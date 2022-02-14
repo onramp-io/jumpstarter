@@ -15,7 +15,6 @@ const Discover: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
       <Box className={styles.signup_wrapper}>
         <h1>Discover</h1>
       </Box>

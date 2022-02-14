@@ -48,8 +48,6 @@ const Login: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
-
       <Box className={styles.login_wrapper}>
         <h1>Login</h1>
         <div>

@@ -47,8 +47,6 @@ const VerifySignup: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
-
       <Box className={styles.login_wrapper}>
         <h1>Confirm Sign Up</h1>
         <div>

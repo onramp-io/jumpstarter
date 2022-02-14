@@ -14,8 +14,6 @@ const Checkout: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
-
       <Box className={styles.signup_wrapper}>
         <h1>Checkout</h1>
       </Box>

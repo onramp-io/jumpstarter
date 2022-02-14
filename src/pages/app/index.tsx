@@ -15,7 +15,6 @@ const Homepage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
       <Box className={styles.signup_wrapper}>
         <h1>Homepage</h1>
       </Box>

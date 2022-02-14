@@ -67,8 +67,6 @@ const Signup: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
-
       <Box className={styles.signup_wrapper}>
         <h1>Create a new account</h1>
         <div>

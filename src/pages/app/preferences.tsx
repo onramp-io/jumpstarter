@@ -15,7 +15,6 @@ const Preferences: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
       <Box className={styles.signup_wrapper}>
         <h1>Preferences</h1>
       </Box>

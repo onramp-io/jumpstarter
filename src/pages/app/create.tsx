@@ -14,8 +14,6 @@ const Create: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
-
       <Box className={styles.signup_wrapper}>
         <h1>Create a new project</h1>
       </Box>

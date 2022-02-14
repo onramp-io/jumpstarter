@@ -13,7 +13,6 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
       <h1 className={styles.title}>Welcome to JumpStarter!</h1>
       <p className={styles.description}>
         JumpStarter is a platform for people to jumpstart their projects, way
