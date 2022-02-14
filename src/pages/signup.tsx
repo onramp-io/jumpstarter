@@ -1,23 +1,26 @@
 import { useState } from 'react';
-import { Alert, AlertTitle, Box } from '@mui/material';
+import { useRouter } from 'next/router';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { CognitoUserAttribute } from 'amazon-cognito-identity-js';
+import Link from 'next/link';
+
+import { Auth } from 'aws-amplify';
+import { Alert, AlertTitle, Box } from '@mui/material';
 
 import styles from '../styles/Signup.module.css';
 import Navbar from '../frontend/components/navbar';
 import Footer from '../frontend/components/footer';
-import axios from 'axios';
-import userpool from 'config/userpool';
-import Link from 'next/link';
 
 const Signup: NextPage = () => {
+  const [username, setUsername] = useState('');
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setError] = useState('');
   const [isSigningUp, setIsSigningUp] = useState(false);
+
+  const router = useRouter();
 
   const onChangeFName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFName(e.target.value);
@@ -29,48 +32,29 @@ const Signup: NextPage = () => {
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
+    setUsername(e.target.value);
   };
 
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const setCognitoUserAttribute = (key: string, val: string) => {
-    const attribute = new CognitoUserAttribute({ Name: key, Value: val });
-    return attribute;
-  };
-
   const handleSignUp = async () => {
     setIsSigningUp(true);
     try {
-      console.log('Signing up...');
-
-      let attributeList = [];
-      let validationData: CognitoUserAttribute[] = [];
-
-      attributeList.push(setCognitoUserAttribute('name', fName));
-      attributeList.push(setCognitoUserAttribute('family_name', lName));
-      attributeList.push(setCognitoUserAttribute('email', email));
-
-      userpool.signUp(
-        email,
+      const { user } = await Auth.signUp({
+        username,
         password,
-        attributeList,
-        validationData,
-        (err, result) => {
-          if (err) {
-            setError(err.message);
-            setIsSigningUp(false);
-            return;
-          } else if (result) {
-            console.log('User name is ' + result);
-            setIsSigningUp(false);
-          }
-        }
-      );
-    } catch (err) {
-      console.log(err);
-      console.log(err);
+        attributes: {
+          given_name: fName,
+          family_name: lName,
+          email,
+        },
+      });
+      console.log(user);
+      router.push('/verify');
+    } catch (error) {
+      console.log('error signing up:', error);
     }
     setIsSigningUp(false);
   };

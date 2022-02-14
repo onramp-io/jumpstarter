@@ -10,30 +10,29 @@ import { Alert, AlertTitle, Box } from '@mui/material';
 import styles from '../styles/Login.module.css';
 import Navbar from '../frontend/components/navbar';
 import Footer from '../frontend/components/footer';
-import { router } from '@backend/routes';
 
-const Login: NextPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const VerifySignup: NextPage = () => {
+  const [username, setUsername] = useState('');
+  const [code, setCode] = useState('');
   const [errorMessage, setError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const router = useRouter();
 
-  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+  const onChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCode(e.target.value);
   };
 
-  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+  const onChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
   };
 
   const handleLogin = async () => {
     setIsLoggingIn(true);
     try {
-      const user = await Auth.signIn(email, password);
+      const user = await Auth.confirmSignUp(username, code);
       console.log(user);
-      router.push('/app/profile');
+      router.push('/profile');
     } catch (error) {
       console.log('error signing in', error);
     }
@@ -51,25 +50,25 @@ const Login: NextPage = () => {
       <Navbar />
 
       <Box className={styles.login_wrapper}>
-        <h1>Login</h1>
+        <h1>Confirm Sign Up</h1>
         <div>
           <input
             type="text"
-            name="email"
-            placeholder="Email"
-            value={email}
+            name="username"
+            placeholder="Username"
+            value={username}
             onChange={(e) => {
-              onChangeEmail(e);
+              onChangeUsername(e);
             }}
             className={styles.login_input}
           />
           <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={password}
+            type="text"
+            name="code"
+            placeholder="Code"
+            value={code}
             onChange={(e) => {
-              onChangePassword(e);
+              onChangeCode(e);
             }}
             className={styles.login_input}
           />
@@ -85,7 +84,7 @@ const Login: NextPage = () => {
               onClick={handleLogin}
               className={styles.login_button}
             >
-              Login
+              Confirm
             </button>
           </div>
         </div>
@@ -101,4 +100,4 @@ const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default VerifySignup;
