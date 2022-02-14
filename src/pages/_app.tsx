@@ -2,7 +2,7 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { withStyles } from '@material-ui/core';
 import { Grommet } from 'grommet';
-import { NavBar } from '@frontend/grommetNavbar';
+import { NavBar } from '@frontend/components/grommetNavbar';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const theme = {
