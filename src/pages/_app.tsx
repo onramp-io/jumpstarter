@@ -2,12 +2,13 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { withStyles } from '@material-ui/core';
 import { Grommet } from 'grommet';
+import { NavBar } from '@frontend/grommetNavbar';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const theme = {
     global: {
       font: {
-        family: 'Roboto',
+        family: 'Arial',
         size: '14px',
         height: '20px',
       },
@@ -16,6 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Grommet theme={theme}>
+      <NavBar />
       <Component {...pageProps} />
     </Grommet>
   )
