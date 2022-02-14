@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "jumpstartere9855e62_identitypool_e9855e62",
+    "identityPoolName": "jumpstarterb7d6df31_identitypool_b7d6df31",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "jumpste9855e62",
-    "userPoolName": "jumpstartere9855e62_userpool_e9855e62",
+    "resourceNameTruncated": "jumpstb7d6df31",
+    "userPoolName": "jumpstarterb7d6df31_userpool_b7d6df31",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -20,7 +20,9 @@
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
     "requiredAttributes": [
-      "email"
+      "email",
+      "family_name",
+      "given_name"
     ],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
@@ -31,12 +33,16 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "jumpste9855e62_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "jumpstb7d6df31_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "e9855e62",
-    "resourceName": "jumpstartere9855e62",
+    "sharedId": "b7d6df31",
+    "resourceName": "jumpstarterb7d6df31",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "default",
+    "usernameAttributes": [
+      "email"
+    ],
+    "triggers": {},
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
