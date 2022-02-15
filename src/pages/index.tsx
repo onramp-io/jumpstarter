@@ -84,7 +84,7 @@ const index: NextPage = function indexComponent<indexProps>({ }) {
         direction="row"
         margin="small"
       >
-        <SectionMarquee APIPayload={personalPicks} />
+        <SectionMarquee APIPayload={personalPicks} linkHref="/personalpicks" linkCaption="See all recommended projects >" />
       </Box>
       <Box
         align="center"
@@ -98,7 +98,7 @@ const index: NextPage = function indexComponent<indexProps>({ }) {
         direction="row"
         margin="small"
       >
-        <SectionMarquee APIPayload={trendingProjects} />
+        <SectionMarquee APIPayload={trendingProjects} linkHref="/trending" linkCaption="See all trending projects >" />
       </Box>
     </>
   );

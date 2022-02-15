@@ -13,9 +13,11 @@ interface ISingleAPIPayload {
 
 interface SectionMarqueeProps {
   APIPayload: ISingleAPIPayload[],
+  linkCaption: string,
+  linkHref: string,
 }
 
-const SectionMarquee = function sectionMarqueeComponent<sectionMarqueeProps>({ APIPayload }) {
+const SectionMarquee = function sectionMarqueeComponent<sectionMarqueeProps>({ APIPayload, linkCaption, linkHref }) {
   /**
   * first 4 JSON payload from our API
   */
@@ -45,6 +47,10 @@ const SectionMarquee = function sectionMarqueeComponent<sectionMarqueeProps>({ A
           }}
           gap="medium"
           direction="row"
+        /** 
+         * 
+         wrap={true}
+         */
         >
           {APIPayload.map(({
             projectTitle,
@@ -60,14 +66,14 @@ const SectionMarquee = function sectionMarqueeComponent<sectionMarqueeProps>({ A
           top: "medium",
           right: "large"
         }}>
-          <Link href="/project">
+          <Link href={linkHref}>
             <Anchor
-              href="/project"
+              href={linkHref}
               /** 
                * 
                icon={<GrommetIcon color="brand" />}
                */
-              label="Create a New Project"
+              label={linkCaption}
             />
           </Link>
         </Box>
