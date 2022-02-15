@@ -12,7 +12,9 @@ interface SectionHeaderProps {
 const SectionHeader = function sectionComponent<sectionProps>({ sectionHeader, sectionDescription }) {
   return (
     <>
-      <Box align="center">
+      <Box
+        align="center"
+      >
         <Heading level={2}>
           {sectionHeader.toUpperCase()}
         </Heading>
