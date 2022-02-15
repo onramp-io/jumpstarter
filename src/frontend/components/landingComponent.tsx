@@ -1,24 +1,9 @@
 import { Image, Heading, Grommet, Header, Main, Text, Box } from 'grommet';
-// import Image from 'next/image';
 import styled from 'styled-components';
 
 import { NextPageContext } from 'next';
 
 const textMargin = '1rem';
-
-const LandingComponentContainer = styled.div`
-// margin: 1rem;
-// display: flex;
-// flex-direction: column;
-// align-items: center;
-/** 
-& > main {
-  // word-break: break-all;
-  // white-space: normal;
-  max-width: 34em;
- */
-}
-`;
 
 interface LandingComponentProps {
 

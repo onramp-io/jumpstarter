@@ -6,36 +6,6 @@ import Link from 'next/link';
 
 import styled from 'styled-components';
 
-//const HeaderComponent = styled.Header`
-//display: flex;
-//`;
-
-/** 
- * 
- const NavContainer = styled.div`
- display: flex;
- flex-grow: 1;
- background-color: #addddf;
- `;
- 
- const JumpStarterIconContainer = styled.div`
- margin-left: 4rem;
- margin-right: 4rem;
- `;
- 
- const SideIconContainer = styled.div`
- display: flex;
- flex-wrap: wrap;
- justify-content: space-between;
- // background-color: yellow;
- & > *:not(:last-child) {
-   margin-right: 3rem;
-   //background-color: red;
- }
- `;
- */
-
-
 export const NavBar = () => {
   return (
     <Header background="light-2" pad="medium" height="xsmall" elevation="medium">
@@ -78,20 +48,12 @@ export const NavBar = () => {
                 <Link href="/project">
                   <Anchor
                     href="/project"
-                    /** 
-                     * 
-                     icon={<GrommetIcon color="brand" />}
-                     */
                     label="Create a New Project"
                   />
                 </Link>
                 <Link href="/discover">
                   <Anchor
                     href="/discover"
-                    /** 
-                     * 
-                     icon={<GrommetIcon color="brand" />}
-                     */
                     label="Discover"
                   />
                 </Link>
@@ -103,10 +65,6 @@ export const NavBar = () => {
                 <Link href="/">
                   <Anchor
                     href="/"
-                    /** 
-                     * 
-                     icon={<GrommetIcon color="brand" />}
-                     */
                     label="JumpStarter"
                   />
                 </Link>
@@ -115,20 +73,12 @@ export const NavBar = () => {
                 <Link href="/login">
                   <Anchor
                     href="/login"
-                    /** 
-                     * 
-                     icon={<GrommetIcon color="brand" />}
-                     */
                     label="Log In"
                   />
                 </Link>
                 <Link href="/signup">
                   <Anchor
                     href="/signup"
-                    /** 
-                     * 
-                     icon={<GrommetIcon color="brand" />}
-                     */
                     label="Sign Up"
                   />
                 </Link>
