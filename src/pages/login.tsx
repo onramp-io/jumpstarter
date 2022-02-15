@@ -37,14 +37,6 @@ const Login: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>JumpStarter - Login</title>
-        <meta name="description" content="Lets JumpStart projects" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <Navbar />
-
       <Box className={styles.login_wrapper}>
         <h1>Login</h1>
         <div>
@@ -89,7 +81,6 @@ const Login: NextPage = () => {
           <a href="/signup">Signup</a>
         </div>
       </Box>
-      <Footer />
     </>
   );
 };
