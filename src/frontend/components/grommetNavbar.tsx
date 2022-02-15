@@ -38,7 +38,7 @@ import styled from 'styled-components';
 
 export const NavBar = () => {
   return (
-    <Header background="light-2" pad="medium" height="xsmall">
+    <Header background="light-2" pad="medium" height="xsmall" elevation="medium">
       <ResponsiveContext.Consumer>
         {(size) =>
           size === 'small' ? (
