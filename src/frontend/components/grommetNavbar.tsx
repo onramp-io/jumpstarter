@@ -43,7 +43,7 @@ export const NavBar = () => {
         {(size) =>
           size === 'small' ? (
             <>
-              <Box justify="end" />
+              <Box />
               <Menu
                 a11yTitle="Navigation Menu"
                 dropProps={{ align: { top: 'bottom', right: 'right' } }}
@@ -73,57 +73,66 @@ export const NavBar = () => {
               />
             </>
           ) : (
-            <Box justify="end" direction="row" gap="medium">
-              <Link href="/project">
-                <Anchor
-                  href="/project"
-                  /** 
-                   * 
-                   icon={<GrommetIcon color="brand" />}
-                   */
-                  label="Create a New Project"
-                />
-              </Link>
-              <Link href="/discover">
-                <Anchor
-                  href="/discover"
-                  /** 
-                   * 
-                   icon={<GrommetIcon color="brand" />}
-                   */
-                  label="Discover"
-                />
-              </Link>
-              <Link href="/">
-                <Anchor
-                  href="/"
-                  /** 
-                   * 
-                   icon={<GrommetIcon color="brand" />}
-                   */
-                  label="JumpStarter"
-                />
-              </Link>
-              <Link href="/login">
-                <Anchor
-                  href="/login"
-                  /** 
-                   * 
-                   icon={<GrommetIcon color="brand" />}
-                   */
-                  label="Log In"
-                />
-              </Link>
-              <Link href="/signup">
-                <Anchor
-                  href="/signup"
-                  /** 
-                   * 
-                   icon={<GrommetIcon color="brand" />}
-                   */
-                  label="Sign Up"
-                />
-              </Link>
+            <Box justify="end" flex="grow" direction="row" gap="medium">
+              <Box direction="row" justify="start" gap="xlarge">
+                <Link href="/project">
+                  <Anchor
+                    href="/project"
+                    /** 
+                     * 
+                     icon={<GrommetIcon color="brand" />}
+                     */
+                    label="Create a New Project"
+                  />
+                </Link>
+                <Link href="/discover">
+                  <Anchor
+                    href="/discover"
+                    /** 
+                     * 
+                     icon={<GrommetIcon color="brand" />}
+                     */
+                    label="Discover"
+                  />
+                </Link>
+              </Box>
+              <Box flex="grow" align="center" margin={{
+                left: "xlarge",
+                right: "xlarge"
+              }}>
+                <Link href="/">
+                  <Anchor
+                    href="/"
+                    /** 
+                     * 
+                     icon={<GrommetIcon color="brand" />}
+                     */
+                    label="JumpStarter"
+                  />
+                </Link>
+              </Box>
+              <Box direction="row" justify="end" gap="xlarge">
+                <Link href="/login">
+                  <Anchor
+                    href="/login"
+                    /** 
+                     * 
+                     icon={<GrommetIcon color="brand" />}
+                     */
+                    label="Log In"
+                  />
+                </Link>
+                <Link href="/signup">
+                  <Anchor
+                    href="/signup"
+                    /** 
+                     * 
+                     icon={<GrommetIcon color="brand" />}
+                     */
+                    label="Sign Up"
+                  />
+                </Link>
+              </Box>
             </Box>
           )
         }
