@@ -16,13 +16,18 @@ export const ProjectInfo = function ProjectInfoComponent<sectionCardProps>({ pro
     <Box>
       <Box
         align="left"
+        margin={{
+          top: "small",
+          bottom: "small"
+        }}
       >
         <Heading level={3}>{projectTitle}</Heading>
       </Box>
       <Box
         align="left"
         margin={{
-          top: 'small'
+          top: "small",
+          bottom: "small",
         }}
       >
         <Text>{projectDescription}</Text>
@@ -106,12 +111,12 @@ const SectionCard = function sectionCardsComponent<sectionCardsProps>({ projectT
       margin={{
         top: "xsmall",
         left: "xsmall",
-        right: "xsmall",
       }}
+      align="center"
       pad="small"
       width="medium"
-      height="medium"
-      elevation="large"
+      height="min-content"
+      elevation="medium"
     >
       <Box
         width="large"

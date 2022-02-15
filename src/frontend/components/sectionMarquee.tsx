@@ -4,10 +4,6 @@ import SectionCard from './sectionCard';
 import styled from 'styled-components';
 import { Box } from 'grommet';
 
-const SectionMarqueeContainer = styled.div`
-  display: flex;
-`;
-
 interface ISingleAPIPayload {
   projectTitle: string,
   projectDescription: string,
@@ -24,14 +20,21 @@ const SectionMarquee = function sectionMarqueeComponent<sectionMarqueeProps>({ A
   */
 
   return (
-    <Box flex="grow" gap="medium" direction="row">
+    <Box
+      margin={{
+        left: "large",
+        right: "large"
+      }}
+      gap="medium"
+      direction="row"
+    >
       {APIPayload.map(({
         projectTitle,
         projectDescription,
         projectCreator,
-      }) => {
+      }, i) => {
         return (
-          < SectionCard projectTitle={projectTitle} projectDescription={projectDescription} projectCreator={projectCreator} />
+          < SectionCard key={i} projectTitle={projectTitle} projectDescription={projectDescription} projectCreator={projectCreator} />
         )
       })}
     </Box>
