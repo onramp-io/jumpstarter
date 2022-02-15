@@ -47,10 +47,6 @@ const SectionMarquee = function sectionMarqueeComponent<sectionMarqueeProps>({ A
           }}
           gap="medium"
           direction="row"
-        /** 
-         * 
-         wrap={true}
-         */
         >
           {APIPayload.map(({
             projectTitle,
@@ -69,10 +65,6 @@ const SectionMarquee = function sectionMarqueeComponent<sectionMarqueeProps>({ A
           <Link href={linkHref}>
             <Anchor
               href={linkHref}
-              /** 
-               * 
-               icon={<GrommetIcon color="brand" />}
-               */
               label={linkCaption}
             />
           </Link>

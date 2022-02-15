@@ -1,7 +1,6 @@
 import { NextPageContext } from 'next';
 import axios from 'axios';
 import { Image, Grommet, Header, Main, Text, Box, Heading } from 'grommet';
-// import Image from 'next/image';
 import styled from 'styled-components';
 
 interface SectionHeaderProps {

@@ -1,9 +1,7 @@
 import { NextPageContext } from 'next';
 import axios from 'axios';
 import { Box, Heading, Image, Meter, Text } from 'grommet';
-import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import Project from 'pages/project';
 
 interface ProjectInfoProps {
   projectTitle: string,
