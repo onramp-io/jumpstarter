@@ -17,7 +17,6 @@ const Discover: NextPage = () => {
       <Box className={styles.signup_wrapper}>
         <h1>Discover</h1>
       </Box>
-      <Footer />
     </>
   );
 };

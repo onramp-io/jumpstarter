@@ -17,7 +17,6 @@ const Project: NextPage = () => {
       <Box className={styles.signup_wrapper}>
         <h1>Project XYZ</h1>
       </Box>
-      <Footer />
     </>
   );
 };

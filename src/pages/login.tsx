@@ -86,7 +86,6 @@ const Login: NextPage = () => {
           <a href="/signup">Signup</a>
         </div>
       </Box>
-      <Footer />
     </>
   );
 };
