@@ -1,16 +1,13 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
 import Link from 'next/link';
 
 import { Auth } from 'aws-amplify';
+import { Heading, TextInput, Box, Notification, Button } from 'grommet';
 
-import { Alert, AlertTitle, Box } from '@mui/material';
 import styles from '../styles/Login.module.css';
-import Navbar from '../frontend/components/navbar';
-import Footer from '../frontend/components/footer';
-import { router } from '@backend/routes';
 
 const Login: NextPage = () => {
   const [email, setEmail] = useState('');
@@ -36,22 +33,17 @@ const Login: NextPage = () => {
       router.push('/app/profile');
     } catch (error) {
       console.log('error signing in', error);
+      setError(error.message);
     }
     setIsLoggingIn(false);
   };
 
   return (
     <>
-      <Head>
-        <title>JumpStarter - Login</title>
-        <meta name="description" content="Lets JumpStart projects" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <Box className={styles.login_wrapper}>
-        <h1>Login</h1>
-        <div>
-          <input
+        <Heading>Login</Heading>
+        <>
+          <TextInput
             type="text"
             name="email"
             placeholder="Email"
@@ -61,7 +53,7 @@ const Login: NextPage = () => {
             }}
             className={styles.login_input}
           />
-          <input
+          <TextInput
             type="password"
             name="password"
             placeholder="Password"
@@ -72,29 +64,27 @@ const Login: NextPage = () => {
             className={styles.login_input}
           />
           {errorMessage !== '' && (
-            <Alert severity="error">
-              <AlertTitle>{errorMessage}</AlertTitle>
-            </Alert>
+            <Notification title="Error" message={errorMessage} />
           )}
-          <div className="auth-buttons">
-            <button
+          <Box className="auth-buttons">
+            <Button
+              primary
               disabled={isLoggingIn}
               type="submit"
               onClick={handleLogin}
               className={styles.login_button}
             >
               Login
-            </button>
-          </div>
-        </div>
-        <div className={styles.account_not_exists}>
-          Don&apos;t have an account?
+            </Button>
+          </Box>
+        </>
+        <Box className={styles.account_not_exists}>
+          Don't have an account?
           <Link href="/signup">
             <a>Signup</a>
           </Link>
-        </div>
+        </Box>
       </Box>
-      <Footer />
     </>
   );
 };
