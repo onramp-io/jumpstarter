@@ -1,15 +1,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import Link from 'next/link';
 
 import { Auth } from 'aws-amplify';
-import { Alert, AlertTitle, Box } from '@mui/material';
 
 import styles from '../styles/Signup.module.css';
-import Navbar from '../frontend/components/navbar';
-import Footer from '../frontend/components/footer';
+import { Heading, TextInput, Box, Button, Notification } from 'grommet';
 
 const Signup: NextPage = () => {
   const [username, setUsername] = useState('');
@@ -55,22 +52,17 @@ const Signup: NextPage = () => {
       router.push('/verify');
     } catch (error) {
       console.log('error signing up:', error);
+      setError(error.message);
     }
     setIsSigningUp(false);
   };
 
   return (
     <>
-      <Head>
-        <title>JumpStarter - Sign up</title>
-        <meta name="description" content="Lets JumpStart projects" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <Box className={styles.signup_wrapper}>
-        <h1>Create a new account</h1>
-        <div>
-          <input
+        <Heading>Create a new account</Heading>
+        <Box>
+          <TextInput
             type="text"
             name="name"
             placeholder="First Name"
@@ -80,7 +72,7 @@ const Signup: NextPage = () => {
             }}
             className={styles.signup_input}
           />
-          <input
+          <TextInput
             type="text"
             name="name"
             placeholder="Last Name"
@@ -90,7 +82,7 @@ const Signup: NextPage = () => {
             }}
             className={styles.signup_input}
           />
-          <input
+          <TextInput
             type="text"
             name="email"
             placeholder="Email"
@@ -100,7 +92,7 @@ const Signup: NextPage = () => {
             }}
             className={styles.signup_input}
           />
-          <input
+          <TextInput
             type="password"
             name="password"
             placeholder="Password"
@@ -111,27 +103,25 @@ const Signup: NextPage = () => {
             className={styles.signup_input}
           />
           {errorMessage !== '' && (
-            <Alert severity="error">
-              <AlertTitle>{errorMessage}</AlertTitle>
-            </Alert>
+            <Notification title="Error" message={errorMessage} />
           )}
-          <div className="auth-buttons">
-            <button
+          <Box className="auth-buttons">
+            <Button
+              primary
               disabled={isSigningUp}
               type="submit"
               onClick={handleSignUp}
               className={styles.signup_button}
             >
               Sign up
-            </button>
-          </div>
-        </div>
-        <div className={styles.account_exists}>
+            </Button>
+          </Box>
+        </Box>
+        <Box className={styles.account_exists}>
           Already have an account?
           <Link href="/login">Login</Link>
-        </div>
+        </Box>
       </Box>
-      <Footer />
     </>
   );
 };
