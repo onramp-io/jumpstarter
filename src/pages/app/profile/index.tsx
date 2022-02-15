@@ -1,22 +1,18 @@
-import type { NextPage } from 'next';
-import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
+import React from 'react';
 import { useRouter } from 'next/router';
 
 import { Amplify, withSSRContext } from 'aws-amplify';
 import { Auth } from 'aws-amplify';
-import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 import awsExports from '../../../aws-exports';
 Amplify.configure(awsExports);
 
-import { Box } from '@mui/material';
+import { Box, Heading, Button } from 'grommet';
 
 import styles from '../../../styles/Signup.module.css';
-import Footer from '../../../frontend/components/footer';
 
-function MyProfile({ authenticated, user, message }) {
+function MyProfile({ user }) {
   const router = useRouter();
   const signOut = async function () {
     try {
@@ -28,23 +24,13 @@ function MyProfile({ authenticated, user, message }) {
   };
   return (
     <>
-      <Head>
-        <title>JumpStarter - MyProfile</title>
-        <meta name="description" content="Lets JumpStart projects" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <Box className={styles.signup_wrapper}>
-        <h1>MyProfile</h1>
-        {authenticated && (
-          <>
-            <h1>Hello {user}</h1>
-            <button onClick={signOut}>Sign out</button>
-          </>
-        )}
+        <Heading>MyProfile</Heading>
+        <Heading>Hello {user}</Heading>
+        <Button primary onClick={signOut}>
+          Sign out
+        </Button>
       </Box>
-
-      <Footer />
     </>
   );
 }
@@ -57,7 +43,6 @@ export async function getServerSideProps(context) {
     console.log('User: ', username);
     return {
       props: {
-        authenticated: true,
         user: username,
       },
     };
