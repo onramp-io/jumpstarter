@@ -9,17 +9,9 @@ import Footer from '../frontend/components/footer';
 const Project: NextPage = () => {
   return (
     <>
-      <Head>
-        <title>JumpStarter - Project XYZ</title>
-        <meta name="description" content="Lets JumpStart projects" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <Navbar />
       <Box className={styles.signup_wrapper}>
         <h1>Project XYZ</h1>
       </Box>
-      <Footer />
     </>
   );
 };
