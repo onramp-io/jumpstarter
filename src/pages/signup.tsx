@@ -48,10 +48,8 @@ const Signup: NextPage = () => {
           email,
         },
       });
-      console.log(user);
       router.push('/verify');
     } catch (error) {
-      console.log('error signing up:', error);
       setError(error.message);
     }
     setIsSigningUp(false);

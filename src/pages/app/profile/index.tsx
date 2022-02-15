@@ -40,7 +40,6 @@ export async function getServerSideProps(context) {
   try {
     const user = await Auth.currentAuthenticatedUser();
     const username = user.attributes.given_name;
-    console.log('User: ', username);
     return {
       props: {
         user: username,

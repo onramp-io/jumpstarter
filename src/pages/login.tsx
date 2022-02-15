@@ -29,10 +29,8 @@ const Login: NextPage = () => {
     setIsLoggingIn(true);
     try {
       const user = await Auth.signIn(email, password);
-      console.log(user);
       router.push('/app/profile');
     } catch (error) {
-      console.log('error signing in', error);
       setError(error.message);
     }
     setIsLoggingIn(false);

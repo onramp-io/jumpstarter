@@ -37,10 +37,8 @@ const VerifySignup: NextPage = () => {
     setIsLoggingIn(true);
     try {
       const user = await Auth.confirmSignUp(username, code);
-      console.log(user);
       router.push('/app/profile');
     } catch (error) {
-      console.log('error signing in', error);
       setError(error.message);
     }
     setIsLoggingIn(false);
