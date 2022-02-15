@@ -1,25 +1,18 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
-import Footer from '../frontend/components/footer';
-import Navbar from '../frontend/components/navbar';
-import styles from '../styles/Home.module.css';
+import { Heading, Text, Box } from 'grommet';
+import styles from '../styles/Signup.module.css';
 
 const Home: NextPage = () => {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>JumpStarter</title>
-        <meta name="description" content="Lets JumpStart projects" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <h1 className={styles.title}>Welcome to JumpStarter!</h1>
-      <p className={styles.description}>
-        JumpStarter is a platform for people to jumpstart their projects, way
-        better than kicking. Join today!
-      </p>
-      <Footer />
-    </div>
+    <>
+      <Box className={styles.signup_wrapper}>
+        <Heading>Welcome to JumpStarter!</Heading>
+        <Text>
+          JumpStarter is a platform for people to jumpstart their projects, way
+          better than kicking. Join today!
+        </Text>
+      </Box>
+    </>
   );
 };
 
