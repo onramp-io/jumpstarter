@@ -1,15 +1,21 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
 import Link from 'next/link';
 
 import { Auth } from 'aws-amplify';
+import {
+  Button,
+  Grommet,
+  Heading,
+  Text,
+  TextInput,
+  Box,
+  Notification,
+} from 'grommet';
 
-import { Alert, AlertTitle, Box } from '@mui/material';
 import styles from '../styles/Login.module.css';
-import Navbar from '../frontend/components/navbar';
-import Footer from '../frontend/components/footer';
 
 const VerifySignup: NextPage = () => {
   const [username, setUsername] = useState('');
@@ -35,22 +41,17 @@ const VerifySignup: NextPage = () => {
       router.push('/profile');
     } catch (error) {
       console.log('error signing in', error);
+      setError(error.message);
     }
     setIsLoggingIn(false);
   };
 
   return (
     <>
-      <Head>
-        <title>JumpStarter - Login</title>
-        <meta name="description" content="Lets JumpStart projects" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <Box className={styles.login_wrapper}>
-        <h1>Confirm Sign Up</h1>
-        <div>
-          <input
+        <Heading>Confirm Sign Up</Heading>
+        <Box>
+          <TextInput
             type="text"
             name="username"
             placeholder="Username"
@@ -60,7 +61,7 @@ const VerifySignup: NextPage = () => {
             }}
             className={styles.login_input}
           />
-          <input
+          <TextInput
             type="text"
             name="code"
             placeholder="Code"
@@ -71,29 +72,27 @@ const VerifySignup: NextPage = () => {
             className={styles.login_input}
           />
           {errorMessage !== '' && (
-            <Alert severity="error">
-              <AlertTitle>{errorMessage}</AlertTitle>
-            </Alert>
+            <Notification title="Error" message={errorMessage} />
           )}
-          <div className="auth-buttons">
-            <button
+          <Box className="auth-buttons">
+            <Button
+              primary
               disabled={isLoggingIn}
               type="submit"
               onClick={handleLogin}
               className={styles.login_button}
             >
               Confirm
-            </button>
-          </div>
-        </div>
-        <div className={styles.account_not_exists}>
-          Don&apos;t have an account?
+            </Button>
+          </Box>
+        </Box>
+        <Box className={styles.account_not_exists}>
+          Don't have an account?
           <Link href="/signup">
             <a>Signup</a>
           </Link>
-        </div>
+        </Box>
       </Box>
-      <Footer />
     </>
   );
 };
