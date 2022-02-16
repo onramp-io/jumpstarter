@@ -2,12 +2,28 @@ import type { NextPage } from 'next';
 import { Box, Button, Grid, Heading, Image, Meter, Paragraph, Table, TableCell, Text } from 'grommet';
 import { Favorite } from 'grommet-icons';
 import { TableRow } from '@mui/material';
+import { useState, useEffect } from 'react';
 
-const ProjectInfo: NextPage = () => {
+interface SingleProjectInfoProps {
+  projectTitle: string,
+  projectDescription: string,
+  projectFundGoal: number,
+  projectCurrFunds: number,
+  projectDeadline: Date,
+  projectPictures: string[],
+  projectInvestors: number
+}
+
+const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectTitle, projectDescription, projectFundGoal, projectCurrFunds, projectDeadline, projectPictures, projectInvestors }) => {
+
   return (
-    <Box direction="column" alignContent="center" margin={{
-        horizontal: "xlarge"
-    }}>
+    <Box 
+        direction="column" 
+        alignContent="center" 
+        margin={{
+            horizontal: "xlarge"
+            }}
+    >
         <Grid
           rows={['0.3fr', '0.7fr', '1fr', '1.fr', '0.3fr']}
           columns={['1.5fr', '1.5fr']}
@@ -23,10 +39,10 @@ const ProjectInfo: NextPage = () => {
             { name: 'button', start: [1, 4], end: [1, 4]}
           ]}
           >
-          <Heading gridArea="title" textAlign="center" fill={true}>Project XYZ</Heading>
+          <Heading gridArea="title" textAlign="center" fill={true}>{projectTitle}</Heading>
 
           <Box gridArea="image">
-            <Image fit="cover" width="100%" max-height="100%" src="//v2.grommet.io/assets/Wilderpeople_Ricky.jpg"/>
+            <Image fit="cover" width="100%" max-height="100%" src={projectPictures[0]}/>
           </Box>
 
           <Box gridArea="goal">
@@ -41,8 +57,8 @@ const ProjectInfo: NextPage = () => {
                         <Heading size="xsmall" margin={{
                         vertical: "small"
                         }}
-                        >Goal: $1,000</Heading>
-                        <Text>Target Date: 03/07/2020</Text>
+                        >Goal: ${projectFundGoal.toLocaleString()}</Heading>
+                        <Text>Target Date: {projectDeadline.toDateString()}</Text>
                     </Box>
                     <Box margin="small" align="end">
                         <Favorite size="large"/>
@@ -50,10 +66,15 @@ const ProjectInfo: NextPage = () => {
               </Grid>
           </Box>
 
-          <Box gridArea="progress" margin={{
+          <Box 
+            gridArea="progress" 
+            border={{ color: "lightgrey" }} 
+            round={true} pad="medium" 
+            margin={{
               top: "large",
-              bottom: "large"
-          }}>
+              bottom: "medium"
+            }}
+            >
               <Table>
                   <TableRow>
                     <TableCell scope="col"><strong>Raised</strong></TableCell>
@@ -61,12 +82,12 @@ const ProjectInfo: NextPage = () => {
                     <TableCell scope="col"><strong>Investors</strong></TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell scope="col">$100</TableCell>
-                    <TableCell scope="col">$900</TableCell>
-                    <TableCell scope="col">12</TableCell>
+                    <TableCell scope="col">${projectCurrFunds.toLocaleString()}</TableCell>
+                    <TableCell scope="col">${(projectFundGoal - projectCurrFunds).toLocaleString()}</TableCell>
+                    <TableCell scope="col">{projectInvestors.toLocaleString()}</TableCell>
                   </TableRow>
               </Table>
-              <Meter max={1000} value={100}  background="light-3" size="full" margin={{
+              <Meter max={projectFundGoal} value={projectCurrFunds}  background="light-3" size="full" margin={{
                   top: "small"
               }} alignSelf="stretch"/>
           </Box>
@@ -78,7 +99,7 @@ const ProjectInfo: NextPage = () => {
             <Paragraph fill={true} margin={{
                 top: "none",
                 bottom: "large"
-            }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec dui arcu, mollis non venenatis sit amet, tincidunt in lacus. Donec non ante in leo blandit commodo. Donec ac malesuada massa. Donec pulvinar suscipit ex eu fringilla. Vivamus et convallis sapien. Praesent ut lorem cursus, venenatis turpis nec, feugiat eros.</Paragraph>
+            }}>{projectDescription}</Paragraph>
           </Box>
 
           <Button gridArea="button" margin={{horizontal: "xlarge"}} primary label="JumpStart this project"/>
@@ -87,4 +108,4 @@ const ProjectInfo: NextPage = () => {
   );
 };
 
-export default ProjectInfo;
+export default SingleProjectInfo;
