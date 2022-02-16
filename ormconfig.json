@@ -8,13 +8,13 @@
   "synchronize": true,
   "logging": false,
   "entities": [
-    "src/backend/model/entities/**/*.ts"
+    "src/backend/model/entities/**/*.{ts,js}"
   ],
   "migrations": [
-    "src/backend/model/migration/**/*.ts"
+    "src/backend/model/migration/**/*.{ts,js}"
   ],
   "subscribers": [
-    "src/backend/model/subscriber/**/*.ts"
+    "src/backend/model/subscriber/**/*.{ts,js}"
   ],
   "cli": {
     "entitiesDir": "src/backend/model/entities",
