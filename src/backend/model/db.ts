@@ -9,7 +9,7 @@ import { Comment } from './entities/Comment';
 const connection = async () => {
     const temp = await createConnection({
         type: 'postgres',
-        url:'postgres://blendapprentice:Blendpw123@blendapprenticedb.cjzm6ljzaagh.us-west-1.rds.amazonaws.com:5432/jumpstarter',
+        url: process.env.CONNECTION_STRING,
         logging: true, //statements/queries console logged to terminal -> should remove when not debugging
         synchronize: true, //will tralslate logic to sql
         entities: [User, Project, Investment, Interest, Comment]
