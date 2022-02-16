@@ -14,12 +14,9 @@ const Project: NextPage = () => {
         <meta name="description" content="Lets JumpStart projects" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Navbar />
       <Box className={styles.signup_wrapper}>
         <h1>Project XYZ</h1>
       </Box>
-      <Footer />
     </>
   );
 };

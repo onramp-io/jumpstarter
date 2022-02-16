@@ -1,11 +1,16 @@
+import { Box, CardFooter } from 'grommet';
 import type { NextPage } from 'next';
 import home from '../../styles/Home.module.css';
 
 const Footer: NextPage = () => {
   return (
-    <div>
+    <Box
+      margin={{
+        top: "xlarge"
+      }}
+    >
       <footer className={home.footer}>Built by Team Blend 😎</footer>
-    </div>
+    </Box>
   );
 };
 
