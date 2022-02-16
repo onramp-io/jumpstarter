@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'ty
 import { User } from './User';
 import { Comment } from './Comment';
 import { Investment } from './Investment';
+import { Like } from './like';
 
 @Entity()
 export class Project {
@@ -37,7 +38,7 @@ export class Project {
     created_date: string;
 
     @Column("integer")
-    likes: number;
+    likes_amt: number;
 
     @ManyToOne(() => User, user => user.projects)
     user: User;
@@ -47,4 +48,7 @@ export class Project {
 
     @OneToMany(() => Investment, investment => investment.project)
     investments: Investment[];
+
+    @OneToMany(() => Like, like => like.user)
+    likes: Like[];
 }

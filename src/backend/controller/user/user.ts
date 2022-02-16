@@ -4,6 +4,7 @@ import { User } from '../../model/entities/User';
 import connection from '../../model/db';
 
 const addNewUser = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log(process.env.CONNECTION_STRING);
   const db = await connection();
   const newUser = await db.createQueryBuilder()
           .insert()

@@ -3,6 +3,7 @@ import { Comment } from './Comment';
 import { Project } from './Project';
 import { Interest } from './Interest';
 import { Investment } from './Investment';
+import { Like } from './like';
 
 @Entity()
 export class User {
@@ -39,4 +40,7 @@ export class User {
 
     @OneToMany(() => Investment, investment => investment.user)
     investments: Investment[];
+
+    @OneToMany(() => Like, like => like.user)
+    likes: Like[];
 }
