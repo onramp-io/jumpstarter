@@ -8,15 +8,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-amplify/cli": "^7.6.19",
+    "@aws-amplify/ui-react": "^2.4.0",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
-    "@mui/icons-material": "^5.4.1",
-    "@mui/material": "^5.4.1",
     "amazon-cognito-identity-js": "^5.2.6",
+    "aws-amplify": "^4.3.14",
     "axios": "^0.25.0",
+    "emotion": "^11.0.0",
+    "grommet": "^2.20.1",
+    "grommet-icons": "^4.7.0",
     "next": "12.0.10",
+    "polished": "^4.1.4",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "styled-components": "^5.3.3"
   },
   "devDependencies": {
     "@types/node": "17.0.16",
