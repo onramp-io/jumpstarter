@@ -20,23 +20,23 @@ export const NavBar = () => {
                 items={[
                   {
                     label: <Box pad="small">JumpStarter</Box>,
-                    href: '/'
+                    href: '/',
                   },
                   {
                     label: <Box pad="small">Create a New Project</Box>,
-                    href: '/project'
+                    href: '/project',
                   },
                   {
                     label: <Box pad="small">Discover</Box>,
-                    href: '/discover'
+                    href: '/discover',
                   },
                   {
                     label: <Box pad="small">Log In</Box>,
-                    href: '/login'
+                    href: '/login',
                   },
                   {
                     label: <Box pad="small">Sign Up</Box>,
-                    href: '/signup'
+                    href: '/signup',
                   },
                 ]}
               />
@@ -54,51 +54,23 @@ export const NavBar = () => {
                 />
               </Link>
               <Link href="/discover">
-                <Anchor
-                  href="/discover"
-                  /** 
-                   * 
-                   icon={<GrommetIcon color="brand" />}
-                   */
-                  label="Discover"
-                />
+                <Anchor href="/discover" label="Discover" />
               </Link>
               <Link href="/">
-                <Anchor
-                  href="/"
-                  /** 
-                   * 
-                   icon={<GrommetIcon color="brand" />}
-                   */
-                  label="JumpStarter"
-                />
+                <Anchor href="/" label="JumpStarter" />
               </Link>
               <Link href="/login">
-                <Anchor
-                  href="/login"
-                  /** 
-                   * 
-                   icon={<GrommetIcon color="brand" />}
-                   */
-                  label="Log In"
-                />
+                <Anchor href="/login" label="Log In" />
               </Link>
               <Link href="/signup">
-                <Anchor
-                  href="/signup"
-                  /** 
-                   * 
-                   icon={<GrommetIcon color="brand" />}
-                   */
-                  label="Sign Up"
-                />
+                <Anchor href="/signup" label="Sign Up" />
               </Link>
             </Box>
           )
         }
       </ResponsiveContext.Consumer>
     </Header>
-  )
+  );
 };
 
 export default {

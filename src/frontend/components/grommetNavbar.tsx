@@ -1,14 +1,16 @@
 import React from 'react';
-
 import { Anchor, Box, Header, Menu, ResponsiveContext } from 'grommet';
 import { Grommet as GrommetIcon, Menu as MenuIcon } from 'grommet-icons';
 import Link from 'next/link';
 
-import styled from 'styled-components';
-
 export const NavBar = () => {
   return (
-    <Header background="light-2" pad="medium" height="xsmall" elevation="medium">
+    <Header
+      background="light-2"
+      pad="medium"
+      height="xsmall"
+      elevation="medium"
+    >
       <ResponsiveContext.Consumer>
         {(size) =>
           size === 'small' ? (
@@ -21,23 +23,23 @@ export const NavBar = () => {
                 items={[
                   {
                     label: <Box pad="small">JumpStarter</Box>,
-                    href: '/'
+                    href: '/',
                   },
                   {
                     label: <Box pad="small">Create a New Project</Box>,
-                    href: '/project'
+                    href: '/project',
                   },
                   {
                     label: <Box pad="small">Discover</Box>,
-                    href: '/discover'
+                    href: '/discover',
                   },
                   {
                     label: <Box pad="small">Log In</Box>,
-                    href: '/login'
+                    href: '/login',
                   },
                   {
                     label: <Box pad="small">Sign Up</Box>,
-                    href: '/signup'
+                    href: '/signup',
                   },
                 ]}
               />
@@ -46,41 +48,30 @@ export const NavBar = () => {
             <Box justify="end" flex="grow" direction="row" gap="medium">
               <Box direction="row" justify="start" gap="xlarge">
                 <Link href="/project">
-                  <Anchor
-                    href="/project"
-                    label="Create a New Project"
-                  />
+                  <Anchor href="/project" label="Create a New Project" />
                 </Link>
                 <Link href="/discover">
-                  <Anchor
-                    href="/discover"
-                    label="Discover"
-                  />
+                  <Anchor href="/discover" label="Discover" />
                 </Link>
               </Box>
-              <Box flex="grow" align="center" margin={{
-                left: "xlarge",
-                right: "xlarge"
-              }}>
+              <Box
+                flex="grow"
+                align="center"
+                margin={{
+                  left: 'xlarge',
+                  right: 'xlarge',
+                }}
+              >
                 <Link href="/">
-                  <Anchor
-                    href="/"
-                    label="JumpStarter"
-                  />
+                  <Anchor href="/" label="JumpStarter" />
                 </Link>
               </Box>
               <Box direction="row" justify="end" gap="xlarge">
                 <Link href="/login">
-                  <Anchor
-                    href="/login"
-                    label="Log In"
-                  />
+                  <Anchor href="/login" label="Log In" />
                 </Link>
                 <Link href="/signup">
-                  <Anchor
-                    href="/signup"
-                    label="Sign Up"
-                  />
+                  <Anchor href="/signup" label="Sign Up" />
                 </Link>
               </Box>
             </Box>
@@ -88,7 +79,7 @@ export const NavBar = () => {
         }
       </ResponsiveContext.Consumer>
     </Header>
-  )
+  );
 };
 
 export default {
