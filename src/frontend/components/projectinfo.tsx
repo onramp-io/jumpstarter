@@ -1,15 +1,18 @@
 import type { NextPage } from 'next';
-import { Box, Button, Grid, Heading, Image, Meter, Paragraph, Text } from 'grommet';
+import { Box, Button, Grid, Heading, Image, Meter, Paragraph, Table, TableCell, Text } from 'grommet';
 import { Favorite } from 'grommet-icons';
+import { TableRow } from '@mui/material';
 
 const ProjectInfo: NextPage = () => {
   return (
-    <Box direction="column" alignContent="center" margin="xlarge">
+    <Box direction="column" alignContent="center" margin={{
+        horizontal: "xlarge"
+    }}>
         <Grid
-          rows={['0.3fr', '0.7fr', '1fr', '1fr', '0.3fr']}
+          rows={['0.3fr', '0.7fr', '1fr', '1.fr', '0.3fr']}
           columns={['1.5fr', '1.5fr']}
           gap={{
-            column: "medium"
+            column: "large"
           }}
           areas={[
             { name: 'title', start: [0, 0], end: [1, 0]},
@@ -35,10 +38,10 @@ const ProjectInfo: NextPage = () => {
                     { name: 'heart', start: [1, 0], end: [1, 0]}
                 ]}>
                     <Box gridArea='text'>
-                        <Heading size="small" margin={{
-                        top: "small",
-                        bottom: "small"
-                        }}>Goal: $1,000</Heading>
+                        <Heading size="xsmall" margin={{
+                        vertical: "small"
+                        }}
+                        >Goal: $1,000</Heading>
                         <Text>Target Date: 03/07/2020</Text>
                     </Box>
                     <Box margin="small" align="end">
@@ -47,19 +50,38 @@ const ProjectInfo: NextPage = () => {
               </Grid>
           </Box>
 
-          <Box gridArea="progress">
-              <Meter/>
+          <Box gridArea="progress" margin={{
+              top: "large",
+              bottom: "large"
+          }}>
+              <Table>
+                  <TableRow>
+                    <TableCell scope="col"><strong>Raised</strong></TableCell>
+                    <TableCell scope="col"><strong>Remaining</strong></TableCell>
+                    <TableCell scope="col"><strong>Investors</strong></TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell scope="col">$100</TableCell>
+                    <TableCell scope="col">$900</TableCell>
+                    <TableCell scope="col">12</TableCell>
+                  </TableRow>
+              </Table>
+              <Meter max={1000} value={100}  background="light-3" size="full" margin={{
+                  top: "small"
+              }} alignSelf="stretch"/>
           </Box>
 
           <Box gridArea="info">
             <Heading size="small" margin={{
-                top: "small",
                 bottom: "small"
             }}>Info</Heading>
-            <Paragraph>This is a description of the project. Pretty cool huh.</Paragraph>
+            <Paragraph fill={true} margin={{
+                top: "none",
+                bottom: "large"
+            }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec dui arcu, mollis non venenatis sit amet, tincidunt in lacus. Donec non ante in leo blandit commodo. Donec ac malesuada massa. Donec pulvinar suscipit ex eu fringilla. Vivamus et convallis sapien. Praesent ut lorem cursus, venenatis turpis nec, feugiat eros.</Paragraph>
           </Box>
 
-          <Button gridArea="button" primary label="JumpStart this project"/>
+          <Button gridArea="button" margin={{horizontal: "xlarge"}} primary label="JumpStart this project"/>
         </Grid>
       </Box>
   );
