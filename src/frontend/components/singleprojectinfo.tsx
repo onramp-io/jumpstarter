@@ -2,7 +2,6 @@ import type { NextPage } from 'next';
 import { Box, Button, Grid, Heading, Image, Meter, Paragraph, Table, TableCell, Text } from 'grommet';
 import { Favorite } from 'grommet-icons';
 import { TableRow } from '@mui/material';
-import { useState, useEffect } from 'react';
 
 interface SingleProjectInfoProps {
   projectTitle: string,
@@ -15,7 +14,6 @@ interface SingleProjectInfoProps {
 }
 
 const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectTitle, projectDescription, projectFundGoal, projectCurrFunds, projectDeadline, projectPictures, projectInvestors }) => {
-
   return (
     <Box 
         direction="column" 

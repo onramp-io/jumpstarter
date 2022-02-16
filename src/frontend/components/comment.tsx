@@ -7,7 +7,7 @@ interface CommentProps {
   commentText: string,
 }
 
-const Comment: NextPage = () => {
+const Comment: NextPage<CommentProps> = ({userName, userIconURL, commentText}) => {
   return (
     <Box 
       direction="column" 
@@ -24,14 +24,14 @@ const Comment: NextPage = () => {
         { name: 'comment', start: [1, 1], end: [2, 1]}
       ]}
       >
-        <Avatar gridArea="icon" size="large" alignSelf='center' src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80"/>
+        <Avatar gridArea="icon" size="large" alignSelf='center' margin={{right: '1rem'}}src={userIconURL}/>
 
         <Box gridArea="username" 
           direction="row"
         >
           <Text alignSelf='end' margin={{
             bottom: "small"
-          }}>User Name</Text>
+          }}>{userName}</Text>
         </Box>
 
         <Box 
@@ -39,7 +39,7 @@ const Comment: NextPage = () => {
           border={true} 
           fill={true} 
         >
-          <Text margin="medium">This is a comment. Cool nice comment love it.</Text>
+          <Text margin="medium">{commentText}</Text>
         </Box>
       </Grid>
     </Box>
