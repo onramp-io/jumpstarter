@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-jumpstarter-dev-101640-authRole",
+      "UnauthRoleArn": "arn:aws:iam::313135610139:role/amplify-jumpstarter-dev-101640-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::313135610139:role/amplify-jumpstarter-dev-101640-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-jumpstarter-dev-101640-deployment",
+      "UnauthRoleName": "amplify-jumpstarter-dev-101640-unauthRole",
+      "StackName": "amplify-jumpstarter-dev-101640",
+      "StackId": "arn:aws:cloudformation:us-east-1:313135610139:stack/amplify-jumpstarter-dev-101640/1dcf7f50-8da9-11ec-abe2-0a58068ce4a1",
+      "AmplifyAppId": "d30432gepsi289"
+    },
+    "categories": {
+      "auth": {
+        "jumpstarterb7d6df31": {}
+      }
+    }
+  }
+}
