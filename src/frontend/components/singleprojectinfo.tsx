@@ -1,7 +1,6 @@
 import type { NextPage } from 'next';
-import { Box, Button, Grid, Heading, Image, Meter, Paragraph, Table, TableCell, Text } from 'grommet';
+import { Box, Button, Grid, Heading, Image, Meter, Paragraph, Table, TableRow, TableCell, Text } from 'grommet';
 import { Favorite } from 'grommet-icons';
-import { TableRow } from '@mui/material';
 
 interface SingleProjectInfoProps {
   projectTitle: string,

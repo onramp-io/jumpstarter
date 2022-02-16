@@ -4,8 +4,6 @@ import Comment from '@frontend/components/comment';
 import SingleProjectInfo from '@frontend/components/singleprojectinfo';
 import { useState } from 'react';
 
-
-
 const Project: NextPage = () => {
   const [comment, setComment] = useState('');
 

@@ -5,30 +5,38 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 import { Auth } from 'aws-amplify';
-import { Heading, TextInput, Box, Notification, Button } from 'grommet';
+import {
+  Button,
+  Grommet,
+  Heading,
+  Text,
+  TextInput,
+  Box,
+  Notification,
+} from 'grommet';
 
 import styles from '../styles/Login.module.css';
 
-const Login: NextPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const VerifySignup: NextPage = () => {
+  const [username, setUsername] = useState('');
+  const [code, setCode] = useState('');
   const [errorMessage, setError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const router = useRouter();
 
-  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+  const onChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCode(e.target.value);
   };
 
-  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+  const onChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
   };
 
   const handleLogin = async () => {
     setIsLoggingIn(true);
     try {
-      const user = await Auth.signIn(email, password);
+      const user = await Auth.confirmSignUp(username, code);
       router.push('/app/profile');
     } catch (error) {
       setError(error.message);
@@ -39,25 +47,25 @@ const Login: NextPage = () => {
   return (
     <>
       <Box className={styles.login_wrapper}>
-        <Heading>Login</Heading>
-        <>
+        <Heading>Confirm Sign Up</Heading>
+        <Box>
           <TextInput
             type="text"
-            name="email"
-            placeholder="Email"
-            value={email}
+            name="username"
+            placeholder="Username"
+            value={username}
             onChange={(e) => {
-              onChangeEmail(e);
+              onChangeUsername(e);
             }}
             className={styles.login_input}
           />
           <TextInput
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={password}
+            type="text"
+            name="code"
+            placeholder="Code"
+            value={code}
             onChange={(e) => {
-              onChangePassword(e);
+              onChangeCode(e);
             }}
             className={styles.login_input}
           />
@@ -72,10 +80,10 @@ const Login: NextPage = () => {
               onClick={handleLogin}
               className={styles.login_button}
             >
-              Login
+              Confirm
             </Button>
           </Box>
-        </>
+        </Box>
         <Box className={styles.account_not_exists}>
           Don't have an account?
           <Link href="/signup">
@@ -87,4 +95,4 @@ const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default VerifySignup;

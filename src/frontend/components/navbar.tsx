@@ -1,38 +1,39 @@
 import type { NextPage } from 'next';
 import home from '../../styles/Home.module.css';
-import HomeIcon from '@mui/icons-material/Home';
+import { Home } from 'grommet-icons';
 import Link from 'next/link';
+import { Box, Text } from 'grommet';
 
 const Navbar: NextPage = () => {
   return (
-    <div className={home.grid}>
+    <Box className={home.grid}>
       <Link href="/">
         <a className={home.card}>
-          <HomeIcon />
+          <Home />
         </a>
       </Link>
 
       <Link href="/app/create">
         <a className={home.card}>
-          <h2>Create a new project</h2>
+          <Text>Create a new project</Text>
         </a>
       </Link>
       <Link href="/discover">
         <a className={home.card}>
-          <h2>Discover</h2>
+          <Text>Discover</Text>
         </a>
       </Link>
       <Link href="/login">
         <a className={home.card}>
-          <h2>Login</h2>
+          <Text>Login</Text>
         </a>
       </Link>
       <Link href="/signup">
         <a className={home.card}>
-          <h2>Signup</h2>
+          <Text>Signup</Text>
         </a>
       </Link>
-    </div>
+    </Box>
   );
 };
 
