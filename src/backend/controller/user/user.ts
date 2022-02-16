@@ -3,6 +3,7 @@ import { getRepository, getConnection } from 'typeorm';
 import { User } from '../../model/entities/User';
 import connection from '../../model/db';
 
+<<<<<<< HEAD
 const addNewUser = async (req: NextApiRequest, res: NextApiResponse) => {
   const db = await connection();
   const newUser = await db.createQueryBuilder()
@@ -15,6 +16,14 @@ const addNewUser = async (req: NextApiRequest, res: NextApiResponse) => {
   await db.close();
   console.log(newUser);
   res.json(newUser);
+=======
+const user_controller = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  user
+) => {
+  res.status(200).json({ name: user.attributes.given_name });
+>>>>>>> 3ecd9613754ccc86c999227a944e2597354d2b92
 };
 
 const getUser = async (req: NextApiRequest, res: NextApiResponse) => {

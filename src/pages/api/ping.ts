@@ -14,7 +14,6 @@ export default function handler(
     //Basic ping/pong endpoint to test server functionality
     pingHandler(req, res);
   } else {
-    console.log(req.body);
     // Handle any other HTTP method
   }
 }
