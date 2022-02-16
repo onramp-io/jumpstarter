@@ -1,0 +1,24 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "test",
+  "password": "test",
+  "database": "test",
+  "synchronize": true,
+  "logging": false,
+  "entities": [
+    "src/backend/model/entities/**/*.ts"
+  ],
+  "migrations": [
+    "src/backend/model/migration/**/*.ts"
+  ],
+  "subscribers": [
+    "src/backend/model/subscriber/**/*.ts"
+  ],
+  "cli": {
+    "entitiesDir": "src/backend/model/entities",
+    "migrationsDir": "src/backend/model/migration",
+    "subscribersDir": "src/backend/model/migration"
+  }
+}
