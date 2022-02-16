@@ -3,7 +3,7 @@ import { Avatar, Box, Grid, Text } from 'grommet';
 
 const Comment: NextPage = () => {
   return (
-    <Box direction="column" alignContent="center" margin={{horizontal: "18rem", vertical: "large"}} pad={{horizontal: "xlarge"}}>
+    <Box direction="column" alignContent="center" margin={{horizontal: "25rem", vertical: "large"}} pad={{horizontal: "medium"}}>
       <Grid height="small"
       rows={['1fr', '3fr']}
       columns={['0.5fr', '1fr', '3fr']}
