@@ -26,18 +26,18 @@
       "react": "17.0.2",
       "react-dom": "17.0.2",
       "react-scripts": "latest",
+      "reflect-metadata": "^0.1.10",
       "styled-components": "^5.3.3",
       "ts-node": "^10.5.0",
-      "typeorm": "0.2.41",
-      "reflect-metadata": "^0.1.10"
+      "typeorm": "0.2.41"
    },
    "devDependencies": {
       "@types/node": "^8.0.29",
       "@types/react": "17.0.39",
       "eslint": "8.8.0",
       "eslint-config-next": "12.0.10",
-      "typescript": "3.3.3333",
-      "ts-node": "3.3.0"
+      "ts-node": "3.3.0",
+      "typescript": "^4.3.2"
    },
    "browserslist": [
       ">0.2%",
