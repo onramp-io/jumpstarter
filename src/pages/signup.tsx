@@ -3,13 +3,13 @@ import { useRouter } from 'next/router';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 
-import { Auth } from 'aws-amplify';
-
 import styles from '../styles/Signup.module.css';
 import { Heading, TextInput, Box, Button, Notification } from 'grommet';
+import { createUserWithEmailAndPassword, getIdToken } from 'firebase/auth';
+import { auth } from '../firebase/client/client';
+import axios from 'axios';
 
 const Signup: NextPage = () => {
-  const [username, setUsername] = useState('');
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
   const [email, setEmail] = useState('');
@@ -29,7 +29,6 @@ const Signup: NextPage = () => {
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-    setUsername(e.target.value);
   };
 
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,16 +38,26 @@ const Signup: NextPage = () => {
   const handleSignUp = async () => {
     setIsSigningUp(true);
     try {
-      const { user } = await Auth.signUp({
-        username,
-        password,
-        attributes: {
-          given_name: fName,
-          family_name: lName,
-          email,
-        },
-      });
-      router.push('/verify');
+      const data = await createUserWithEmailAndPassword(auth, email, password);
+      const token = await getIdToken(data.user);
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+      const body = {
+        firstName: fName,
+        lastName: lName,
+        email: email,
+      };
+      const response = await axios.post(
+        'http://localhost:3000/api/users/user',
+        body,
+        {
+          headers,
+        }
+      );
+      console.log('response: ', response);
+      router.push('/login');
     } catch (error) {
       setError(error.message);
     }
