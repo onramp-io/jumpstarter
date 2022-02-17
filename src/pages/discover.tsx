@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
-import { Box, CheckBoxGroup, Heading, InfiniteScroll, Select, Sidebar, Text } from 'grommet';
-import { useState } from 'react';
+import { Box, CheckBoxGroup, Heading, InfiniteScroll, NameValueList, Select, Sidebar, Text } from 'grommet';
+import React, { useState } from 'react';
 import LargeProjectCard from '@frontend/components/largeprojectcard';
 
 const Discover: NextPage = () => {
@@ -15,8 +15,13 @@ const Discover: NextPage = () => {
 
   const [categories, setCategories] = useState(categoryState);
 
-  const onChangeHandler = () => {
+  const onChangeHandler = (value, option) => {
+    const checked = categories[option["label"]];
+    const copyOfCategories = { ...categories };
 
+    copyOfCategories[option["label"]] = !checked;
+
+    setCategories(copyOfCategories)
   }
 
   const projectData = [
@@ -91,11 +96,11 @@ const Discover: NextPage = () => {
       <Box direction="row" margin={{ horizontal: "9rem" }}>
         <Sidebar margin={{right: "xlarge"}}>
           <Text weight="bold" margin={{top: "large", bottom: "medium"}}>Categories</Text>
-          <CheckBoxGroup options={["Film", "Tech", "Literature", "Games", "Music", "Food"]} onChange={() => onChangeHandler} alignSelf="center"/>
+          <CheckBoxGroup options={["Film", "Tech", "Literature", "Games", "Music", "Food"]} onChange={({ value, option }) => onChangeHandler(value, option)} alignSelf="center"/>
         </Sidebar>
         <Box direction="row" gap="small" wrap={true} margin={{left: "1rem"}}>
           <InfiniteScroll
-            items={projectData}
+            items={projectData.filter(project => categories[project.category])}
             step={3}
             onMore={() => {
               console.log('On more triggered')

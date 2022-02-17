@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { Anchor, Box, Card, Heading, Image, Meter, Text } from 'grommet';
+import { Anchor, Box, Image, Meter, Text } from 'grommet';
 
 type projectType = {
   user_name: string,
