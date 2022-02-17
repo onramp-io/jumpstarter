@@ -9,11 +9,9 @@ export default function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) {
-    //Add new user to database if user does not already exist
-    if (req.method === 'POST') {
-        likesController.addNewLike(req, res);
-    } else {
-        console.log(req.body);
-    // Handle any other HTTP method
+    switch(req.method) {
+        //Add new like given by user to project
+        case 'POST': likesController.addNewLike(req, res);;
+        default: console.log(req.body);
     }
 }
