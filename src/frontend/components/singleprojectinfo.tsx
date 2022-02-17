@@ -2,17 +2,21 @@ import type { NextPage } from 'next';
 import { Box, Button, Grid, Heading, Image, Meter, Paragraph, Table, TableRow, TableCell, Text } from 'grommet';
 import { Favorite } from 'grommet-icons';
 
-interface SingleProjectInfoProps {
-  projectTitle: string,
-  projectDescription: string,
-  projectFundGoal: number,
-  projectCurrFunds: number,
-  projectDeadline: Date,
-  projectPictures: string[],
-  projectInvestors: number
+type projectType = {
+  title: string,
+  description: string,
+  fund_goal: number,
+  fund_raised: number,
+  end_date: Date,
+  pictures: string[],
+  investors: number
 }
 
-const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectTitle, projectDescription, projectFundGoal, projectCurrFunds, projectDeadline, projectPictures, projectInvestors }) => {
+interface SingleProjectInfoProps {
+  projectDetails: projectType
+}
+
+const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails }): JSX.Element => {
   return (
     <Box 
         direction="column" 
@@ -36,10 +40,10 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectTitle, pro
             { name: 'button', start: [1, 4], end: [1, 4]}
           ]}
           >
-          <Heading gridArea="title" textAlign="center" fill={true}>{projectTitle}</Heading>
+          <Heading gridArea="title" textAlign="center" fill={true}>{projectDetails.title}</Heading>
 
           <Box gridArea="image">
-            <Image fit="cover" width="100%" max-height="100%" src={projectPictures[0]}/>
+            <Image fit="cover" width="100%" max-height="100%" src={projectDetails.pictures[0]}/>
           </Box>
 
           <Box gridArea="goal">
@@ -54,8 +58,8 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectTitle, pro
                         <Heading size="xsmall" margin={{
                         vertical: "small"
                         }}
-                        >Goal: ${projectFundGoal.toLocaleString()}</Heading>
-                        <Text>Target Date: {projectDeadline.toDateString()}</Text>
+                        >Goal: ${projectDetails.fund_goal.toLocaleString()}</Heading>
+                        <Text>Target Date: {projectDetails.end_date.toDateString()}</Text>
                     </Box>
                     <Box margin="small" align="end">
                         <Favorite size="large"/>
@@ -79,12 +83,12 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectTitle, pro
                     <TableCell scope="col"><strong>Investors</strong></TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell scope="col">${projectCurrFunds.toLocaleString()}</TableCell>
-                    <TableCell scope="col">${(projectFundGoal - projectCurrFunds).toLocaleString()}</TableCell>
-                    <TableCell scope="col">{projectInvestors.toLocaleString()}</TableCell>
+                    <TableCell scope="col">${projectDetails.fund_raised.toLocaleString()}</TableCell>
+                    <TableCell scope="col">${(projectDetails.fund_goal - projectDetails.fund_raised).toLocaleString()}</TableCell>
+                    <TableCell scope="col">{projectDetails.investors.toLocaleString()}</TableCell>
                   </TableRow>
               </Table>
-              <Meter max={projectFundGoal} value={projectCurrFunds}  background="light-3" size="full" margin={{
+              <Meter max={projectDetails.fund_goal} value={projectDetails.fund_raised}  background="light-3" size="full" margin={{
                   top: "small"
               }} alignSelf="stretch"/>
           </Box>
@@ -96,7 +100,7 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectTitle, pro
             <Paragraph fill={true} margin={{
                 top: "none",
                 bottom: "large"
-            }}>{projectDescription}</Paragraph>
+            }}>{projectDetails.description}</Paragraph>
           </Box>
 
           <Button gridArea="button" margin={{horizontal: "xlarge"}} primary label="JumpStart this project"/>
