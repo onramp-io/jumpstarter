@@ -1,8 +1,24 @@
 import type { NextPage } from 'next';
 import { Box, CheckBoxGroup, Heading, InfiniteScroll, Select, Sidebar, Text } from 'grommet';
+import { useState } from 'react';
 import LargeProjectCard from '@frontend/components/largeprojectcard';
 
 const Discover: NextPage = () => {
+  const categoryState = {
+    Film: true,
+    Tech: true,
+    Literature: true,
+    Games: true,
+    Music: true,
+    Food: true
+  }
+
+  const [categories, setCategories] = useState(categoryState);
+
+  const onChangeHandler = () => {
+
+  }
+
   const projectData = [
     {
       user_name: "User 1",
@@ -75,7 +91,7 @@ const Discover: NextPage = () => {
       <Box direction="row" margin={{ horizontal: "9rem" }}>
         <Sidebar margin={{right: "xlarge"}}>
           <Text weight="bold" margin={{top: "large", bottom: "medium"}}>Categories</Text>
-          <CheckBoxGroup options={["Film", "Tech", "Literature", "Games", "Music", "Food"]} alignSelf="center"/>
+          <CheckBoxGroup options={["Film", "Tech", "Literature", "Games", "Music", "Food"]} onChange={() => onChangeHandler} alignSelf="center"/>
         </Sidebar>
         <Box direction="row" gap="small" wrap={true} margin={{left: "1rem"}}>
           <InfiniteScroll
