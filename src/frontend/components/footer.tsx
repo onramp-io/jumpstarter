@@ -4,7 +4,11 @@ import home from '../../styles/Home.module.css';
 
 const Footer: NextPage = () => {
   return (
-    <Box>
+    <Box
+      margin={{
+        top: 'xlarge',
+      }}
+    >
       <footer className={home.footer}>Built by Team Blend 😎</footer>
     </Box>
   );
