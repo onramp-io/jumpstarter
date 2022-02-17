@@ -68,4 +68,6 @@ const params: Stripe.Checkout.SessionCreateParams = {
 };
 
 const checkoutSession: Stripe.Checkout.Session =
-  await Stripe.checkout.sessions.create(params);
+  (async () => {
+    await Stripe.checkout.sessions.create(params)
+  })();
