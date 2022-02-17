@@ -1,9 +1,17 @@
 import type { NextPage } from 'next';
 import { Anchor, Box, Card, Heading, Image, Meter, Text } from 'grommet';
 
+interface LargeProjectCardProps {
+  user_name: string,
+  title: string,
+  category: string,
+  description: string,
+  fund_goal: number,
+  fund_raised: number
+  end_date: Date,
+}
 
-
-const LargeProjectCard: NextPage = () => {
+const LargeProjectCard: NextPage<LargeProjectCardProps> = ({ user_name, title, category, description, fund_goal, fund_raised, end_date }) => {
   return (
     <Box
       flex={{shrink: 0}}
@@ -14,7 +22,7 @@ const LargeProjectCard: NextPage = () => {
       align="center"
       pad="small"
       width="medium"
-      height="min-content"
+      max-height="min-content"
       elevation="medium"
     >
       <Box
@@ -25,16 +33,18 @@ const LargeProjectCard: NextPage = () => {
       </Box>
 
       <Box direction="column" gap="small" margin={{vertical: "medium", horizontal: "medium"}}>
-        <Anchor href="#" label="LITERATURE" size="small"/>
-        <Text weight="bold" size="large">Title</Text>
-        <Text>A brief description of what this project is. A second line for good measure. Maybe even a third line why not.</Text>
+        <Anchor href="#" label={ category.toUpperCase() } size="small"/>
+        <Text weight="bold" size="large">{title}</Text>
+        <Box max-height="min-content">
+          <Text>{ description }</Text>
+        </Box>
         <Box margin={{top: "small", bottom: "medium"}}>
           <Text size="small">Created by</Text>
-          <Anchor href="#" label="User Name" />
+          <Anchor href="#" label={ user_name } />
         </Box>
-        <Meter type="bar" value={10} />
-        <Box>
-          <Text><strong>$100</strong> raised</Text>
+        <Meter type="bar" value={ fund_raised } max={ fund_goal }/>
+        <Box margin={{bottom: "small"}}>
+          <Text><strong>${fund_raised.toLocaleString()}</strong> <small>raised out of ${fund_goal.toLocaleString()} </small></Text>
           <Text size="small">12 days left</Text>
         </Box>
       </Box>
