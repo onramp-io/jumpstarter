@@ -1,5 +1,17 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+.next
+.vscode/settings.json
+amplify/.config/project-config.json
+amplify/README.md
+amplify/backend/auth/**
+amplify/backend/backend-config.json
+amplify/backend/tags.json
+amplify/backend/types/**
+amplify/cli.json
+amplify/hooks/README.md
+amplify/**
+
 # dependencies
 /node_modules
 /.pnp

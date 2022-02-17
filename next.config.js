@@ -15,4 +15,7 @@ module.exports = {
     FB_ADMIN_CLIENT_EMAIL: process.env.FB_ADMIN_CLIENT_EMAIL,
     FB_ADMIN_CLIENT_ID: process.env.FB_ADMIN_CLIENT_ID,
   },
+  images: {
+    domains: ['images.unsplash.com']
+  }
 };
