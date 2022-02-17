@@ -13,7 +13,7 @@ const connection = async () => {
         url: process.env.CONNECTION_STRING,
         logging: true, //statements/queries console logged to terminal -> should remove when not debugging
         synchronize: true, //will tralslate logic to sql
-        entities: [User, Project, Investment, Comment]
+        entities: [User, Project, Investment, Comment, Like, Interest]
      });
     if (getConnection().isConnected) {
         console.log("type orm db connected");
