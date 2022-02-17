@@ -4,7 +4,7 @@ import { Project } from './entities/Project';
 import { Investment } from './entities/Investment';
 import { Interest } from './entities/Interest';
 import { Comment } from './entities/Comment';
-import { Like } from './entities/like';
+import { Like } from './entities/Like';
 
 //create typeorm database connection using ormconfig.json file
 const connection = async () => {

@@ -3,7 +3,7 @@ import { Comment } from './Comment';
 import { Project } from './Project';
 import { Interest } from './Interest';
 import { Investment } from './Investment';
-import { Like } from './like';
+import { Like } from './Like';
 
 @Entity()
 export class User {

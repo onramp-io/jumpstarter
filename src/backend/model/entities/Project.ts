@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'ty
 import { User } from './User';
 import { Comment } from './Comment';
 import { Investment } from './Investment';
-import { Like } from './like';
+import { Like } from './Like';
 
 @Entity()
 export class Project {
