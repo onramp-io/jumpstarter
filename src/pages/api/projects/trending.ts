@@ -9,12 +9,9 @@ export default function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) {
-    //Get all trending projects
-    if (req.method === 'GET') {
-        projectController.getTrendingProjects(req, res); 
-    } 
-    else {
-        console.log(req.body);
-    // Handle any other HTTP method
+    switch(req.method) {
+        //Get all trending projects
+        case 'GET': projectController.getTrendingProjects(req, res);
+        default: console.log(req.body);
     }
 }

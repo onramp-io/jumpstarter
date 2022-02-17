@@ -9,20 +9,13 @@ export default function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) {
-    //Get single project
-    if (req.method === 'GET') {
-        projectController.getProject(req, res);
-    }
-    //Update project
-    if (req.method === 'PUT') {
-        projectController.updateProject(req, res);
-    }
-    //Delete project
-    if (req.method === 'DELETE') {
-        projectController.deleteProject(req, res);
-    }
-    else {
-        console.log(req.body);
-    // Handle any other HTTP method
+    switch(req.method) {
+        //Get single project
+        case 'GET': projectController.getProject(req, res);
+        //Update project
+        case 'PUT': projectController.updateProject(req, res);
+        //Delete project
+        case 'DELETE': projectController.deleteProject(req, res);
+        default: console.log(req.body);
     }
 }

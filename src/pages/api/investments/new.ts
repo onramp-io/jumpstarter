@@ -10,10 +10,8 @@ export default function handler(
     res: NextApiResponse<Data>
 ) {
     //Add new user to database if user does not already exist
-    if (req.method === 'POST') {
-        investementsController.addNewInvestment(req, res);
-    } else {
-        console.log(req.body);
-    // Handle any other HTTP method
+    switch(req.method) {
+        case 'POST': investementsController.addNewInvestment(req, res);
+        default: console.log(req.body);
     }
 }

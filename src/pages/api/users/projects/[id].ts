@@ -9,15 +9,11 @@ export default function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) {
-    //Get all projects associated with user
-    if (req.method === 'GET') {
-        userController.getUserProjects(req, res); 
-    } 
-    //Create new project
-    if (req.method === 'POST') {
-        userController.createProject(req, res);
-    }else {
-        console.log(req.body);
-    // Handle any other HTTP method
+    switch(req.method) {
+        //Get all projects associated with user
+        case 'GET': userController.getUserProjects(req, res);
+        //Create new project
+        case 'POST': userController.createProject(req, res);
+        default: console.log(req.body);
     }
 }

@@ -9,11 +9,9 @@ export default function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) {
-    //Add new user to database if user does not already exist
-    if (req.method === 'POST') {
-        userController.addNewUser(req, res);
-    } else {
-        console.log(req.body);
-    // Handle any other HTTP method
+    switch(req.method) {
+        //Add new user to database if user does not already exist
+        case 'POST': userController.addNewUser(req, res);
+        default: console.log(req.body);
     }
 }

@@ -9,15 +9,11 @@ export default function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) {
-    //Get specified user
-    if (req.method === 'GET') {
-        userController.getUser(req, res); 
-    } 
-    //Update specified user data
-    if (req.method === 'PUT') {
-        userController.updateUser(req, res);
-    }else {
-        console.log(req.body);
-    // Handle any other HTTP method
+    switch(req.method) {
+        //Get specified user
+        case 'GET': userController.getUser(req, res);
+        //Update specified user data
+        case 'PUT': userController.updateUser(req, res);
+        default: console.log(req.body);
     }
 }

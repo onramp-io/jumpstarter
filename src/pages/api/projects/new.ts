@@ -9,12 +9,9 @@ export default function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) {
-    //Get all new projects
-    if (req.method === 'GET') {
-        projectController.getNewProjects(req, res); 
-    } 
-    else {
-        console.log(req.body);
-    // Handle any other HTTP method
+    switch(req.method) {
+        //Get all new projects
+        case 'GET': projectController.getNewProjects(req, res);
+        default: console.log(req.body);
     }
 }
