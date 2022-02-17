@@ -6,15 +6,17 @@ import { Anchor } from "grommet";
 interface ReusableLinkProps {
   linkHref: string;
   linkCaption: string;
+  className: string | undefined;
 }
 
 const ReusableLink = function reusableLinkComponent<ReusableLinkProps>({
   linkHref,
   linkCaption,
+  className,
 }) {
   return (
     <Link href={linkHref}>
-      <Anchor href={linkHref} label={linkCaption} />
+      <Anchor className={className} href={linkHref} label={linkCaption} />
     </Link>
   );
 };

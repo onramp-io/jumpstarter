@@ -74,7 +74,11 @@ const SectionMarquee = function SectionMarqueeComponent<SectionMarqueeProps>({
             right: "large",
           }}
         >
-          <ReusableLink linkHref={linkHref} linkCaption={linkCaption} />
+          <ReusableLink
+            className=""
+            linkHref={linkHref}
+            linkCaption={linkCaption}
+          />
         </Box>
       </Box>
     </>
