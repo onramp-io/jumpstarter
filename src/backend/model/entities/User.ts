@@ -26,7 +26,7 @@ export class User {
     @Column("text")
     bio: string;
 
-    @Column("decimal")
+    @Column({type: "decimal", default: 0})
     investedAmt: number;
 
     @OneToMany(() => Comment, comment => comment.user)

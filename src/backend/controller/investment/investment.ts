@@ -25,7 +25,7 @@ const addNewInvestment = async (req: NextApiRequest, res: NextApiResponse) => {
         const userFund = await db.createQueryBuilder()
                 .select()
                 .update(User)
-                .set({investedAmt: () => "invested_amt + `%${req.body.fund_amt}%`"})
+                .set({investedAmt: () => "investedAmt + `%${req.body.fund_amt}%`"})
                 .where("id = :id", { id: req.body.userId })
                 .execute()
 
@@ -33,7 +33,7 @@ const addNewInvestment = async (req: NextApiRequest, res: NextApiResponse) => {
         const projFund = await db.createQueryBuilder()
                 .select()
                 .update(Project)
-                .set({fundRaised: () => "fund_raised + ${req.body.fund_amt}"})
+                .set({fundRaised: () => "fundRaised + `%{req.body.fund_amt}%`"})
                 .where("id = :id", { id: req.body.projectId })
                 .execute()
         await db.close();

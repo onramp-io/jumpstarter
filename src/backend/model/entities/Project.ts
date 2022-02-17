@@ -23,7 +23,7 @@ export class Project {
     description: string;
 
     @Column("decimal", { array: true})
-    fund_tiers: number[];
+    fundTiers: number[];
 
     @Column("integer")
     currFundGoal: number;
@@ -37,7 +37,7 @@ export class Project {
     @Column("timestamp")
     createdDate: string;
 
-    @Column("integer")
+    @Column({type: "integer", default: 0})
     likesAmt: number;
 
     @ManyToOne(() => User, user => user.projects)
