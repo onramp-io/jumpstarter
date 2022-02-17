@@ -19,7 +19,7 @@ const SectionHeader = function sectionComponent<sectionProps>({ margin, sectionH
         <Heading level={2}>
           {sectionHeader.toUpperCase()}
         </Heading>
-        <Main pad="none">
+        <Main pad="small">
           {sectionDescription}
         </Main>
       </Box>
