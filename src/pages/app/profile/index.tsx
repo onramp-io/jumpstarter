@@ -1,22 +1,19 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import { InferGetServerSidePropsType, GetServerSidePropsContext } from 'next';
 
-import { Amplify, withSSRContext } from 'aws-amplify';
-import { Auth } from 'aws-amplify';
-import '@aws-amplify/ui-react/styles.css';
-
-import awsExports from '../../../aws-exports';
-Amplify.configure(awsExports);
-
-import { Box, Heading, Button } from 'grommet';
+import { Box, Heading, Button, Text } from 'grommet';
 
 import styles from '../../../styles/Signup.module.css';
+import admin from '../../../firebase/admin/admin';
+import { useAuth } from '@frontend/context/AuthProvider';
 
-function MyProfile({ user }) {
+function MyProfile() {
   const router = useRouter();
+  const { access_token } = useAuth();
+
   const signOut = async function () {
     try {
-      await Auth.signOut();
       router.push('/login');
     } catch (error) {
       console.log('error signing out: ', error);
@@ -26,34 +23,14 @@ function MyProfile({ user }) {
     <>
       <Box className={styles.signup_wrapper}>
         <Heading>MyProfile</Heading>
-        <Heading>Hello {user}</Heading>
+        <Heading>Hello {access_token}</Heading>
+        {access_token}
         <Button primary onClick={signOut}>
           Sign out
         </Button>
       </Box>
     </>
   );
-}
-
-export async function getServerSideProps(context) {
-  const { Auth } = withSSRContext(context);
-  try {
-    const user = await Auth.currentAuthenticatedUser();
-    const username = user.attributes.given_name;
-    return {
-      props: {
-        user: username,
-      },
-    };
-  } catch (error) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/login',
-      },
-      props: {},
-    };
-  }
 }
 
 export default MyProfile;
