@@ -11,13 +11,14 @@ const addNewInvestment = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         console.log("userID: " + req.body.userId); //debug
         console.log("ProjectID: " + req.body.projectId); //debug
+        console.log("fundAmt: " + req.body.fundAmt); //debug
 
         //Add investment to investment table and associate with userID and ProjectId
         const investment = await db.createQueryBuilder()
                 .insert()
                 .into(Investment)
                 .values([
-                {user: req.body.userId, project: req.body.projectId, fundAmt: req.body.fund_amt},
+                {user: req.body.userId, project: req.body.projectId, fundAmt: req.body.fundAmt},
                 ])
                 .execute()
 
@@ -25,7 +26,7 @@ const addNewInvestment = async (req: NextApiRequest, res: NextApiResponse) => {
         const userFund = await db.createQueryBuilder()
                 .select()
                 .update(User)
-                .set({investedAmt: () => "investedAmt + `%${req.body.fund_amt}%`"})
+                .set({investedAmt: () => `"investedAmt" + ${req.body.fundAmt}`})
                 .where("id = :id", { id: req.body.userId })
                 .execute()
 
@@ -33,7 +34,7 @@ const addNewInvestment = async (req: NextApiRequest, res: NextApiResponse) => {
         const projFund = await db.createQueryBuilder()
                 .select()
                 .update(Project)
-                .set({fundRaised: () => "fundRaised + `%{req.body.fund_amt}%`"})
+                .set({fundRaised: () => `"fundRaised" + ${req.body.fundAmt}`})
                 .where("id = :id", { id: req.body.projectId })
                 .execute()
         await db.close();
