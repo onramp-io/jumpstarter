@@ -14,13 +14,13 @@ export const get_user = async (
 export const insert_user = async (
   req: NextApiRequest,
   res: NextApiResponse,
-  user
+  user: any
 ) => {
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
   const email = req.body.email;
   const uid = user.uid;
-
+  console.log(user);
   const db = await connection();
   const newUser = await db
     .createQueryBuilder()
@@ -28,13 +28,17 @@ export const insert_user = async (
     .into(User)
     .values([
       {
+        uid: uid,
         first_name: firstName,
         last_name: lastName,
         email: email,
-        uid: uid,
-        avatar: 'test',
-        bio: 'test',
+        avatar: '',
+        bio: '',
         invested_amt: 0,
+        comments: [],
+        projects: [],
+        interests: [],
+        investments: [],
       },
     ])
     .execute();
