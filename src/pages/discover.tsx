@@ -105,13 +105,7 @@ const Discover: NextPage = () => {
               (item, index) => (
                 <LargeProjectCard
                   key={index}
-                  user_name={item.user_name}
-                  title={item.title}
-                  category={item.category}
-                  description={item.description}
-                  fund_goal={item.fund_goal}
-                  fund_raised={item.fund_raised}
-                  end_date={item.end_date}
+                  projectData = {item}
                 />
               )
             }

@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import { Anchor, Box, Card, Heading, Image, Meter, Text } from 'grommet';
 
-interface LargeProjectCardProps {
+type projectType = {
   user_name: string,
   title: string,
   category: string,
@@ -11,7 +11,11 @@ interface LargeProjectCardProps {
   end_date: Date,
 }
 
-const LargeProjectCard: NextPage<LargeProjectCardProps> = ({ user_name, title, category, description, fund_goal, fund_raised, end_date }) => {
+interface LargeProjectCardProps {
+  projectData: projectType
+}
+
+const LargeProjectCard: NextPage<LargeProjectCardProps> = ({projectData}): JSX.Element => {
   return (
     <Box
       flex={{shrink: 0}}
@@ -33,18 +37,18 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({ user_name, title, c
       </Box>
 
       <Box direction="column" gap="small" margin={{vertical: "medium", horizontal: "medium"}}>
-        <Anchor href="#" label={ category.toUpperCase() } size="small"/>
-        <Text weight="bold" size="large">{title}</Text>
+        <Anchor href="#" label={ projectData.category.toUpperCase() } size="small"/>
+        <Text weight="bold" size="large">{ projectData.title }</Text>
         <Box max-height="min-content">
-          <Text>{ description }</Text>
+          <Text>{ projectData.description }</Text>
         </Box>
         <Box margin={{top: "small", bottom: "medium"}}>
           <Text size="small">Created by</Text>
-          <Anchor href="#" label={ user_name } />
+          <Anchor href="#" label={ projectData.user_name } />
         </Box>
-        <Meter type="bar" value={ fund_raised } max={ fund_goal }/>
+        <Meter type="bar" value={ projectData.fund_raised } max={ projectData.fund_goal }/>
         <Box margin={{bottom: "small"}}>
-          <Text><strong>${fund_raised.toLocaleString()}</strong> <small>raised out of ${fund_goal.toLocaleString()} </small></Text>
+          <Text><strong>${projectData.fund_raised.toLocaleString()}</strong> <small>raised out of ${projectData.fund_goal.toLocaleString()} </small></Text>
           <Text size="small">12 days left</Text>
         </Box>
       </Box>
