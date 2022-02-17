@@ -2,6 +2,7 @@ import { NextPageContext } from "next";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { Box, Heading, Image, ResponsiveContext } from "grommet";
+import { hoverAnimation } from "utils/animations/motionObjects";
 
 export enum ProjectCategory {
   CATEGORY_1 = "Arts",
@@ -22,12 +23,7 @@ const PreferenceCard = function preferenceCardComponent<PreferenceCardProps>({
   projectCategory,
 }) {
   return (
-    <motion.div
-      whileHover={{
-        scale: 1.05,
-        transition: { duration: 0.2 },
-      }}
-    >
+    <motion.div whileHover={hoverAnimation}>
       <Box
         elevation="medium"
         margin={{
