@@ -19,6 +19,7 @@
     "amazon-cognito-identity-js": "^5.2.6",
     "axios": "^0.25.0",
     "classnames": "latest",
+    "framer-motion": "^6.2.6",
     "grommet": "^2.20.1",
     "next": "12.0.10",
     "pg": "^8.4.0",
