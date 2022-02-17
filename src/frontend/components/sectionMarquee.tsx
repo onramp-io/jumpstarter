@@ -1,29 +1,34 @@
-import { NextPageContext } from 'next';
-import axios from 'axios';
-import SectionCard from './sectionCard';
-import styled from 'styled-components';
-import { Anchor, Box, Pagination } from 'grommet';
-import Link from 'next/link';
+import { NextPageContext } from "next";
+import axios from "axios";
+import SectionCard from "./sectionCard";
+import styled from "styled-components";
+import { Anchor, Box, Pagination } from "grommet";
+import Link from "next/link";
+import ReusableLink from "./reusableLink";
 
 interface SingleAPIPayload {
-  projectTitle: string,
-  projectDescription: string,
-  projectCreator: string,
+  projectTitle: string;
+  projectDescription: string;
+  projectCreator: string;
 }
 
 interface SectionMarqueeProps {
-  APIPayload: SingleAPIPayload[],
-  linkCaption: string,
-  linkHref: string,
+  APIPayload: SingleAPIPayload[];
+  linkCaption: string;
+  linkHref: string;
 }
 
-const SectionMarquee = function SectionMarqueeComponent<SectionMarqueeProps>({ APIPayload, linkCaption, linkHref }) {
+const SectionMarquee = function SectionMarqueeComponent<SectionMarqueeProps>({
+  APIPayload,
+  linkCaption,
+  linkHref,
+}) {
   /**
-  * first 4 JSON payload from our API
-  */
+   * first 4 JSON payload from our API
+   */
   const handlePageChange = () => {
     console.log("Changed page numbers!");
-  }
+  };
 
   let numberOfPages = 40;
 
@@ -35,7 +40,7 @@ const SectionMarquee = function SectionMarqueeComponent<SectionMarqueeProps>({ A
           gap="small"
           margin={{
             bottom: "small",
-            right: "large"
+            right: "large",
           }}
         >
           <Pagination onChange={handlePageChange} numberItems={numberOfPages} />
@@ -43,41 +48,41 @@ const SectionMarquee = function SectionMarqueeComponent<SectionMarqueeProps>({ A
         <Box
           margin={{
             left: "large",
-            right: "large"
+            right: "large",
           }}
           gap="medium"
           direction="row"
         >
-          {APIPayload.map(({
-            projectTitle,
-            projectDescription,
-            projectCreator,
-          }, i) => {
-            return (
-              < SectionCard key={i} projectTitle={projectTitle} projectDescription={projectDescription} projectCreator={projectCreator} />
-            )
-          })}
+          {APIPayload.map(
+            ({ projectTitle, projectDescription, projectCreator }, i) => {
+              return (
+                <SectionCard
+                  key={i}
+                  projectTitle={projectTitle}
+                  projectDescription={projectDescription}
+                  projectCreator={projectCreator}
+                />
+              );
+            }
+          )}
         </Box>
-        <Box direction="row" justify="end" margin={{
-          top: "medium",
-          right: "large"
-        }}>
-          <Link href={linkHref}>
-            <Anchor
-              href={linkHref}
-              label={linkCaption}
-            />
-          </Link>
+        <Box
+          direction="row"
+          justify="end"
+          margin={{
+            top: "medium",
+            right: "large",
+          }}
+        >
+          <ReusableLink linkHref={linkHref} linkCaption={linkCaption} />
         </Box>
       </Box>
     </>
   );
-}
+};
 
 SectionMarquee.getInitialProps = async ({ req }: NextPageContext) => {
-  return {
-
-  };
+  return {};
 };
 
 export default SectionMarquee;
