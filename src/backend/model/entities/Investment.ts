@@ -9,7 +9,7 @@ export class Investment {
     id: number;
 
     @Column("decimal")
-    fund_amt: number;
+    fundAmt: number;
 
     @ManyToOne(() => User, user => user.investments)
     user: User;

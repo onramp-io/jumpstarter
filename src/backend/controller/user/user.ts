@@ -10,7 +10,7 @@ const addNewUser = async (req: NextApiRequest, res: NextApiResponse) => {
           .insert()
           .into(User)
           .values([
-            {first_name: "test", last_name: "test", email: "test@test.com", avatar: "test", bio: "test", invested_amt: 0},
+            {first_name: "test", last_name: "test", email: "test@test.com", avatar: "test", bio: "test", investedAmt: 0},
           ])
           .execute()
   await db.close();
