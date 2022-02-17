@@ -92,3 +92,7 @@ select {
 .no-text-wrap {
   white-space: nowrap;
 }
+
+.grey-text {
+  color: rgb(161, 161, 161) !important;
+}
