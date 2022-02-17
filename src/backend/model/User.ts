@@ -10,6 +10,9 @@ export class User {
   id: number;
 
   @Column('text')
+  uid: string;
+
+  @Column('text')
   first_name: string;
 
   @Column('text')
