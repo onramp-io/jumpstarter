@@ -11,7 +11,7 @@ export const get_user_controller = async (
   res: NextApiResponse,
   user
 ) => {
-  const user_bio = await get_user(req, res, user.username);
+  const user_bio = await get_user(req, res, user);
   res.status(200).json({
     fName: user.attributes.given_name,
     lName: user.attributes.family_name,
@@ -24,11 +24,9 @@ export const post_user_controller = async (
   res: NextApiResponse,
   user
 ) => {
-  const user_bio = await insert_user(req, res, user.username);
+  const user_bio = await insert_user(req, res, user);
   res.status(200).json({
-    fName: user.attributes.given_name,
-    lName: user.attributes.family_name,
-    bio: user_bio,
+    message: 'User created successfully',
   });
 };
 
@@ -37,7 +35,7 @@ export const put_user_controller = async (
   res: NextApiResponse,
   user
 ) => {
-  const user_bio = await update_user(req, res, user.username);
+  const user_bio = await update_user(req, res, user);
   res.status(200).json({
     fName: user.attributes.given_name,
     lName: user.attributes.family_name,
@@ -50,7 +48,7 @@ export const delete_user_controller = async (
   res: NextApiResponse,
   user
 ) => {
-  const user_bio = await delete_user(req, res, user.username);
+  const user_bio = await delete_user(req, res, user);
   res.status(200).json({
     fName: user.attributes.given_name,
     lName: user.attributes.family_name,
