@@ -4,7 +4,6 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-import { Auth } from 'aws-amplify';
 import { Heading, TextInput, Box, Notification, Button } from 'grommet';
 
 import styles from '../styles/Login.module.css';
@@ -28,7 +27,6 @@ const Login: NextPage = () => {
   const handleLogin = async () => {
     setIsLoggingIn(true);
     try {
-      const user = await Auth.signIn(email, password);
       router.push('/app/profile');
     } catch (error) {
       setError(error.message);
