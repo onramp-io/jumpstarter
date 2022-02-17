@@ -6,13 +6,15 @@ import styled from 'styled-components';
 interface SectionHeaderProps {
   sectionHeader: string,
   sectionDescription: string,
+  margin: string,
 }
 
-const SectionHeader = function sectionComponent<sectionProps>({ sectionHeader, sectionDescription }) {
+const SectionHeader = function sectionComponent<sectionProps>({ margin, sectionHeader, sectionDescription }) {
   return (
     <>
       <Box
         align="center"
+        margin={margin}
       >
         <Heading level={2}>
           {sectionHeader.toUpperCase()}
