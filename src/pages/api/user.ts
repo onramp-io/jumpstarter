@@ -14,13 +14,9 @@ export default async function handler(
   const { Auth } = withSSRContext({ req });
   try {
     const user = await Auth.currentAuthenticatedUser();
-    if (req.method === 'GET') {
-      // go to the get routes file import it from routes/get.ts
-      //Basic ping/pong endpoint to test server functionality
-      user_controller(req, res, user);
-    } else {
-      console.log(req.body);
-      // Handle any other HTTP method
+    switch(req.method) {
+      case 'GET': //user_controller(req, res, user);
+      default: console.log(req.body);
     }
   } catch (error) {
     res.status(401).json({ error });
