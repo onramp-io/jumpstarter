@@ -19,7 +19,8 @@
       "@frontend/*": ["frontend/*"],
       "@shared/*": ["shared/*"]
     },
-    "incremental": true
+    "incremental": true,
+    "experimentalDecorators": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
