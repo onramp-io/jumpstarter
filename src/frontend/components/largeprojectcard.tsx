@@ -1,0 +1,59 @@
+import type { NextPage } from 'next';
+import { Anchor, Box, Image, Meter, Text } from 'grommet';
+
+type projectType = {
+  user_name: string,
+  title: string,
+  category: string,
+  description: string,
+  fund_goal: number,
+  fund_raised: number
+  end_date: Date,
+}
+
+interface LargeProjectCardProps {
+  projectData: projectType
+}
+
+const LargeProjectCard: NextPage<LargeProjectCardProps> = ({projectData}): JSX.Element => {
+  return (
+    <Box
+      flex={{shrink: 0}}
+      margin={{
+        vertical: "small",
+        horizontal: "0.8rem",
+      }}
+      align="center"
+      pad="small"
+      width="medium"
+      max-height="min-content"
+      elevation="medium"
+    >
+      <Box
+        width="large"
+        height="small"
+      >
+        <Image fit="cover" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80" />
+      </Box>
+
+      <Box direction="column" gap="small" margin={{vertical: "medium", horizontal: "medium"}}>
+        <Anchor href="#" label={ projectData.category.toUpperCase() } size="small"/>
+        <Text weight="bold" size="large">{ projectData.title }</Text>
+        <Box max-height="min-content">
+          <Text>{ projectData.description }</Text>
+        </Box>
+        <Box margin={{top: "small", bottom: "medium"}}>
+          <Text size="small">Created by</Text>
+          <Anchor href="#" label={ projectData.user_name } />
+        </Box>
+        <Meter type="bar" value={ projectData.fund_raised } max={ projectData.fund_goal }/>
+        <Box margin={{bottom: "small"}}>
+          <Text><strong>${projectData.fund_raised.toLocaleString()}</strong> <small>raised out of ${projectData.fund_goal.toLocaleString()} </small></Text>
+          <Text size="small">12 days left</Text>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+export default LargeProjectCard;

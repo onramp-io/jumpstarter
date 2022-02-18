@@ -1,12 +1,133 @@
 import type { NextPage } from 'next';
-import { Box, Heading } from 'grommet';
-import styles from '../styles/Signup.module.css';
+import { Box, CheckBox, CheckBoxGroup, Heading, InfiniteScroll, NameValueList, Select, Sidebar, Text } from 'grommet';
+import React, { useState } from 'react';
+import LargeProjectCard from '@frontend/components/largeprojectcard';
 
 const Discover: NextPage = () => {
+  const categoryState = {
+    Film: true,
+    Tech: true,
+    Literature: true,
+    Games: true,
+    Music: true,
+    Food: true
+  }
+
+  const [categories, setCategories] = useState(categoryState);
+
+  const onChangeHandler = (category) => {
+    console.log(category); 
+
+    const checked = categories[category];
+    const copyOfCategories = { ...categories };
+
+    copyOfCategories[category] = !checked;
+
+    setCategories(copyOfCategories)
+  }
+
+  const categoryList = ["Film", "Tech", "Literature", "Games", "Music", "Food"];
+
+  const projectData = [
+    {
+      user_name: "User 1",
+      title: "New Film",
+      category: "Film",
+      description: "This is a new film description. It will be really good and fun to watch.",
+      fund_goal: 10000,
+      fund_raised: 1000,
+      end_date: new Date(),
+    },
+    {
+      user_name: "User 2",
+      title: "Smart Watch",
+      category: "Tech",
+      description: "This is a new smart watch description. It is very useful and high tech.",
+      fund_goal: 20000,
+      fund_raised: 15000,
+      end_date: new Date(),
+    },
+    {
+      user_name: "User 3",
+      title: "New Book",
+      category: "Literature",
+      description: "This is a new book description. It will have many pages and tell a fun story. Some other third line of text.",
+      fund_goal: 5000,
+      fund_raised: 1300,
+      end_date: new Date(),
+    },
+    {
+      user_name: "User 4",
+      title: "New Game",
+      category: "Games",
+      description: "This is a new game description. It will be really fun and have lots of mechanics.",
+      fund_goal: 30000,
+      fund_raised: 12000,
+      end_date: new Date(),
+    },
+    {
+      user_name: "User 5",
+      title: "New Album",
+      category: "Music",
+      description: "This is a new album description. It is made by New Singer and their new band.",
+      fund_goal: 10000,
+      fund_raised: 3000,
+      end_date: new Date(),
+    },
+    {
+      user_name: "User 6",
+      title: "New Snack",
+      category: "Food",
+      description: "This is a new snack description. It will be sold in grocery stores and be very delicious.",
+      fund_goal: 10000,
+      fund_raised: 5000,
+      end_date: new Date(),
+    },
+  ];
+
   return (
     <>
-      <Box className={styles.signup_wrapper}>
-        <Heading>Discover</Heading>
+      <Box margin={{top: "xlarge"}}>
+        <Heading alignSelf='center'>Discover</Heading>
+      </Box>
+
+      <Box direction="column" width="100%">
+        <Text alignSelf="end">Sort by 
+          <Select options={['Newest', 'Trending']} alignSelf="end" margin={{ left: "small",right: "11rem", bottom: "small" }} defaultValue={'Newest'}/>
+        </Text>
+      </Box>
+
+      <Box direction="row" margin={{ horizontal: "9rem" }}>
+        <Sidebar margin={{right: "xlarge"}}>
+          <Text weight="bold" margin={{top: "large", bottom: "medium"}}>Categories</Text>
+          {categoryList.map((category, index) => {
+            return <CheckBox
+              key={index}
+              label={category}
+              id={category}
+              checked={categories[category]}
+              onChange={(event) => onChangeHandler(event.target.id)}
+            />
+          })}
+        </Sidebar>
+        <Box direction="row" gap="small" wrap={true} margin={{left: "1rem"}} width="100vw">
+          <InfiniteScroll
+            items={projectData.filter(project => categories[project.category])}
+            step={3}
+            onMore={() => {
+              console.log()
+            }}
+          >
+            {
+              (item, index) => (
+                <LargeProjectCard
+                  key={index}
+                  projectData = {item}
+                />
+              )
+            }
+          </InfiniteScroll>
+        </Box>
       </Box>
     </>
   );
