@@ -1,59 +1,93 @@
+/* eslint-disable @next/next/link-passhref */
+/* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
-import { useRouter } from 'next/router';
 
-import { Amplify, withSSRContext } from 'aws-amplify';
-import { Auth } from 'aws-amplify';
-import '@aws-amplify/ui-react/styles.css';
+import { Box, Heading, Button, Text, Tab, Tabs, Avatar } from 'grommet';
 
-import awsExports from '../../../aws-exports';
-Amplify.configure(awsExports);
+import profile from '../../../styles/Profile.module.css';
 
-import { Box, Heading, Button } from 'grommet';
+import { useAuth } from '@frontend/context/AuthProvider';
 
-import styles from '../../../styles/Signup.module.css';
+import { Image } from 'grommet';
+import SectionMarquee from '@frontend/components/sectionMarquee';
+import Link from 'next/link';
 
-function MyProfile({ user }) {
-  const router = useRouter();
-  const signOut = async function () {
-    try {
-      await Auth.signOut();
-      router.push('/login');
-    } catch (error) {
-      console.log('error signing out: ', error);
-    }
-  };
+const userData2 = [
+  {
+    projectTitle: 'Example Project 1',
+    projectDescription:
+      'A brief description of what this project is. A second line for good measure.',
+    projectCreator: 'Example Creator 1',
+  },
+  {
+    projectTitle: 'Example Project 2',
+    projectDescription:
+      'A brief description of what this project is. A second line for good measure.',
+    projectCreator: 'Example Creator 2',
+  },
+  {
+    projectTitle: 'Example Project 3',
+    projectDescription:
+      'A brief description of what this project is. A second line for good measure.',
+    projectCreator: 'Example Creator 3',
+  },
+  {
+    projectTitle: 'Example Project 4',
+    projectDescription:
+      'A brief description of what this project is. A second line for good measure.',
+    projectCreator: 'Example Creator 4',
+  },
+];
+
+function MyProfile() {
+  const { firstName, lastName, bio, avatar, totalInvestments } = useAuth();
+
   return (
     <>
-      <Box className={styles.signup_wrapper}>
-        <Heading>MyProfile</Heading>
-        <Heading>Hello {user}</Heading>
-        <Button primary onClick={signOut}>
-          Sign out
-        </Button>
+      <Box className={profile.wrapper}>
+        <Box className={profile.userData}>
+          <Avatar
+            src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80"
+            size="3xl"
+          />
+          <Heading className={profile.heading}>
+            {firstName} {lastName}
+          </Heading>
+          <Text>{bio}</Text>
+          <Link href="/app/profile/edit">
+            <Button label="Edit" className={profile.editButton} />
+          </Link>
+        </Box>
+        <Box className={profile.profileData}>
+          <Tabs>
+            <Tab title="My Projects">
+              <Box pad="medium">
+                <Box align="center" direction="row" margin="small">
+                  <SectionMarquee
+                    APIPayload={userData2}
+                    linkHref="/personalpicks"
+                    linkCaption="See all recommended projects >"
+                  />
+                </Box>
+              </Box>
+            </Tab>
+            <Tab title="My Contribution">
+              <Box pad="medium">
+                <Text>Total Investment: ${totalInvestments}</Text>
+                <Box align="center" direction="row" margin="small">
+                  <SectionMarquee
+                    APIPayload={userData2}
+                    linkHref="/personalpicks"
+                    linkCaption="See all recommended projects >"
+                  />
+                </Box>
+              </Box>
+            </Tab>
+          </Tabs>
+        </Box>
       </Box>
     </>
   );
-}
-
-export async function getServerSideProps(context) {
-  const { Auth } = withSSRContext(context);
-  try {
-    const user = await Auth.currentAuthenticatedUser();
-    const username = user.attributes.given_name;
-    return {
-      props: {
-        user: username,
-      },
-    };
-  } catch (error) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/login',
-      },
-      props: {},
-    };
-  }
 }
 
 export default MyProfile;
