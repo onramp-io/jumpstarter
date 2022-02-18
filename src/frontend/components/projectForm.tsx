@@ -8,7 +8,6 @@ const ProjectForm: NextPage = () => {
 
   return (
     <Box margin={{ horizontal: "15rem", vertical: "3rem" }}>
-      <Heading alignSelf='center' margin={{ bottom: "3rem" }}>Create a new project</Heading>
       <Form
         value={projectInfo}
         onChange={info => setProjectInfo(info)}

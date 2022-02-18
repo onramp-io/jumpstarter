@@ -6,6 +6,7 @@ const Create: NextPage = () => {
   return (
     <>
       <Box>
+        <Heading>Create a new project</Heading>
         <ProjectForm />
       </Box>
     </>
