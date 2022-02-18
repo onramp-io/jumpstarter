@@ -3,13 +3,15 @@ import { useRouter } from 'next/router';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 
-import { Auth } from 'aws-amplify';
-
 import styles from '../styles/Signup.module.css';
 import { Heading, TextInput, Box, Button, Notification } from 'grommet';
+import { createUserWithEmailAndPassword, getIdToken } from 'firebase/auth';
+import { auth } from '../firebase/client/client';
+import axios from 'axios';
+
+import { Alert, AlertTitle } from '@mui/material';
 
 const Signup: NextPage = () => {
-  const [username, setUsername] = useState('');
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
   const [email, setEmail] = useState('');
@@ -29,7 +31,6 @@ const Signup: NextPage = () => {
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-    setUsername(e.target.value);
   };
 
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,85 +40,101 @@ const Signup: NextPage = () => {
   const handleSignUp = async () => {
     setIsSigningUp(true);
     try {
-      const { user } = await Auth.signUp({
-        username,
-        password,
-        attributes: {
-          given_name: fName,
-          family_name: lName,
-          email,
-        },
-      });
-      router.push('/verify');
+      const data = await createUserWithEmailAndPassword(auth, email, password);
+      const token = await getIdToken(data.user);
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+      const body = {
+        firstName: fName,
+        lastName: lName,
+        email: email,
+      };
+      const response = await axios.post(
+        'http://localhost:3000/api/users/create',
+        body,
+        {
+          headers,
+        }
+      );
+      console.log('response: ', response);
+      router.push('/app/profile');
     } catch (error) {
-      setError(error.message);
+      setError('Invalid email or password');
     }
     setIsSigningUp(false);
   };
 
   return (
     <>
-      <Box className={styles.signup_wrapper}>
-        <Heading>Create a new account</Heading>
-        <Box>
-          <TextInput
-            type="text"
-            name="name"
-            placeholder="First Name"
-            value={fName}
-            onChange={(e) => {
-              onChangeFName(e);
-            }}
-            className={styles.signup_input}
-          />
-          <TextInput
-            type="text"
-            name="name"
-            placeholder="Last Name"
-            value={lName}
-            onChange={(e) => {
-              onChangeLName(e);
-            }}
-            className={styles.signup_input}
-          />
-          <TextInput
-            type="text"
-            name="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => {
-              onChangeEmail(e);
-            }}
-            className={styles.signup_input}
-          />
-          <TextInput
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => {
-              onChangePassword(e);
-            }}
-            className={styles.signup_input}
-          />
-          {errorMessage !== '' && (
-            <Notification title="Error" message={errorMessage} />
-          )}
-          <Box className="auth-buttons">
-            <Button
-              primary
-              disabled={isSigningUp}
-              type="submit"
-              onClick={handleSignUp}
-              className={styles.signup_button}
-            >
-              Sign up
-            </Button>
+      <Box className={styles.signupWrapper}>
+        <Box className={styles.container}>
+          <Heading className={styles.header}>Create a new account</Heading>
+          <Box className={styles.form}>
+            <TextInput
+              type="text"
+              name="name"
+              placeholder="First Name"
+              value={fName}
+              onChange={(e) => {
+                onChangeFName(e);
+              }}
+              className={styles.signupInput}
+            />
+            <TextInput
+              type="text"
+              name="name"
+              placeholder="Last Name"
+              value={lName}
+              onChange={(e) => {
+                onChangeLName(e);
+              }}
+              className={styles.signupInput}
+            />
+            <TextInput
+              type="text"
+              name="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => {
+                onChangeEmail(e);
+              }}
+              className={styles.signupInput}
+            />
+            <TextInput
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => {
+                onChangePassword(e);
+              }}
+              className={styles.signupInput}
+            />
+            {errorMessage !== '' && (
+              <Alert severity="error">
+                <AlertTitle>{errorMessage}</AlertTitle>
+              </Alert>
+            )}
+            <Box className="auth-buttons">
+              <Button
+                primary
+                disabled={isSigningUp}
+                type="submit"
+                onClick={handleSignUp}
+                className={styles.signupButton}
+              >
+                Sign up
+              </Button>
+            </Box>
           </Box>
-        </Box>
-        <Box className={styles.account_exists}>
-          Already have an account?
-          <Link href="/login">Login</Link>
+          <Box className={styles.accountExists}>
+            Already have an account?
+            <Link href="/login">
+              <a className={styles.loginLink}>Login</a>
+            </Link>
+          </Box>
         </Box>
       </Box>
     </>
