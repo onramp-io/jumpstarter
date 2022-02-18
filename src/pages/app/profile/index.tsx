@@ -12,12 +12,6 @@ import { Image } from 'grommet';
 import SectionMarquee from '@frontend/components/sectionMarquee';
 import Link from 'next/link';
 
-const userData = {
-  name: 'John Doe',
-  image: '//v2.grommet.io/assets/Wilderpeople_Ricky.jpg',
-  bio: 'A blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah',
-};
-
 const userData2 = [
   {
     projectTitle: 'Example Project 1',
@@ -59,10 +53,7 @@ function MyProfile() {
           <Heading className={profile.heading}>
             {firstName} {lastName}
           </Heading>
-          <Text>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
-          </Text>
+          <Text>{bio}</Text>
           <Link href="/app/profile/edit">
             <Button label="Edit" className={profile.edit_button} />
           </Link>
