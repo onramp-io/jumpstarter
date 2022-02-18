@@ -6,7 +6,7 @@
   /* background-color: aqua; */
 }
 
-.user_data {
+.userData {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,7 +15,7 @@
   margin-top: 30px;
 }
 
-.profile_data {
+.profileData {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,6 +29,6 @@
   margin-bottom: 10px;
 }
 
-.edit_button {
+.editButton {
   margin-top: 20px !important;
 }

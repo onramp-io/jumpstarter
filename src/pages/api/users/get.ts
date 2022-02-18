@@ -1,6 +1,6 @@
-import { verify_request } from '@backend/middleware/verify_request';
+import { verifyRequest } from '@backend/middleware/verify_request';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { get_user_controller } from '../../../backend/controller/user/user';
+import { getUserController } from '../../../backend/controller/user/user';
 
 interface Request extends NextApiRequest {
   user: any;
@@ -9,7 +9,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case 'GET':
-        get_user_controller(req, res);
+        getUserController(req, res);
         break;
       default:
         res.status(404).json({
@@ -22,4 +22,4 @@ const handler = async (req: Request, res: NextApiResponse) => {
   }
 };
 
-export default verify_request(handler);
+export default verifyRequest(handler);

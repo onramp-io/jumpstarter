@@ -7,28 +7,22 @@ import {
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Request } from '@backend/middleware/verify_request';
 
-export const get_user_controller = async (
-  req: Request,
-  res: NextApiResponse
-) => {
+export const getUserController = async (req: Request, res: NextApiResponse) => {
   getUser(req, res);
 };
 
-export const post_user_controller = async (
+export const postUserController = async (
   req: Request,
   res: NextApiResponse
 ) => {
   insertUser(req, res);
 };
 
-export const put_user_controller = async (
-  req: Request,
-  res: NextApiResponse
-) => {
+export const putUserController = async (req: Request, res: NextApiResponse) => {
   updateUser(req, res);
 };
 
-export const delete_user_controller = async (
+export const deleteUserController = async (
   req: Request,
   res: NextApiResponse
 ) => {

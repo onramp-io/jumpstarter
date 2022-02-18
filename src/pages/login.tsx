@@ -41,7 +41,7 @@ const Login: NextPage = () => {
 
   return (
     <>
-      <Box className={styles.login_wrapper}>
+      <Box className={styles.loginWrapper}>
         <Box className={styles.container}>
           <Heading className={styles.header}>Login</Heading>
           <Box className={styles.form}>
@@ -53,7 +53,7 @@ const Login: NextPage = () => {
               onChange={(e) => {
                 onChangeEmail(e);
               }}
-              className={styles.login_input}
+              className={styles.loginInput}
             />
             <TextInput
               type="password"
@@ -63,7 +63,7 @@ const Login: NextPage = () => {
               onChange={(e) => {
                 onChangePassword(e);
               }}
-              className={styles.login_input}
+              className={styles.loginInput}
             />
             {errorMessage !== '' && (
               <Alert severity="error">
@@ -76,17 +76,17 @@ const Login: NextPage = () => {
                 disabled={isLoggingIn}
                 type="submit"
                 onClick={handleLogin}
-                className={styles.login_button}
+                className={styles.loginButton}
               >
                 Login
               </Button>
             </Box>
           </Box>
         </Box>
-        <Box className={styles.account_not_exists}>
+        <Box className={styles.accountNotExists}>
           Don't have an account?
           <Link href="/signup">
-            <a className={styles.signup_link}>Signup</a>
+            <a className={styles.signupLink}>Signup</a>
           </Link>
         </Box>
       </Box>

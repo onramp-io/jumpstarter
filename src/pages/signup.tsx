@@ -68,7 +68,7 @@ const Signup: NextPage = () => {
 
   return (
     <>
-      <Box className={styles.signup_wrapper}>
+      <Box className={styles.signupWrapper}>
         <Box className={styles.container}>
           <Heading className={styles.header}>Create a new account</Heading>
           <Box className={styles.form}>
@@ -80,7 +80,7 @@ const Signup: NextPage = () => {
               onChange={(e) => {
                 onChangeFName(e);
               }}
-              className={styles.signup_input}
+              className={styles.signupInput}
             />
             <TextInput
               type="text"
@@ -90,7 +90,7 @@ const Signup: NextPage = () => {
               onChange={(e) => {
                 onChangeLName(e);
               }}
-              className={styles.signup_input}
+              className={styles.signupInput}
             />
             <TextInput
               type="text"
@@ -100,7 +100,7 @@ const Signup: NextPage = () => {
               onChange={(e) => {
                 onChangeEmail(e);
               }}
-              className={styles.signup_input}
+              className={styles.signupInput}
             />
             <TextInput
               type="password"
@@ -110,7 +110,7 @@ const Signup: NextPage = () => {
               onChange={(e) => {
                 onChangePassword(e);
               }}
-              className={styles.signup_input}
+              className={styles.signupInput}
             />
             {errorMessage !== '' && (
               <Alert severity="error">
@@ -123,16 +123,16 @@ const Signup: NextPage = () => {
                 disabled={isSigningUp}
                 type="submit"
                 onClick={handleSignUp}
-                className={styles.signup_button}
+                className={styles.signupButton}
               >
                 Sign up
               </Button>
             </Box>
           </Box>
-          <Box className={styles.account_exists}>
+          <Box className={styles.accountExists}>
             Already have an account?
             <Link href="/login">
-              <a className={styles.login_link}>Login</a>
+              <a className={styles.loginLink}>Login</a>
             </Link>
           </Box>
         </Box>

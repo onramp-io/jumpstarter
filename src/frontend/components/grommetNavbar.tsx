@@ -145,7 +145,7 @@ export const NavBar = () => {
                         <Box
                           pad="large"
                           background="light-2"
-                          className={navbar.dropdown_wrapper}
+                          className={navbar.dropdownWrapper}
                         >
                           <Link href="/app/profile">
                             <Anchor href="/app/profile" label="Profile" />
@@ -153,7 +153,7 @@ export const NavBar = () => {
                           <Button
                             label="Log Out"
                             onClick={logOut}
-                            className={navbar.dropdown_logout_button}
+                            className={navbar.dropdownLogoutButton}
                             icon={<PowerShutdown />}
                           />
                         </Box>

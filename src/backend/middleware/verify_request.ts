@@ -5,7 +5,7 @@ export interface Request extends NextApiRequest {
   user: any;
 }
 
-export const verify_request = (handler) => {
+export const verifyRequest = (handler) => {
   return async (req: Request, res: NextApiResponse) => {
     const accessToken = req.headers['authorization'];
     let token: string = '';

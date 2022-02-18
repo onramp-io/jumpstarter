@@ -9,30 +9,30 @@ import { getIdToken } from 'firebase/auth';
 import axios from 'axios';
 
 export interface AuthContextType {
-  access_token: string;
+  accessToken: string;
   firstName: string;
   lastName: string;
   bio: string;
   avatar: string;
-  total_investments: number;
+  totalInvestments: number;
 }
 
 export const AuthContext = createContext<AuthContextType>({
-  access_token: '',
+  accessToken: '',
   firstName: '',
   lastName: '',
   bio: '',
   avatar: '',
-  total_investments: 0,
+  totalInvestments: 0,
 });
 
 export const PrivateRouteProvider: NextPage = ({ children }) => {
-  const [access_token, setAccessToken] = useState<string>('');
+  const [accessToken, setAccessToken] = useState<string>('');
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [bio, setBio] = useState<string>('');
   const [avatar, setAvatar] = useState<string>('');
-  const [total_investments, setTotalInvestments] = useState<number>(0);
+  const [totalInvestments, setTotalInvestments] = useState<number>(0);
 
   const router = useRouter();
 
@@ -67,12 +67,12 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        access_token,
+        accessToken,
         firstName,
         lastName,
         bio,
         avatar,
-        total_investments,
+        totalInvestments,
       }}
     >
       {children}

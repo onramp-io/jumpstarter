@@ -25,7 +25,7 @@ const EditProfile: NextPage = () => {
   const [errorMessage, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { firstName, lastName, bio, avatar, access_token } = useAuth();
+  const { firstName, lastName, bio, avatar, accessToken } = useAuth();
 
   const router = useRouter();
 
@@ -56,7 +56,7 @@ const EditProfile: NextPage = () => {
         body,
         {
           headers: {
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
@@ -76,7 +76,7 @@ const EditProfile: NextPage = () => {
           `http://localhost:3000/api/users/delete`,
           {
             headers: {
-              Authorization: `Bearer ${access_token}`,
+              Authorization: `Bearer ${accessToken}`,
             },
           }
         );
@@ -97,11 +97,10 @@ const EditProfile: NextPage = () => {
               <Avatar
                 src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80"
                 size="3xl"
-                className={styles.avatar_img}
+                className={styles.avatarImg}
               />
             </Box>
             <FileInput
-              className={styles.avatar_input}
               name="file"
               placeholder="Upload a profile picture"
               onChange={(event) => {
@@ -113,7 +112,7 @@ const EditProfile: NextPage = () => {
             />
           </Box>
           <Box className={styles.form}>
-            <Box className={styles.text_label}>
+            <Box className={styles.textLabel}>
               <Text className={styles.label}>First Name</Text>
               <TextInput
                 type="text"
@@ -125,7 +124,7 @@ const EditProfile: NextPage = () => {
                 }}
               />
             </Box>
-            <Box className={styles.text_label}>
+            <Box className={styles.textLabel}>
               <Text className={styles.label}>Last Name</Text>
               <TextInput
                 type="text"
@@ -137,7 +136,7 @@ const EditProfile: NextPage = () => {
                 }}
               />
             </Box>
-            <Box className={styles.text_label}>
+            <Box className={styles.textLabel}>
               <Text className={styles.label}>Bio</Text>
               <TextInput
                 type="text"
@@ -155,14 +154,14 @@ const EditProfile: NextPage = () => {
                 disabled={isSubmitting}
                 type="submit"
                 onClick={handleSubmit}
-                className={styles.save_button}
+                className={styles.saveButton}
               >
                 Save Changes
               </Button>
             </Box>
           </Box>
         </Box>
-        <Text onClick={delUser} className={styles.delete_user}>
+        <Text onClick={delUser} className={styles.deleteUser}>
           Delete Account
         </Text>
         {errorMessage !== '' && (

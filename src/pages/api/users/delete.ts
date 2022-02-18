@@ -1,6 +1,6 @@
-import { verify_request } from '@backend/middleware/verify_request';
+import { verifyRequest } from '@backend/middleware/verify_request';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { delete_user_controller } from '../../../backend/controller/user/user';
+import { deleteUserController } from '../../../backend/controller/user/user';
 
 interface Request extends NextApiRequest {
   user: any;
@@ -9,7 +9,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case 'DELETE':
-        delete_user_controller(req, res);
+        deleteUserController(req, res);
         break;
       default:
         res.status(404).json({
@@ -22,4 +22,4 @@ const handler = async (req: Request, res: NextApiResponse) => {
   }
 };
 
-export default verify_request(handler);
+export default verifyRequest(handler);

@@ -40,12 +40,12 @@ const userData2 = [
 ];
 
 function MyProfile() {
-  const { firstName, lastName, bio, avatar, total_investments } = useAuth();
+  const { firstName, lastName, bio, avatar, totalInvestments } = useAuth();
 
   return (
     <>
       <Box className={profile.wrapper}>
-        <Box className={profile.user_data}>
+        <Box className={profile.userData}>
           <Avatar
             src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80"
             size="3xl"
@@ -55,10 +55,10 @@ function MyProfile() {
           </Heading>
           <Text>{bio}</Text>
           <Link href="/app/profile/edit">
-            <Button label="Edit" className={profile.edit_button} />
+            <Button label="Edit" className={profile.editButton} />
           </Link>
         </Box>
-        <Box className={profile.profile_data}>
+        <Box className={profile.profileData}>
           <Tabs>
             <Tab title="My Projects">
               <Box pad="medium">
@@ -73,7 +73,7 @@ function MyProfile() {
             </Tab>
             <Tab title="My Contribution">
               <Box pad="medium">
-                <Text>Total Investment: ${total_investments}</Text>
+                <Text>Total Investment: ${totalInvestments}</Text>
                 <Box align="center" direction="row" margin="small">
                   <SectionMarquee
                     APIPayload={userData2}
