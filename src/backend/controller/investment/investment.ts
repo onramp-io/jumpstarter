@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getRepository, getConnection } from 'typeorm';
-import { User } from '../../entity/User';
-import { Project } from '../../entity/Project';
-import { Investment } from '../../entity/Investment';
+import { User } from '../../entities/User';
+import { Project } from '../../entities/Project';
+import { Investment } from '../../entities/Investment';
 import connection from '../../config/db';
 
 //Add a like to a project by a user
