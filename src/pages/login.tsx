@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { Heading, TextInput, Box, Notification, Button } from 'grommet';
 
 import styles from '../styles/Login.module.css';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase/client/client';
 
 const Login: NextPage = () => {
   const [email, setEmail] = useState('');
@@ -27,6 +29,7 @@ const Login: NextPage = () => {
   const handleLogin = async () => {
     setIsLoggingIn(true);
     try {
+      await signInWithEmailAndPassword(auth, email, password);
       router.push('/app/profile');
     } catch (error) {
       setError(error.message);
