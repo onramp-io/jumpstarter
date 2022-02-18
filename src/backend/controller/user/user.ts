@@ -1,57 +1,40 @@
 import {
-  get_user,
-  insert_user,
-  update_user,
-  delete_user,
+  getUser,
+  insertUser,
+  updateUser,
+  deleteUser,
 } from '@backend/services/db/user/user_db';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { Request } from '@backend/middleware/verify_request';
 
 export const get_user_controller = async (
-  req: NextApiRequest,
+  req: Request,
   res: NextApiResponse,
   user
 ) => {
-  const user_bio = await get_user(req, res, user);
-  res.status(200).json({
-    fName: user.attributes.given_name,
-    lName: user.attributes.family_name,
-    bio: user_bio,
-  });
+  getUser(req, res, user);
 };
 
 export const post_user_controller = async (
-  req: NextApiRequest,
+  req: Request,
   res: NextApiResponse,
   user
 ) => {
-  const user_bio = await insert_user(req, res, user);
-  res.status(200).json({
-    message: 'User created successfully',
-  });
+  insertUser(req, res, user);
 };
 
 export const put_user_controller = async (
-  req: NextApiRequest,
+  req: Request,
   res: NextApiResponse,
   user
 ) => {
-  const user_bio = await update_user(req, res, user);
-  res.status(200).json({
-    fName: user.attributes.given_name,
-    lName: user.attributes.family_name,
-    bio: user_bio,
-  });
+  updateUser(req, res, user);
 };
 
 export const delete_user_controller = async (
-  req: NextApiRequest,
+  req: Request,
   res: NextApiResponse,
   user
 ) => {
-  const user_bio = await delete_user(req, res, user);
-  res.status(200).json({
-    fName: user.attributes.given_name,
-    lName: user.attributes.family_name,
-    bio: user_bio,
-  });
+  deleteUser(req, res, user);
 };
