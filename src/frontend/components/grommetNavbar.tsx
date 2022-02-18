@@ -1,14 +1,16 @@
 /* eslint-disable import/no-anonymous-default-export */
 /* eslint-disable @next/next/link-passhref */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Anchor,
+  Avatar,
   Box,
   Button,
   DropButton,
   Header,
   Menu,
   ResponsiveContext,
+  Text,
 } from 'grommet';
 import {
   Grommet as GrommetIcon,
@@ -21,8 +23,11 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase/client/client';
 import { useRouter } from 'next/router';
 
+import navbar from '../../styles/Navbar.module.css';
+
 export const NavBar = () => {
   const { firstName } = useAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const router = useRouter();
 
@@ -31,6 +36,7 @@ export const NavBar = () => {
     try {
       signOut(auth)
         .then(() => {
+          setIsAuthenticated(false);
           router.push('/');
         })
         .catch((error) => {
@@ -111,8 +117,8 @@ export const NavBar = () => {
               )}
             </>
           ) : (
-            <Box justify="end" flex="grow" direction="row" gap="medium">
-              <Box direction="row" justify="start" gap="xlarge">
+            <Box className={navbar.wrapper}>
+              <Box className={navbar.starter}>
                 <Link href="/project">
                   <Anchor href="/project" label="Create a New Project" />
                 </Link>
@@ -120,36 +126,42 @@ export const NavBar = () => {
                   <Anchor href="/discover" label="Discover" />
                 </Link>
               </Box>
-              <Box
-                flex="grow"
-                align="center"
-                margin={{
-                  left: 'xlarge',
-                  right: 'xlarge',
-                }}
-              >
+              <Box className={navbar.brand}>
                 <Link href="/">
                   <Anchor href="/" label="JumpStarter" />
                 </Link>
               </Box>
-              <Box direction="row" justify="end" gap="xlarge">
-                {firstName && (
+              <Box className={navbar.end}>
+                {firstName && isAuthenticated && (
                   <>
+                    <Text>Welcome back, {firstName}</Text>
                     <DropButton
-                      label={firstName}
+                      label={
+                        <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
+                      }
+                      className={navbar.dropdown}
                       dropAlign={{ top: 'bottom', right: 'right' }}
                       dropContent={
-                        <Box pad="large" background="light-2">
+                        <Box
+                          pad="large"
+                          background="light-2"
+                          className={navbar.dropdown_wrapper}
+                        >
                           <Link href="/app/profile">
                             <Anchor href="/app/profile" label="Profile" />
                           </Link>
-                          <PowerShutdown onClick={logOut} />
+                          <Button
+                            label="Log Out"
+                            onClick={logOut}
+                            className={navbar.dropdown_logout_button}
+                            icon={<PowerShutdown />}
+                          />
                         </Box>
                       }
                     />
                   </>
                 )}
-                {!firstName && (
+                {(!firstName || !isAuthenticated) && (
                   <>
                     <Link href="/login">
                       <Anchor href="/login" label="Log In" />
