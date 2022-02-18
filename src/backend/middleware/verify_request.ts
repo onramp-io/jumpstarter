@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import admin from '../../firebase/admin/admin';
 
-interface Request extends NextApiRequest {
+export interface Request extends NextApiRequest {
   user: any;
 }
 
