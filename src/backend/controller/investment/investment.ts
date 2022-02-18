@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getRepository, getConnection } from 'typeorm';
-import { User } from '../../model/entities/User';
-import { Project } from '../../model/entities/Project';
-import { Investment } from '../../model/entities/Investment';
-import connection from '../../model/db';
+import { User } from '../../entities/User';
+import { Project } from '../../entities/Project';
+import { Investment } from '../../entities/Investment';
+import connection from '../../config/db';
 
 //Add a like to a project by a user
 const addNewInvestment = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -43,4 +43,4 @@ const addNewInvestment = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 };
 
-export default {addNewInvestment}
+export default { addNewInvestment };
