@@ -9,6 +9,8 @@ import { createUserWithEmailAndPassword, getIdToken } from 'firebase/auth';
 import { auth } from '../firebase/client/client';
 import axios from 'axios';
 
+import { Alert, AlertTitle } from '@mui/material';
+
 const Signup: NextPage = () => {
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
@@ -59,7 +61,7 @@ const Signup: NextPage = () => {
       console.log('response: ', response);
       router.push('/app/profile');
     } catch (error) {
-      setError(error.message);
+      setError('Invalid email or password');
     }
     setIsSigningUp(false);
   };
@@ -111,7 +113,9 @@ const Signup: NextPage = () => {
               className={styles.signup_input}
             />
             {errorMessage !== '' && (
-              <Notification title="Error" message={errorMessage} />
+              <Alert severity="error">
+                <AlertTitle>{errorMessage}</AlertTitle>
+              </Alert>
             )}
             <Box className="auth-buttons">
               <Button

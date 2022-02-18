@@ -10,6 +10,8 @@ import styles from '../styles/Login.module.css';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/client/client';
 
+import { Alert, AlertTitle } from '@mui/material';
+
 const Login: NextPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,7 +34,7 @@ const Login: NextPage = () => {
       await signInWithEmailAndPassword(auth, email, password);
       router.push('/app/profile');
     } catch (error) {
-      setError(error.message);
+      setError('Invalid email or password');
     }
     setIsLoggingIn(false);
   };
@@ -64,7 +66,9 @@ const Login: NextPage = () => {
               className={styles.login_input}
             />
             {errorMessage !== '' && (
-              <Notification title="Error" message={errorMessage} />
+              <Alert severity="error">
+                <AlertTitle>{errorMessage}</AlertTitle>
+              </Alert>
             )}
             <Box className="auth-buttons">
               <Button
