@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
   env: {
-    COGNITO_POOL_ID: process.env.COGNITO_POOL_ID,
-    COGNITO_CLIENT_ID: process.env.COGNITO_CLIENT_ID,
     DB_TYPE: process.env.DB_TYPE,
     DB_CONNECTION_STRING: process.env.DB_CONNECTION_STRING,
     FB_CLIENT_API_KEY: process.env.FB_CLIENT_API_KEY,
