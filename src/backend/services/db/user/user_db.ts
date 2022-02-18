@@ -40,8 +40,8 @@ export const insertUser = async (req: Request, res: NextApiResponse) => {
       .into(User)
       .values([
         {
-          first_name: firstName,
-          last_name: lastName,
+          firstName: firstName,
+          lastName: lastName,
           email: email,
           avatar: '',
           bio: '',
@@ -71,8 +71,8 @@ export const updateUser = async (req: Request, res: NextApiResponse) => {
       .createQueryBuilder()
       .update(User)
       .set({
-        first_name: req.body.firstName,
-        last_name: req.body.lastName,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         avatar: req.body.avatar,
         bio: req.body.bio,
       })

@@ -15,7 +15,7 @@ export class Project {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('text', { array: true })
+  @Column({type: 'text', array: true, nullable: true })
   pictures: string[];
 
   @Column('text')
@@ -33,13 +33,13 @@ export class Project {
   @Column('integer')
   currFundGoal: number;
 
-  @Column('decimal')
+  @Column({ type: 'decimal', default: 0 })
   fundRaised: number;
 
   @Column('timestamp')
   launchDate: string;
 
-  @Column('timestamp')
+  @Column({ type: 'timestamp', default: () => "now()" })
   createdDate: string;
 
   @Column({ type: 'integer', default: 0 })

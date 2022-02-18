@@ -56,8 +56,8 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
       const resposne = await axios.get('http://localhost:3000/api/users/get', {
         headers,
       });
-      setFirstName(resposne.data.userData['first_name']);
-      setLastName(resposne.data.userData['last_name']);
+      setFirstName(resposne.data.userData['firstName']);
+      setLastName(resposne.data.userData['lastName']);
       setBio(resposne.data.userData['bio']);
       setAvatar(resposne.data.userData['avatar']);
       setTotalInvestments(resposne.data.userData['investedAmt']);
