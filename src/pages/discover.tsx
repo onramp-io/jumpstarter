@@ -83,7 +83,7 @@ const Discover: NextPage = () => {
 
   return (
     <>
-      <Box>
+      <Box margin={{top: "xlarge"}}>
         <Heading alignSelf='center'>Discover</Heading>
       </Box>
 
