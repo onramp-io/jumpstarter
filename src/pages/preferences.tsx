@@ -7,37 +7,6 @@ import SectionHeader from "@frontend/components/sectionHeader";
 import { Box, Button, ResponsiveContext } from "grommet";
 import ReusableLink from "@frontend/components/reusableLink";
 
-const SixPreferenceCards = function sixPreferenceCardsComponent({}) {
-  return (
-    <>
-      <PreferenceCard
-        imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
-        projectCategory={ProjectCategory.CATEGORY_1}
-      />
-      <PreferenceCard
-        imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
-        projectCategory={ProjectCategory.CATEGORY_2}
-      />
-      <PreferenceCard
-        imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
-        projectCategory={ProjectCategory.CATEGORY_3}
-      />
-      <PreferenceCard
-        imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
-        projectCategory={ProjectCategory.CATEGORY_4}
-      />
-      <PreferenceCard
-        imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
-        projectCategory={ProjectCategory.CATEGORY_5}
-      />
-      <PreferenceCard
-        imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
-        projectCategory={ProjectCategory.CATEGORY_6}
-      />
-    </>
-  );
-};
-
 interface UserPreferencesProps {}
 
 const UserPreferences = function UserPreferencesComponent<
@@ -54,15 +23,7 @@ const UserPreferences = function UserPreferencesComponent<
       <ResponsiveContext.Consumer>
         {(size) =>
           size === "small" ? (
-            <Box align="center" gap="large">
-              <SixPreferenceCards />
-              <Button primary label="Submit my preferences" />
-              <ReusableLink
-                linkHref="/"
-                linkCaption="Skip (you can set up your preferences later in your User Settings) >"
-                className="grey-text"
-              />
-            </Box>
+            <Box>I am small or medium</Box>
           ) : (
             <Box align="center">
               {/** 
@@ -78,8 +39,31 @@ const UserPreferences = function UserPreferencesComponent<
                 wrap={true}
                 direction="row"
               >
+                <PreferenceCard
+                  imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+                  projectCategory={ProjectCategory.CATEGORY_1}
+                />
+                <PreferenceCard
+                  imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+                  projectCategory={ProjectCategory.CATEGORY_2}
+                />
+                <PreferenceCard
+                  imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+                  projectCategory={ProjectCategory.CATEGORY_3}
+                />
+                <PreferenceCard
+                  imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+                  projectCategory={ProjectCategory.CATEGORY_4}
+                />
+                <PreferenceCard
+                  imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+                  projectCategory={ProjectCategory.CATEGORY_5}
+                />
+                <PreferenceCard
+                  imageUrl="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+                  projectCategory={ProjectCategory.CATEGORY_6}
+                />
                 <Box margin="medium" gap="medium">
-                  <SixPreferenceCards />
                   <Button primary label="Submit my preferences" />
                   <ReusableLink
                     linkHref="/"
