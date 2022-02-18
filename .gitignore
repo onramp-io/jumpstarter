@@ -2,6 +2,7 @@
 
 .next
 .vscode/settings.json
+.env.test
 amplify/.config/project-config.json
 amplify/README.md
 amplify/backend/auth/**
