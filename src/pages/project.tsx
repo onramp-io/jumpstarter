@@ -11,14 +11,15 @@ const Project: NextPage = () => {
     console.log("Submitted comment: " + comment)
   }
 
+
   const projectDetails = {
-      projectTitle: 'Project XYZ',
-      projectDescription: 'A brief description of what this project is. A second line for good measure. Maybe even a third line why not.',
-      projectFundGoal: 1000,
-      projectCurrFunds: 100,
-      projectDeadline: new Date(),
-      projectPictures: ["//v2.grommet.io/assets/Wilderpeople_Ricky.jpg"],
-      projectInvestors: 12
+      title: 'Project XYZ',
+      description: 'A brief description of what this project is. A second line for good measure. Maybe even a third line why not.',
+      fund_goal: 1000,
+      fund_raised: 100,
+      end_date: new Date(),
+      pictures: ["//v2.grommet.io/assets/Wilderpeople_Ricky.jpg"],
+      investors: 12
     };
 
   const commentDetails = [
@@ -39,13 +40,7 @@ const Project: NextPage = () => {
   return (
     <>
       <SingleProjectInfo 
-        projectTitle={projectDetails.projectTitle}
-        projectDescription={projectDetails.projectDescription}
-        projectFundGoal={projectDetails.projectFundGoal}
-        projectCurrFunds={projectDetails.projectCurrFunds}
-        projectDeadline={projectDetails.projectDeadline}
-        projectPictures={projectDetails.projectPictures}
-        projectInvestors={projectDetails.projectInvestors}
+        projectDetails={projectDetails}
       />
 
       <Heading textAlign="center" fill={true} margin={{left: '2rem', top: '5rem'}}>Comments</Heading>

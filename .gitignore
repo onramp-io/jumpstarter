@@ -2,6 +2,7 @@
 
 .next
 .vscode/settings.json
+.env.test
 
 # dependencies
 /node_modules
