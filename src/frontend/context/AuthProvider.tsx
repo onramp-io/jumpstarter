@@ -53,9 +53,10 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       };
-      const resposne = await axios.get('http://localhost:3000/api/users/user', {
+      const resposne = await axios.get('http://localhost:3000/api/users/get', {
         headers,
       });
+      console.log(resposne.data);
       setFirstName(resposne.data.userData['first_name']);
       setLastName(resposne.data.userData['last_name']);
       setBio(resposne.data.userData['bio']);
