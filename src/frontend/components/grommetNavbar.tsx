@@ -1,8 +1,20 @@
 /* eslint-disable import/no-anonymous-default-export */
 /* eslint-disable @next/next/link-passhref */
 import React from 'react';
-import { Anchor, Box, Button, Header, Menu, ResponsiveContext } from 'grommet';
-import { Grommet as GrommetIcon, Menu as MenuIcon } from 'grommet-icons';
+import {
+  Anchor,
+  Box,
+  Button,
+  DropButton,
+  Header,
+  Menu,
+  ResponsiveContext,
+} from 'grommet';
+import {
+  Grommet as GrommetIcon,
+  Menu as MenuIcon,
+  PowerShutdown,
+} from 'grommet-icons';
 import Link from 'next/link';
 import { useAuth } from '@frontend/context/AuthProvider';
 import { signOut } from 'firebase/auth';
@@ -41,33 +53,62 @@ export const NavBar = () => {
           size === 'small' ? (
             <>
               <Box />
-              <Menu
-                a11yTitle="Navigation Menu"
-                dropProps={{ align: { top: 'bottom', right: 'right' } }}
-                icon={<MenuIcon color="brand" />}
-                items={[
-                  {
-                    label: <Box pad="small">JumpStarter</Box>,
-                    href: '/',
-                  },
-                  {
-                    label: <Box pad="small">Create a New Project</Box>,
-                    href: '/project',
-                  },
-                  {
-                    label: <Box pad="small">Discover</Box>,
-                    href: '/discover',
-                  },
-                  {
-                    label: <Box pad="small">Log In</Box>,
-                    href: '/login',
-                  },
-                  {
-                    label: <Box pad="small">Sign Up</Box>,
-                    href: '/signup',
-                  },
-                ]}
-              />
+              {!firstName ? (
+                <Menu
+                  a11yTitle="Navigation Menu"
+                  dropProps={{ align: { top: 'bottom', right: 'right' } }}
+                  icon={<MenuIcon color="brand" />}
+                  items={[
+                    {
+                      label: <Box pad="small">JumpStarter</Box>,
+                      href: '/',
+                    },
+                    {
+                      label: <Box pad="small">Create a New Project</Box>,
+                      href: '/project',
+                    },
+                    {
+                      label: <Box pad="small">Discover</Box>,
+                      href: '/discover',
+                    },
+                    {
+                      label: <Box pad="small">Log In</Box>,
+                      href: '/login',
+                    },
+                    {
+                      label: <Box pad="small">Sign Up</Box>,
+                      href: '/signup',
+                    },
+                  ]}
+                />
+              ) : (
+                <Menu
+                  a11yTitle="Navigation Menu"
+                  dropProps={{ align: { top: 'bottom', right: 'right' } }}
+                  icon={<MenuIcon color="brand" />}
+                  items={[
+                    {
+                      label: <Box pad="small">JumpStarter</Box>,
+                      href: '/',
+                    },
+                    {
+                      label: <Box pad="small">Create a New Project</Box>,
+                      href: '/project',
+                    },
+                    {
+                      label: <Box pad="small">Discover</Box>,
+                      href: '/discover',
+                    },
+                    {
+                      label: <Box pad="small">Profile</Box>,
+                      href: '/app/profile',
+                    },
+                    {
+                      label: <PowerShutdown onClick={logOut} />,
+                    },
+                  ]}
+                />
+              )}
             </>
           ) : (
             <Box justify="end" flex="grow" direction="row" gap="medium">
@@ -94,11 +135,18 @@ export const NavBar = () => {
               <Box direction="row" justify="end" gap="xlarge">
                 {firstName && (
                   <>
-                    {firstName}
-                    <Link href="/app/profile">
-                      <Anchor href="/app/profile" label="Profile" />
-                    </Link>
-                    <Button label="Log Out" onClick={logOut} />
+                    <DropButton
+                      label={firstName}
+                      dropAlign={{ top: 'bottom', right: 'right' }}
+                      dropContent={
+                        <Box pad="large" background="light-2">
+                          <Link href="/app/profile">
+                            <Anchor href="/app/profile" label="Profile" />
+                          </Link>
+                          <PowerShutdown onClick={logOut} />
+                        </Box>
+                      }
+                    />
                   </>
                 )}
                 {!firstName && (
