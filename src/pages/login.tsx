@@ -1,16 +1,21 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useState } from 'react';
 import type { NextPage } from 'next';
-import Head from 'next/head';
-import { Alert, AlertTitle, Box } from '@mui/material';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+
+import { Auth } from 'aws-amplify';
+import { Heading, TextInput, Box, Notification, Button } from 'grommet';
+
 import styles from '../styles/Login.module.css';
-import Navbar from '../frontend/components/navbar';
-import Footer from '../frontend/components/footer';
 
 const Login: NextPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  const router = useRouter();
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -23,29 +28,20 @@ const Login: NextPage = () => {
   const handleLogin = async () => {
     setIsLoggingIn(true);
     try {
-      console.log('Logging in...');
-      console.log({
-        email,
-        password,
-      });
-    } catch (err) {
-      // setError(err.message);
-      console.log(err);
+      const user = await Auth.signIn(email, password);
+      router.push('/app/profile');
+    } catch (error) {
+      setError(error.message);
     }
     setIsLoggingIn(false);
   };
 
   return (
     <>
-      <Head>
-        <title>JumpStarter - Login</title>
-        <meta name="description" content="Lets JumpStart projects" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <Box className={styles.login_wrapper}>
-        <h1>Login</h1>
-        <div>
-          <input
+        <Heading>Login</Heading>
+        <>
+          <TextInput
             type="text"
             name="email"
             placeholder="Email"
@@ -55,7 +51,7 @@ const Login: NextPage = () => {
             }}
             className={styles.login_input}
           />
-          <input
+          <TextInput
             type="password"
             name="password"
             placeholder="Password"
@@ -66,25 +62,26 @@ const Login: NextPage = () => {
             className={styles.login_input}
           />
           {errorMessage !== '' && (
-            <Alert severity="error">
-              <AlertTitle>{errorMessage}</AlertTitle>
-            </Alert>
+            <Notification title="Error" message={errorMessage} />
           )}
-          <div className="auth-buttons">
-            <button
+          <Box className="auth-buttons">
+            <Button
+              primary
               disabled={isLoggingIn}
               type="submit"
               onClick={handleLogin}
               className={styles.login_button}
             >
               Login
-            </button>
-          </div>
-        </div>
-        <div className={styles.account_not_exists}>
-          Don&apos;t have an account?
-          <a href="/signup">Signup</a>
-        </div>
+            </Button>
+          </Box>
+        </>
+        <Box className={styles.account_not_exists}>
+          Don't have an account?
+          <Link href="/signup">
+            <a>Signup</a>
+          </Link>
+        </Box>
       </Box>
     </>
   );

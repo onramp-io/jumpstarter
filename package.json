@@ -9,6 +9,8 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
+    "@aws-amplify/cli": "^7.6.19",
+    "@aws-amplify/ui-react": "^2.4.0",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@material-ui/core": "latest",
@@ -17,12 +19,14 @@
     "@stripe/react-stripe-js": "^1.7.0",
     "@stripe/stripe-js": "^1.23.0",
     "amazon-cognito-identity-js": "^5.2.6",
+    "aws-amplify": "^4.3.14",
     "axios": "^0.25.0",
     "classnames": "latest",
     "framer-motion": "^6.2.6",
     "grommet": "^2.20.1",
+    "grommet-icons": "^4.7.0",
     "next": "12.0.10",
-    "pg": "^8.4.0",
+    "pg": "^8.7.3",
     "polished": "^4.1.4",
     "postgres": "^1.0.2",
     "prop-types": "latest",
@@ -32,7 +36,7 @@
     "reflect-metadata": "^0.1.10",
     "styled-components": "^5.3.3",
     "ts-node": "^10.5.0",
-    "typeorm": "0.2.41"
+    "typeorm": "^0.2.41"
   },
   "devDependencies": {
     "@types/node": "^8.0.29",
