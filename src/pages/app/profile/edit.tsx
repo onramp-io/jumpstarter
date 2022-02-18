@@ -13,13 +13,16 @@ import {
   FileInput,
 } from 'grommet';
 import axios from 'axios';
+import { useAuth } from '@frontend/context/AuthProvider';
 
 const EditProfile: NextPage = () => {
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
-  const [bio, setBio] = useState('');
+  const [bioValue, setBio] = useState('');
   const [errorMessage, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { firstName, lastName, bio, avatar } = useAuth();
 
   const router = useRouter();
 
@@ -58,18 +61,6 @@ const EditProfile: NextPage = () => {
     setIsSubmitting(false);
   };
 
-  useEffect(() => {
-    try {
-      axios.get(`http://localhost:3000/api/users/user`).then((res) => {
-        setFName(res.data.fName);
-        setLName(res.data.lName);
-        setBio(res.data.bio);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
   return (
     <>
       <Box className={styles.login_wrapper}>
@@ -91,7 +82,7 @@ const EditProfile: NextPage = () => {
           <TextInput
             type="text"
             name="name"
-            placeholder={fName}
+            placeholder={firstName}
             value={fName}
             onChange={(e) => {
               onChangeFName(e);
@@ -101,7 +92,7 @@ const EditProfile: NextPage = () => {
           <TextInput
             type="text"
             name="name"
-            placeholder={lName}
+            placeholder={lastName}
             value={lName}
             onChange={(e) => {
               onChangeLName(e);
@@ -112,7 +103,7 @@ const EditProfile: NextPage = () => {
             type="text"
             name="name"
             placeholder={bio}
-            value={bio}
+            value={bioValue}
             onChange={(e) => {
               onChangeBio(e);
             }}
