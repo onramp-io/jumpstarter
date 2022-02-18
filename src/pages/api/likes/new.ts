@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import likesController from '../../../backend/controller/like/like';
+import { addNewLikeController } from '@backend/controller/like/like';
 
 type Data = {
     name: string;
@@ -11,7 +11,7 @@ export default function handler(
 ) {
     switch(req.method) {
         //Add new like given by user to project
-        case 'POST': likesController.addNewLike(req, res);;
+        case 'POST': addNewLikeController(req, res); break;
         default: console.log(req.body);
     }
 }
