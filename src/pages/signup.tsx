@@ -57,7 +57,7 @@ const Signup: NextPage = () => {
         }
       );
       console.log('response: ', response);
-      router.push('/login');
+      router.push('/app/profile');
     } catch (error) {
       setError(error.message);
     }
