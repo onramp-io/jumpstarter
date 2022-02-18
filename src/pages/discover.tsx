@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { Box, CheckBoxGroup, Heading, InfiniteScroll, NameValueList, Select, Sidebar, Text } from 'grommet';
+import { Box, CheckBox, CheckBoxGroup, Heading, InfiniteScroll, NameValueList, Select, Sidebar, Text } from 'grommet';
 import React, { useState } from 'react';
 import LargeProjectCard from '@frontend/components/largeprojectcard';
 
@@ -15,14 +15,16 @@ const Discover: NextPage = () => {
 
   const [categories, setCategories] = useState(categoryState);
 
-  const onChangeHandler = (value, option) => {
-    const checked = categories[option["label"]];
+  const onChangeHandler = (category) => {
+    const checked = categories[category];
     const copyOfCategories = { ...categories };
 
-    copyOfCategories[option["label"]] = !checked;
+    copyOfCategories[category] = !checked;
 
     setCategories(copyOfCategories)
   }
+
+  const categoryList = ["Film", "Tech", "Literature", "Games", "Music", "Food"];
 
   const projectData = [
     {
@@ -96,9 +98,15 @@ const Discover: NextPage = () => {
       <Box direction="row" margin={{ horizontal: "9rem" }}>
         <Sidebar margin={{right: "xlarge"}}>
           <Text weight="bold" margin={{top: "large", bottom: "medium"}}>Categories</Text>
-          <CheckBoxGroup options={["Film", "Tech", "Literature", "Games", "Music", "Food"]} onChange={({ value, option }) => onChangeHandler(value, option)} alignSelf="center"/>
+          {/* <CheckBoxGroup options={["Film", "Tech", "Literature", "Games", "Music", "Food"]} onChange={({ value, option }) => onChangeHandler(value, option)} alignSelf="center"/> */}
+          {categoryList.map((category, index) => {
+            <CheckBox
+              key={index}
+              label={category}
+            />
+          })}
         </Sidebar>
-        <Box direction="row" gap="small" wrap={true} margin={{left: "1rem"}}>
+        <Box direction="row" gap="small" wrap={true} margin={{left: "1rem"}} width="100vw">
           <InfiniteScroll
             items={projectData.filter(project => categories[project.category])}
             step={3}
