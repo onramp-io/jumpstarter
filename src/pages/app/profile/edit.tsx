@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import styles from '../../../styles/Signup.module.css';
+import styles from '../../../styles/EditUser.module.css';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -11,9 +11,11 @@ import {
   Button,
   Avatar,
   FileInput,
+  Text,
 } from 'grommet';
 import axios from 'axios';
 import { useAuth } from '@frontend/context/AuthProvider';
+import { deleteUser, getAuth } from 'firebase/auth';
 
 const EditProfile: NextPage = () => {
   const [fName, setFName] = useState('');
@@ -22,7 +24,7 @@ const EditProfile: NextPage = () => {
   const [errorMessage, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { firstName, lastName, bio, avatar } = useAuth();
+  const { firstName, lastName, bio, avatar, access_token } = useAuth();
 
   const router = useRouter();
 
@@ -42,15 +44,15 @@ const EditProfile: NextPage = () => {
     setIsSubmitting(true);
     try {
       const res = await axios.put(
-        `http://localhost:3000/api/users/user`,
+        `http://localhost:3000/api/users/update`,
         {
-          fName,
-          lName,
+          firstName: fName,
+          lastName: lName,
           bio,
         },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${access_token}`,
           },
         }
       );
@@ -61,69 +63,107 @@ const EditProfile: NextPage = () => {
     setIsSubmitting(false);
   };
 
+  const delUser = async () => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      deleteUser(user).then(async () => {
+        const res = await axios.delete(
+          `http://localhost:3000/api/users/delete`,
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
+        );
+        router.push('/');
+      });
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   return (
     <>
-      <Box className={styles.login_wrapper}>
-        <Heading>Edit Profile</Heading>
-        <>
-          <Box direction="row" gap="small">
-            <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
+      <Box className={styles.wrapper}>
+        <Heading className={styles.header}>Edit Profile</Heading>
+        <Box className={styles.container}>
+          <Box className={styles.avatar}>
+            <Box direction="row" gap="small">
+              <Avatar
+                src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80"
+                size="3xl"
+                className={styles.avatar_img}
+              />
+            </Box>
+            <FileInput
+              className={styles.avatar_input}
+              name="file"
+              placeholder="Upload a profile picture"
+              onChange={(event) => {
+                const fileList = event.target.files;
+                for (let i = 0; i < fileList.length; i += 1) {
+                  const file = fileList[i];
+                }
+              }}
+            />
           </Box>
-          <FileInput
-            name="file"
-            placeholder="Upload a profile picture"
-            onChange={(event) => {
-              const fileList = event.target.files;
-              for (let i = 0; i < fileList.length; i += 1) {
-                const file = fileList[i];
-              }
-            }}
-          />
-          <TextInput
-            type="text"
-            name="name"
-            placeholder={firstName}
-            value={fName}
-            onChange={(e) => {
-              onChangeFName(e);
-            }}
-            className={styles.login_input}
-          />
-          <TextInput
-            type="text"
-            name="name"
-            placeholder={lastName}
-            value={lName}
-            onChange={(e) => {
-              onChangeLName(e);
-            }}
-            className={styles.login_input}
-          />
-          <TextInput
-            type="text"
-            name="name"
-            placeholder={bio}
-            value={bioValue}
-            onChange={(e) => {
-              onChangeBio(e);
-            }}
-            className={styles.login_input}
-          />
-          {errorMessage !== '' && (
-            <Notification title="Error" message={errorMessage} />
-          )}
-          <Box className="auth-buttons">
-            <Button
-              primary
-              disabled={isSubmitting}
-              type="submit"
-              onClick={handleSubmit}
-              className={styles.login_button}
-            >
-              Submit
-            </Button>
+          <Box className={styles.form}>
+            <Box className={styles.text_label}>
+              <Text className={styles.label}>First Name</Text>
+              <TextInput
+                type="text"
+                name="name"
+                placeholder={firstName}
+                value={fName}
+                onChange={(e) => {
+                  onChangeFName(e);
+                }}
+              />
+            </Box>
+            <Box className={styles.text_label}>
+              <Text className={styles.label}>Last Name</Text>
+              <TextInput
+                type="text"
+                name="name"
+                placeholder={lastName}
+                value={lName}
+                onChange={(e) => {
+                  onChangeLName(e);
+                }}
+              />
+            </Box>
+            <Box className={styles.text_label}>
+              <Text className={styles.label}>Bio</Text>
+              <TextInput
+                type="text"
+                name="name"
+                placeholder={bio}
+                value={bioValue}
+                onChange={(e) => {
+                  onChangeBio(e);
+                }}
+                className={styles.bio}
+              />
+              {errorMessage !== '' && (
+                <Notification title="Error" message={errorMessage} />
+              )}
+            </Box>
+            <Box>
+              <Button
+                disabled={isSubmitting}
+                type="submit"
+                onClick={handleSubmit}
+                className={styles.save_button}
+              >
+                Save Changes
+              </Button>
+            </Box>
           </Box>
-        </>
+        </Box>
+        <Text onClick={delUser} className={styles.delete_user}>
+          Delete Account
+        </Text>
       </Box>
     </>
   );
