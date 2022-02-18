@@ -1,11 +1,30 @@
+import {
+  getUser,
+  insertUser,
+  updateUser,
+  deleteUser,
+} from '@backend/services/db/user/user_db';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { Request } from '@backend/middleware/verify_request';
 
-const user_controller = async (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  user
-) => {
-  res.status(200).json({ name: user.attributes.given_name });
+export const getUserController = async (req: Request, res: NextApiResponse) => {
+  getUser(req, res);
 };
 
-export default user_controller;
+export const postUserController = async (
+  req: Request,
+  res: NextApiResponse
+) => {
+  insertUser(req, res);
+};
+
+export const putUserController = async (req: Request, res: NextApiResponse) => {
+  updateUser(req, res);
+};
+
+export const deleteUserController = async (
+  req: Request,
+  res: NextApiResponse
+) => {
+  deleteUser(req, res);
+};
