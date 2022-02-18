@@ -16,6 +16,8 @@ const Discover: NextPage = () => {
   const [categories, setCategories] = useState(categoryState);
 
   const onChangeHandler = (category) => {
+    console.log(category); 
+
     const checked = categories[category];
     const copyOfCategories = { ...categories };
 
@@ -98,11 +100,13 @@ const Discover: NextPage = () => {
       <Box direction="row" margin={{ horizontal: "9rem" }}>
         <Sidebar margin={{right: "xlarge"}}>
           <Text weight="bold" margin={{top: "large", bottom: "medium"}}>Categories</Text>
-          {/* <CheckBoxGroup options={["Film", "Tech", "Literature", "Games", "Music", "Food"]} onChange={({ value, option }) => onChangeHandler(value, option)} alignSelf="center"/> */}
           {categoryList.map((category, index) => {
-            <CheckBox
+            return <CheckBox
               key={index}
               label={category}
+              id={category}
+              checked={categories[category]}
+              onChange={(event) => onChangeHandler(event.target.id)}
             />
           })}
         </Sidebar>
@@ -111,7 +115,7 @@ const Discover: NextPage = () => {
             items={projectData.filter(project => categories[project.category])}
             step={3}
             onMore={() => {
-              console.log('On more triggered')
+              console.log()
             }}
           >
             {
