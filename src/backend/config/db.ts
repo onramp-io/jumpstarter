@@ -1,10 +1,10 @@
 import { createConnection, getConnection, Connection } from 'typeorm';
-import { User } from '../entity/User';
-import { Project } from '../entity/Project';
-import { Investment } from '../entity/Investment';
-import { Interest } from '../entity/Interest';
-import { Comment } from '../entity/Comment';
-import { Like } from '../entity/Like';
+import { User } from '../entities/User';
+import { Project } from '../entities/Project';
+import { Investment } from '../entities/Investment';
+import { Interest } from '../entities/Interest';
+import { Comment } from '../entities/Comment';
+import { Like } from '../entities/Like';
 
 //create typeorm database connection using ormconfig.json file
 const connection = async () => {
