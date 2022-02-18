@@ -4,6 +4,7 @@ package-lock.json
 .env*.local
 .next
 .vscode/settings.json
+.env.test
 
 # dependencies
 /node_modules
