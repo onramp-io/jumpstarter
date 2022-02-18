@@ -40,47 +40,49 @@ const Login: NextPage = () => {
   return (
     <>
       <Box className={styles.login_wrapper}>
-        <Heading>Login</Heading>
-        <>
-          <TextInput
-            type="text"
-            name="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => {
-              onChangeEmail(e);
-            }}
-            className={styles.login_input}
-          />
-          <TextInput
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => {
-              onChangePassword(e);
-            }}
-            className={styles.login_input}
-          />
-          {errorMessage !== '' && (
-            <Notification title="Error" message={errorMessage} />
-          )}
-          <Box className="auth-buttons">
-            <Button
-              primary
-              disabled={isLoggingIn}
-              type="submit"
-              onClick={handleLogin}
-              className={styles.login_button}
-            >
-              Login
-            </Button>
+        <Box className={styles.container}>
+          <Heading className={styles.header}>Login</Heading>
+          <Box className={styles.form}>
+            <TextInput
+              type="text"
+              name="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => {
+                onChangeEmail(e);
+              }}
+              className={styles.login_input}
+            />
+            <TextInput
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => {
+                onChangePassword(e);
+              }}
+              className={styles.login_input}
+            />
+            {errorMessage !== '' && (
+              <Notification title="Error" message={errorMessage} />
+            )}
+            <Box className="auth-buttons">
+              <Button
+                primary
+                disabled={isLoggingIn}
+                type="submit"
+                onClick={handleLogin}
+                className={styles.login_button}
+              >
+                Login
+              </Button>
+            </Box>
           </Box>
-        </>
+        </Box>
         <Box className={styles.account_not_exists}>
           Don't have an account?
           <Link href="/signup">
-            <a>Signup</a>
+            <a className={styles.signup_link}>Signup</a>
           </Link>
         </Box>
       </Box>
