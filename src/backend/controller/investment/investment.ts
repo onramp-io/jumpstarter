@@ -7,12 +7,8 @@ import connection from '../../model/db';
 
 //Add a like to a project by a user
 const addNewInvestment = async (req: NextApiRequest, res: NextApiResponse) => {
-    const db = await connection();
     try {
-        console.log("userID: " + req.body.userId); //debug
-        console.log("ProjectID: " + req.body.projectId); //debug
-        console.log("fundAmt: " + req.body.fundAmt); //debug
-
+        const db = await connection();
         //Add investment to investment table and associate with userID and ProjectId
         const investment = await db.createQueryBuilder()
                 .insert()
@@ -37,19 +33,13 @@ const addNewInvestment = async (req: NextApiRequest, res: NextApiResponse) => {
                 .set({fundRaised: () => `"fundRaised" + ${req.body.fundAmt}`})
                 .where("id = :id", { id: req.body.projectId })
                 .execute()
-        await db.close();
 
-        console.log(investment); //debug
-        console.log(userFund); //debug
-        console.log(projFund); //debug
-
-        res.json(investment);
+        res.status(200).json(investment);
     } catch (error) {
         let message;
         if (error instanceof Error) message = error.message;
-        await db.close();
         console.log(message); //debug
-        res.json(message);
+        res.status(500).json(message);
     }
 };
 
