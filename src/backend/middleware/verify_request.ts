@@ -11,6 +11,7 @@ export const verify_request = (handler) => {
     let token: string = '';
 
     if (!accessToken) {
+      console.log('ERROR: verify_request() in verify_request.ts');
       return res.status(401).send('Access token is required');
     } else {
       token = accessToken.split(' ')[1];
@@ -21,6 +22,7 @@ export const verify_request = (handler) => {
         req.user = decoded;
       }
     } catch (error) {
+      console.log('ERROR: verify_request() #2 in verify_request.ts');
       return res.status(401).send('Invalid access token');
     }
     return handler(req, res);
