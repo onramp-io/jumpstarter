@@ -9,32 +9,28 @@ import { Request } from '@backend/middleware/verify_request';
 
 export const get_user_controller = async (
   req: Request,
-  res: NextApiResponse,
-  user
+  res: NextApiResponse
 ) => {
-  getUser(req, res, user);
+  getUser(req, res);
 };
 
 export const post_user_controller = async (
   req: Request,
-  res: NextApiResponse,
-  user
+  res: NextApiResponse
 ) => {
-  insertUser(req, res, user);
+  insertUser(req, res);
 };
 
 export const put_user_controller = async (
   req: Request,
-  res: NextApiResponse,
-  user
+  res: NextApiResponse
 ) => {
-  updateUser(req, res, user);
+  updateUser(req, res);
 };
 
 export const delete_user_controller = async (
   req: Request,
-  res: NextApiResponse,
-  user
+  res: NextApiResponse
 ) => {
-  deleteUser(req, res, user);
+  deleteUser(req, res);
 };
