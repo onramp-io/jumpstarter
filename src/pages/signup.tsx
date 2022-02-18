@@ -67,66 +67,70 @@ const Signup: NextPage = () => {
   return (
     <>
       <Box className={styles.signup_wrapper}>
-        <Heading>Create a new account</Heading>
-        <Box>
-          <TextInput
-            type="text"
-            name="name"
-            placeholder="First Name"
-            value={fName}
-            onChange={(e) => {
-              onChangeFName(e);
-            }}
-            className={styles.signup_input}
-          />
-          <TextInput
-            type="text"
-            name="name"
-            placeholder="Last Name"
-            value={lName}
-            onChange={(e) => {
-              onChangeLName(e);
-            }}
-            className={styles.signup_input}
-          />
-          <TextInput
-            type="text"
-            name="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => {
-              onChangeEmail(e);
-            }}
-            className={styles.signup_input}
-          />
-          <TextInput
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => {
-              onChangePassword(e);
-            }}
-            className={styles.signup_input}
-          />
-          {errorMessage !== '' && (
-            <Notification title="Error" message={errorMessage} />
-          )}
-          <Box className="auth-buttons">
-            <Button
-              primary
-              disabled={isSigningUp}
-              type="submit"
-              onClick={handleSignUp}
-              className={styles.signup_button}
-            >
-              Sign up
-            </Button>
+        <Box className={styles.container}>
+          <Heading className={styles.header}>Create a new account</Heading>
+          <Box className={styles.form}>
+            <TextInput
+              type="text"
+              name="name"
+              placeholder="First Name"
+              value={fName}
+              onChange={(e) => {
+                onChangeFName(e);
+              }}
+              className={styles.signup_input}
+            />
+            <TextInput
+              type="text"
+              name="name"
+              placeholder="Last Name"
+              value={lName}
+              onChange={(e) => {
+                onChangeLName(e);
+              }}
+              className={styles.signup_input}
+            />
+            <TextInput
+              type="text"
+              name="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => {
+                onChangeEmail(e);
+              }}
+              className={styles.signup_input}
+            />
+            <TextInput
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => {
+                onChangePassword(e);
+              }}
+              className={styles.signup_input}
+            />
+            {errorMessage !== '' && (
+              <Notification title="Error" message={errorMessage} />
+            )}
+            <Box className="auth-buttons">
+              <Button
+                primary
+                disabled={isSigningUp}
+                type="submit"
+                onClick={handleSignUp}
+                className={styles.signup_button}
+              >
+                Sign up
+              </Button>
+            </Box>
           </Box>
-        </Box>
-        <Box className={styles.account_exists}>
-          Already have an account?
-          <Link href="/login">Login</Link>
+          <Box className={styles.account_exists}>
+            Already have an account?
+            <Link href="/login">
+              <a className={styles.login_link}>Login</a>
+            </Link>
+          </Box>
         </Box>
       </Box>
     </>
