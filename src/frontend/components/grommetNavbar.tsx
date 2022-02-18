@@ -1,9 +1,34 @@
+/* eslint-disable import/no-anonymous-default-export */
+/* eslint-disable @next/next/link-passhref */
 import React from 'react';
-import { Anchor, Box, Header, Menu, ResponsiveContext } from 'grommet';
+import { Anchor, Box, Button, Header, Menu, ResponsiveContext } from 'grommet';
 import { Grommet as GrommetIcon, Menu as MenuIcon } from 'grommet-icons';
 import Link from 'next/link';
+import { useAuth } from '@frontend/context/AuthProvider';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase/client/client';
+import { useRouter } from 'next/router';
 
 export const NavBar = () => {
+  const { firstName } = useAuth();
+
+  const router = useRouter();
+
+  const logOut = async () => {
+    console.log('here');
+    try {
+      signOut(auth)
+        .then(() => {
+          router.push('/');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Header
       background="light-2"
@@ -67,12 +92,25 @@ export const NavBar = () => {
                 </Link>
               </Box>
               <Box direction="row" justify="end" gap="xlarge">
-                <Link href="/login">
-                  <Anchor href="/login" label="Log In" />
-                </Link>
-                <Link href="/signup">
-                  <Anchor href="/signup" label="Sign Up" />
-                </Link>
+                {firstName && (
+                  <>
+                    {firstName}
+                    <Link href="/app/profile">
+                      <Anchor href="/app/profile" label="Profile" />
+                    </Link>
+                    <Button label="Log Out" onClick={logOut} />
+                  </>
+                )}
+                {!firstName && (
+                  <>
+                    <Link href="/login">
+                      <Anchor href="/login" label="Log In" />
+                    </Link>
+                    <Link href="/signup">
+                      <Anchor href="/signup" label="Sign Up" />
+                    </Link>
+                  </>
+                )}
               </Box>
             </Box>
           )
