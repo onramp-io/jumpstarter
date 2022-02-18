@@ -13,16 +13,15 @@ interface Request extends NextApiRequest {
 const handler = async (req: Request, res: NextApiResponse) => {
   try {
     let user = req.user;
-    if (req.method === 'GET') {
-      get_user_controller(req, res, user); // (edit.tsx, user.tsx)
-    } else if (req.method === 'POST') {
-      console.log(user);
-      post_user_controller(req, res, user); // (signup.tsx)
-    } else if (req.method === 'PUT') {
-      put_user_controller(req, res, user); // (edit.tsx)
-    } else {
-      delete_user_controller(req, res, user); // (edit.tsx)
-      console.log(req.body);
+    switch (req.method) {
+      case 'GET':
+        get_user_controller(req, res, user);
+      case 'POST':
+        post_user_controller(req, res, user);
+      case 'PUT':
+        put_user_controller(req, res, user);
+      case 'DELETE':
+        delete_user_controller(req, res, user);
     }
   } catch (error) {
     res.status(401).json({ error });
