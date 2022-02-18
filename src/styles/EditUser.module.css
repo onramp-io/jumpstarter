@@ -1,0 +1,87 @@
+.wrapper {
+  align-items: center;
+  justify-content: center;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+  width: 50vw;
+  height: 60vh;
+  /* background-color: #8bc34a; */
+  border-radius: 15px;
+  border: 1px solid #000;
+}
+
+.text_input {
+  padding: 12px !important;
+  margin: 8px !important;
+  border: 1px solid #ccc !important;
+  border-radius: 5px !important;
+  width: 90% !important;
+}
+
+.save_button {
+  width: 100% !important;
+  background-size: 200% 200% !important;
+  color: white !important;
+  padding: 14px 20px !important;
+  margin: 8px 0 !important;
+  border: none !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+  background: linear-gradient(to right, #4caf50, #8bc34a) !important;
+}
+
+.avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* background-color: red; */
+  height: 40%;
+}
+
+.avatar_img {
+  margin-bottom: 10px;
+}
+
+.form {
+  height: 60%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* background-color: blue; */
+}
+
+.label {
+  font-weight: bold !important;
+}
+
+.text_label {
+  width: 90%;
+  margin-bottom: 10px;
+}
+
+.bio {
+  height: 100px;
+}
+
+.delete_user {
+  color: red !important;
+  margin: 4px !important;
+  cursor: pointer !important;
+  font-weight: bold !important;
+}
