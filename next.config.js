@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
   env: {
-    DB_URL: process.env.DB_URL,
     DB_TYPE: process.env.DB_TYPE,
+    DB_CONNECTION_STRING: process.env.DB_CONNECTION_STRING,
     FB_CLIENT_API_KEY: process.env.FB_CLIENT_API_KEY,
     FB_CLIENT_AUTH_DOMAIN: process.env.FB_CLIENT_AUTH_DOMAIN,
     FB_CLIENT_PROJECT_ID: process.env.FB_CLIENT_PROJECT_ID,
@@ -16,6 +16,6 @@ module.exports = {
     FB_ADMIN_CLIENT_ID: process.env.FB_ADMIN_CLIENT_ID,
   },
   images: {
-    domains: ['images.unsplash.com']
-  }
+    domains: ['images.unsplash.com'],
+  },
 };
