@@ -50,7 +50,7 @@ const Signup: NextPage = () => {
         email: email,
       };
       const response = await axios.post(
-        'http://localhost:3000/api/users/user',
+        'http://localhost:3000/api/users/create',
         body,
         {
           headers,
