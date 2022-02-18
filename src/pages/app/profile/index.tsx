@@ -2,10 +2,9 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 
-import { Box, Heading, Button, Text, Tab, Tabs } from 'grommet';
+import { Box, Heading, Button, Text, Tab, Tabs, Avatar } from 'grommet';
 
-import styles from '../../../styles/Signup.module.css';
-import home from '../../../styles/Home.module.css';
+import profile from '../../../styles/Profile.module.css';
 
 import { useAuth } from '@frontend/context/AuthProvider';
 
@@ -51,42 +50,50 @@ function MyProfile() {
 
   return (
     <>
-      <Box className={styles.signup_wrapper}>
-        <Box height="small" width="small">
-          <Heading>
+      <Box className={profile.wrapper}>
+        <Box className={profile.user_data}>
+          <Avatar
+            src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80"
+            size="3xl"
+          />
+          <Heading className={profile.heading}>
             {firstName} {lastName}
           </Heading>
-          <Image fit="cover" src={userData.image} />
-          <Text>{bio}</Text>
+          <Text>
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry.
+          </Text>
           <Link href="/app/profile/edit">
-            <Button label="Edit" />
+            <Button label="Edit" className={profile.edit_button} />
           </Link>
         </Box>
-        <Tabs>
-          <Tab title="My Projects">
-            <Box pad="medium">
-              <Box align="center" direction="row" margin="small">
-                <SectionMarquee
-                  APIPayload={userData2}
-                  linkHref="/personalpicks"
-                  linkCaption="See all recommended projects >"
-                />
+        <Box className={profile.profile_data}>
+          <Tabs>
+            <Tab title="My Projects">
+              <Box pad="medium">
+                <Box align="center" direction="row" margin="small">
+                  <SectionMarquee
+                    APIPayload={userData2}
+                    linkHref="/personalpicks"
+                    linkCaption="See all recommended projects >"
+                  />
+                </Box>
               </Box>
-            </Box>
-          </Tab>
-          <Tab title="My Contribution">
-            <Box pad="medium">
-              <Text>Total Investment: ${total_investments}</Text>
-              <Box align="center" direction="row" margin="small">
-                <SectionMarquee
-                  APIPayload={userData2}
-                  linkHref="/personalpicks"
-                  linkCaption="See all recommended projects >"
-                />
+            </Tab>
+            <Tab title="My Contribution">
+              <Box pad="medium">
+                <Text>Total Investment: ${total_investments}</Text>
+                <Box align="center" direction="row" margin="small">
+                  <SectionMarquee
+                    APIPayload={userData2}
+                    linkHref="/personalpicks"
+                    linkCaption="See all recommended projects >"
+                  />
+                </Box>
               </Box>
-            </Box>
-          </Tab>
-        </Tabs>
+            </Tab>
+          </Tabs>
+        </Box>
       </Box>
     </>
   );
