@@ -8,6 +8,14 @@ import { Like } from './entities/Like';
 
 //create typeorm database connection using ormconfig.json file
 const connection = async () => {
+
+    try {
+        const staleConnection = getConnection();
+        await staleConnection.close();
+      } catch (error) {
+        // no stale connection to clean up
+      }
+      
     const temp = await createConnection({
         type: 'postgres',
         url: process.env.CONNECTION_STRING,

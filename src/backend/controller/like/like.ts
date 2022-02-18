@@ -7,10 +7,11 @@ import connection from '../../model/db';
 
 //Add a like to a project by a user
 const addNewLike = async (req: NextApiRequest, res: NextApiResponse) => {
-    const db = await connection();
     try {
-        console.log("userID: " + req.body.userId); //debug
-        console.log("ProjectID: " + req.body.projectId); //debug
+        if ((req.body.userId == null) || (req.body.projectId == null)) {
+            throw("Either userId or projectId is NULL");
+        }
+        const db = await connection();
         const like = await db.createQueryBuilder()
                 .insert()
                 .into(Like)
@@ -18,15 +19,11 @@ const addNewLike = async (req: NextApiRequest, res: NextApiResponse) => {
                 {user: req.body.userId, project: req.body.projectId},
                 ])
                 .execute()
-        await db.close();
-        console.log(like); //debug
-        res.json(like);
+        res.status(200).json(like);
     } catch (error) {
         let message;
         if (error instanceof Error) message = error.message;
-        await db.close();
-        console.log(message); //debug
-        res.json(message);
+        res.status(500).json(message);
     }
 };
 
