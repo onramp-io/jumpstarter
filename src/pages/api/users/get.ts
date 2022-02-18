@@ -7,7 +7,6 @@ interface Request extends NextApiRequest {
 }
 const handler = async (req: Request, res: NextApiResponse) => {
   try {
-    console.log(req.method);
     switch (req.method) {
       case 'GET':
         get_user_controller(req, res);
