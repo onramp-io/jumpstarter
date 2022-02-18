@@ -8,6 +8,7 @@ import {
 import { User } from './User';
 import { Comment } from './Comment';
 import { Investment } from './Investment';
+import { Like } from './Like';
 
 @Entity()
 export class Project {
@@ -27,22 +28,22 @@ export class Project {
   description: string;
 
   @Column('decimal', { array: true })
-  fund_tiers: number[];
+  fundTiers: number[];
 
   @Column('integer')
-  curr_fund_goal: number;
+  currFundGoal: number;
 
   @Column('decimal')
-  fund_raised: number;
+  fundRaised: number;
 
   @Column('timestamp')
-  launch_date: string;
+  launchDate: string;
 
   @Column('timestamp')
-  created_date: string;
+  createdDate: string;
 
-  @Column('integer')
-  likes: number;
+  @Column({ type: 'integer', default: 0 })
+  likesAmt: number;
 
   @ManyToOne(() => User, (user) => user.projects)
   user: User;
@@ -52,4 +53,7 @@ export class Project {
 
   @OneToMany(() => Investment, (investment) => investment.project)
   investments: Investment[];
+
+  @OneToMany(() => Like, (like) => like.user)
+  likes: Like[];
 }

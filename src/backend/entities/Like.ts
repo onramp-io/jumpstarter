@@ -3,16 +3,13 @@ import { User } from './User';
 import { Project } from './Project';
 
 @Entity()
-export class Investment {
+export class Like {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('decimal')
-  fund_amt: number;
-
-  @ManyToOne(() => User, (user) => user.investments)
+  @ManyToOne(() => User, (user) => user.likes)
   user: User;
 
-  @ManyToOne(() => Project, (project) => project.investments)
+  @ManyToOne(() => Project, (project) => project.likes)
   project: Project;
 }

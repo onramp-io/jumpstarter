@@ -3,14 +3,12 @@ import { Comment } from './Comment';
 import { Project } from './Project';
 import { Interest } from './Interest';
 import { Investment } from './Investment';
+import { Like } from './Like';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column('text')
-  uid: string;
 
   @Column('text')
   first_name: string;
@@ -27,8 +25,8 @@ export class User {
   @Column('text')
   bio: string;
 
-  @Column('decimal')
-  invested_amt: number;
+  @Column({ type: 'decimal', default: 0 })
+  investedAmt: number;
 
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
@@ -41,4 +39,7 @@ export class User {
 
   @OneToMany(() => Investment, (investment) => investment.user)
   investments: Investment[];
+
+  @OneToMany(() => Like, (like) => like.user)
+  likes: Like[];
 }
