@@ -16,6 +16,7 @@ import {
 import axios from 'axios';
 import { useAuth } from '@frontend/context/AuthProvider';
 import { deleteUser, getAuth } from 'firebase/auth';
+import { Alert, AlertTitle } from '@mui/material';
 
 const EditProfile: NextPage = () => {
   const [fName, setFName] = useState('');
@@ -43,13 +44,16 @@ const EditProfile: NextPage = () => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
+      const body = {
+        firstName: fName,
+        lastName: lName,
+        bio: bioValue,
+        avatar: '',
+      };
+      console.log(body);
       const res = await axios.put(
         `http://localhost:3000/api/users/update`,
-        {
-          firstName: fName,
-          lastName: lName,
-          bio,
-        },
+        body,
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
@@ -145,9 +149,6 @@ const EditProfile: NextPage = () => {
                 }}
                 className={styles.bio}
               />
-              {errorMessage !== '' && (
-                <Notification title="Error" message={errorMessage} />
-              )}
             </Box>
             <Box>
               <Button
@@ -164,6 +165,11 @@ const EditProfile: NextPage = () => {
         <Text onClick={delUser} className={styles.delete_user}>
           Delete Account
         </Text>
+        {errorMessage !== '' && (
+          <Alert severity="error">
+            <AlertTitle>{errorMessage}</AlertTitle>
+          </Alert>
+        )}
       </Box>
     </>
   );
