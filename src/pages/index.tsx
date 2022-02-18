@@ -69,11 +69,6 @@ const index: NextPage = function indexComponent<indexProps>({}) {
   ];
   return (
     <>
-      <Head>
-        <title>JumpStarter</title>
-        <meta name="description" content="Lets JumpStart projects" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <LandingComponent />
       <Box align="center" direction="column" margin="large">
         <Section

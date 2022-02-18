@@ -1,6 +1,4 @@
-.loginWrapper {
-  display: flex;
-  flex-direction: column;
+.wrapper {
   align-items: center;
   justify-content: center;
 }
@@ -14,37 +12,26 @@
 }
 
 .container {
-  margin-top: 20vh;
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between;
-  width: 30vw;
-  height: 40vh;
+  width: 50vw;
+  height: 60vh;
   /* background-color: #8bc34a; */
   border-radius: 15px;
-  /* border: 1px solid #000; */
+  border: 1px solid #000;
 }
 
-.form {
-  height: 100%;
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  /* background-color: blue; */
-}
-
-.loginInput {
-  width: 100% !important;
-  padding: 12px 20px !important;
-  margin: 8px 0 !important;
+.textInput {
+  padding: 12px !important;
+  margin: 8px !important;
   border: 1px solid #ccc !important;
   border-radius: 5px !important;
+  width: 90% !important;
 }
 
-.loginButton {
+.saveButton {
   width: 100% !important;
   background-size: 200% 200% !important;
   color: white !important;
@@ -53,18 +40,48 @@
   border: none !important;
   border-radius: 5px !important;
   cursor: pointer !important;
-  background: linear-gradient(to right, #6b4caf, #6c4ac3) !important;
+  background: linear-gradient(to right, #4caf50, #8bc34a) !important;
 }
 
-.accountNotExists {
+.avatar {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  /* background-color: red; */
+  height: 40%;
 }
 
-.signupLink {
-  text-decoration: underline;
+.avatarImg {
+  margin-bottom: 10px;
+}
+
+.form {
+  height: 60%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* background-color: blue; */
+}
+
+.label {
+  font-weight: bold !important;
+}
+
+.textLabel {
+  width: 90%;
+  margin-bottom: 10px;
+}
+
+.bio {
+  height: 100px;
+}
+
+.deleteUser {
+  color: red !important;
+  margin: 4px !important;
+  cursor: pointer !important;
+  font-weight: bold !important;
 }

@@ -1,38 +1,30 @@
+import {
+  getUser,
+  insertUser,
+  updateUser,
+  deleteUser,
+} from '@backend/services/db/user/user_db';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getRepository, getConnection } from 'typeorm';
-import { User } from '../../model/entities/User';
-import connection from '../../model/db';
+import { Request } from '@backend/middleware/verify_request';
 
-const addNewUser = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log(process.env.CONNECTION_STRING);
-  const db = await connection();
-  const newUser = await db.createQueryBuilder()
-          .insert()
-          .into(User)
-          .values([
-            {first_name: "test", last_name: "test", email: "test@test.com", avatar: "test", bio: "test", investedAmt: 0},
-          ])
-          .execute()
-  await db.close();
-  console.log(newUser);
-  res.json(newUser);
+export const getUserController = async (req: Request, res: NextApiResponse) => {
+  getUser(req, res);
 };
 
-const getUser = async (req: NextApiRequest, res: NextApiResponse) => {
-  res.send('API CALL: Get User');
+export const postUserController = async (
+  req: Request,
+  res: NextApiResponse
+) => {
+  insertUser(req, res);
 };
 
-const updateUser = async (req: NextApiRequest, res: NextApiResponse) => {
-  res.send('API CALL: Update User');
+export const putUserController = async (req: Request, res: NextApiResponse) => {
+  updateUser(req, res);
 };
 
-const getUserProjects = async (req: NextApiRequest, res: NextApiResponse) => {
-  res.send('API CALL: Get User projects');
+export const deleteUserController = async (
+  req: Request,
+  res: NextApiResponse
+) => {
+  deleteUser(req, res);
 };
-
-const createProject = async (req: NextApiRequest, res: NextApiResponse) => {
-  res.send('API CALL: Create project');
-};
-
-
-export default {addNewUser, getUser, updateUser, getUserProjects, createProject};
