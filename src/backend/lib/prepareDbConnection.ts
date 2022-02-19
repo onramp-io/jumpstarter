@@ -27,3 +27,5 @@ async function prepareDbConnection() {
 
   return connectionReadyPromise;
 }
+
+export default prepareDbConnection;
