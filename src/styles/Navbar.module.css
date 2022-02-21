@@ -1,0 +1,52 @@
+.wrapper {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  /* background: #000 !important; */
+  width: 100% !important;
+}
+
+.starter {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-evenly !important;
+  /* background: red !important; */
+  width: 25% !important;
+}
+
+.brand {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  /* background: blue !important; */
+  width: 50% !important;
+}
+
+.end {
+  width: 25% !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-evenly !important;
+  /* background: yellow !important; */
+}
+
+.dropdownWrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  /* background: green !important; */
+  width: 100% !important;
+}
+
+.dropdownLogoutButton {
+  margin-top: 20px !important;
+}
+
+.dropdownButton {
+  border: none !important;
+}
