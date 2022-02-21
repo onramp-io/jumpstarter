@@ -1,4 +1,4 @@
-import { createConnection, getConnection } from "typeorm";
+import { Connection, createConnection, getConnection } from "typeorm";
 
 let connectionReadyPromise: Promise<void> | null = null;
 
@@ -8,7 +8,7 @@ let connectionReadyPromise: Promise<void> | null = null;
  * - see link for more details: https://dev.to/unframework/getting-typeorm-to-work-with-next-js-and-typescript-1len
  * @returns `connectionReadyPromise` which you need to await
  */
-async function prepareDbConnection() {
+async function prepareDbConnection(): Promise<Connection | void> {
   // if no connection exists yet
   if (!connectionReadyPromise) {
     // create one
