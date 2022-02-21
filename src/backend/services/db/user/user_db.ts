@@ -23,7 +23,9 @@ export const getUser = async (req: Request, res: NextApiResponse) => {
       });
     }
   } catch (error) {
-    console.log('ERROR: getUser() in user_db.ts', error);
+    let message;
+    if (error instanceof Error) message = error.message;
+    res.status(500).json(message);
   }
 };
 
@@ -59,7 +61,9 @@ export const insertUser = async (req: Request, res: NextApiResponse) => {
       });
     }
   } catch (error) {
-    console.log("CATCH: " + error);
+    let message;
+    if (error instanceof Error) message = error.message;
+    res.status(500).json(message);
   }
 };
 
@@ -89,7 +93,9 @@ export const updateUser = async (req: Request, res: NextApiResponse) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    let message;
+    if (error instanceof Error) message = error.message;
+    res.status(500).json(message);
   }
 };
 
@@ -114,6 +120,8 @@ export const deleteUser = async (req: Request, res: NextApiResponse) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    let message;
+    if (error instanceof Error) message = error.message;
+    res.status(500).json(message);
   }
 };
