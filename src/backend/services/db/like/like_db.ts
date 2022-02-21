@@ -7,6 +7,7 @@ import connection from '@backend/config/db';
 
 //Add a like to a project by a user
 export const addNewLike = async (req: NextApiRequest, res: NextApiResponse) => {
+    console.log("like api call");
     try {
         if ((req.body.userId == null) || (req.body.projectId == null)) {
             throw("Either userId or projectId is NULL");
