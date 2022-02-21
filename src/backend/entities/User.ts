@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Comment } from './Comment';
 import { Project } from './Project';
-import { Interest } from './Interest';
 import { Investment } from './Investment';
 import { Like } from './Like';
 
@@ -11,19 +10,22 @@ export class User {
   id: number;
 
   @Column('text')
-  first_name: string;
+  firstName: string;
 
   @Column('text')
-  last_name: string;
+  lastName: string;
 
   @Column('text')
   email: string;
 
-  @Column('text')
+  @Column({ type: 'text', nullable: true })
   avatar: string;
 
-  @Column('text')
+  @Column({ type: 'text', nullable: true })
   bio: string;
+
+  @Column({ type: 'text', array: true, nullable: true })
+  interests: string[];
 
   @Column({ type: 'decimal', default: 0 })
   balance: number;
@@ -36,9 +38,6 @@ export class User {
 
   @OneToMany(() => Project, (project) => project.user)
   projects: Project[];
-
-  @OneToMany(() => Interest, (interest) => interest.user)
-  interests: Interest[];
 
   @OneToMany(() => Investment, (investment) => investment.user)
   investments: Investment[];
