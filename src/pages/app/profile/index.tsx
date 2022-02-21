@@ -8,7 +8,6 @@ import profile from '../../../styles/Profile.module.css';
 
 import { useAuth } from '@frontend/context/AuthProvider';
 
-import { Image } from 'grommet';
 import SectionMarquee from '@frontend/components/sectionMarquee';
 import Link from 'next/link';
 
