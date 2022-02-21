@@ -3,68 +3,39 @@ import { User } from '@backend/entities/User';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Request } from '@backend/middleware/verify_request';
 
-export const getUser = async (req: Request, res: NextApiResponse) => {
+export const getUser = async (email: string) => {
   const db = await connection();
-  try {
-    const email = req.user.email;
-    const userData = await db
-      .createQueryBuilder()
-      .select('*')
-      .from('user', 'user')
-      .where('email = :email', { email })
-      .getRawOne();
-    if (userData) {
-      res.status(200).json({
-        userData,
-      });
-    } else {
-      res.status(404).json({
-        message: 'User not found',
-      });
-    }
-  } catch (error) {
-    let message;
-    if (error instanceof Error) message = error.message;
-    res.status(500).json(message);
-  }
+  const userData = await db
+    .createQueryBuilder()
+    .select('*')
+    .from('user', 'user')
+    .where('email = :email', { email })
+    .getRawOne();
+  return userData;
 };
 
-export const insertUser = async (req: Request, res: NextApiResponse) => {
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
-  const email = req.body.email;
-
+export const insertUser = async (
+  firstName: string,
+  lastName: string,
+  email: string
+) => {
   const db = await connection();
-  try {
-    const userData = await db
-      .createQueryBuilder()
-      .insert()
-      .into(User)
-      .values([
-        {
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          avatar: '',
-          bio: '',
-          investedAmt: 0,
-        },
-      ])
-      .execute();
-    if (userData) {
-      res.status(200).json({
-        message: 'User created',
-      });
-    } else {
-      res.status(404).json({
-        message: 'User not created',
-      });
-    }
-  } catch (error) {
-    let message;
-    if (error instanceof Error) message = error.message;
-    res.status(500).json(message);
-  }
+  const userData = await db
+    .createQueryBuilder()
+    .insert()
+    .into(User)
+    .values([
+      {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        avatar: '',
+        bio: '',
+        investedAmt: 0,
+      },
+    ])
+    .execute();
+  return userData;
 };
 
 export const updateUser = async (req: Request, res: NextApiResponse) => {
