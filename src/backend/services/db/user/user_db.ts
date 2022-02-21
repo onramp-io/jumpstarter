@@ -38,36 +38,26 @@ export const insertUser = async (
   return userData;
 };
 
-export const updateUser = async (req: Request, res: NextApiResponse) => {
+export const updateUser = async (
+  email: string,
+  firstName: string,
+  lastName: string,
+  bio: string,
+  avatar: string
+) => {
   const db = await connection();
-  try {
-    const email = req.user.email;
-    const userData = await db
-      .createQueryBuilder()
-      .update(User)
-      .set({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        avatar: req.body.avatar,
-        bio: req.body.bio,
-      })
-      .where('email = :email', { email })
-      .execute();
-    console.log(userData);
-    if (userData) {
-      res.status(200).json({
-        message: 'User updated',
-      });
-    } else {
-      res.status(404).json({
-        message: 'User not updated',
-      });
-    }
-  } catch (error) {
-    let message;
-    if (error instanceof Error) message = error.message;
-    res.status(500).json(message);
-  }
+  const userData = await db
+    .createQueryBuilder()
+    .update(User)
+    .set({
+      firstName: firstName,
+      lastName: lastName,
+      avatar: avatar,
+      bio: bio,
+    })
+    .where('email = :email', { email })
+    .execute();
+  return userData;
 };
 
 export const deleteUser = async (req: Request, res: NextApiResponse) => {
