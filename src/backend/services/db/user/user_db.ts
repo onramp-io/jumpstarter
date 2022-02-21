@@ -117,3 +117,30 @@ export const deleteUser = async (req: Request, res: NextApiResponse) => {
     console.log(error);
   }
 };
+
+export const payOutUser = async (req: Request, res: NextApiResponse) => {
+  const db = await connection();
+  try {
+    const email = req.user.email;
+    const userData = await db
+      .createQueryBuilder()
+      .update(User)
+      .set({
+        investedAmt: 0,
+      })
+      .where('email = :email', { email })
+      .execute();
+    console.log(userData);
+    if (userData) {
+      res.status(200).json({
+        message: 'User payed out',
+      });
+    } else {
+      res.status(404).json({
+        message: 'User not payed out',
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
