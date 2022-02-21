@@ -55,7 +55,26 @@ export const postUserController = async (
 };
 
 export const putUserController = async (req: Request, res: NextApiResponse) => {
-  updateUser(req, res);
+  try {
+    const email = req.user.email;
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+    const bio = req.body.bio;
+    const avatar = req.body.avatar;
+    const userData = updateUser(firstName, lastName, bio, avatar, email);
+    if (userData) {
+      res.status(200).json({
+        message: 'User updated',
+      });
+    } else {
+      res.status(404).json({
+        message: 'User not found',
+      });
+    }
+  } catch (error) {
+    console.log('ERROR @ putUserController in controller/user/user.ts', error);
+    res.status(500).json(error.message);
+  }
 };
 
 export const deleteUserController = async (
