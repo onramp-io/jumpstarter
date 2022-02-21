@@ -1,4 +1,3 @@
-/*USER*/
 INSERT INTO public.user ("email", "bio", "firstName", "lastName")
     VALUES ('ssquarepants@krustycrab.com', 'i live in a pineapple under the sea', 'spongebob', 'squarepants');
 INSERT INTO public.user ("email", "bio", "firstName", "lastName")
@@ -20,7 +19,6 @@ INSERT INTO public.user ("email", "bio", "firstName", "lastName")
 INSERT INTO public.user ("email", "bio", "firstName", "lastName")
     VALUES ('test', 'test', 'test', 'test');
 
-/*PROJECT*/
 INSERT INTO public.project ("title", "category", "description", "fundTiers", "currFundGoal", "launchDate")
     VALUES ('krabby patty', 'food', 'burger', Array[10,20,30], 0, '2004-10-19 10:23:54');
 INSERT INTO public.project ("title", "category", "description", "fundTiers", "currFundGoal", "launchDate", "userId")

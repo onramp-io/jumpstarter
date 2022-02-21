@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useReducer } from 'react';
 
 import { onAuthStateChanged } from '@firebase/auth';
 
@@ -15,6 +15,7 @@ export interface AuthContextType {
   bio: string;
   avatar: string;
   totalInvestments: number;
+  interests: string[];
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -24,22 +25,44 @@ export const AuthContext = createContext<AuthContextType>({
   bio: '',
   avatar: '',
   totalInvestments: 0,
+  interests: []
 });
 
+const userDispatchContext = createContext({});
+
+const initialState = {
+  accessToken: '',
+  firstName: '',
+  lastName: '',
+  bio: '',
+  avatar: '',
+  totalInvestments: 0,
+  interests: []
+}
+
+const reducer = (state, action) => {
+  console.log(action.payload); //debug
+  switch (action.type) {
+    case 'SET_USER':
+      return { ...state, ...action.payload };
+    default:
+      throw new Error(`Unknown action: ${action.type}`);
+  }
+}
+
 export const PrivateRouteProvider: NextPage = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   const [accessToken, setAccessToken] = useState<string>('');
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [bio, setBio] = useState<string>('');
-  const [avatar, setAvatar] = useState<string>('');
-  const [totalInvestments, setTotalInvestments] = useState<number>(0);
 
   const router = useRouter();
+
+  const setUser = (payload) => dispatch({ type: 'SET_USER', payload });
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        router.push('/');
+        router.push('/'); //if user is not signed in then send them to home page
       } else {
         const token = await getIdToken(user);
         getUser(token);
@@ -48,38 +71,42 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
         }
       }
     });
-    const getUser = async (token) => {
-      const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      };
-      const resposne = await axios.get('http://localhost:3000/api/users/get', {
-        headers,
-      });
-      setFirstName(resposne.data.userData['firstName']);
-      setLastName(resposne.data.userData['lastName']);
-      setBio(resposne.data.userData['bio']);
-      setAvatar(resposne.data.userData['avatar']);
-      setTotalInvestments(resposne.data.userData['investedAmt']);
-    };
+    
   }, []);
 
+  const getUser = async (token) => {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axios.get('http://localhost:3000/api/users/get', {
+      headers,
+    });
+
+    setUser({
+      accessToken: accessToken,
+      firstName: response.data.userData['firstName'],
+      lastName: response.data.userData['lastName'],
+      bio: response.data.userData['bio'],
+      avatar: response.data.userData['avatar'],
+      investedAmt: response.data.userData['investedAmt'],
+      interests: response.data.userData['interests']
+    });
+  };
+
   return (
-    <AuthContext.Provider
-      value={{
-        accessToken,
-        firstName,
-        lastName,
-        bio,
-        avatar,
-        totalInvestments,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <userDispatchContext.Provider value={{setUser}}>
+      <AuthContext.Provider value={state}>
+        {children}
+      </AuthContext.Provider>
+    </userDispatchContext.Provider>
   );
 };
 
 export const useAuth = () => {
   return useContext(AuthContext);
+};
+
+export const useUserDispatch = () => {
+  return useContext(userDispatchContext)
 };

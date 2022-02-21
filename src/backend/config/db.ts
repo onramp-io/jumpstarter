@@ -14,10 +14,11 @@ const connection = async () => {
   } catch (error) {
     // no stale connection to clean up
   }
+
   const temp = await createConnection({
     type: process.env.DB_TYPE as any,
     url: process.env.DB_CONNECTION_STRING,
-    logging: true, //statements/queries console logged to terminal -> should remove when not debugging
+    //logging: true, //statements/queries console logged to terminal -> should remove when not debugging
     synchronize: true, //will tralslate logic to sql
     entities: [User, Project, Investment, Comment, Like],
   });
@@ -25,6 +26,7 @@ const connection = async () => {
     console.log('type orm db connected');
     return getConnection();
   }
+  
 };
 
 export default connection;
