@@ -25,7 +25,7 @@ export const getUserController = async (req: Request, res: NextApiResponse) => {
       });
     }
   } catch (error) {
-    console.log('ERROR @ getUserController in controller/user/user.ts', error);
+    console.log('ERROR @getUserController in controller/user/user.ts', error);
     res.status(500).json(error.message);
   }
 };
@@ -72,7 +72,7 @@ export const putUserController = async (req: Request, res: NextApiResponse) => {
       });
     }
   } catch (error) {
-    console.log('ERROR @ putUserController in controller/user/user.ts', error);
+    console.log('ERROR @putUserController in controller/user/user.ts', error);
     res.status(500).json(error.message);
   }
 };
@@ -81,9 +81,42 @@ export const deleteUserController = async (
   req: Request,
   res: NextApiResponse
 ) => {
-  deleteUser(req, res);
+  try {
+    const email = req.user.email;
+    const userData = deleteUser(email);
+    if (userData) {
+      res.status(200).json({
+        message: 'User deleted',
+      });
+    } else {
+      res.status(404).json({
+        message: 'User not deleted',
+      });
+    }
+  } catch (error) {
+    console.log(
+      'ERROR @deleteUserController in controller/user/user.ts',
+      error
+    );
+    res.status(500).json(error.message);
+  }
 };
 
 export const payoutController = async (req: Request, res: NextApiResponse) => {
-  payOutUser(req, res);
+  try {
+    const email = req.user.emaill;
+    const userData = await payOutUser(email);
+    if (userData) {
+      res.status(200).json({
+        message: 'User payed out',
+      });
+    } else {
+      res.status(404).json({
+        message: 'User not payed out',
+      });
+    }
+  } catch (error) {
+    console.log('ERROR @payoutController in controller/user/user.ts', error);
+    res.status(500).json(error.message);
+  }
 };
