@@ -17,7 +17,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
         });
     }
   } catch (error) {
-    console.log('ERROR: handler() in user.ts', error);
+    console.log('ERROR: handler() in users/update.ts', error);
     res.status(401).json({ error });
   }
 };
