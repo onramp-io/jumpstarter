@@ -34,9 +34,6 @@ export const insertUser = async (req: Request, res: NextApiResponse) => {
 
   const db = await connection();
   try {
-    console.log("DB: " + db);
-    console.log("ISCONNECTED " + db.isConnected);
-    console.log("USER " + User);
     const userData = await db
       .createQueryBuilder()
       .insert()
