@@ -20,6 +20,7 @@ export const getCategories = async (req: NextApiRequest, res: NextApiResponse) =
 
 export const addNewCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const { category, picture, description } = req.body;
     const db = await connection();
     //add new category
     const newCategory = await db.createQueryBuilder()
@@ -28,9 +29,9 @@ export const addNewCategory = async (req: NextApiRequest, res: NextApiResponse) 
               .into(Category)
               .values([
                 {
-                  category: req.body.category,
-                  picture: req.body.picture,
-                  description: req.body.description
+                  category: category,
+                  picture: picture,
+                  description: description
                 },
               ])
               .execute();
