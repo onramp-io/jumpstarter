@@ -3,17 +3,17 @@ import axios from "axios";
 import Link from "next/link";
 import { Anchor } from "grommet";
 
-interface ReusableLinkProps {
+interface JumpstarterLinkProps {
   linkHref: string;
   linkCaption: string;
   className: string | undefined;
 }
 
-const ReusableLink = function reusableLinkComponent<ReusableLinkProps>({
+const JumpstarterLink = function reusableLinkComponent({
   linkHref,
   linkCaption,
   className,
-}) {
+}: JumpstarterLinkProps) {
   return (
     <Link href={linkHref}>
       <Anchor className={className} href={linkHref} label={linkCaption} />
@@ -21,6 +21,4 @@ const ReusableLink = function reusableLinkComponent<ReusableLinkProps>({
   );
 };
 
-ReusableLink.getInitialProps = async ({ req }: NextPageContext) => {};
-
-export default ReusableLink;
+export default JumpstarterLink;

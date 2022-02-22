@@ -4,7 +4,7 @@ import SectionCard from "./sectionCard";
 import styled from "styled-components";
 import { Anchor, Box, Pagination } from "grommet";
 import Link from "next/link";
-import ReusableLink from "./reusableLink";
+import JumpstarterLink from "./jumpstarterLink";
 
 interface SingleAPIPayload {
   projectTitle: string;
@@ -84,7 +84,7 @@ const SectionMarquee = function SectionMarqueeComponent({
             right: "large",
           }}
         >
-          <ReusableLink
+          <JumpstarterLink
             className=""
             linkHref={linkHref}
             linkCaption={linkCaption}
@@ -93,10 +93,6 @@ const SectionMarquee = function SectionMarqueeComponent({
       </Box>
     </>
   );
-};
-
-SectionMarquee.getInitialProps = async ({ req }: NextPageContext) => {
-  return {};
 };
 
 export default SectionMarquee;

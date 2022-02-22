@@ -5,7 +5,7 @@ import PreferenceCard, {
 } from "@frontend/components/preferenceCard";
 import SectionHeader from "@frontend/components/sectionHeader";
 import { Box, Button, ResponsiveContext } from "grommet";
-import ReusableLink from "@frontend/components/reusableLink";
+import JumpstarterLink from "@frontend/components/jumpstarterLink";
 
 interface UserPreferencesProps {}
 
@@ -63,7 +63,7 @@ const UserPreferences = function UserPreferencesComponent<
                 />
                 <Box width="70%" margin="medium" gap="medium">
                   <Button primary label="Submit my preferences" />
-                  <ReusableLink
+                  <JumpstarterLink
                     linkHref="/"
                     linkCaption="Skip (you can set up your preferences later in your User Settings) >"
                     className="grey-text"
@@ -112,7 +112,7 @@ const UserPreferences = function UserPreferencesComponent<
                 />
                 <Box margin="medium" gap="medium">
                   <Button primary label="Submit my preferences" />
-                  <ReusableLink
+                  <JumpstarterLink
                     linkHref="/"
                     linkCaption="Skip (you can set up your preferences later in your User Settings) >"
                     className="grey-text"
@@ -125,10 +125,6 @@ const UserPreferences = function UserPreferencesComponent<
       </ResponsiveContext.Consumer>
     </>
   );
-};
-
-UserPreferences.getInitialProps = async ({ req }: NextPageContext) => {
-  return {};
 };
 
 export default UserPreferences;
