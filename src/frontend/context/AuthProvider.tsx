@@ -23,6 +23,7 @@ export interface AuthContextType {
   totalInvestments: number;
   interests: string[];
   balance: number;
+  investments: any[];
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -34,6 +35,7 @@ export const AuthContext = createContext<AuthContextType>({
   totalInvestments: 0,
   interests: [],
   balance: 0,
+  investments: [],
 });
 
 const userDispatchContext = createContext({});
@@ -47,6 +49,7 @@ const initialState = {
   totalInvestments: 0,
   interests: [],
   balance: 0,
+  investments: [],
 };
 
 const reducer = (state, action) => {
@@ -75,6 +78,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
       } else {
         const token = await getIdToken(user);
         getUser(token);
+        getUserInvestments(token);
         if (token) {
           setAccessToken(token);
         }
@@ -99,6 +103,22 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
       investedAmt: response.data.userData['investedAmt'],
       interests: response.data.userData['interests'],
       balance: response.data.userData['balance'],
+    });
+  };
+
+  const getUserInvestments = async (token) => {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axios.get(
+      'http://localhost:3000/api/investments/get',
+      {
+        headers,
+      }
+    );
+    setUser({
+      investments: response.data.userInvestments,
     });
   };
 
