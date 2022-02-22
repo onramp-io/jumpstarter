@@ -10,6 +10,7 @@ interface SingleAPIPayload {
   projectTitle: string;
   projectDescription: string;
   projectCreator: string;
+  projectImageUrl: string;
 }
 
 interface SectionMarqueeProps {
@@ -18,11 +19,11 @@ interface SectionMarqueeProps {
   linkHref: string;
 }
 
-const SectionMarquee = function SectionMarqueeComponent<SectionMarqueeProps>({
+const SectionMarquee = function SectionMarqueeComponent({
   APIPayload,
   linkCaption,
   linkHref,
-}) {
+}: SectionMarqueeProps) {
   /**
    * first 4 JSON payload from our API
    */
@@ -54,13 +55,22 @@ const SectionMarquee = function SectionMarqueeComponent<SectionMarqueeProps>({
           direction="row"
         >
           {APIPayload.map(
-            ({ projectTitle, projectDescription, projectCreator }, i) => {
+            (
+              {
+                projectTitle,
+                projectDescription,
+                projectCreator,
+                projectImageUrl,
+              },
+              i
+            ) => {
               return (
                 <SectionCard
                   key={i}
                   projectTitle={projectTitle}
                   projectDescription={projectDescription}
                   projectCreator={projectCreator}
+                  projectImageUrl={projectImageUrl}
                 />
               );
             }

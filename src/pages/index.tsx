@@ -1,75 +1,104 @@
-import Section from '@frontend/components/sectionHeader';
-import LandingComponent from '@frontend/components/landingComponent';
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
-import SectionCard from '@frontend/components/sectionCard';
-import { Heading, Text, Box } from 'grommet';
+import Section from "@frontend/components/sectionHeader";
+import LandingComponent from "@frontend/components/landingComponent";
+import type { NextPage } from "next";
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import SectionCard from "@frontend/components/sectionCard";
+import { Heading, Text, Box } from "grommet";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import { NextPageContext } from 'next';
-import SectionMarquee from '@frontend/components/sectionMarquee';
+import { NextPageContext } from "next";
+import SectionMarquee from "@frontend/components/sectionMarquee";
 
 interface indexProps {}
 
 const index: NextPage = function indexComponent<indexProps>({}) {
   const personalPicks = [
     {
-      projectTitle: 'Personal Picks Project 1',
+      projectTitle: "Personal Picks Project 1",
       projectDescription:
-        'A brief description of what this project is. A second line for good measure.',
-      projectCreator: 'Example Creator 1',
+        "A brief description of what this project is. A second line for good measure.",
+      projectCreator: "Example Creator 1",
+      projectImageUrl: `https://picsum.photos/${Math.floor(
+        Math.random() * 1000
+      )}`,
     },
     {
-      projectTitle: 'Personal Picks Project 2',
+      projectTitle: "Personal Picks Project 2",
       projectDescription:
-        'A brief description of what this project is. A second line for good measure.',
-      projectCreator: 'Example Creator 2',
+        "A brief description of what this project is. A second line for good measure.",
+      projectCreator: "Example Creator 2",
+      projectImageUrl: `https://picsum.photos/${Math.floor(
+        Math.random() * 1000
+      )}`,
     },
     {
-      projectTitle: 'Personal Picks Project 3',
+      projectTitle: "Personal Picks Project 3",
       projectDescription:
-        'A brief description of what this project is. A second line for good measure.',
-      projectCreator: 'Example Creator 3',
+        "A brief description of what this project is. A second line for good measure.",
+      projectCreator: "Example Creator 3",
+      projectImageUrl: `https://picsum.photos/${Math.floor(
+        Math.random() * 1000
+      )}`,
     },
     {
-      projectTitle: 'Personal Picks Project 4',
+      projectTitle: "Personal Picks Project 4",
       projectDescription:
-        'A brief description of what this project is. A second line for good measure.',
-      projectCreator: 'Example Creator 4',
+        "A brief description of what this project is. A second line for good measure.",
+      projectCreator: "Example Creator 4",
+      projectImageUrl: `https://picsum.photos/${Math.floor(
+        Math.random() * 1000
+      )}`,
     },
   ];
 
   const trendingProjects = [
     {
-      projectTitle: 'Trending Project 1',
+      projectTitle: "Trending Project 1",
       projectDescription:
-        'A brief description of what this project is. A second line for good measure.',
-      projectCreator: 'Example Creator 1',
+        "A brief description of what this project is. A second line for good measure.",
+      projectCreator: "Example Creator 1",
+      projectImageUrl: `https://picsum.photos/${Math.floor(
+        Math.random() * 1000
+      )}`,
     },
     {
-      projectTitle: 'Trending Project 2',
+      projectTitle: "Trending Project 2",
       projectDescription:
-        'A brief description of what this project is. A second line for good measure.',
-      projectCreator: 'Example Creator 2',
+        "A brief description of what this project is. A second line for good measure.",
+      projectCreator: "Example Creator 2",
+      projectImageUrl: `https://picsum.photos/${Math.floor(
+        Math.random() * 1000
+      )}`,
     },
     {
-      projectTitle: 'Trending Project 3',
+      projectTitle: "Trending Project 3",
       projectDescription:
-        'A brief description of what this project is. A second line for good measure.',
-      projectCreator: 'Example Creator 3',
+        "A brief description of what this project is. A second line for good measure.",
+      projectCreator: "Example Creator 3",
+      projectImageUrl: `https://picsum.photos/${Math.floor(
+        Math.random() * 1000
+      )}`,
     },
     {
-      projectTitle: 'Trending Project 4',
+      projectTitle: "Trending Project 4",
       projectDescription:
-        'A brief description of what this project is. A second line for good measure.',
-      projectCreator: 'Example Creator 4',
+        "A brief description of what this project is. A second line for good measure.",
+      projectCreator: "Example Creator 4",
+      projectImageUrl: `https://picsum.photos/${Math.floor(
+        Math.random() * 1000
+      )}`,
     },
   ];
+
+  const landingImageUrl = `https://picsum.photos/${Math.floor(
+    Math.random() * 1000
+  )}`;
+
   return (
     <>
-      <LandingComponent />
+      <LandingComponent landingImageUrl={landingImageUrl} />
       <Box align="center" direction="column" margin="large">
         <Section
           sectionHeader="Personal Picks"
