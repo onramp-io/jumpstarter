@@ -49,6 +49,7 @@ function MyProfile() {
     totalInvestments,
     balance,
     accessToken,
+    investments,
   } = useAuth();
 
   const [isMoneyTransferred, setMoneyTransferred] = useState(false);
@@ -126,11 +127,19 @@ function MyProfile() {
               <Box pad="medium">
                 <Text>Total Investment: ${totalInvestments}</Text>
                 <Box align="center" direction="row" margin="small">
-                  <SectionMarquee
-                    APIPayload={userData2}
-                    linkHref="/personalpicks"
-                    linkCaption="See all recommended projects >"
-                  />
+                  {investments.length > 0 ? (
+                    <>
+                      <SectionMarquee
+                        APIPayload={investments}
+                        linkHref="/personalpicks"
+                        linkCaption="See all recommended projects >"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Text>You have not made any contributions yet.</Text>
+                    </>
+                  )}
                 </Box>
               </Box>
             </Tab>
