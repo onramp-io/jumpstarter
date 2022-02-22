@@ -4,45 +4,45 @@ import {
   Column,
   ManyToOne,
   OneToMany,
-} from 'typeorm';
-import { User } from './User';
-import { Comment } from './Comment';
-import { Investment } from './Investment';
-import { Like } from './Like';
+} from "typeorm";
+import { User } from "./User";
+import { Comment } from "./Comment";
+import { Investment } from "./Investment";
+import { Like } from "./Like";
 
 @Entity()
-export class Project {
+export default class Project {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('text', { array: true })
+  @Column({ type: "text", array: true, nullable: true })
   pictures: string[];
 
-  @Column('text')
+  @Column("text")
   title: string;
 
-  @Column('text')
+  @Column("text")
   category: string;
 
-  @Column('text')
+  @Column("text")
   description: string;
 
-  @Column('decimal', { array: true })
+  @Column("decimal", { array: true })
   fundTiers: number[];
 
-  @Column('integer')
+  @Column("integer")
   currFundGoal: number;
 
-  @Column('decimal')
+  @Column({ type: "decimal", default: 0 })
   fundRaised: number;
 
-  @Column('timestamp')
+  @Column("timestamp")
   launchDate: string;
 
-  @Column('timestamp')
+  @Column({ type: "timestamp", default: () => "now()" })
   createdDate: string;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: "integer", default: 0 })
   likesAmt: number;
 
   @ManyToOne(() => User, (user) => user.projects)
