@@ -1,6 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import admin from '../../firebase/admin/admin';
 
+import {
+  ReasonPhrases,
+  StatusCodes,
+  getReasonPhrase,
+  getStatusCode,
+} from 'http-status-codes';
+
 export interface Request extends NextApiRequest {
   user: any;
 }
@@ -12,7 +19,9 @@ export const verifyRequest = (handler) => {
 
     if (!accessToken) {
       console.log('ERROR: verify_request() in verify_request.ts');
-      return res.status(401).send('Access token is required');
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .send('Access token is required');
     } else {
       token = accessToken.split(' ')[1];
     }
@@ -23,7 +32,7 @@ export const verifyRequest = (handler) => {
       }
     } catch (error) {
       console.log('ERROR: verify_request() #2 in verify_request.ts');
-      return res.status(401).send('Invalid access token');
+      return res.status(StatusCodes.UNAUTHORIZED).send('Invalid access token');
     }
     return handler(req, res);
   };
