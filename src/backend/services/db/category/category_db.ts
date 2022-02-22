@@ -45,7 +45,6 @@ export const addNewCategory = async (req: NextApiRequest, res: NextApiResponse) 
 export const deleteCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const id = req.query.id;
-    console.log(id);
     const db = await connection();
     //delete category with specific id
     const deleteCategory = await db.createQueryBuilder()
@@ -58,7 +57,6 @@ export const deleteCategory = async (req: NextApiRequest, res: NextApiResponse) 
   } catch (error) {
       let message;
       if (error instanceof Error) message = error.message;
-      console.log(message); //debug
       res.status(500).json(message);
   }
 };
