@@ -1,11 +1,11 @@
 import connection from "@backend/config/db";
-import { Project } from "@backend/entities/Project";
+import Project from "@backend/entities/Project";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Request } from "@backend/middleware/verify_request";
 import prepareDbConnection from "@backend/lib/prepareDbConnection";
 import { createQueryBuilder, Db, getConnection } from "typeorm";
 import { ProjectPayloadInterface, sortByString, sortByStringType } from "@backend/common/ProjectPayload"; from "@backend/common/ProjectPayload";
-import ProjectPayload from "@backend/common/ProjectPayload";
+import ProjectPayload from "@backend/common/ProjectRequestApiInterfaces";
 import SortByConfig from "@backend/common/SortByConfig";
 
 const ProjectService = {
@@ -49,7 +49,8 @@ const ProjectService = {
     try {
       await prepareDbConnection();
       const foundProject = await createQueryBuilder()
-        .where("project.id = :id", findById).getOne();
+        .where("project.id = :id", findById)
+        .getOne();
       return foundProject;
     } catch (err) {
       console.warn(err.message);
@@ -87,13 +88,18 @@ const ProjectService = {
   /**
    * READ: 'GET' request for **ALL** Records of a Particular Category
    */
-  sortBy: async (sortByString: sortByStringType, { sortBy }: ProjectPayloadInterface) => {
+  sortBy: async (
+    sortByString: sortByStringType,
+    { sortBy }: ProjectPayloadInterface
+  ) => {
     if (sortByString === SortByConfig.NEWEST) {
+    // TODO: Add sorting logic for createdAt column @Summer
 
     } else if (sortByString === SortByConfig.TRENDING) {
+    // TODO: Add logic for Trending (@Pran)
 
     } else if (sortByString === SortByConfig.RECOMMENDED) {
-
+    // TODO: Add logic here for Recommended (@Tapa)
     }
   },
 };
