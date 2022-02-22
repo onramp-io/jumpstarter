@@ -39,7 +39,8 @@ const userData2 = [
 ];
 
 function MyProfile() {
-  const { firstName, lastName, bio, avatar, totalInvestments } = useAuth();
+  const { firstName, lastName, bio, avatar, totalInvestments, balance } =
+    useAuth();
 
   return (
     <>
@@ -56,6 +57,26 @@ function MyProfile() {
           <Link href="/app/profile/edit">
             <Button label="Edit" className={profile.editButton} />
           </Link>
+          <Box className={profile.withdrawFunds}>
+            <Text>My balance: ${balance}</Text>
+            {balance <= 0 ? (
+              <>
+                <Link href="">
+                  <Button
+                    label="Withdraw"
+                    className={profile.editButton}
+                    disabled
+                  />
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href="">
+                  <Button label="Withdraw" className={profile.editButton} />
+                </Link>
+              </>
+            )}
+          </Box>
         </Box>
         <Box className={profile.profileData}>
           <Tabs>
