@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/link-passhref */
 /* eslint-disable jsx-a11y/alt-text */
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Box, Heading, Button, Text, Tab, Tabs, Avatar } from 'grommet';
 
@@ -10,6 +10,8 @@ import { useAuth } from '@frontend/context/AuthProvider';
 
 import SectionMarquee from '@frontend/components/sectionMarquee';
 import Link from 'next/link';
+import axios from 'axios';
+import Alert from '@mui/material/Alert';
 
 const userData2 = [
   {
@@ -39,8 +41,32 @@ const userData2 = [
 ];
 
 function MyProfile() {
-  const { firstName, lastName, bio, avatar, totalInvestments, balance } =
-    useAuth();
+  const {
+    firstName,
+    lastName,
+    bio,
+    avatar,
+    totalInvestments,
+    balance,
+    accessToken,
+  } = useAuth();
+
+  const [isMoneyTransferred, setMoneyTransferred] = useState(false);
+
+  const handlePayOut = async () => {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    const response = await axios.post(
+      'http://localhost:3000/api/users/payout',
+      {
+        headers,
+      }
+    );
+    setMoneyTransferred(true);
+  };
 
   return (
     <>
@@ -61,23 +87,28 @@ function MyProfile() {
             <Text>My balance: ${balance}</Text>
             {balance <= 0 ? (
               <>
-                <Link href="">
-                  <Button
-                    label="Withdraw"
-                    className={profile.editButton}
-                    disabled
-                  />
-                </Link>
+                <Button
+                  label="Withdraw"
+                  className={profile.editButton}
+                  disabled
+                />
               </>
             ) : (
               <>
-                <Link href="">
-                  <Button label="Withdraw" className={profile.editButton} />
-                </Link>
+                <Button
+                  label="Withdraw"
+                  className={profile.editButton}
+                  onClick={handlePayOut}
+                />
               </>
             )}
           </Box>
         </Box>
+        {isMoneyTransferred && (
+          <Alert severity="success">
+            Your balance has been successfully transferred.
+          </Alert>
+        )}
         <Box className={profile.profileData}>
           <Tabs>
             <Tab title="My Projects">
