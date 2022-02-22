@@ -1,122 +1,47 @@
-import {
-  getUser,
-  insertUser,
-  updateUser,
-  deleteUser,
-  payOutUser,
-} from '@backend/services/db/user/user_db';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { UserDbService } from '@backend/services/db/user/user_db';
+import type { NextApiResponse } from 'next';
 import { Request } from '@backend/middleware/verify_request';
 
-export const getUserController = async (req: Request, res: NextApiResponse) => {
-  try {
-    // break down request <===========
-    const { email } = req.user;
-    // call service <===============
-    const userData = await getUser(email);
-    // send response <==============
-    if (userData) {
-      res.status(200).json({
-        userData,
-      });
-    } else {
-      res.status(404).json({
-        message: 'User not found',
-      });
-    }
-  } catch (error) {
-    console.log('ERROR @getUserController in controller/user/user.ts', error);
-    res.status(500).json(error.message);
-  }
-};
+export const UserController = {
+  get: async (req: Request) => {
+    const email = req.user.email;
+    const userData = await UserDbService.get(email);
+    return userData;
+  },
 
-export const postUserController = async (
-  req: Request,
-  res: NextApiResponse
-) => {
-  try {
+  post: async (req: Request) => {
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const email = req.body.email;
-    const userData = insertUser(firstName, lastName, email);
-    if (userData) {
-      res.status(200).json({
-        message: 'User created',
-      });
-    } else {
-      res.status(404).json({
-        message: 'User not created',
-      });
-    }
-  } catch (error) {
-    console.log('ERROR @ postUserController in controller/user/user.ts', error);
-    res.status(500).json(error.message);
-  }
-};
+    const userData = await UserDbService.insert(firstName, lastName, email);
+    return userData;
+  },
 
-export const putUserController = async (req: Request, res: NextApiResponse) => {
-  try {
+  put: async (req: Request) => {
     const email = req.user.email;
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const bio = req.body.bio;
     const avatar = req.body.avatar;
-    const userData = updateUser(firstName, lastName, bio, avatar, email);
-    if (userData) {
-      res.status(200).json({
-        message: 'User updated',
-      });
-    } else {
-      res.status(404).json({
-        message: 'User not found',
-      });
-    }
-  } catch (error) {
-    console.log('ERROR @putUserController in controller/user/user.ts', error);
-    res.status(500).json(error.message);
-  }
-};
-
-export const deleteUserController = async (
-  req: Request,
-  res: NextApiResponse
-) => {
-  try {
-    const email = req.user.email;
-    const userData = deleteUser(email);
-    if (userData) {
-      res.status(200).json({
-        message: 'User deleted',
-      });
-    } else {
-      res.status(404).json({
-        message: 'User not deleted',
-      });
-    }
-  } catch (error) {
-    console.log(
-      'ERROR @deleteUserController in controller/user/user.ts',
-      error
+    const userData = await UserDbService.update(
+      firstName,
+      lastName,
+      bio,
+      avatar,
+      email
     );
-    res.status(500).json(error.message);
-  }
-};
+    return userData;
+  },
 
-export const payoutController = async (req: Request, res: NextApiResponse) => {
-  try {
-    const email = req.user.emaill;
-    const userData = await payOutUser(email);
-    if (userData) {
-      res.status(200).json({
-        message: 'User payed out',
-      });
-    } else {
-      res.status(404).json({
-        message: 'User not payed out',
-      });
-    }
-  } catch (error) {
-    console.log('ERROR @payoutController in controller/user/user.ts', error);
-    res.status(500).json(error.message);
-  }
+  delete: async (req: Request) => {
+    const email = req.user.email;
+    const userData = await UserDbService.delete(email);
+    return userData;
+  },
+
+  payOut: async (req: Request) => {
+    const email = req.user.email;
+    const userData = await UserDbService.payOut(email);
+    return userData;
+  },
 };
