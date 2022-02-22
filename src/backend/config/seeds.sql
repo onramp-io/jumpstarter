@@ -20,25 +20,25 @@ INSERT INTO public.user ("email", "bio", "firstName", "lastName")
     VALUES ('test', 'test', 'test', 'test');
 
 INSERT INTO public.project ("title", "category", "description", "fundTiers", "currFundGoal", "launchDate")
-    VALUES ('krabby patty', 'food', 'burger', Array[10,20,30], 0, '2004-10-19 10:23:54');
+    VALUES ('krabby patty', 'food', 'burger', Array[0,10,20,30], 0, '2004-10-19 10:23:54');
 INSERT INTO public.project ("title", "category", "description", "fundTiers", "currFundGoal", "launchDate", "userId")
-    VALUES ('hello', 'food', 'test', Array[10,20,30], 0, '2004-10-19 10:23:54', 1);
+    VALUES ('hello', 'food', 'test', Array[0,10,20,30], 0, '2004-10-19 10:23:54', 1);
 INSERT INTO public.project ("title", "category", "description", "fundTiers", "currFundGoal", "launchDate", "userId")
-    VALUES ('something cool', 'test', 'test', Array[10,20,30], 0, '2004-10-19 10:23:54', 2);
+    VALUES ('something cool', 'test', 'test', Array[0,10,20,30], 0, '2004-10-19 10:23:54', 2);
 INSERT INTO public.project ("title", "category", "description", "fundTiers", "currFundGoal", "launchDate", "userId")
-    VALUES ('not sure', 'test', 'test', Array[10,20,30], 0, '2004-10-19 10:23:54', 3);
+    VALUES ('not sure', 'test', 'test', Array[0,10,20,30], 0, '2004-10-19 10:23:54', 3);
 INSERT INTO public.project ("title", "category", "description", "fundTiers", "currFundGoal", "launchDate", "userId")
-    VALUES ('help', 'test', 'im out of ideas', Array[10,20,30], 0, '2004-10-19 10:23:54', 3);
+    VALUES ('help', 'test', 'im out of ideas', Array[0,10,20,30], 0, '2004-10-19 10:23:54', 3);
 INSERT INTO public.project ("title", "category", "description", "fundTiers", "currFundGoal", "launchDate", "userId")
-    VALUES ('cool shoes', 'test', 'shoes that are cool', Array[10,20,30], 0, '2004-10-19 10:23:54', 5);
+    VALUES ('cool shoes', 'test', 'shoes that are cool', Array[0,10,20,30], 0, '2004-10-19 10:23:54', 5);
 INSERT INTO public.project ("title", "category", "description", "fundTiers", "currFundGoal", "launchDate", "userId")
-    VALUES ('something', 'test', 'im not an entrepreneur', Array[10,20,30], 0, '2004-10-19 10:23:54', 5);
+    VALUES ('something', 'test', 'im not an entrepreneur', Array[0,10,20,30], 0, '2004-10-19 10:23:54', 5);
 INSERT INTO public.project ("title", "category", "description", "fundTiers", "currFundGoal", "launchDate", "userId")
-    VALUES ('sleep maker', 'test', 'make more sleep', Array[10,20,30], 0, '2004-10-19 10:23:54', 5);
+    VALUES ('sleep maker', 'test', 'make more sleep', Array[0,10,20,30], 0, '2004-10-19 10:23:54', 5);
 INSERT INTO public.project ("title", "category", "description", "fundTiers", "currFundGoal", "launchDate", "userId")
-    VALUES ('lala', 'lala', 'lala', Array[10,20,30], 0, '2004-10-19 10:23:54', 6);
+    VALUES ('lala', 'lala', 'lala', Array[0,10,20,30], 0, '2004-10-19 10:23:54', 6);
 INSERT INTO public.project ("title", "category", "description", "fundTiers", "currFundGoal", "launchDate", "userId")
-    VALUES ('hey', 'hey', 'hey', Array[10,20,30], 0, '2004-10-19 10:23:54', 6);
+    VALUES ('hey', 'hey', 'hey', Array[0,10,20,30], 0, '2004-10-19 10:23:54', 6);
 
 INSERT INTO public.category ("category", "picture")
     VALUES ('Arts', 'none');

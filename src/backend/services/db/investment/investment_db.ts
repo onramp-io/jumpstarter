@@ -4,10 +4,20 @@ import { User } from '@backend/entities/User';
 import { Project } from '@backend/entities/Project';
 import { Investment } from '@backend/entities/Investment';
 import connection from '@backend/config/db';
+import { connectAuthEmulator } from 'firebase/auth';
 
-//Add a like to a project by a user
+//Add investment made by user to project
+/* curr_fund_goal will point to the index of the fund_tiers array that the project has reached
+   For exmample:
+    if curr_fund_goal = 0, then project has not met any goals, they are striving for fund_tiers[1]
+    if curr_fund_goal = 1, then project has met goal fund_tier[1], they are now striving for fund_tier[2]
+*/
 export const addNewInvestment = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
+        let currFundGoal = 0;
+        let fundTiers = [];
+        let fundRaised = 0;
+
         const db = await connection();
         //Add investment to investment table and associate with userID and ProjectId
         const investment = await db.createQueryBuilder()
@@ -18,22 +28,40 @@ export const addNewInvestment = async (req: NextApiRequest, res: NextApiResponse
                 ])
                 .execute()
 
-        //Increment user invested_amt
-        const userFund = await db.createQueryBuilder()
-                .select()
-                .update(User)
-                .set({investedAmt: () => `"investedAmt" + ${req.body.fundAmt}`})
-                .where("id = :id", { id: req.body.userId })
-                .execute()
-
         //Increment project fund_raised
         const projFund = await db.createQueryBuilder()
                 .select()
                 .update(Project)
                 .set({fundRaised: () => `"fundRaised" + ${req.body.fundAmt}`})
                 .where("id = :id", { id: req.body.projectId })
+                .returning(['fundRaised', 'fundTiers', 'currFundGoal'])
                 .execute()
 
+        currFundGoal = projFund.raw[0].currFundGoal;
+        fundRaised = projFund.raw[0].fundRaised;
+        fundTiers = projFund.raw[0].fundTiers;
+
+        const data = moveMilestoneAndPayoutUser(currFundGoal, fundTiers, fundRaised, req.body.fundAmt);
+
+        //Increment user invested_amt and balance as necessary
+        const userFund = await db.createQueryBuilder()
+            .select()
+            .update(User)
+            .set({
+                investedAmt: () => `"investedAmt" + ${req.body.fundAmt}`,
+                balance: () => `"balance" + ${data.userBalance}`
+            })
+            .where("id = :id", { id: req.body.userId })
+            .execute()
+
+        //Update project funding milestone and payout amount
+        const projUpdate = await db.createQueryBuilder()
+            .select()
+            .update(Project)
+            .set({currFundGoal: data.newGoal})
+            .where("id = :id", { id: req.body.projectId })
+            .execute()
+        
         res.status(200).json(investment);
     } catch (error) {
         let message;
@@ -42,3 +70,41 @@ export const addNewInvestment = async (req: NextApiRequest, res: NextApiResponse
         res.status(500).json(message);
     }
 };
+
+/*****
+Helper function to pay out user as they reach each milestone
+and create new fund goal                            
+*****/
+const moveMilestoneAndPayoutUser = (currFundGoal, fundTiers, fundRaised, fundAmt) => {
+    let userBalance = 0;
+    let newGoal = currFundGoal;
+    let leftOver = 0;
+
+    //increment goal only if last goal not reached
+    if (currFundGoal < (fundTiers.length-1) ) {
+        //increment goal and pay out user at each milestone until last milestone reached
+        while (fundRaised >= fundTiers[newGoal+1]) {
+            newGoal++;
+            //if user reaches last milestone, pay them anything left in fundAmt+lastmilestone amount
+            if (newGoal == (fundTiers.length - 1)) {
+                leftOver = (fundRaised - fundTiers[fundTiers.length - 2]);
+                if (leftOver > 0) {
+                    userBalance += leftOver;
+                }
+                break;
+            }
+            //if user has already been paid previous milestone amt, they
+            //should be paid the difference between the current and last milestone
+            else {
+                userBalance += fundTiers[newGoal] - fundTiers[newGoal - 1];
+            }
+        }
+    //else all milestones have been reached already and user
+    //can be paid entire fundAmt
+    } else {
+        userBalance += fundAmt;
+    }
+
+    return { userBalance, newGoal };
+}
+    

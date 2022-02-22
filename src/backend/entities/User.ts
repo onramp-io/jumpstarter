@@ -30,6 +30,9 @@ export class User {
   @Column({ type: 'decimal', default: 0 })
   investedAmt: number;
 
+  @Column({ type: 'decimal', default: 0 })
+  balance: number;
+
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
 
