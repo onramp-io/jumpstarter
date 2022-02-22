@@ -4,6 +4,7 @@ import { Project } from '../entities/Project';
 import { Investment } from '../entities/Investment';
 import { Comment } from '../entities/Comment';
 import { Like } from '../entities/Like';
+import { Category } from '../entities/Category';
 
 //create typeorm database connection using ormconfig.json file
 const connection = async () => {
@@ -20,7 +21,7 @@ const connection = async () => {
     url: process.env.DB_CONNECTION_STRING,
     //logging: true, //statements/queries console logged to terminal -> should remove when not debugging
     synchronize: true, //will tralslate logic to sql
-    entities: [User, Project, Investment, Comment, Like],
+    entities: [User, Project, Investment, Comment, Like, Category],
   });
   if (getConnection().isConnected) {
     console.log('type orm db connected');

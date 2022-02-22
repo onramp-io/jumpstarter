@@ -39,3 +39,16 @@ INSERT INTO public.project ("title", "category", "description", "fundTiers", "cu
     VALUES ('lala', 'lala', 'lala', Array[10,20,30], 0, '2004-10-19 10:23:54', 6);
 INSERT INTO public.project ("title", "category", "description", "fundTiers", "currFundGoal", "launchDate", "userId")
     VALUES ('hey', 'hey', 'hey', Array[10,20,30], 0, '2004-10-19 10:23:54', 6);
+
+INSERT INTO public.category ("category", "picture")
+    VALUES ('Arts', 'none');
+INSERT INTO public.category ("category", "picture")
+    VALUES ('Design & Tech', 'none');
+INSERT INTO public.category ("category", "picture")
+    VALUES ('Film', 'none');
+INSERT INTO public.category ("category", "picture")
+    VALUES ('Food & Craft', 'none');
+INSERT INTO public.category ("category", "picture")
+    VALUES ('Games', 'none');
+INSERT INTO public.category ("category", "picture")
+    VALUES ('Music', 'none');
