@@ -1,7 +1,5 @@
 import connection from '@backend/config/db';
 import { User } from '@backend/entities/User';
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { Request } from '@backend/middleware/verify_request';
 
 export const getUser = async (email: string) => {
   const db = await connection();
