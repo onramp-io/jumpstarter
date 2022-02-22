@@ -75,7 +75,7 @@ export const payOutUser = async (email: string) => {
     .createQueryBuilder()
     .update(User)
     .set({
-      investedAmt: 0,
+      balance: 0,
     })
     .where('email = :email', { email })
     .execute();
