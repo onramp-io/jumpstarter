@@ -38,7 +38,7 @@ export const postUserController = async (
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const email = req.body.email;
-    const userData = insertUser(firstName, lastName, email);
+    const userData = await insertUser(firstName, lastName, email);
     if (userData) {
       res.status(200).json({
         message: 'User created',
@@ -61,7 +61,7 @@ export const putUserController = async (req: Request, res: NextApiResponse) => {
     const lastName = req.body.lastName;
     const bio = req.body.bio;
     const avatar = req.body.avatar;
-    const userData = updateUser(firstName, lastName, bio, avatar, email);
+    const userData = await updateUser(firstName, lastName, bio, avatar, email);
     if (userData) {
       res.status(200).json({
         message: 'User updated',
@@ -83,7 +83,7 @@ export const deleteUserController = async (
 ) => {
   try {
     const email = req.user.email;
-    const userData = deleteUser(email);
+    const userData = await deleteUser(email);
     if (userData) {
       res.status(200).json({
         message: 'User deleted',
