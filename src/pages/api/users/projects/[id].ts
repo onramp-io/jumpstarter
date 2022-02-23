@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import userController from '../../../../backend/controller/user/user';
+//import userController from '../../../../backend/controller/user/user';
 
 type Data = {
     name: string;
@@ -11,9 +11,9 @@ export default function handler(
 ) {
     switch(req.method) {
         //Get all projects associated with user
-        case 'GET': userController.getUserProjects(req, res);
+        case 'GET':
         //Create new project
-        case 'POST': userController.createProject(req, res);
+        case 'POST':
         default: console.log(req.body);
     }
 }
