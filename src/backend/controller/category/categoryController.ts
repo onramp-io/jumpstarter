@@ -4,20 +4,17 @@ import { Request } from '@backend/middleware/verify_request';
 
 const categoryController = {
   getAll: async (req: Request) => {
-    const data = await categoryService.getAll();
-    return data;
+    return categoryService.getAll();
   },
 
   create: async (req: Request) => {
     const { category, picture, description } = req.body;
-    const data = await categoryService.create(category, picture, description);
-    return data;
+    return categoryService.create(category, picture, description);
   },
 
   deleteById: async (req: Request) => {
     const { id } = req.query;
-    const data = await categoryService.deleteById(id);
-    return data;
+    return categoryService.deleteById(id);
   }
 }
 

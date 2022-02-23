@@ -7,8 +7,7 @@ const likeController = {
   //Add a like to a project by a user
   create: async (req: NextApiRequest) => {
     const { userId, projectId } = req.body;
-    const data = await likeService.create(userId, projectId);
-    return data;
+    return likeService.create(userId, projectId);
   }
 }
 
