@@ -118,7 +118,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
       }
     );
     setUser({
-      investments: response.data.userInvestments,
+      investments: response.data.investments,
     });
   };
 
