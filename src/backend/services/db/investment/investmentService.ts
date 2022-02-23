@@ -5,6 +5,11 @@ import { Project } from '@backend/entities/Project';
 import { Investment } from '@backend/entities/Investment';
 import connection from '@backend/config/db';
 import { connectAuthEmulator } from 'firebase/auth';
+import {
+	StatusCodes,
+	getReasonPhrase,
+} from 'http-status-codes';
+import { jsError } from '@backend/config/errorTypes';
 
 const investmentService = {
     //Add investment made by user to project
@@ -15,34 +20,36 @@ const investmentService = {
     */
     create: async (body) => {
         const { userId, projectId, fundAmt } = body;
+        let currFundGoal = 0;
+        let fundTiers = [];
+        let fundRaised = 0;
+
+        const db = await connection();
+
         try {
-            let currFundGoal = 0;
-            let fundTiers = [];
-            let fundRaised = 0;
+        //Increment project fund_raised
+        const projFund = await db.createQueryBuilder()
+            .select()
+            .update(Project)
+            .set({ fundRaised: () => `"fundRaised" + ${fundAmt}` })
+            .where("id = :id", { id: projectId })
+            .returning(['fundRaised', 'fundTiers', 'currFundGoal'])
+            .execute()
 
-            const db = await connection();
-            //Add investment to investment table and associate with userID and ProjectId
-            const investment = await db.createQueryBuilder()
-                .insert()
-                .into(Investment)
-                .values([{ user: userId, project: projectId, fundAmt: fundAmt }])
-                .execute()
+        currFundGoal = projFund.raw[0].currFundGoal;
+        fundRaised = projFund.raw[0].fundRaised;
+        fundTiers = projFund.raw[0].fundTiers;
+        }
+        catch {
+            throw new jsError(
+                StatusCodes.INTERNAL_SERVER_ERROR, 
+                getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
+                "Query did not complete. Please make sure projectId is valid.")
+        }
 
-            //Increment project fund_raised
-            const projFund = await db.createQueryBuilder()
-                .select()
-                .update(Project)
-                .set({ fundRaised: () => `"fundRaised" + ${fundAmt}` })
-                .where("id = :id", { id: projectId })
-                .returning(['fundRaised', 'fundTiers', 'currFundGoal'])
-                .execute()
+        const data = moveMilestoneAndPayoutUser(currFundGoal, fundTiers, fundRaised, fundAmt);
 
-            currFundGoal = projFund.raw[0].currFundGoal;
-            fundRaised = projFund.raw[0].fundRaised;
-            fundTiers = projFund.raw[0].fundTiers;
-
-            const data = moveMilestoneAndPayoutUser(currFundGoal, fundTiers, fundRaised, fundAmt);
-
+        try {
             //Increment user invested_amt and balance as necessary
             const userFund = await db.createQueryBuilder()
                 .select()
@@ -53,7 +60,15 @@ const investmentService = {
                 })
                 .where("id = :id", { id: userId })
                 .execute()
+        }
+        catch {
+            throw new jsError(
+                StatusCodes.INTERNAL_SERVER_ERROR, 
+                getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
+                "Query did not complete. Please make sure userId is valid.")
+        }
 
+        try {
             //Update project funding milestone and payout amount
             const projUpdate = await db.createQueryBuilder()
                 .select()
@@ -61,13 +76,27 @@ const investmentService = {
                 .set({ currFundGoal: data.newGoal })
                 .where("id = :id", { id: projectId })
                 .execute()
-        
-            return { status: "success", data: investment}
-        } catch (error) {
-            let message;
-            if (error instanceof Error) message = error.message;
-            console.log(message); //debug
-            return { status: "failure", err: message}
+            }
+        catch {
+            throw new jsError(StatusCodes.INTERNAL_SERVER_ERROR, 
+                getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
+                "Query did not complete. Please make sure projectId is valid.")
+        }
+
+        try {
+            //Add investment to investment table and associate with userID and ProjectId
+            const investment = await db.createQueryBuilder()
+                .insert()
+                .into(Investment)
+                .values([{ user: userId, project: projectId, fundAmt: fundAmt }])
+                .execute()
+                return investment;
+            }
+        catch {
+            throw new jsError(
+                StatusCodes.INTERNAL_SERVER_ERROR, 
+                getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
+                "Query did not cimplete. Please make sure your userId and projectId are valid.")
         }
     }  
 }

@@ -4,22 +4,20 @@ import {
 	StatusCodes
 } from 'http-status-codes';
 
-export default function handler(
-    req: NextApiRequest,
-    res: NextApiResponse
-) {
-    switch(req.method) {
-        //Add new like given by user to project
-        case 'POST':
-            likeController.create(req)
-            .then((response) => {
-            if (response.status == "success") {
-                res.status(StatusCodes.OK).json(response.data);
-            } else {
-                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response.err);
-            }
-            });
-        break;
-        default: console.log(req.body);
+const handler = async (req: NextApiRequest,res: NextApiResponse) => {
+    try {
+        switch(req.method) {
+            //Add new like given by user to project
+            case 'POST':
+                const response = await likeController.create(req)
+                res.status(StatusCodes.OK).json(response);
+                break;
+            default: console.log(req.body);
+        }
+    }
+    catch (error) {
+        res.status(error.code).json(error.message);
     }
 }
+
+export default handler;

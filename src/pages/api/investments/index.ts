@@ -8,22 +8,22 @@ interface Request extends NextApiRequest {
     user: any;
 }
 
-export default function handler(
-    req: Request,
-    res: NextApiResponse
-) {
-    //Add new user to database if user does not already exist
-    switch(req.method) {
-        case 'POST':
-            investmentController.create(req)
-            .then((response) => {
-            if (response.status == "success") {
-                res.status(StatusCodes.OK).json(response.data);
-            } else {
-                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(response.err);
-            }
-            });
-        break;
-        default: console.log(req.body);
+const handler = async (req: Request, res: NextApiResponse) => {
+
+    try {
+        //Add new user to database if user does not already exist
+        switch(req.method) {
+            case 'POST':
+                const response = investmentController.create(req)
+                res.status(StatusCodes.OK).json(response);     
+                break;
+            default: console.log(req.body);
+        }
+    } 
+    catch (error) {
+        res.status(error.code).json(error.message);
     }
+
 }
+
+export default handler;
