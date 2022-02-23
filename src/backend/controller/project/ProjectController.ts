@@ -11,6 +11,7 @@ import {
   ProjectDeleteByIdApiRequest, // DELETE - 1
   ProjectSortByApiRequest, // SORT - all
 } from "@backend/common/ProjectRequestApiInterfaces";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * **From each of the methods** on the Controller (e.g. ProjectController.create() ), you:
@@ -23,50 +24,63 @@ import {
 const ProjectController = {
   // CREATE
   create: async (req: ProjectCreateApiRequest) => {
-    // step (1)
     const { createParams } = req.body;
-
-    // step (2) not necessary for this input
-
-    // steps (3) and (4)
-    const createdProject = ProjectService.create(createParams);
-
-    // step (5)
-    return createdProject;
+    if (createParams !== null && createParams !== undefined) {
+      return ProjectService.create(createParams);
+    } else {
+      return [null, StatusCodes.BAD_REQUEST]; // 400 (client error, since they forgot to pass in the params needed)
+    }
   },
 
   // READ - all
   findAll: async (req: ProjectFindAllApiRequest) => {
     const { findAllParams } = req.body;
-    const allProjectsArr = ProjectService.findAll(findAllParams);
-    return allProjectsArr;
+    if (findAllParams !== null && findAllParams !== undefined) {
+      return ProjectService.findAll(findAllParams);
+    } else {
+      return [null, StatusCodes.BAD_REQUEST]; // 400 (client error)
+    }
   },
 
   // READ - 1
   findById: async (req: ProjectFindByIdApiRequest) => {
     const { findByIdParams } = req.body;
-    const foundProject = ProjectService.findById(findByIdParams);
-    return foundProject;
+    if (findByIdParams !== null && findAllParams !== undefined) {
+      return ProjectService.findById(findByIdParams);
+    } else {
+      return [null, StatusCodes.BAD_REQUEST];
+    }
   },
 
   // UPDATE - 1
   updateById: async (req: ProjectUpdateByIdApiRequest) => {
     const { updateByIdParams } = req.body;
-    const updatedProject = ProjectService.updateById(updateByIdParams);
-    return updatedProject;
+    if (updateByIdParams !== null && updateByIdParams !== undefined) {
+      return ProjectService.updateById(updateByIdParams);
+    } else {
+      return [null, StatusCodes.BAD_REQUEST];
+    }
   },
 
   // DESTROY - 1
   deleteById: async (req: ProjectDeleteByIdApiRequest) => {
     const { deleteByIdParams } = req.body;
-    const deletedProject = ProjectService.deleteById(deleteByIdParams);
-    return deletedProject;
+    if (deleteByIdParams !== null && deleteByIdParams !== undefined) {
+      return ProjectService.deleteById(deleteByIdParams);
+    } else {
+      return [null, StatusCodes.BAD_REQUEST];
+    }
   },
 
   // SORT - all (TODO: add logic to ProjectService.sortBy -- Tapa & Pran)
   sortBy: async (req: ProjectSortByApiRequest) => {
-    const { sortByString, sortByParams } = req.body;
-    const sortedProjectsArr = ProjectService.sortBy(sortByString, sortByParams);
-    return sortedProjectsArr;
+    const { sortByParams } = req.body;
+    if (sortByParams !== null && sortByParams !== undefined) {
+      return ProjectService.sortBy(sortByParams);
+    } else {
+      return [null, StatusCodes.BAD_REQUEST];
+    }
   },
 };
+
+export default ProjectController;
