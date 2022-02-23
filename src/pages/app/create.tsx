@@ -7,9 +7,9 @@ const CreateProject: NextPage = () => {
     title: "",
     category: "",
     description: "",
-    end_date: "",
+    end_date: new Date().toString(),
     fund_goal: 0,
-    fund_tiers: [0],
+    fund_tiers: [0, 0, 0, 0],
     pictures: []
   }
 
