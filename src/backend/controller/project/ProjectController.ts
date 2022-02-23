@@ -45,7 +45,7 @@ const ProjectController = {
   // READ - 1
   findById: async (req: ProjectFindByIdApiRequest) => {
     const { findByIdParams } = req.body;
-    if (findByIdParams !== null && findAllParams !== undefined) {
+    if (findByIdParams !== null && findByIdParams !== undefined) {
       return ProjectService.findById(findByIdParams);
     } else {
       return [null, StatusCodes.BAD_REQUEST];
