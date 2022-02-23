@@ -3,17 +3,35 @@ import Project from "@backend/entities/Project";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Request } from "@backend/middleware/verify_request";
 import prepareDbConnection from "@backend/lib/prepareDbConnection";
-import { createQueryBuilder, CustomRepositoryDoesNotHaveEntityError, Db, getConnection, UpdateQueryBuilder } from "typeorm";
-import { ProjectPayloadInterface, sortByString, sortByStringType } from "@backend/common/ProjectPayload"; from "@backend/common/ProjectPayload";
-import ProjectPayload, { CreateParamsInterface, DeleteByIdParamsInterface, FindAllParamsInterface, FindByIdParamsInterface, UpdateByIdParamsInterface, SortByParamsInterface, SortByParamsType } from "@backend/common/ProjectRequestApiInterfaces";
+import {
+  createQueryBuilder,
+  CustomRepositoryDoesNotHaveEntityError,
+  Db,
+  getConnection,
+  UpdateQueryBuilder,
+} from "typeorm";
+import {
+  ProjectPayloadInterface,
+  sortByString,
+  sortByStringType,
+} from "@backend/common/ProjectPayload";
+import ProjectPayload, {
+  CreateParamsInterface,
+  DeleteByIdParamsInterface,
+  FindAllParamsInterface,
+  FindByIdParamsInterface,
+  UpdateByIdParamsInterface,
+  SortByParamsInterface,
+  SortByParamsType,
+} from "@backend/common/ProjectRequestApiInterfaces";
 import SortByConfig from "@backend/common/SortByConfig";
 import index from "pages";
 import {
-	ReasonPhrases,
-	StatusCodes,
-	getReasonPhrase,
-	getStatusCode,
-} from 'http-status-codes';
+  ReasonPhrases,
+  StatusCodes,
+  getReasonPhrase,
+  getStatusCode,
+} from "http-status-codes";
 
 /** 
  * 
@@ -83,9 +101,7 @@ import {
  
    naming conventions for static typing params passed into your controller
 
- */ 
-
-
+ */
 
 const ProjectService = {
   /**
@@ -101,88 +117,88 @@ const ProjectService = {
         .into(Project)
         .values(createParams)
         .execute();
-        
-        if (projectInsertResult !== null && projectInsertResult !== undefined) {
-          // return projectInsertResult; // return both projInsertResult AND status code [projectInsertResult, statusCode]
-          return [projectInsertResult, StatusCodes.OK];
-        } else {
-          throw new Error('Project not created');
-        }
-      } catch (err) {
-        return [null, StatusCodes.INTERNAL_SERVER_ERROR];
-        // TODO: Add DB layer error handling here! --> do status code 500
-        // console.warn(err.message); // remove <<--- only for local debugging
-// distributed tracing - in prod --> all instances at runtime - sends out event log
+
+      if (projectInsertResult !== null && projectInsertResult !== undefined) {
+        // return projectInsertResult; // return both projInsertResult AND status code [projectInsertResult, statusCode]
+        return [projectInsertResult, StatusCodes.OK];
+      } else {
+        throw new Error("Project not created");
       }
-    },
-    
-    /**
-     * READ: 'GET' request for **ALL** Records
-     */
-    findAll: async (findAllParams: FindAllParamsInterface) => {
-      try {
-        await prepareDbConnection();
-        const allProjectRows: Project[] = await getConnection()
+    } catch (err) {
+      return [null, StatusCodes.INTERNAL_SERVER_ERROR];
+      // TODO: Add DB layer error handling here! --> do status code 500
+      // console.warn(err.message); // remove <<--- only for local debugging
+      // distributed tracing - in prod --> all instances at runtime - sends out event log
+    }
+  },
+
+  /**
+   * READ: 'GET' request for **ALL** Records
+   */
+  findAll: async (findAllParams: FindAllParamsInterface) => {
+    try {
+      await prepareDbConnection();
+      const allProjectRows: Project[] = await getConnection()
         .createQueryBuilder()
         .getMany(); // way to paginate .. findAll not in prod! cache gives u ids that are most relevant!! backend worker job on interval (Cron?) -- pieces of code, automated run on interval, message queue on AWs, every 15 mins... any language! run on its own! something waiting on result to capture! cron job 15 db with new values
-        if (allProjectRows !== null && allProjectRows !== undefined) {
-          return [allProjectRows, StatusCodes.OK];
-        } else {
-          throw new Error('Projects not found');
-        }
-      } catch (err) {
-        return [null, StatusCodes.INTERNAL_SERVER_ERROR];
+      if (allProjectRows !== null && allProjectRows !== undefined) {
+        return [allProjectRows, StatusCodes.OK];
+      } else {
+        throw new Error("Projects not found");
       }
-    },
+    } catch (err) {
+      return [null, StatusCodes.INTERNAL_SERVER_ERROR];
+    }
+  },
 
-/** 
- * same for everyone -- ours
- * ML
- * - weights
- * -significance
- * -algebraic score
- * 
- */
+  /**
+   * same for everyone -- ours
+   * ML
+   * - weights
+   * -significance
+   * -algebraic score
+   *
+   */
 
-    /** 
-     * take all signals from content presenting
-     * - likes?
-     * - comments?
-     * - engatement?
-     * - >>> edges before u and post... how do they add together to create relevancy score
-     */
-    // trending === snapshot ranking
-    // recommended:: (below)
-    /** 
-     * snapshot - calculate delta likes, views
-     * score went up by 10 in last half hour; score of ____
-     * over threshhold.. over delta of 5 positive direction -- give trending status
-     * - take snapshot - 15 mins.. these were values... CRON job looks at delta...
-     * sliding window forward.. generic ranking algo.. based on user, likes n interest, how likely are they interested in this proj!
-     * - funding... factors.. numerical score... 
-     * 
-     */
-    
-    /**
-     * READ: 'GET' request for **ONE Record by ID**
-     */
-    findById: async (findByIdParams: FindByIdParamsInterface) => {
-      try {
-        await prepareDbConnection();
-        const foundProject = await createQueryBuilder()
+  /**
+   * take all signals from content presenting
+   * - likes?
+   * - comments?
+   * - engatement?
+   * - >>> edges before u and post... how do they add together to create relevancy score
+   */
+  // trending === snapshot ranking
+  // recommended:: (below)
+  /**
+   * snapshot - calculate delta likes, views
+   * score went up by 10 in last half hour; score of ____
+   * over threshhold.. over delta of 5 positive direction -- give trending status
+   * - take snapshot - 15 mins.. these were values... CRON job looks at delta...
+   * sliding window forward.. generic ranking algo.. based on user, likes n interest, how likely are they interested in this proj!
+   * - funding... factors.. numerical score...
+   *
+   */
+
+  /**
+   * READ: 'GET' request for **ONE Record by ID**
+   */
+  findById: async (findByIdParams: FindByIdParamsInterface) => {
+    try {
+      await prepareDbConnection();
+      const foundProject = await createQueryBuilder()
         .where("project.id = :id", findByIdParams)
         .getOne();
 
-        // handle errors here
-        if (foundProject === null || foundProject === undefined) {
-          throw new Error('Project not found');
-        }
-        return [foundProject, StatusCodes.OK];
-      } catch (err) {
-        return [null, StatusCodes.INTERNAL_SERVER_ERROR];
+      // handle errors here
+      if (foundProject === null || foundProject === undefined) {
+        throw new Error("Project not found");
       }
-    },
-    
+      return [foundProject, StatusCodes.OK];
+    } catch (err) {
+      return [null, StatusCodes.INTERNAL_SERVER_ERROR];
+    }
+  },
+
   /**
    * UPDATE: 'PUT' request for ONE Record by ID
    */
@@ -194,12 +210,12 @@ const ProjectService = {
         .set(updateByIdParams) // <-- this is where we pass in the params we want to update records with
         .where("id = :id", { id: updateByIdParams.id })
         .execute();
-      
+
       if (updatedProject === null || updatedProject === undefined) {
-        throw new Error('Could not update Project');
+        throw new Error("Could not update Project");
       }
 
-      return [updatedProject, StatusCodes.OK]
+      return [updatedProject, StatusCodes.OK];
     } catch (err) {
       // Don't log errors in production.
       return [null, StatusCodes.INTERNAL_SERVER_ERROR];
@@ -222,9 +238,9 @@ const ProjectService = {
         .execute();
 
       if (deletedProject !== null && deletedProject !== undefined) {
-        return [deletedProject, StatusCodes.];
+        return [deletedProject, StatusCodes.OK];
       } else {
-        throw new Error('Project not deleted');
+        throw new Error("Project not deleted");
       }
     } catch (err) {
       return [null, StatusCodes.INTERNAL_SERVER_ERROR];
@@ -235,32 +251,29 @@ const ProjectService = {
    * READ: 'GET' request for **ALL** Records of a Particular Category
    * expects eithe
    */
-  sortBy: async (
-    sortByParams
-  ) => {
+  sortBy: async (sortByParams) => {
     if (sortByParams === SortByConfig.NEWEST) {
       try {
         await prepareDbConnection();
 
         const newestProjectsFirst = await getConnection()
-          .createQueryBuilder(Project, 'projects')
-          .leftJoinAndSelect('projects.createdAt', 'createdAt')
-          .orderBy('createdAt', 'ASC')
+          .createQueryBuilder(Project, "projects")
+          .leftJoinAndSelect("projects.createdAt", "createdAt")
+          .orderBy("createdAt", "ASC")
           .getMany();
 
         if (newestProjectsFirst !== null && newestProjectsFirst !== undefined) {
           return [newestProjectsFirst, StatusCodes.OK];
         } else {
-          throw new Error('Projects could not be sorted by createdAt')
+          throw new Error("Projects could not be sorted by createdAt");
         }
       } catch (err) {
         return [null, StatusCodes.INTERNAL_SERVER_ERROR];
       }
     } else if (sortByParams === SortByConfig.TRENDING) {
-    // TODO: Add logic for Trending (@Pran) // whole scale
-
+      // TODO: Add logic for Trending (@Pran) // whole scale
     } else if (sortByParams === SortByConfig.RECOMMENDED) {
-    // TODO: Add logic here for Recommended (@Tapa) // needs info from user.. depends on signals they're looking at
+      // TODO: Add logic here for Recommended (@Tapa) // needs info from user.. depends on signals they're looking at
     }
   },
 };
