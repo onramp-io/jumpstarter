@@ -5,8 +5,7 @@ import { useRadioGroup } from '@mui/material';
   
 const investmentController = {
   create: async (req: Request) => {
-    const { userId, projectId, fundAmt } = req.body;
-    return investmentService.create(userId, projectId, fundAmt);
+    return investmentService.create(req.body);
   }
 }
 

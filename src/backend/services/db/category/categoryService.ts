@@ -19,7 +19,8 @@ const categoryService = {
     }
   },
 
-  create: async (category, picture, description) => {
+  create: async (body) => {
+    const { category, picture, description } = body;
     try {
       const db = await connection();
       //add new category
@@ -37,7 +38,8 @@ const categoryService = {
     }
   },
 
-  deleteById: async (id) => {
+  deleteById: async (query) => {
+    const id = query.id;
     try {
       const db = await connection();
       //delete category with specific id

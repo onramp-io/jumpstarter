@@ -7,8 +7,8 @@ import connection from '@backend/config/db';
 
 const likeService = {
     //Add a like to a project by a user
-    create: async (userId, projectId) => {
-        console.log("like api call");
+    create: async (body) => {
+        const { userId, projectId } = body;
         try {
             if ((userId == null) || (projectId == null)) {
                 throw ("Either userId or projectId is NULL");

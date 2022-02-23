@@ -13,7 +13,8 @@ const investmentService = {
         if curr_fund_goal = 0, then project has not met any goals, they are striving for fund_tiers[1]
         if curr_fund_goal = 1, then project has met goal fund_tier[1], they are now striving for fund_tier[2]
     */
-    create: async (userId, projectId, fundAmt) => {
+    create: async (body) => {
+        const { userId, projectId, fundAmt } = body;
         try {
             let currFundGoal = 0;
             let fundTiers = [];

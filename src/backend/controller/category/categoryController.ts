@@ -8,13 +8,11 @@ const categoryController = {
   },
 
   create: async (req: Request) => {
-    const { category, picture, description } = req.body;
-    return categoryService.create(category, picture, description);
+    return categoryService.create(req.body);
   },
 
   deleteById: async (req: Request) => {
-    const { id } = req.query;
-    return categoryService.deleteById(id);
+    return categoryService.deleteById(req.query);
   }
 }
 
