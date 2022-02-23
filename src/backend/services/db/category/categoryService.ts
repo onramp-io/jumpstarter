@@ -27,13 +27,7 @@ const categoryService = {
         .createQueryBuilder()
         .insert()
         .into(Category)
-        .values([
-          {
-            category: category,
-            picture: picture,
-            description: description
-          },
-        ])
+        .values([{ category, picture, description }])
         .execute();
       return { status: "success", data: newCategory}
     } catch (error) {

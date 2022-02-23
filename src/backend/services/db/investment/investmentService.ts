@@ -24,9 +24,7 @@ const investmentService = {
             const investment = await db.createQueryBuilder()
                 .insert()
                 .into(Investment)
-                .values([
-                    { user: userId, project: projectId, fundAmt: fundAmt },
-                ])
+                .values([{ user: userId, project: projectId, fundAmt: fundAmt }])
                 .execute()
 
             //Increment project fund_raised
