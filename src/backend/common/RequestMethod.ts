@@ -9,3 +9,5 @@ const RequestMethod = {
   // Destroy
   DELETE: "DELETE",
 };
+
+export default RequestMethod;
