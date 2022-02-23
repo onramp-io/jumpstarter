@@ -1,25 +1,72 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import projectController from "../../../backend/controller/project/projectController";
+import ProjectController from "@backend/controller/project/ProjectController";
+import { getReasonPhrase, StatusCodes } from "http-status-codes";
+import jumpstarterApiErrorHandler from "@backend/utils/JumpstarterApiErrorHandler";
+import RequestMethod from "@backend/common/RequestMethod";
 
-type Data = {
-  name: string;
-};
-
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse
 ) {
   switch (req.method) {
-    //Get single project
-    case "GET":
-      projectController.getProject(req, res);
-    //Update project
-    case "PUT":
-      projectController.updateProject(req, res);
-    //Delete project
-    case "DELETE":
-      projectController.deleteProject(req, res);
+    // CREATE - 1 row
+    case RequestMethod.POST:
+      const [createdProject, createStatusCode] = await ProjectController.create(
+        req
+      );
+      if (createdProject !== null && createdProject !== undefined) {
+        res.status(StatusCodes.CREATED).send({
+          payload: createdProject,
+        });
+      } else {
+        return jumpstarterApiErrorHandler(res, createStatusCode);
+      }
+      break;
+
+    // READ - all rows
+    case RequestMethod.GET:
+      const [allProjects, findAllStatusCode] = await ProjectController.findAll(
+        req
+      );
+      if (allProjects !== null && allProjects !== undefined) {
+        res.status(StatusCodes.OK).send({
+          payload: allProjects,
+        });
+      } else {
+        return jumpstarterApiErrorHandler(res, findAllStatusCode);
+      }
+      break;
+
+    // UPDATE - 1 row
+    case RequestMethod.PUT:
+      const [updatedProject, updateByIdStatusCode] =
+        await ProjectController.updateById(req);
+      if (updatedProject !== null && updatedProject !== undefined) {
+        res.status(StatusCodes.OK).send({
+          payload: updatedProject,
+        });
+      } else {
+        return jumpstarterApiErrorHandler(res, updateByIdStatusCode);
+      }
+      break;
+
+    // DESTROY - 1 row
+    case RequestMethod.DELETE:
+      ProjectController.deleteById(req);
+      const [deletedProject, deleteByIdStatusCode] =
+        await ProjectController.deleteById(req);
+      if (deletedProject !== null && deletedProject !== undefined) {
+        res.status(StatusCodes.OK).send({
+          payload: deletedProject,
+        });
+      } else {
+        return jumpstarterApiErrorHandler(res, deleteByIdStatusCode);
+      }
+      break;
+
     default:
-      console.log(req.body);
+      res.status(StatusCodes.METHOD_NOT_ALLOWED).send({
+        error: getReasonPhrase(StatusCodes.METHOD_NOT_ALLOWED),
+      });
   }
 }

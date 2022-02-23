@@ -1,6 +1,7 @@
 import { StatusCodes, getReasonPhrase } from "http-status-codes";
 import { NextApiResponse } from "next";
 
+// Common pattern for handling errors from within NextApiHandler function
 const jumpstarterApiErrorHandler = (
   res: NextApiResponse,
   statusCode: StatusCodes
