@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import likeController from '@backend/controller/like/like';
 import {
-	StatusCodes
+	StatusCodes,
+    getReasonPhrase,
 } from 'http-status-codes';
 
 const handler = async (req: NextApiRequest,res: NextApiResponse) => {
@@ -12,7 +13,7 @@ const handler = async (req: NextApiRequest,res: NextApiResponse) => {
                 const response = await likeController.create(req)
                 res.status(StatusCodes.OK).json(response);
                 break;
-            default: console.log(req.body);
+            default: res.status(StatusCodes.NOT_FOUND).json(getReasonPhrase(StatusCodes.NOT_FOUND));
         }
     }
     catch (error) {

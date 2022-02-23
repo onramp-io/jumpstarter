@@ -2,7 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import categoryController from '@backend/controller/category/categoryController';
 import { Rss } from 'grommet-icons';
 import {
-	StatusCodes
+	StatusCodes,
+  getReasonPhrase,
 } from 'http-status-codes';
 
 interface Request extends NextApiRequest {
@@ -23,7 +24,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
         response = await categoryController.create(req)
         res.status(StatusCodes.OK).json(response.data);
         break;
-      default: console.log(req.body);
+      default: res.status(StatusCodes.NOT_FOUND).json(getReasonPhrase(StatusCodes.NOT_FOUND));
     }
   }
   catch (error) {
