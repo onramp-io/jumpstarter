@@ -24,13 +24,13 @@ export interface ProjectCreateApiRequest extends NextApiRequest {
   };
 }
 
-export interface FindAllParamsInterface {
+export interface ProjectFindAllParamsInterface {
   undefined?: undefined | null;
 }
 
 export interface ProjectFindAllApiRequest extends NextApiRequest {
   body: {
-    findAllParams: FindAllParamsInterface;
+    findAllParams: ProjectFindAllParamsInterface;
   };
 }
 
