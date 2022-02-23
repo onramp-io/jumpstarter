@@ -1,38 +1,16 @@
-import {
-  addNewInvestment,
-  getUserInvestments,
-} from '@backend/services/db/investment/investment_db';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { InvestmentsDbService } from '@backend/services/db/investment/investment_db';
 import { Request } from '@backend/middleware/verify_request';
 
-export const addNewInvestmentController = async (
-  req: Request,
-  res: NextApiResponse
-) => {
-  addNewInvestment(req, res);
-};
+export const InvestmentController = {
+  create: async (req: Request) => {
+    const { userId, projectId, fundAmt } = req.body;
+    const data = await InvestmentsDbService.create(userId, projectId, fundAmt);
+    return data;
+  },
 
-export const getUserInvestmentController = async (
-  req: Request,
-  res: NextApiResponse
-) => {
-  try {
+  get: async (req: Request) => {
     const { email } = req.user;
-    const userInvestments = await getUserInvestments(email);
-    if (userInvestments) {
-      res.status(200).json({
-        userInvestments,
-      });
-    } else {
-      res.status(404).json({
-        message: 'No investments found',
-      });
-    }
-  } catch (error) {
-    console.log(
-      'ERROR: @getUserInvestmentController api/investment/investments.ts',
-      error
-    );
-    res.status(401).json({ error });
-  }
+    const userInvestments = await InvestmentsDbService.get(email);
+    return userInvestments;
+  },
 };
