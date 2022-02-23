@@ -23,23 +23,25 @@ const investmentService = {
         let currFundGoal = 0;
         let fundTiers = [];
         let fundRaised = 0;
+        let projectOwnerId = 0;
 
         const db = await connection();
 
         try {
-        //Increment project fund_raised
-        const projFund = await db.createQueryBuilder()
-            .select()
-            .update(Project)
-            .set({ fundRaised: () => `"fundRaised" + ${fundAmt}` })
-            .where("id = :id", { id: projectId })
-            .returning(['fundRaised', 'fundTiers', 'currFundGoal'])
-            .execute()
+            //Increment project fundRaised
+            const projFund = await db.createQueryBuilder()
+                .select()
+                .update(Project)
+                .set({ fundRaised: () => `"fundRaised" + ${fundAmt}` })
+                .where("id = :id", { id: projectId })
+                .returning(['fundRaised', 'fundTiers', 'currFundGoal', 'user'])
+                .execute()
 
-        currFundGoal = projFund.raw[0].currFundGoal;
-        fundRaised = projFund.raw[0].fundRaised;
-        fundTiers = projFund.raw[0].fundTiers;
-        }
+            currFundGoal = projFund.raw[0].currFundGoal;
+            fundRaised = projFund.raw[0].fundRaised;
+            fundTiers = projFund.raw[0].fundTiers;
+            projectOwnerId = projFund.raw[0].userId;
+            }
         catch {
             throw new jsError(
                 StatusCodes.INTERNAL_SERVER_ERROR, 
@@ -47,16 +49,13 @@ const investmentService = {
                 "Query did not complete. Please make sure projectId is valid.")
         }
 
-        const data = moveMilestoneAndPayoutUser(currFundGoal, fundTiers, fundRaised, fundAmt);
-
         try {
-            //Increment user invested_amt and balance as necessary
+            //Increment user investedAmt
             const userFund = await db.createQueryBuilder()
                 .select()
                 .update(User)
                 .set({
-                    investedAmt: () => `"investedAmt" + ${fundAmt}`,
-                    balance: () => `"balance" + ${data.userBalance}`
+                    investedAmt: () => `"investedAmt" + ${fundAmt}`
                 })
                 .where("id = :id", { id: userId })
                 .execute()
@@ -68,8 +67,31 @@ const investmentService = {
                 "Query did not complete. Please make sure userId is valid.")
         }
 
+        //figure out how much money the project owner can be paid out
+        const data = moveMilestoneAndPayoutUser(currFundGoal, fundTiers, fundRaised, fundAmt);
+
+        console.log(projectOwnerId);
+
         try {
-            //Update project funding milestone and payout amount
+            //Increment project owner balance as necessary
+            const userFund = await db.createQueryBuilder()
+                .select()
+                .update(User)
+                .set({
+                    balance: () => `"balance" + ${data.userBalance}`
+                })
+                .where("id = :id", { id: projectOwnerId })
+                .execute()
+        }
+        catch {
+            throw new jsError(
+                StatusCodes.INTERNAL_SERVER_ERROR, 
+                getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
+                "Query did not complete. Please make sure userId is valid.")
+        }
+
+        try {
+            //Update project current funding milestone
             const projUpdate = await db.createQueryBuilder()
                 .select()
                 .update(Project)
