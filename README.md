@@ -1,6 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
+
+TODO: Refactor this section once everything's been wired up
 
 First, run the development server:
 
@@ -12,23 +12,69 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## About this App
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- TODO: Briefly explain what our app is about
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Features
 
-## Learn More
+- TODO: Add list of features (by priority or otherwise)
 
-To learn more about Next.js, take a look at the following resources:
+## Wireframes & UI Development Process
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- TODO: Add Screenshots of Lo-fi Wireframes
+- TODO: Add relevant Screenrecordings as needed
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## RESTful API
 
-## Deploy on Vercel
+- TODO: Add URL to Swagger Docs
+- TODO: Add Swagger Docs Screenshot / Preview
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Key Design Decisions
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- TODO: Add to this section as we go
+
+### Frontend
+
+- Considerations for **Responsive Design**:
+  - Added **Responsive mobile, desktop, and in-between breakpoints** to make content easy to consume regardless of screen resolution
+- Considerations for **Accessibility**:
+  - Added **a11yTitle on Grommet UI Components** wherever possible (**adds aria-labels for screenreaders**)
+  - Added global media query to **lessen animations** for users with **'prefers-reduced-motion' enabled** on browser settings
+  - Added **CSS reset** for **consistent baseline styles** across different clients/browsers
+  - Used **semantic markup** wherever possible
+  - Used **NextJS** for SSR, to make static markup available on demand
+    - Better for screenreaders (and SEO) since the HTML, which provides structure, is made available on the first server response
+- Added **UI animations** with Framer Motion for **better visual feedback & clarity of user intent**
+- Created **Reusable, Modular Components** and composed them together as needed in NextPages
+- Added **classNames & CSS for scoping custom styles** not built-into Grommet UI Components
+
+### Backend
+
+- Refactored backend to **use TypeORM** instead of Prisma
+
+## App Architecture
+
+- TODO: Briefly explain MVC
+- **Model**
+  - TODO: Briefly explain TypeORM + Postgres + Data Model
+- **View**
+  - TODO: Briefly explain React + Context API
+- **Controller**
+  - TODO: Briefly explain NextJS & How we use it to modify our Model (via NextJS API) & View (with SSR)
+
+## Database Model / Schema
+
+- TODO: Add diagrams for each table & corresponding relations
+
+## Development Process & Timeline
+
+- TODO: Add overall timeline
+- TODO: Add videos/screenrecordings of development process as needed
+
+## Optimizations & Future Nice-to-Haves
+
+- TODO: Add to this as we go
+
+- Add aria-hidden="true" tag attribute [as necessary](https://www.scottohara.me/blog/2018/05/05/hidden-vs-none.html#:~:text=A%20general%20rule%20to%20follow,%3A%20none%20or%20visibility%3A%20hidden%20.)
+- Add **selective query-caching layer** with Redis or Memcached
