@@ -21,8 +21,10 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
   const [projectState, setProjectState] = useState(projectFormState);
   const [imageFile, setImageFile] = useState<File>();
 
-  const submitProject = (project) => {
-    console.log("Submitted " + project)
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    console.log(JSON.stringify(event.value));
   }
 
   const updateTier = (newValue, index) => {
@@ -49,21 +51,15 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
 
   return (
     <Box margin={{ horizontal: "15rem", vertical: "3rem" }}>
+      <Box margin="xlarge">
+        <FileInput name="image" onChange={(event) => { setImageFile(event.target.files[0])}}/>
+      </Box>
       <Form
         value={projectState}
-        onSubmit={({ value }) => submitProject(value)}
+        onSubmit={(event) => onSubmit(event)}
         validate="blur"
       >
         <Box direction="column" gap="xlarge">
-          <FormField
-            name="image"
-            label="Upload cover image"
-            htmlFor="image"
-          >
-            <Box margin={{horizontal: "10rem"}}>
-              <FileInput name="image" onChange={(event) => { setImageFile(event.target.files[0])}}/>
-            </Box>
-          </FormField>
 
           <FormField
             name="title"
