@@ -12,20 +12,13 @@ import {
 interface Request extends NextApiRequest {
   user: any;
 }
+
 const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case 'POST':
         const userData = await UserController.post(req);
-        if (userData) {
-          res.status(StatusCodes.OK).json({
-            message: 'User created',
-          });
-        } else {
-          res.status(StatusCodes.NOT_FOUND).json({
-            message: 'User not created',
-          });
-        }
+        res.status(StatusCodes.OK).send(ReasonPhrases.OK);
         break;
       default:
         res.status(StatusCodes.METHOD_NOT_ALLOWED).json({
