@@ -19,6 +19,7 @@
     "@types/jest": "^27.4.0",
     "@types/supertest": "^2.0.11",
     "axios": "^0.25.0",
+    "chalk": "^5.0.0",
     "classnames": "latest",
     "emotion": "^11.0.0",
     "firebase": "^9.6.6",

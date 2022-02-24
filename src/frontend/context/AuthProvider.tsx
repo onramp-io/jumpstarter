@@ -12,10 +12,9 @@ import { onAuthStateChanged } from '@firebase/auth';
 
 import { auth } from '../../firebase/client/client';
 import { getIdToken } from 'firebase/auth';
-import axios from 'axios';
+import axios from '../../axios/instance';
 
 export interface AuthContextType {
-  accessToken: string;
   firstName: string;
   lastName: string;
   bio: string;
@@ -26,7 +25,6 @@ export interface AuthContextType {
 }
 
 export const AuthContext = createContext<AuthContextType>({
-  accessToken: '',
   firstName: '',
   lastName: '',
   bio: '',
@@ -39,7 +37,6 @@ export const AuthContext = createContext<AuthContextType>({
 const userDispatchContext = createContext({});
 
 const initialState = {
-  accessToken: '',
   firstName: '',
   lastName: '',
   bio: '',
@@ -50,7 +47,6 @@ const initialState = {
 };
 
 const reducer = (state, action) => {
-  console.log(action.payload); //debug
   switch (action.type) {
     case 'SET_USER':
       return { ...state, ...action.payload };
@@ -61,37 +57,25 @@ const reducer = (state, action) => {
 
 export const PrivateRouteProvider: NextPage = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  const [accessToken, setAccessToken] = useState<string>('');
-
   const router = useRouter();
-
   const setUser = (payload) => dispatch({ type: 'SET_USER', payload });
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        router.push('/'); //if user is not signed in then send them to home page
+        router.push('/');
+        delete axios.defaults.headers.common['Authorization'];
       } else {
         const token = await getIdToken(user);
-        getUser(token);
-        if (token) {
-          setAccessToken(token);
-        }
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        getUser();
       }
     });
   }, []);
 
-  const getUser = async (token) => {
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    };
-    const response = await axios.get('http://localhost:3000/api/users/get', {
-      headers,
-    });
+  const getUser = async () => {
+    const response = await axios.get('/users/get');
     setUser({
-      accessToken: accessToken,
       firstName: response.data.userData['firstName'],
       lastName: response.data.userData['lastName'],
       bio: response.data.userData['bio'],
