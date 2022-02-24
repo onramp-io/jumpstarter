@@ -10,8 +10,9 @@ import { useAuth } from '@frontend/context/AuthProvider';
 
 import SectionMarquee from '@frontend/components/sectionMarquee';
 import Link from 'next/link';
-import axios from 'axios';
+import axios from '../../../axios/instance';
 import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const userData2 = [
   {
@@ -48,25 +49,22 @@ function MyProfile() {
     avatar,
     totalInvestments,
     balance,
-    accessToken,
     investments,
   } = useAuth();
 
+  const [error, setError] = useState('');
+  const [isMoneyTransfering, setMoneyTransferring] = useState(false);
   const [isMoneyTransferred, setMoneyTransferred] = useState(false);
 
   const handlePayOut = async () => {
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    };
-
-    const response = await axios.post(
-      'http://localhost:3000/api/users/payout',
-      {
-        headers,
-      }
-    );
-    setMoneyTransferred(true);
+    try {
+      setMoneyTransferring(true);
+      await axios.put('/users/payout', {});
+      setMoneyTransferred(true);
+      setMoneyTransferring(false);
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -86,21 +84,28 @@ function MyProfile() {
           </Link>
           <Box className={profile.withdrawFunds}>
             <Text>My balance: ${balance}</Text>
-            {balance <= 0 ? (
-              <>
-                <Button
-                  label="Withdraw"
-                  className={profile.editButton}
-                  disabled
-                />
-              </>
+            {isMoneyTransfering ? (
+              <CircularProgress />
             ) : (
               <>
-                <Button
-                  label="Withdraw"
-                  className={profile.editButton}
-                  onClick={handlePayOut}
-                />
+                {balance >= 0 ? (
+                  <>
+                    <Button
+                      label="Withdraw"
+                      className={profile.editButton}
+                      disabled
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      label="Withdraw"
+                      className={profile.editButton}
+                      onClick={handlePayOut}
+                      disabled={isMoneyTransferred}
+                    />
+                  </>
+                )}
               </>
             )}
           </Box>
@@ -115,11 +120,11 @@ function MyProfile() {
             <Tab title="My Projects">
               <Box pad="medium">
                 <Box align="center" direction="row" margin="small">
-                  <SectionMarquee
+                  {/* <SectionMarquee
                     APIPayload={userData2}
                     linkHref="/personalpicks"
                     linkCaption="See all recommended projects >"
-                  />
+                  /> */}
                 </Box>
               </Box>
             </Tab>

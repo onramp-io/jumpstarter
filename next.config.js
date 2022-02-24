@@ -14,9 +14,10 @@ module.exports = {
     FB_ADMIN_PRIVATE_KEY: process.env.FB_ADMIN_PRIVATE_KEY,
     FB_ADMIN_CLIENT_EMAIL: process.env.FB_ADMIN_CLIENT_EMAIL,
     FB_ADMIN_CLIENT_ID: process.env.FB_ADMIN_CLIENT_ID,
+    PUBLIC_API_URL_DEV: process.env.PUBLIC_API_URL_DEV,
   },
   images: {
-    domains: ['images.unsplash.com']
+    domains: ['images.unsplash.com'],
   },
   future: {
     webpack5: true,

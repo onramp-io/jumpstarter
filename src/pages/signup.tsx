@@ -7,7 +7,7 @@ import styles from '../styles/Signup.module.css';
 import { Heading, TextInput, Box, Button, Notification } from 'grommet';
 import { createUserWithEmailAndPassword, getIdToken } from 'firebase/auth';
 import { auth } from '../firebase/client/client';
-import axios from 'axios';
+import axios from '../axios/instance';
 
 import { Alert, AlertTitle } from '@mui/material';
 
@@ -40,25 +40,13 @@ const Signup: NextPage = () => {
   const handleSignUp = async () => {
     setIsSigningUp(true);
     try {
-      const data = await createUserWithEmailAndPassword(auth, email, password);
-      const token = await getIdToken(data.user);
-      const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      };
+      await createUserWithEmailAndPassword(auth, email, password);
       const body = {
         firstName: fName,
         lastName: lName,
         email: email,
       };
-      const response = await axios.post(
-        'http://localhost:3000/api/users/create',
-        body,
-        {
-          headers,
-        }
-      );
-      console.log('response: ', response);
+      await axios.post('/users/create', body);
       router.push('/app/profile');
     } catch (error) {
       setError('Invalid email or password');
