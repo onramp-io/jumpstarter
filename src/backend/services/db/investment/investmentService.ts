@@ -5,11 +5,7 @@ import { Project } from '@backend/entities/Project';
 import { Investment } from '@backend/entities/Investment';
 import connection from '@backend/config/db';
 import { connectAuthEmulator } from 'firebase/auth';
-import {
-	StatusCodes,
-	getReasonPhrase,
-} from 'http-status-codes';
-import { jsError } from '@backend/config/errorTypes';
+import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors'
 
 const investmentService = {
     //Add investment made by user to project
@@ -43,10 +39,7 @@ const investmentService = {
             projectOwnerId = projFund.raw[0].userId;
             }
         catch {
-            throw new jsError(
-                StatusCodes.INTERNAL_SERVER_ERROR, 
-                getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
-                "Query did not complete. Please make sure projectId is valid.")
+            throw new DatabaseError('Database connection failed');
         }
 
         try {
@@ -61,10 +54,7 @@ const investmentService = {
                 .execute()
         }
         catch {
-            throw new jsError(
-                StatusCodes.INTERNAL_SERVER_ERROR, 
-                getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
-                "Query did not complete. Please make sure userId is valid.")
+            throw new DatabaseError('Database connection failed');
         }
 
         //figure out how much money the project owner can be paid out
@@ -84,10 +74,7 @@ const investmentService = {
                 .execute()
         }
         catch {
-            throw new jsError(
-                StatusCodes.INTERNAL_SERVER_ERROR, 
-                getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
-                "Query did not complete. Please make sure userId is valid.")
+            throw new DatabaseError('Database connection failed');
         }
 
         try {
@@ -100,9 +87,7 @@ const investmentService = {
                 .execute()
             }
         catch {
-            throw new jsError(StatusCodes.INTERNAL_SERVER_ERROR, 
-                getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
-                "Query did not complete. Please make sure projectId is valid.")
+            throw new DatabaseError('Database connection failed');
         }
 
         try {
@@ -115,10 +100,7 @@ const investmentService = {
                 return investment;
             }
         catch {
-            throw new jsError(
-                StatusCodes.INTERNAL_SERVER_ERROR, 
-                getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
-                "Query did not cimplete. Please make sure your userId and projectId are valid.")
+            throw new DatabaseError('Database connection failed');
         }
     }  
 }

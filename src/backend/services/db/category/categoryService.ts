@@ -2,11 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getRepository, getConnection } from 'typeorm';
 import { Category } from '@backend/entities/Category';
 import connection from '@backend/config/db';
-import {
-	StatusCodes,
-	getReasonPhrase,
-} from 'http-status-codes';
-import { jsError } from '@backend/config/errorTypes';
+import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors'
 
 const categoryService = {
   //Add a like to a project by a user
@@ -21,10 +17,7 @@ const categoryService = {
       return categoryData;
     }
     catch {
-      throw new jsError(
-        StatusCodes.INTERNAL_SERVER_ERROR, 
-        getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
-        "Query did not complete. Please make sure entity exists.")
+      throw new DatabaseError('Database connection failed');
     }
   },
 
@@ -44,10 +37,7 @@ const categoryService = {
       return newCategory;
     }
     catch {
-      throw new jsError(
-        StatusCodes.INTERNAL_SERVER_ERROR, 
-        getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
-        "Query did not complete. Please make sure you have a valid category and picture")
+      throw new DatabaseError('Database connection failed');
     }
   },
 
@@ -67,10 +57,7 @@ const categoryService = {
 
     }
     catch {
-      throw new jsError(
-        StatusCodes.INTERNAL_SERVER_ERROR, 
-        getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), 
-        "Query did not complete. Please make sure you have a valid id.")
+      throw new DatabaseError('Database connection failed');
     }
   }
 }

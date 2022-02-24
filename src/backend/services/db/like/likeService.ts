@@ -4,11 +4,7 @@ import { User } from '@backend/entities/User';
 import { Project } from '@backend/entities/Project';
 import { Like } from '@backend/entities/Like';
 import connection from '@backend/config/db';
-import {
-	StatusCodes,
-	getReasonPhrase,
-} from 'http-status-codes';
-import { jsError } from '@backend/config/errorTypes';
+import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors'
 
 const likeService = {
     //Add a like to a project by a user
@@ -30,10 +26,7 @@ const likeService = {
             return like;
         } 
         catch {
-            throw new jsError(
-                StatusCodes.BAD_REQUEST, 
-                getReasonPhrase(StatusCodes.BAD_REQUEST), 
-                "Query did not complete. Please make sure you are providing a valid project and user ID.")
+            throw new DatabaseError('Database connection failed');
         }
     }
 }

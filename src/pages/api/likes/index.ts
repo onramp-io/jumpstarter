@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import likeController from '@backend/controller/like/like';
 import {
-	StatusCodes,
-    getReasonPhrase,
-} from 'http-status-codes';
+    MethodNotAllowedError,
+  } from 'helpers/ErrorHandling/errors';
+  import { Success } from 'helpers/ErrorHandling/success';
 
 const handler = async (req: NextApiRequest,res: NextApiResponse) => {
     try {
@@ -11,13 +11,19 @@ const handler = async (req: NextApiRequest,res: NextApiResponse) => {
             //Add new like given by user to project
             case 'POST':
                 const response = await likeController.create(req)
-                res.status(StatusCodes.OK).json(response);
+                res.status(Success.code).json({
+                    status: Success.status,
+                    message: Success.message,
+                  }); 
                 break;
-            default: res.status(StatusCodes.NOT_FOUND).json(getReasonPhrase(StatusCodes.NOT_FOUND));
+            default: new MethodNotAllowedError('Method not found');
         }
     }
     catch (error) {
-        res.status(error.code).json(error.message);
+        res.status(error.code).json({
+            status: error.status,
+            message: error.message,
+          });
     }
 }
 
