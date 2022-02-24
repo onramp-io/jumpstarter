@@ -6,6 +6,7 @@ import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors';
 export const userService = {
   get: async (uid: string) => {
     const db = await connection();
+    if (!db) throw new DatabaseError('Database connection failed');
     const userData = await db
       .createQueryBuilder()
       .select('*')
