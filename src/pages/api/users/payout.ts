@@ -29,12 +29,12 @@ const handler = async (req: Request, res: NextApiResponse) => {
   } catch (error) {
     if (error instanceof NotFoundError) {
       console.log(
-        chalk.red.bold(error.name + '@user/payout.ts on Line 33'),
+        chalk.red.bold(error.name + '@user/payout.ts on Line 32'),
         error.message
       );
     } else if (error instanceof MethodNotAllowedError) {
       console.log(
-        chalk.red.bold(error.name + '@user/payout.ts on Line 38'),
+        chalk.red.bold(error.name + '@user/payout.ts on Line 37'),
         error.message
       );
     }
