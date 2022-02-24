@@ -9,6 +9,8 @@ import {
   getStatusCode,
 } from 'http-status-codes';
 
+import chalk from 'chalk';
+
 interface Request extends NextApiRequest {
   user: any;
 }
@@ -28,7 +30,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
         });
     }
   } catch (error) {
-    console.log('ERROR: handler() in get.ts', error);
+    console.log(chalk.red.bold('ERROR: handler() in user/get.ts'), error);
     res.status(StatusCodes.UNAUTHORIZED).json({ error });
   }
 };
