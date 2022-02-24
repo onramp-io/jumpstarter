@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import admin from '../../firebase/admin/admin';
 
 import chalk from 'chalk';
+import { AuthorizationError } from 'helpers/ErrorHandling/errors';
 
 export interface Request extends NextApiRequest {
   user: any;
@@ -12,24 +13,32 @@ export const verifyRequest = (handler) => {
     const accessToken = req.headers['authorization'];
     let token: string = '';
 
-    if (!accessToken) {
-      console.log(
-        chalk.red.bold('ERROR: verify_request() in verify_request.ts')
-      );
-      return res.status(401).send('Access token is required');
-    } else {
-      token = accessToken.split(' ')[1];
-    }
     try {
-      const decoded = await admin.auth().verifyIdToken(token);
-      if (decoded) {
+      if (!accessToken) {
+        console.log(
+          chalk.red.bold('ERROR: verify_request() in verify_request.ts')
+        );
+        throw new AuthorizationError('Access token is required');
+      } else {
+        token = accessToken.split(' ')[1];
+        const decoded = await admin.auth().verifyIdToken(token);
+        if (!decoded) {
+          throw new AuthorizationError('Invalid token');
+        }
         req.user = decoded;
       }
     } catch (error) {
-      console.log(
-        chalk.red.bold('ERROR: verify_request() #2 in verify_request.ts')
-      );
-      return res.status(401).send('Invalid access token');
+      if (error instanceof AuthorizationError) {
+        console.log(
+          chalk.red.bold(error.name + ' @verify_request.ts on Line 32: '),
+          error.message
+        );
+        res.status(401).json({
+          code: error.code,
+          status: error.status,
+          error: error.message,
+        });
+      }
     }
     return handler(req, res);
   };
