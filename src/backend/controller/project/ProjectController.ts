@@ -12,6 +12,7 @@ import {
   ProjectSortByApiRequest, // SORT - all
 } from "@backend/common/ProjectRequestApiInterfaces";
 import { StatusCodes } from "http-status-codes";
+import isNotNullNorUndefined from "@backend/utils/isNotNullNorUndefined";
 
 /**
  * **From each of the methods** on the Controller (e.g. ProjectController.create() ), you:
@@ -23,12 +24,73 @@ import { StatusCodes } from "http-status-codes";
  */
 const ProjectController = {
   // CREATE
-  create: async (req: ProjectCreateApiRequest) => {
-    const { createParams } = req.body;
-    if (createParams !== null && createParams !== undefined) {
-      return ProjectService.create(createParams);
-    } else {
-      return [null, StatusCodes.BAD_REQUEST]; // 400 (client error, since they forgot to pass in the params needed)
+  create: async (req) => {
+    try {
+      console.log(`You're at the ProjectController.create( ) method!`);
+      /**
+       * Destructuring from req.body is necessary for Frontend to be able to use Forms to populate req.body
+       */
+
+      const {
+        title,
+        category,
+        description,
+        fundTiers,
+        currFundGoal,
+        userId,
+        launchDate,
+      } = req.body;
+
+      console.log(`title === ${title}`);
+      console.log(`category === ${category}`);
+      console.log(`description === ${description}`);
+      console.log(`fundTiers === ${fundTiers}`);
+      console.log(`currFundGoal === ${currFundGoal}`);
+      console.log(`userId === ${userId}`);
+      console.log(`launchDate === ${launchDate}`);
+
+      // this is necessary for the rest of the code in BE to work (ProjectService.create(createParams))
+      const createParams = {
+        title,
+        category,
+        description,
+        fundTiers,
+        currFundGoal,
+        userId,
+        launchDate,
+      };
+
+      const fakeCreateParams = {
+        title: "Your fake create params!",
+        category: "ART",
+        description: "Fake description from ProjectController.create( )!",
+        fundTiers: [100, 200, 300, 400],
+        currFundGoal: 400,
+        userId: 3,
+        launchDate: "15:12:02.020.001230",
+      };
+      /** 
+       * all the ff. are currently undefined!
+       console.log(`title === ${title}`);
+       console.log(`category === ${category}`);
+       console.log(`description === ${description}`);
+       console.log(`fundTiers === ${fundTiers}`);
+       console.log(`currFundGoal === ${currFundGoal}`);
+       console.log(`userId === ${userId}`);
+       console.log(`launchDate === ${launchDate}`);
+       */
+
+      // pass in a fake object with hardcoded values for now!!! check if it works
+      if (true) {
+        console.log(
+          `in ProjectController.create( ) if block, fakeCreateParams === ${fakeCreateParams}`
+        );
+        return ProjectService.create(fakeCreateParams);
+      } else {
+        return [null, StatusCodes.BAD_REQUEST]; // 400 (client error, since they forgot to pass in the params needed)
+      }
+    } catch (err) {
+      console.warn(err.message);
     }
   },
 
