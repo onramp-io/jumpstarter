@@ -45,6 +45,12 @@ export class Project {
   @Column({ type: 'integer', default: 0 })
   likesAmt: number;
 
+  @Column({ type: 'integer', default: 0 })
+  views: number;
+
+  @Column({ type: 'integer', default: 0 })
+  trendScore: number;
+
   @ManyToOne(() => User, (user) => user.projects)
   user: User;
 
