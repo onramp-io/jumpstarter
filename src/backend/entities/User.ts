@@ -1,34 +1,39 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Comment } from './Comment';
-import { Project } from './Project';
-import { Interest } from './Interest';
-import { Investment } from './Investment';
-import { Like } from './Like';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Comment } from "./Comment";
+import { Project } from "./Project";
+import { Investment } from "./Investment";
+import { Like } from "./Like";
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('text')
-  first_name: string;
+  @Column("text")
+  uid: String;
 
-  @Column('text')
-  last_name: string;
+  @Column("text")
+  firstName: string;
 
-  @Column('text')
+  @Column("text")
+  lastName: string;
+
+  @Column("text")
   email: string;
 
-  @Column('text')
+  @Column({ type: "text", nullable: true })
   avatar: string;
 
-  @Column('text')
+  @Column({ type: "text", nullable: true })
   bio: string;
 
-  @Column({ type: 'decimal', default: 0 })
+  @Column({ type: "text", array: true, nullable: true })
+  interests: string[];
+
+  @Column({ type: "decimal", default: 0 })
   investedAmt: number;
 
-  @Column({ type: 'decimal', default: 0})
+  @Column({ type: "decimal", default: 0 })
   balance: number;
 
   @OneToMany(() => Comment, (comment) => comment.user)
@@ -36,9 +41,6 @@ export class User {
 
   @OneToMany(() => Project, (project) => project.user)
   projects: Project[];
-
-  @OneToMany(() => Interest, (interest) => interest.user)
-  interests: Interest[];
 
   @OneToMany(() => Investment, (investment) => investment.user)
   investments: Investment[];
