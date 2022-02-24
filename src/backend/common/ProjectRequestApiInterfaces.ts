@@ -39,13 +39,12 @@ export interface FindByIdParamsInterface {
 }
 
 export interface ProjectFindByIdApiRequest extends NextApiRequest {
-  body: {
-    findByIdParams: FindAllParamsInterface;
-  };
+  body: FindByIdParamsInterface;
 }
 
 export interface UpdateByIdParamsInterface {
   // id: string; <-- auto passed by query
+  project: number;
   pictures?: string[];
   title?: string;
   category?: string;
@@ -55,15 +54,13 @@ export interface UpdateByIdParamsInterface {
   // comments?: Comment[]; <--- take this* out in other files
   // investments?: Investment[]; <-- and this*
   // likes?: Like[]; <-- and this*
-  // Is launchdate required soon as proj is being created?
+  // Is launchdate required soon as proj is being createdte?
   // if not, pls remove the next line.
   launchDate?: string;
 }
 
 export interface ProjectUpdateByIdApiRequest extends NextApiRequest {
-  body: {
-    updateByIdParams: UpdateByIdParamsInterface;
-  };
+  body: UpdateByIdParamsInterface;
 }
 
 export interface DeleteByIdParamsInterface {
@@ -71,9 +68,7 @@ export interface DeleteByIdParamsInterface {
 }
 
 export interface ProjectDeleteByIdApiRequest extends NextApiRequest {
-  body: {
-    deleteByIdParams: DeleteByIdParamsInterface;
-  };
+  body: DeleteByIdParamsInterface;
 }
 
 export const SortByString = {
@@ -99,7 +94,7 @@ export type SortByParamsType = {
 };
 
 export interface ProjectSortByApiRequest extends NextApiRequest {
-  body: SortByParamsInterface;
+  body: SortByParamsType;
 }
 
 /** 
