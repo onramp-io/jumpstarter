@@ -1,13 +1,13 @@
 import connection from "@backend/config/db";
-import Project from "@backend/entities/Project";
+import { Project } from "@backend/entities/Project";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Request } from "@backend/middleware/verify_request";
-import prepareDbConnection from "@backend/lib/prepareDbConnection";
 import {
   createQueryBuilder,
   CustomRepositoryDoesNotHaveEntityError,
   Db,
   getConnection,
+  getRepository,
   UpdateQueryBuilder,
 } from "typeorm";
 import {
@@ -32,6 +32,7 @@ import {
   getReasonPhrase,
   getStatusCode,
 } from "http-status-codes";
+import { User } from "@backend/entities/User";
 
 /** 
  * 
@@ -109,22 +110,44 @@ const ProjectService = {
    */
   create: async (createParams: CreateParamsInterface) => {
     try {
-      await prepareDbConnection();
+      console.log(`You're at the ProjectService.create( ) method!`);
+      const db = await connection();
+      console.log(`db === ${db}`);
+
       // toss in reusable helper function if same pattern exactly followed
-      const projectInsertResult = await getConnection()
+      // returns something - successful query
+      // raw: ["how many things inserted"]
+      const projectInsertResult = await db
         .createQueryBuilder()
         .insert()
         .into(Project)
-        .values(createParams)
+        .values(createParams) // <-- hardcode from now!
+        // .returning(["id"]) // --> PUT,
         .execute();
 
-      if (projectInsertResult !== null && projectInsertResult !== undefined) {
-        // return projectInsertResult; // return both projInsertResult AND status code [projectInsertResult, statusCode]
-        return [projectInsertResult, StatusCodes.OK];
-      } else {
+      /** 
+         console.log(
+           `${JSON.stringify(projectInsertResult)} is the projectInsertResult`
+         );
+         * 
+         */
+
+      if (projectInsertResult === null || projectInsertResult === undefined) {
         throw new Error("Project not created");
       }
+      // return projectInsertResult; // return both projInsertResult AND status code [projectInsertResult, statusCode]
+      console.log(
+        `created the project! it's on pgAdmin! ${JSON.stringify(
+          projectInsertResult
+        )}.. but it's typeof is ${typeof projectInsertResult}`
+      );
+
+      return [projectInsertResult, StatusCodes.CREATED];
     } catch (err) {
+      console.warn(err.message);
+      throw new Error(
+        "Project not created! - check project service catch block"
+      );
       return [null, StatusCodes.INTERNAL_SERVER_ERROR];
       // TODO: Add DB layer error handling here! --> do status code 500
       // console.warn(err.message); // remove <<--- only for local debugging
@@ -137,9 +160,10 @@ const ProjectService = {
    */
   findAll: async (findAllParams: FindAllParamsInterface) => {
     try {
-      await prepareDbConnection();
-      const allProjectRows: Project[] = await getConnection()
-        .createQueryBuilder()
+      await connection();
+
+      const allProjectRows: Project[] = await getRepository(Project)
+        .createQueryBuilder("project")
         .getMany(); // way to paginate .. findAll not in prod! cache gives u ids that are most relevant!! backend worker job on interval (Cron?) -- pieces of code, automated run on interval, message queue on AWs, every 15 mins... any language! run on its own! something waiting on result to capture! cron job 15 db with new values
       if (allProjectRows !== null && allProjectRows !== undefined) {
         return [allProjectRows, StatusCodes.OK];
@@ -184,7 +208,9 @@ const ProjectService = {
    */
   findById: async (findByIdParams: FindByIdParamsInterface) => {
     try {
-      await prepareDbConnection();
+      const db = await connection();
+
+      // get tapa's findById function
       const foundProject = await createQueryBuilder()
         .where("project.id = :id", findByIdParams)
         .getOne();
@@ -203,14 +229,26 @@ const ProjectService = {
    * UPDATE: 'PUT' request for ONE Record by ID
    */
   updateById: async (updateByIdParams: UpdateByIdParamsInterface) => {
+    console.log(`you're at ProjectService.updateById( )!`);
+    console.log(
+      `in ProjectService.updateById(), updateByIdParams === ${JSON.stringify(
+        updateByIdParams
+      )}`
+    );
     try {
-      await prepareDbConnection();
-      const updatedProject = await createQueryBuilder()
+      const db = await connection();
+
+      const updatedProject = await db
+        .createQueryBuilder()
+        .select()
         .update(Project)
+        // not matching actual columns
         .set(updateByIdParams) // <-- this is where we pass in the params we want to update records with
         .where("id = :id", { id: updateByIdParams.id })
+        // .returning() // look into returning entire row
         .execute();
 
+      console.log(`updatedProject === ${JSON.stringify(updatedProject)}`);
       if (updatedProject === null || updatedProject === undefined) {
         throw new Error("Could not update Project");
       }
@@ -234,7 +272,7 @@ const ProjectService = {
         .createQueryBuilder()
         .delete()
         .from(Project)
-        .where("id = :id", { id: deleteByIdParams.id })
+        .where("id = :id", { id: deleteByIdParams.id }) //<--
         .execute();
 
       if (deletedProject !== null && deletedProject !== undefined) {
