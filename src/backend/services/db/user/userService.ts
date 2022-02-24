@@ -1,6 +1,7 @@
 import connection from '@backend/config/db';
 import { IUserPost, IUserPut } from '@backend/controller/user/user';
 import { User } from '@backend/entities/User';
+import { NotFoundError } from 'helpers/ErrorHandling/errors';
 
 export const userService = {
   get: async (uid: string) => {
@@ -11,7 +12,7 @@ export const userService = {
       .from('user', 'user')
       .where('uid = :uid', { uid })
       .getRawOne();
-    if (!userData) throw new Error('User not found');
+    if (!userData) throw new NotFoundError('User not found');
     return userData;
   },
 
@@ -34,7 +35,7 @@ export const userService = {
       ])
       .execute();
     if (!userData) {
-      throw new Error('User not created');
+      throw new NotFoundError('User not created');
     }
     return userData;
   },
@@ -53,7 +54,7 @@ export const userService = {
       .where('uid = :uid', { uid: dataToUpdate.put.uid })
       .execute();
     if (!userData) {
-      throw new Error('User not updated');
+      throw new NotFoundError('User not updated');
     }
     return userData;
   },
@@ -67,7 +68,7 @@ export const userService = {
       .where('uid = :uid', { uid })
       .execute();
     if (!userData) {
-      throw new Error('User not deleted');
+      throw new NotFoundError('User not deleted');
     }
     return userData;
   },
@@ -83,7 +84,7 @@ export const userService = {
       .where('uid = :uid', { uid })
       .execute();
     if (!userData) {
-      throw new Error('User not paid out');
+      throw new NotFoundError('User not paid out');
     }
     return userData;
   },
