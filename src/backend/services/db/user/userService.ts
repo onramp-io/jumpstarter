@@ -3,13 +3,13 @@ import { IUserPost, IUserPut } from '@backend/controller/user/user';
 import { User } from '@backend/entities/User';
 
 export const userService = {
-  get: async (email: string) => {
+  get: async (uid: string) => {
     const db = await connection();
     const userData = await db
       .createQueryBuilder()
       .select('*')
       .from('user', 'user')
-      .where('email = :email', { email })
+      .where('uid = :uid', { uid })
       .getRawOne();
     if (!userData) throw new Error('User not found');
     return userData;
@@ -29,6 +29,7 @@ export const userService = {
           avatar: '',
           bio: '',
           investedAmt: 0,
+          uid: dataToInsert.post.uid,
         },
       ])
       .execute();
@@ -49,7 +50,7 @@ export const userService = {
         avatar: dataToUpdate.put.avatar,
         bio: dataToUpdate.put.bio,
       })
-      .where('email = :email', { email: dataToUpdate.put.email })
+      .where('uid = :uid', { uid: dataToUpdate.put.uid })
       .execute();
     if (!userData) {
       throw new Error('User not updated');
@@ -57,13 +58,13 @@ export const userService = {
     return userData;
   },
 
-  delete: async (email: string) => {
+  delete: async (uid: string) => {
     const db = await connection();
     const userData = await db
       .createQueryBuilder()
       .delete()
       .from(User)
-      .where('email = :email', { email })
+      .where('uid = :uid', { uid })
       .execute();
     if (!userData) {
       throw new Error('User not deleted');
@@ -71,7 +72,7 @@ export const userService = {
     return userData;
   },
 
-  payOut: async (email: string) => {
+  payOut: async (uid: string) => {
     const db = await connection();
     const userData = await db
       .createQueryBuilder()
@@ -79,7 +80,7 @@ export const userService = {
       .set({
         balance: 0,
       })
-      .where('email = :email', { email })
+      .where('uid = :uid', { uid })
       .execute();
     if (!userData) {
       throw new Error('User not paid out');
