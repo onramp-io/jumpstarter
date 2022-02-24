@@ -33,8 +33,7 @@ export const verifyRequest = (handler) => {
           chalk.red.bold(error.name + ' @verify_request.ts on Line 32: '),
           error.message
         );
-        res.status(401).json({
-          code: error.code,
+        res.status(error.code).json({
           status: error.status,
           error: error.message,
         });
