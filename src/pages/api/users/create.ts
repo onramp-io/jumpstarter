@@ -28,22 +28,10 @@ const handler = async (req: Request, res: NextApiResponse) => {
         throw new MethodNotAllowedError('Method not found');
     }
   } catch (error) {
-    if (error instanceof NotFoundError) {
-      console.log(
-        chalk.red.bold(error.name + '@user/create.ts on Line 32'),
-        error.message
-      );
-    } else if (error instanceof MethodNotAllowedError) {
-      console.log(
-        chalk.red.bold(error.name + '@user/create.ts on Line 37'),
-        error.message
-      );
-    } else if (error instanceof DatabaseError) {
-      console.log(
-        chalk.red.bold(error.name + '@user/get.ts on Line 43'),
-        error.message
-      );
-    }
+    console.log(
+      chalk.red.bold(error.name + '@user/create.ts on Line 32'),
+      error.message
+    );
     res.status(error.code).json({
       status: error.status,
       message: error.message,
