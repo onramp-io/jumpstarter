@@ -21,14 +21,17 @@ export interface ProjectCreateApiRequest extends NextApiRequest {
   body: CreateParamsInterface;
 }
 
-export interface ProjectFindAllParamsInterface {
-  undefined?: undefined | null;
-}
-
-export interface ProjectFindAllApiRequest extends NextApiRequest {
-  body: {
-    findAllParams: ProjectFindAllParamsInterface;
-  };
+/** 
+ * 
+ export interface ProjectFindAllParamsInterface {
+   undefined?: undefined | null;
+ }
+ 
+ export interface ProjectFindAllApiRequest extends NextApiRequest {
+   body: {
+     findAllParams: ProjectFindAllParamsInterface;
+   };
+ */
 }
 
 export interface FindByIdParamsInterface {
