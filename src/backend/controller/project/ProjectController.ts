@@ -88,7 +88,7 @@ const ProjectController = {
 
       // console.log(JSON.stringify(Object.keys(req.body).length));
       console.log(`The keys in req.body are:${Object.keys(req.body)}`);
-      if (isAllTruthy(req.body) /**&& req.body.length === 8*/) {
+      if (isAllTruthy(req.body) && Object.keys(req.body).length === 7) {
         console.log(
           `in ProjectController.create( ) if block, req.body === ${req.body}`
         );
@@ -119,9 +119,11 @@ const ProjectController = {
 
   // READ - 1
   findById: async (req) => {
-    if (isAllTruthy(req.body) && req.body.length === 1) {
+    if (isAllTruthy(req.body) && Object.keys(req.body).length === 1) {
       return await ProjectService.findById(req.body);
     } else {
+      console.warn("req.body is missing id (project id)");
+      throw new Error("req.body is missing id (project id)");
       return [null, StatusCodes.BAD_REQUEST];
     }
   },
@@ -137,7 +139,7 @@ const ProjectController = {
 
     if (isAllTruthy(req.body) && Object.keys(req.body).length === 8) {
       console.log(
-        `In ProjectService.updateById(), req.body is indeed all truthy (req.body has complete params!)`
+        `In ProjectService.updateById(), req.body is indeed all truthy and complete (req.body has complete params!)`
       );
       return ProjectService.updateById(req.body);
     } else {
@@ -146,21 +148,33 @@ const ProjectController = {
   },
 
   // DESTROY - 1
-  deleteById: async (req: ProjectDeleteByIdApiRequest) => {
-    const { deleteByIdParams } = req.body;
-    if (deleteByIdParams !== null && deleteByIdParams !== undefined) {
-      return ProjectService.deleteById(deleteByIdParams);
+  deleteById: async (req) => {
+    console.log(`you're at ProjectController.deleteById( )!`);
+    console.log(
+      `req.body is composed of ${JSON.stringify(
+        Object.keys(req.body)
+      )} and its length is ${req.body.length}`
+    );
+
+    if (isAllTruthy(req.body) && Object.keys(req.body).length === 1) {
+      console.log(
+        `In ProjectService.deleteById(), req.body is indeed all truthy and complete (req.body has complete params!)`
+      );
+      return ProjectService.deleteById(req.body);
     } else {
+      throw new Error("Error: req.body is missing some params!");
       return [null, StatusCodes.BAD_REQUEST];
     }
   },
 
   // SORT - all (TODO: add logic to ProjectService.sortBy -- Tapa & Pran)
-  sortBy: async (req: ProjectSortByApiRequest) => {
-    const { sortByParams } = req.body;
-    if (sortByParams !== null && sortByParams !== undefined) {
+  sortBy: async (req) => {
+    if (isAllTruthy(req.body) && Object.keys(req.body).length === 1) {
       return ProjectService.sortBy(sortByParams);
     } else {
+      throw new Error(
+        "req.body is missing sortBy params! (i.e. SortByString.NEWEST, or SortByString.RECOMMENDED, or SortByString.TRENDING"
+      );
       return [null, StatusCodes.BAD_REQUEST];
     }
   },
