@@ -1,7 +1,7 @@
 import connection from '@backend/config/db';
 import { IUserPost, IUserPut } from '@backend/controller/user/user';
 import { User } from '@backend/entities/User';
-import { NotFoundError } from 'helpers/ErrorHandling/errors';
+import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors';
 
 export const userService = {
   get: async (uid: string) => {
@@ -18,6 +18,7 @@ export const userService = {
 
   insert: async (dataToInsert: IUserPost) => {
     const db = await connection();
+    if (!db) throw new DatabaseError('Database connection failed');
     const userData = await db
       .createQueryBuilder()
       .insert()
@@ -34,14 +35,13 @@ export const userService = {
         },
       ])
       .execute();
-    if (!userData) {
-      throw new NotFoundError('User not created');
-    }
+    if (!userData) throw new NotFoundError('User not created');
     return userData;
   },
 
   update: async (dataToUpdate: IUserPut) => {
     const db = await connection();
+    if (!db) throw new DatabaseError('Database connection failed');
     const userData = await db
       .createQueryBuilder()
       .update(User)
@@ -53,28 +53,26 @@ export const userService = {
       })
       .where('uid = :uid', { uid: dataToUpdate.put.uid })
       .execute();
-    if (!userData) {
-      throw new NotFoundError('User not updated');
-    }
+    if (!userData) throw new NotFoundError('User not found');
     return userData;
   },
 
   delete: async (uid: string) => {
     const db = await connection();
+    if (!db) throw new DatabaseError('Database connection failed');
     const userData = await db
       .createQueryBuilder()
       .delete()
       .from(User)
       .where('uid = :uid', { uid })
       .execute();
-    if (!userData) {
-      throw new NotFoundError('User not deleted');
-    }
+    if (!userData) throw new NotFoundError('User not found');
     return userData;
   },
 
   payOut: async (uid: string) => {
     const db = await connection();
+    if (!db) throw new DatabaseError('Database connection failed');
     const userData = await db
       .createQueryBuilder()
       .update(User)
@@ -83,9 +81,7 @@ export const userService = {
       })
       .where('uid = :uid', { uid })
       .execute();
-    if (!userData) {
-      throw new NotFoundError('User not paid out');
-    }
+    if (!userData) throw new NotFoundError('User not found');
     return userData;
   },
 };
