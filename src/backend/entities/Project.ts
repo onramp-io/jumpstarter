@@ -11,7 +11,7 @@ import { Investment } from "./Investment";
 import { Like } from "./Like";
 
 @Entity()
-export default class Project {
+export class Project {
   @PrimaryGeneratedColumn()
   id: number;
 
