@@ -12,6 +12,7 @@ import { Success } from 'helpers/ErrorHandling/success';
 interface Request extends NextApiRequest {
   user: any;
 }
+
 const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
@@ -20,7 +21,6 @@ const handler = async (req: Request, res: NextApiResponse) => {
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
-          data: {},
         });
         break;
       default:
@@ -29,19 +29,19 @@ const handler = async (req: Request, res: NextApiResponse) => {
   } catch (error) {
     if (error instanceof NotFoundError) {
       console.log(
-        chalk.red.bold(error.name + '@user/payout.ts on Line 32'),
+        chalk.red.bold(error.name + '@user/payout.ts on Line 33'),
         error.message
       );
     } else if (error instanceof MethodNotAllowedError) {
       console.log(
-        chalk.red.bold(error.name + '@user/payout.ts on Line 37'),
+        chalk.red.bold(error.name + '@user/payout.ts on Line 38'),
         error.message
       );
-      res.status(error.code).json({
-        status: error.status,
-        message: error.message,
-      });
     }
+    res.status(error.code).json({
+      status: error.status,
+      message: error.message,
+    });
   }
 };
 

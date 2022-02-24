@@ -12,6 +12,7 @@ import { Success } from 'helpers/ErrorHandling/success';
 interface Request extends NextApiRequest {
   user: any;
 }
+
 const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
@@ -20,7 +21,6 @@ const handler = async (req: Request, res: NextApiResponse) => {
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
-          data: {},
         });
         break;
       default:
@@ -37,11 +37,11 @@ const handler = async (req: Request, res: NextApiResponse) => {
         chalk.red.bold(error.name + '@user/update.ts on Line 37'),
         error.message
       );
-      res.status(error.code).json({
-        status: error.status,
-        message: error.message,
-      });
     }
+    res.status(error.code).json({
+      status: error.status,
+      message: error.message,
+    });
   }
 };
 
