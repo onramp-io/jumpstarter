@@ -17,16 +17,10 @@ const handler = async (req: Request, res: NextApiResponse) => {
     switch (req.method) {
       case 'GET':
         const userData = await UserController.get(req);
-        if (userData) {
-          res.status(StatusCodes.OK).json({
-            message: 'User found',
-            userData,
-          });
-        } else {
-          res.status(StatusCodes.NOT_FOUND).json({
-            message: 'User not found',
-          });
-        }
+        res.status(StatusCodes.OK).json({
+          message: 'User found',
+          userData,
+        });
         break;
       default:
         res.status(StatusCodes.METHOD_NOT_ALLOWED).json({
