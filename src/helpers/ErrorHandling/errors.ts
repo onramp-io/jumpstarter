@@ -7,7 +7,7 @@ export class DatabaseError extends Error {
     this.name = 'DatabaseError';
     this.message = message;
     this.code = 500;
-    this.status = 'INTERNAL_SERVER_ERROR';
+    this.status = 'Internal Server Error';
   }
 
   toJSON() {
@@ -27,16 +27,16 @@ export class UserFacingError extends Error {
   }
 }
 
-export class UserNotFoundError extends UserFacingError {
+export class NotFoundError extends UserFacingError {
   code: number;
   status: string;
 
   constructor(message: string) {
     super(message);
-    this.name = 'UserNotFoundError';
+    this.name = 'NotFoundError';
     this.message = message;
     this.code = 404;
-    this.status = 'NOT_FOUND';
+    this.status = 'Not Found';
   }
 
   toJSON() {
@@ -58,7 +58,29 @@ export class AuthorizationError extends UserFacingError {
     this.name = 'UserNotAuthorizedError';
     this.message = message;
     this.code = 401;
-    this.status = 'UNAUTHORIZED';
+    this.status = 'Unauthorized';
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      code: this.code,
+      status: this.status,
+      message: this.message,
+    };
+  }
+}
+
+export class MethodNotAllowedError extends UserFacingError {
+  code: number;
+  status: string;
+
+  constructor(message: string) {
+    super(message);
+    this.name = 'MethodNotAllowedError';
+    this.message = message;
+    this.code = 405;
+    this.status = 'Method Not Allowed';
   }
 
   toJSON() {
