@@ -41,7 +41,7 @@ const ProjectController = {
         launchDate,
       } = req.body;
 
-      console.log(`title === ${title}`);
+      console.log(`title === ${title}`); // currently logs
       console.log(`category === ${category}`);
       console.log(`description === ${description}`);
       console.log(`fundTiers === ${fundTiers}`);
@@ -81,12 +81,19 @@ const ProjectController = {
        */
 
       // pass in a fake object with hardcoded values for now!!! check if it works
+
+      const isAllTruthy = Object.values(createParams).every((param) =>
+        isNotNullNorUndefined(param)
+      );
+      console.log(`isAllTruthy === ${isAllTruthy}`);
+
       if (true) {
         console.log(
           `in ProjectController.create( ) if block, fakeCreateParams === ${fakeCreateParams}`
         );
         return ProjectService.create(fakeCreateParams);
       } else {
+        console.warn(`req.body is missing a parameter!`);
         return [null, StatusCodes.BAD_REQUEST]; // 400 (client error, since they forgot to pass in the params needed)
       }
     } catch (err) {
