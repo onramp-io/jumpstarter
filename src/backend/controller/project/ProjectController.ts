@@ -38,7 +38,7 @@ const ProjectController = {
         description,
         fundTiers,
         currFundGoal,
-        userId,
+        user,
         launchDate,
       } = req.body;
 
@@ -47,29 +47,32 @@ const ProjectController = {
       console.log(`description === ${description}`);
       console.log(`fundTiers === ${fundTiers}`);
       console.log(`currFundGoal === ${currFundGoal}`);
-      console.log(`userId === ${userId}`);
+      console.log(`user === ${user}`);
       console.log(`launchDate === ${launchDate}`);
 
+      /** 
+       * 
+       const createParams = {
+         title,
+         category,
+         description,
+         fundTiers,
+         currFundGoal,
+         userId,
+         launchDate,
+        };
+        const fakeCreateParams = {
+          title: "Your fake create params!",
+          category: "ART",
+          description: "Fake description from ProjectController.create( )!",
+          fundTiers: [100, 200, 300, 400],
+          currFundGoal: 400,
+          userId: 3,
+          launchDate: "15:12:02.020.001230",
+        };
+       */
       // this is necessary for the rest of the code in BE to work (ProjectService.create(createParams))
-      const createParams = {
-        title,
-        category,
-        description,
-        fundTiers,
-        currFundGoal,
-        userId,
-        launchDate,
-      };
 
-      const fakeCreateParams = {
-        title: "Your fake create params!",
-        category: "ART",
-        description: "Fake description from ProjectController.create( )!",
-        fundTiers: [100, 200, 300, 400],
-        currFundGoal: 400,
-        userId: 3,
-        launchDate: "15:12:02.020.001230",
-      };
       /** 
        * all the ff. are currently undefined!
        console.log(`title === ${title}`);
@@ -83,17 +86,17 @@ const ProjectController = {
 
       // pass in a fake object with hardcoded values for now!!! check if it works
 
-      if (isAllTruthy(createParams)) {
+      // console.log(JSON.stringify(Object.keys(req.body).length));
+      console.log(`The keys in req.body are:${Object.keys(req.body)}`);
+      if (isAllTruthy(req.body) /**&& req.body.length === 8*/) {
         console.log(
-          `in ProjectController.create( ) if block, createParams === ${createParams}`
+          `in ProjectController.create( ) if block, req.body === ${req.body}`
         );
-        const createdProj = await ProjectService.create(createParams);
+        const createdProj = await ProjectService.create(req.body);
         console.log(
-          `createdProj.fundTiers === ${
-            createParams.fundTiers
-          }, its typeof is ${typeof createParams.fundTiers}`
+          `stringified createdProj === ${JSON.stringify(createdProj)}`
         );
-        return createdProj;
+        return [createdProj, StatusCodes.CREATED];
       } else {
         console.warn(`req.body is missing a parameter!`);
         return [null, StatusCodes.BAD_REQUEST]; // 400 (client error, since they forgot to pass in the params needed)
@@ -105,31 +108,51 @@ const ProjectController = {
 
   // READ - all
   findAll: async (req: ProjectFindAllApiRequest) => {
-    const { findAllParams } = req.body;
-    if (findAllParams !== null && findAllParams !== undefined) {
-      return ProjectService.findAll(findAllParams);
-    } else {
+    try {
+      // no need to destructure out from req.body -- findAll needs no params
+      return await ProjectService.findAll(undefined);
+    } catch (err) {
+      console.warn(err.message);
       return [null, StatusCodes.BAD_REQUEST]; // 400 (client error)
     }
   },
 
   // READ - 1
-  findById: async (req: ProjectFindByIdApiRequest) => {
-    const { findByIdParams } = req.body;
-    if (findByIdParams !== null && findByIdParams !== undefined) {
-      return ProjectService.findById(findByIdParams);
+  findById: async (req) => {
+    if (isAllTruthy(req.body) && req.body.length === 1) {
+      return await ProjectService.findById(req.body);
     } else {
       return [null, StatusCodes.BAD_REQUEST];
     }
   },
 
   // UPDATE - 1
-  updateById: async (req: ProjectUpdateByIdApiRequest) => {
-    const { updateByIdParams } = req.body;
-    if (updateByIdParams !== null && updateByIdParams !== undefined) {
-      return ProjectService.updateById(updateByIdParams);
+  updateById: async (req) => {
+    console.log(`you're at ProjectController.updateById( )!`);
+    const {
+      // id: string; <-- auto passed by query
+      pictures,
+      title,
+      category,
+      description,
+      fundTiers,
+      currFundGoal,
+      // comments?: Comment[]; <--- take this* out in other files
+      // investments?: Investment[]; <-- and this*
+      // likes?: Like[]; <-- and this*
+      // Is launchdate required soon as proj is being created?
+      // if not, pls remove the next line.
+      launchDate,
+      user,
+    } = req.body;
+
+    if (isAllTruthy(req.body)) {
+      console.log(
+        `In ProjectService.updateById(), req.body is indeed all truthy (req.body has complete params!)`
+      );
+      return ProjectService.updateById(req.body);
     } else {
-      return [null, StatusCodes.BAD_REQUEST];
+      throw new Error("req.body is missing some params!");
     }
   },
 
