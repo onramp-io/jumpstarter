@@ -10,7 +10,7 @@ import { useAuth } from '@frontend/context/AuthProvider';
 
 import SectionMarquee from '@frontend/components/sectionMarquee';
 import Link from 'next/link';
-import axios from 'axios';
+import axios from '../../../axios/instance';
 import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -42,37 +42,22 @@ const userData2 = [
 ];
 
 function MyProfile() {
-  const {
-    firstName,
-    lastName,
-    bio,
-    avatar,
-    totalInvestments,
-    balance,
-    accessToken,
-  } = useAuth();
+  const { firstName, lastName, bio, avatar, totalInvestments, balance } =
+    useAuth();
 
+  const [error, setError] = useState('');
   const [isMoneyTransfering, setMoneyTransferring] = useState(false);
   const [isMoneyTransferred, setMoneyTransferred] = useState(false);
 
   const handlePayOut = async () => {
-    setMoneyTransferring(true);
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    };
-    const response = await axios.put(
-      'http://localhost:3000/api/users/payout',
-      {},
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    setMoneyTransferred(true);
-    setMoneyTransferring(false);
+    try {
+      setMoneyTransferring(true);
+      await axios.put('/users/payout', {});
+      setMoneyTransferred(true);
+      setMoneyTransferring(false);
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
