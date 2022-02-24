@@ -4,6 +4,7 @@ import { UserController } from '../../../backend/controller/user/user';
 
 import chalk from 'chalk';
 import {
+  DatabaseError,
   MethodNotAllowedError,
   NotFoundError,
 } from 'helpers/ErrorHandling/errors';
@@ -35,6 +36,11 @@ const handler = async (req: Request, res: NextApiResponse) => {
     } else if (error instanceof MethodNotAllowedError) {
       console.log(
         chalk.red.bold(error.name + '@user/delete.ts on Line 37'),
+        error.message
+      );
+    } else if (error instanceof DatabaseError) {
+      console.log(
+        chalk.red.bold(error.name + '@user/get.ts on Line 44'),
         error.message
       );
     }
