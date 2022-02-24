@@ -11,42 +11,65 @@ export default async function handler(
   switch (req.method) {
     // CREATE - 1 row
     case RequestMethod.POST:
-      const [createdProject, createStatusCode] = await ProjectController.create(
-        req
-      );
-      if (createdProject !== null && createdProject !== undefined) {
-        res.status(StatusCodes.CREATED).send({
-          payload: createdProject,
-        });
-      } else {
-        return jumpstarterApiErrorHandler(res, createStatusCode);
+      try {
+        console.log(
+          `you're at the /pages/api/projects/index NextApiHandler's POST method!`
+        );
+        const [createdProject, createStatusCode] =
+          await ProjectController.create(req);
+        console.log(`createdProject === ${createdProject}`);
+        if (createStatusCode === 201) {
+          res.status(createStatusCode).json({
+            data: createdProject,
+          });
+        }
+      } catch (err) {
+        console.warn(err.message); // <-- db service error pops up here!! catch hierarchy!!
       }
       break;
 
     // READ - all rows
     case RequestMethod.GET:
-      const [allProjects, findAllStatusCode] = await ProjectController.findAll(
-        req
-      );
-      if (allProjects !== null && allProjects !== undefined) {
-        res.status(StatusCodes.OK).send({
-          payload: allProjects,
-        });
-      } else {
-        return jumpstarterApiErrorHandler(res, findAllStatusCode);
+      try {
+        console.log(
+          `you're at the /pages/api/projects/index NextApiHandler's GET method!`
+        );
+        const [allProjects, findAllStatusCode] =
+          await ProjectController.findAll(req);
+
+        console.log(`findAllStatusCode === ${findAllStatusCode}`);
+
+        if (findAllStatusCode === 200) {
+          res.status(findAllStatusCode).json({
+            data: allProjects,
+          });
+        } else {
+          throw new Error("Projects not found - see index.ts");
+        }
+      } catch (err) {
+        console.warn(err.message); // <-- db service error pops up here!! catch hierarchy!!
       }
       break;
 
     // UPDATE - 1 row
     case RequestMethod.PUT:
-      const [updatedProject, updateByIdStatusCode] =
-        await ProjectController.updateById(req);
-      if (updatedProject !== null && updatedProject !== undefined) {
-        res.status(StatusCodes.OK).send({
-          payload: updatedProject,
-        });
-      } else {
-        return jumpstarterApiErrorHandler(res, updateByIdStatusCode);
+      try {
+        console.log(
+          `you're at the /pages/api/projects/index NextApiHandler's PUT method!`
+        );
+        const [updatedProject, updateByIdStatusCode] =
+          await ProjectController.updateById(req);
+
+        console.log(`updateByIdStatusCode === ${updateByIdStatusCode}`);
+        if (updateByIdStatusCode === 200) {
+          res.status(StatusCodes.OK).send({
+            data: updatedProject,
+          });
+        } else {
+          throw new Error("Project not updated - see index.ts");
+        }
+      } catch (err) {
+        console.warn(err.message);
       }
       break;
 
@@ -57,7 +80,7 @@ export default async function handler(
         await ProjectController.deleteById(req);
       if (deletedProject !== null && deletedProject !== undefined) {
         res.status(StatusCodes.OK).send({
-          payload: deletedProject,
+          data: deletedProject,
         });
       } else {
         return jumpstarterApiErrorHandler(res, deleteByIdStatusCode);
