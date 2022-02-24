@@ -9,6 +9,7 @@ export interface IUserPost {
     avatar: string;
     bio: string;
     investedAmt: number;
+    uid: string;
   };
 }
 
@@ -19,21 +20,23 @@ export interface IUserPut {
     avatar: string;
     bio: string;
     email: string;
+    uid: string;
   };
 }
 
 export const UserController = {
   get: async (req: Request) => {
     const {
-      user: { email },
+      user: { uid },
     } = req;
-    const userData = userService.get(email);
+    const userData = userService.get(uid);
     return userData;
   },
 
   post: async (req: Request) => {
     const {
       body: { firstName, lastName, email },
+      user: { uid },
     } = req;
     const dataToInsert: IUserPost = {
       post: {
@@ -43,6 +46,7 @@ export const UserController = {
         avatar: '',
         bio: '',
         investedAmt: 0,
+        uid,
       },
     };
     const userData = userService.insert(dataToInsert);
@@ -53,9 +57,10 @@ export const UserController = {
     const email = req.user.email;
     const {
       body: { firstName, lastName, bio, avatar },
+      user: { uid },
     } = req;
     const dataToUpdate: IUserPut = {
-      put: { email, firstName, lastName, bio, avatar },
+      put: { email, firstName, lastName, bio, avatar, uid },
     };
     const userData = userService.update(dataToUpdate);
     return userData;
@@ -63,17 +68,17 @@ export const UserController = {
 
   delete: async (req: Request) => {
     const {
-      user: { email },
+      user: { uid },
     } = req;
-    const userData = userService.delete(email);
+    const userData = userService.delete(uid);
     return userData;
   },
 
   payOut: async (req: Request) => {
     const {
-      user: { email },
+      user: { uid },
     } = req;
-    const userData = userService.payOut(email);
+    const userData = userService.payOut(uid);
     return userData;
   },
 };
