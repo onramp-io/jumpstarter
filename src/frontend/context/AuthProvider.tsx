@@ -50,7 +50,6 @@ const initialState = {
 };
 
 const reducer = (state, action) => {
-  console.log(action.payload); //debug
   switch (action.type) {
     case 'SET_USER':
       return { ...state, ...action.payload };
@@ -91,7 +90,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
       headers,
     });
     setUser({
-      accessToken: accessToken,
+      accessToken: token,
       firstName: response.data.userData['firstName'],
       lastName: response.data.userData['lastName'],
       bio: response.data.userData['bio'],
