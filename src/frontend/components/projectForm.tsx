@@ -27,6 +27,8 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
     console.log(JSON.stringify(event.value));
   }
 
+  console.log(projectState.fund_goal)
+
   const updateTier = (newValue, index) => {
     const newTiers = projectState.fund_tiers.map((tier, i) => {
       if (i === index) {
@@ -109,7 +111,6 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
             name="goal"
             htmlFor="goal"
             label="Funding Goal"
-            value={projectState.fund_goal}
             validate={(val) => {
               val = projectState.fund_goal
               if (val <= 0) {
@@ -117,7 +118,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
               }
             }}
           >
-            <TextInput name="goal" type="number" onChange={(event) => { setProjectState({...projectState, fund_goal: Number(event.target.value)}) }}/>
+            <TextInput name="goal" type="number" value={projectState.fund_goal} onChange={(event) => { setProjectState({...projectState, fund_goal: Number(event.target.value)}) }}/>
           </FormField>
 
 
