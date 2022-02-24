@@ -4,24 +4,21 @@ import { Like } from "@backend/entities/Like";
 import { User } from "@backend/entities/User";
 import { NextApiRequest } from "next";
 
-export type sortByStringType = "createdDate" | "likesAmt" | "userId";
-
 export interface CreateParamsInterface {
   title: string;
   category: string;
   description: string;
   fundTiers: number[];
   currFundGoal: number;
-  user: User;
+  userId: number;
   // Is launchdate required soon as proj is being created?
   // if not, pls remove the next line.
   launchDate?: string;
 }
 
 export interface ProjectCreateApiRequest extends NextApiRequest {
-  body: {
-    createParams: CreateParamsInterface;
-  };
+  // req.body.createParams.description
+  body: CreateParamsInterface;
 }
 
 export interface ProjectFindAllParamsInterface {
@@ -45,16 +42,16 @@ export interface ProjectFindByIdApiRequest extends NextApiRequest {
 }
 
 export interface UpdateByIdParamsInterface {
-  id: string;
+  // id: string; <-- auto passed by query
   pictures?: string[];
   title?: string;
   category?: string;
   description?: string;
   fundTiers?: number[];
   currFundGoal?: number;
-  comments?: Comment[];
-  investments?: Investment[];
-  likes?: Like[];
+  // comments?: Comment[]; <--- take this* out in other files
+  // investments?: Investment[]; <-- and this*
+  // likes?: Like[]; <-- and this*
   // Is launchdate required soon as proj is being created?
   // if not, pls remove the next line.
   launchDate?: string;
