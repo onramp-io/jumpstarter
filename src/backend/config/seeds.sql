@@ -1,23 +1,23 @@
-INSERT INTO public.user ("email", "bio", "firstName", "lastName")
-    VALUES ('ssquarepants@krustycrab.com', 'i live in a pineapple under the sea', 'spongebob', 'squarepants');
-INSERT INTO public.user ("email", "bio", "firstName", "lastName")
-  VALUES ('pstar@sea.com', 'i live under a rock', 'patrick', 'star');
-INSERT INTO public.user ("email", "bio", "firstName", "lastName")
-    VALUES ('squdward@sea.com', 'i like clarinets', 'squidward', 'something');
-INSERT INTO public.user ("email", "bio", "firstName", "lastName")
-    VALUES ('obama@usa.com', 'i was a president', 'barrack', 'obama');
-INSERT INTO public.user ("email", "bio", "firstName", "lastName")
-    VALUES ('pran@test.com', 'hi', 'pran', 'mag');
-INSERT INTO public.user ("email", "bio", "firstName", "lastName")
-    VALUES ('idk@idk.com', 'idk what to write', 'idk', 'idk');
-INSERT INTO public.user ("email", "bio", "firstName", "lastName")
-    VALUES ('beyonce@music.com', 'im awesome', 'beyonce', 'knowles');
-INSERT INTO public.user ("email", "bio", "firstName", "lastName")
-    VALUES ('what@what.com', 'ok', 'ok', 'ok');
-INSERT INTO public.user ("email", "bio", "firstName", "lastName")
-    VALUES ('scheeks@sea.com', 'im a squirrel that lives under water', 'sandy', 'cheeks');
-INSERT INTO public.user ("email", "bio", "firstName", "lastName")
-    VALUES ('test', 'test', 'test', 'test');
+INSERT INTO public.user ("email", "uid", "bio", "firstName", "lastName")
+    VALUES ('ssquarepants@krustycrab.com', 'q', 'i live in a pineapple under the sea', 'spongebob', 'squarepants');
+INSERT INTO public.user ("email", "uid", "bio", "firstName", "lastName")
+  VALUES ('pstar@sea.com', 'r', 'i live under a rock', 'patrick', 'star');
+INSERT INTO public.user ("email", "uid", "bio", "firstName", "lastName")
+    VALUES ('squdward@sea.com', 's', 'i like clarinets', 'squidward', 'something');
+INSERT INTO public.user ("email", "uid", "bio", "firstName", "lastName")
+    VALUES ('obama@usa.com', 't', 'i was a president', 'barrack', 'obama');
+INSERT INTO public.user ("email", "uid", "bio", "firstName", "lastName")
+    VALUES ('pran@test.com', 'w', 'hi', 'pran', 'mag');
+INSERT INTO public.user ("email", "uid", "bio", "firstName", "lastName")
+    VALUES ('idk@idk.com', 'y', 'idk what to write', 'idk', 'idk');
+INSERT INTO public.user ("email", "uid", "bio", "firstName", "lastName")
+    VALUES ('beyonce@music.com', 'u', 'im awesome', 'beyonce', 'knowles');
+INSERT INTO public.user ("email", "uid", "bio", "firstName", "lastName")
+    VALUES ('what@what.com', 'i', 'ok', 'ok', 'ok');
+INSERT INTO public.user ("email", "uid", "bio", "firstName", "lastName")
+    VALUES ('scheeks@sea.com', 'o', 'im a squirrel that lives under water', 'sandy', 'cheeks');
+INSERT INTO public.user ("email", "uid", "bio", "firstName", "lastName")
+    VALUES ('test', 'p', 'test', 'test', 'test');
 
 INSERT INTO public.project ("title", "category", "description", "fundTiers", "currFundGoal", "launchDate")
     VALUES ('krabby patty', 'food', 'burger', Array[0,10,20,30], 0, '2004-10-19 10:23:54');
