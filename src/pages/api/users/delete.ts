@@ -9,6 +9,8 @@ import {
   getStatusCode,
 } from 'http-status-codes';
 
+import chalk from 'chalk';
+
 interface Request extends NextApiRequest {
   user: any;
 }
@@ -17,15 +19,9 @@ const handler = async (req: Request, res: NextApiResponse) => {
     switch (req.method) {
       case 'DELETE':
         const userData = await UserController.delete(req);
-        if (userData) {
-          res.status(StatusCodes.OK).json({
-            message: 'User deleted',
-          });
-        } else {
-          res.status(StatusCodes.NOT_FOUND).json({
-            message: 'User not deleted',
-          });
-        }
+        res.status(StatusCodes.OK).json({
+          message: 'User deleted',
+        });
         break;
       default:
         res.status(StatusCodes.METHOD_NOT_ALLOWED).json({
@@ -33,7 +29,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
         });
     }
   } catch (error) {
-    console.log('ERROR: handler() in delete.ts', error);
+    console.log(chalk.red.bold('ERROR: handler() in user/delete.ts'), error);
     res.status(401).json({ error });
   }
 };
