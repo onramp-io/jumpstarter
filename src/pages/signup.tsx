@@ -58,7 +58,6 @@ const Signup: NextPage = () => {
           headers,
         }
       );
-      console.log('response: ', response);
       router.push('/app/profile');
     } catch (error) {
       setError('Invalid email or password');
