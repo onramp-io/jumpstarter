@@ -13,6 +13,7 @@ import {
 } from "@backend/common/ProjectRequestApiInterfaces";
 import { StatusCodes } from "http-status-codes";
 import isNotNullNorUndefined from "@backend/utils/isNotNullNorUndefined";
+import isAllTruthy from "@backend/utils/isAllTruthy";
 
 /**
  * **From each of the methods** on the Controller (e.g. ProjectController.create() ), you:
@@ -82,16 +83,17 @@ const ProjectController = {
 
       // pass in a fake object with hardcoded values for now!!! check if it works
 
-      const isAllTruthy = Object.values(createParams).every((param) =>
-        isNotNullNorUndefined(param)
-      );
-      console.log(`isAllTruthy === ${isAllTruthy}`);
-
-      if (true) {
+      if (isAllTruthy(createParams)) {
         console.log(
-          `in ProjectController.create( ) if block, fakeCreateParams === ${fakeCreateParams}`
+          `in ProjectController.create( ) if block, createParams === ${createParams}`
         );
-        return ProjectService.create(fakeCreateParams);
+        const createdProj = await ProjectService.create(createParams);
+        console.log(
+          `createdProj.fundTiers === ${
+            createParams.fundTiers
+          }, its typeof is ${typeof createParams.fundTiers}`
+        );
+        return createdProj;
       } else {
         console.warn(`req.body is missing a parameter!`);
         return [null, StatusCodes.BAD_REQUEST]; // 400 (client error, since they forgot to pass in the params needed)
