@@ -129,30 +129,19 @@ const ProjectController = {
   // UPDATE - 1
   updateById: async (req) => {
     console.log(`you're at ProjectController.updateById( )!`);
-    const {
-      // id: string; <-- auto passed by query
-      pictures,
-      title,
-      category,
-      description,
-      fundTiers,
-      currFundGoal,
-      // comments?: Comment[]; <--- take this* out in other files
-      // investments?: Investment[]; <-- and this*
-      // likes?: Like[]; <-- and this*
-      // Is launchdate required soon as proj is being created?
-      // if not, pls remove the next line.
-      launchDate,
-      user,
-    } = req.body;
+    console.log(
+      `req.body is composed of ${JSON.stringify(
+        Object.keys(req.body)
+      )} and its length is ${req.body.length}`
+    );
 
-    if (isAllTruthy(req.body)) {
+    if (isAllTruthy(req.body) && Object.keys(req.body).length === 8) {
       console.log(
         `In ProjectService.updateById(), req.body is indeed all truthy (req.body has complete params!)`
       );
       return ProjectService.updateById(req.body);
     } else {
-      throw new Error("req.body is missing some params!");
+      throw new Error("Error: req.body is missing some params!");
     }
   },
 
