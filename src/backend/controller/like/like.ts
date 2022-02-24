@@ -6,5 +6,6 @@ import {
 
   //Add a like to a project by a user
 export const addNewLikeController = async (req: NextApiRequest, res: NextApiResponse) => {
+    //extract request body
     addNewLike(req, res);
 };

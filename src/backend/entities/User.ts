@@ -33,6 +33,12 @@ export class User {
   @Column({ type: 'decimal', default: 0 })
   investedAmt: number;
 
+  @Column({ type: 'decimal', default: 0 })
+  balance: number;
+
+  @Column('text', { array: true })
+  Interests: string[];
+
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
 

@@ -8,11 +8,10 @@ describe('Testing /api/likes/new endpoint', () => {
 		//check for whether userId and projectId actually exist should happen on frontend
 		const response = await request(domain)
 			.post('/api/likes/new')
-			.send({userId: 6, projectId: 1})
+			.send({ userId: 6, projectId: 1 })
 			.then( (response) => {
 				expect(response.statusCode).toBe(200);
 			});
-
 	});
 
 	it('should return a 500 status code if userId is null', async () => {

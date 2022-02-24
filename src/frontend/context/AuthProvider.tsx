@@ -71,7 +71,6 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
         }
       }
     });
-    
   }, []);
 
   const getUser = async (token) => {
