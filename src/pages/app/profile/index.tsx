@@ -12,6 +12,7 @@ import SectionMarquee from '@frontend/components/sectionMarquee';
 import Link from 'next/link';
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const userData2 = [
   {
@@ -51,21 +52,27 @@ function MyProfile() {
     accessToken,
   } = useAuth();
 
+  const [isMoneyTransfering, setMoneyTransferring] = useState(false);
   const [isMoneyTransferred, setMoneyTransferred] = useState(false);
 
   const handlePayOut = async () => {
+    setMoneyTransferring(true);
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`,
     };
-
-    const response = await axios.post(
+    const response = await axios.put(
       'http://localhost:3000/api/users/payout',
+      {},
       {
-        headers,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
       }
     );
     setMoneyTransferred(true);
+    setMoneyTransferring(false);
   };
 
   return (
@@ -85,21 +92,28 @@ function MyProfile() {
           </Link>
           <Box className={profile.withdrawFunds}>
             <Text>My balance: ${balance}</Text>
-            {balance <= 0 ? (
-              <>
-                <Button
-                  label="Withdraw"
-                  className={profile.editButton}
-                  disabled
-                />
-              </>
+            {isMoneyTransfering ? (
+              <CircularProgress />
             ) : (
               <>
-                <Button
-                  label="Withdraw"
-                  className={profile.editButton}
-                  onClick={handlePayOut}
-                />
+                {balance >= 0 ? (
+                  <>
+                    <Button
+                      label="Withdraw"
+                      className={profile.editButton}
+                      disabled
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      label="Withdraw"
+                      className={profile.editButton}
+                      onClick={handlePayOut}
+                      disabled={isMoneyTransferred}
+                    />
+                  </>
+                )}
               </>
             )}
           </Box>
@@ -114,11 +128,11 @@ function MyProfile() {
             <Tab title="My Projects">
               <Box pad="medium">
                 <Box align="center" direction="row" margin="small">
-                  <SectionMarquee
+                  {/* <SectionMarquee
                     APIPayload={userData2}
                     linkHref="/personalpicks"
                     linkCaption="See all recommended projects >"
-                  />
+                  /> */}
                 </Box>
               </Box>
             </Tab>
@@ -126,11 +140,11 @@ function MyProfile() {
               <Box pad="medium">
                 <Text>Total Investment: ${totalInvestments}</Text>
                 <Box align="center" direction="row" margin="small">
-                  <SectionMarquee
+                  {/* <SectionMarquee
                     APIPayload={userData2}
                     linkHref="/personalpicks"
                     linkCaption="See all recommended projects >"
-                  />
+                  /> */}
                 </Box>
               </Box>
             </Tab>
