@@ -1,21 +1,20 @@
 import AWS from 'aws-sdk';
-import { NextApiResponse } from 'next';
-import { UploadPostParamsInterface } from '@backend/common/FileUploadApiInterfaces';
-import { v1 as uuid } from 'uuid';
- 
-const s3 = new AWS.S3();
+
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY
+});
 
 const UploadService = {
     create: async(createParams) => {
         try {
-            console.log("params are: " + createParams)
-            console.log("Param type is: " + typeof(createParams))
-            console.log("bucket param is: " + createParams["Bucket"])
-            s3.getSignedUrl('putObject', {
-                Bucket: 'blend-jumpstarter-bucket',
-                ContentType: 'jpeg',
-                Key: 'test/test/.jpeg'
-              }, (err, url) => {console.log(url)})
+             const url = s3.getSignedUrl('putObject', {
+                 Bucket: createParams.Bucket,
+                 ContentType: createParams.ContentType,
+                 Key: createParams.key
+               })
+
+               return url;
         } catch (err) {
               return err;
         }

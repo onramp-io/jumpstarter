@@ -1,6 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import UploadService from '@backend/services/db/upload/upload_db';
-import { UploadPostApiRequest } from '@backend/common/FileUploadApiInterfaces';
+import { NextApiResponse } from 'next';
 
 const UploadController = {
   create: async (req) => {

@@ -11,7 +11,7 @@ export default async function handler(
             try {
                 console.log(`you're at the /pages/api/upload/index NextApiHandler's POST method!`)
                 const uploadConfig = await UploadController.create(req);
-                res.status(200).send(uploadConfig)
+                res.send(uploadConfig);
             } catch (err){
                 console.log(err);
             }
