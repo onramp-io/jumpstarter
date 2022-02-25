@@ -22,6 +22,7 @@ export interface AuthContextType {
   totalInvestments: number;
   interests: string[];
   balance: number;
+  investments: any[];
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -32,6 +33,7 @@ export const AuthContext = createContext<AuthContextType>({
   totalInvestments: 0,
   interests: [],
   balance: 0,
+  investments: [],
 });
 
 const userDispatchContext = createContext({});
@@ -44,6 +46,7 @@ const initialState = {
   totalInvestments: 0,
   interests: [],
   balance: 0,
+  investments: [],
 };
 
 const reducer = (state, action) => {
@@ -69,6 +72,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
         const token = await getIdToken(user);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         getUser();
+        getUserInvestments();
       }
     });
   }, []);
@@ -83,6 +87,13 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
       investedAmt: response.data.userData['investedAmt'],
       interests: response.data.userData['interests'],
       balance: response.data.userData['balance'],
+    });
+  };
+
+  const getUserInvestments = async () => {
+    const response = await axios.get('/investments/get');
+    setUser({
+      investments: response.data.investments,
     });
   };
 
