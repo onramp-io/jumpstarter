@@ -42,8 +42,15 @@ const userData2 = [
 ];
 
 function MyProfile() {
-  const { firstName, lastName, bio, avatar, totalInvestments, balance } =
-    useAuth();
+  const {
+    firstName,
+    lastName,
+    bio,
+    avatar,
+    totalInvestments,
+    balance,
+    investments,
+  } = useAuth();
 
   const [error, setError] = useState('');
   const [isMoneyTransfering, setMoneyTransferring] = useState(false);
@@ -125,11 +132,19 @@ function MyProfile() {
               <Box pad="medium">
                 <Text>Total Investment: ${totalInvestments}</Text>
                 <Box align="center" direction="row" margin="small">
-                  {/* <SectionMarquee
-                    APIPayload={userData2}
-                    linkHref="/personalpicks"
-                    linkCaption="See all recommended projects >"
-                  /> */}
+                  {investments.length > 0 ? (
+                    <>
+                      <SectionMarquee
+                        APIPayload={investments}
+                        linkHref="/personalpicks"
+                        linkCaption="See all recommended projects >"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Text>You have not made any contributions yet.</Text>
+                    </>
+                  )}
                 </Box>
               </Box>
             </Tab>
