@@ -11,23 +11,3 @@ const RequestMethod = {
 };
 
 export default RequestMethod;
-
-/** 
- * 
- const submitForm = () => {
-   const {createApiPayload: CreateParamsInterface} = req.body;
-   
-   submitHandler = () => {
-     axios({
-       method: 'post',
-       url: `https://${process.env.DOMAIN}/projects`,
-       data: createApiPayload
-     });
-   }
- 
-   return (
-     <Button onClick={submitHandler}/>
-   );
- }
-
- */

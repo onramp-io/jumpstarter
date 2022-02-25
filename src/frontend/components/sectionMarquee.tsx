@@ -4,12 +4,13 @@ import SectionCard from "./sectionCard";
 import styled from "styled-components";
 import { Anchor, Box, Pagination } from "grommet";
 import Link from "next/link";
-import ReusableLink from "./reusableLink";
+import JumpstarterLink from "./jumpstarterLink";
 
 interface SingleAPIPayload {
   projectTitle: string;
   projectDescription: string;
   projectCreator: string;
+  projectImageUrl: string;
 }
 
 interface SectionMarqueeProps {
@@ -18,11 +19,11 @@ interface SectionMarqueeProps {
   linkHref: string;
 }
 
-const SectionMarquee = function SectionMarqueeComponent<SectionMarqueeProps>({
+const SectionMarquee = function SectionMarqueeComponent({
   APIPayload,
   linkCaption,
   linkHref,
-}) {
+}: SectionMarqueeProps) {
   /**
    * first 4 JSON payload from our API
    */
@@ -54,13 +55,22 @@ const SectionMarquee = function SectionMarqueeComponent<SectionMarqueeProps>({
           direction="row"
         >
           {APIPayload.map(
-            ({ projectTitle, projectDescription, projectCreator }, i) => {
+            (
+              {
+                projectTitle,
+                projectDescription,
+                projectCreator,
+                projectImageUrl,
+              },
+              i
+            ) => {
               return (
                 <SectionCard
                   key={i}
                   projectTitle={projectTitle}
                   projectDescription={projectDescription}
                   projectCreator={projectCreator}
+                  projectImageUrl={projectImageUrl}
                 />
               );
             }
@@ -74,7 +84,7 @@ const SectionMarquee = function SectionMarqueeComponent<SectionMarqueeProps>({
             right: "large",
           }}
         >
-          <ReusableLink
+          <JumpstarterLink
             className=""
             linkHref={linkHref}
             linkCaption={linkCaption}
@@ -83,10 +93,6 @@ const SectionMarquee = function SectionMarqueeComponent<SectionMarqueeProps>({
       </Box>
     </>
   );
-};
-
-SectionMarquee.getInitialProps = async ({ req }: NextPageContext) => {
-  return {};
 };
 
 export default SectionMarquee;

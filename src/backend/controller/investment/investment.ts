@@ -1,10 +1,23 @@
+import InvestmentsDbService from '@backend/services/db/investment/investmentService';
+import { Request } from '@backend/middleware/verify_request';
 import {
-    addNewInvestment
-  } from '@backend/services/db/investment/investment_db';
-  import type { NextApiRequest, NextApiResponse } from 'next';
-  import { Request } from '@backend/middleware/verify_request';
-  
-  export const addNewInvestmentController = async (req: Request, res: NextApiResponse) => {
-    addNewInvestment(req, res);
-  };
-  
+  DatabaseError
+} from 'helpers/ErrorHandling/errors';
+
+export const InvestmentController = {
+  getAll: async (req: Request) => {
+    const {
+      user: { uid },
+    } = req;
+    const userInvestments = InvestmentsDbService.getAll(uid);
+    return userInvestments;
+  },
+
+  create: async (req: Request) => {
+    if ((req.body.userId == null) || (req.body.projectId == null) || (req.body.fundAmt == null)) {
+      throw new DatabaseError('Database connection failed');
+    }
+    
+    return InvestmentsDbService.create(req.body);
+  }
+};

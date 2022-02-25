@@ -13,7 +13,7 @@ import {
   FileInput,
   Text,
 } from 'grommet';
-import axios from 'axios';
+import axios from '../../../axios/instance';
 import { useAuth } from '@frontend/context/AuthProvider';
 import { deleteUser, getAuth } from 'firebase/auth';
 import { Alert, AlertTitle } from '@mui/material';
@@ -25,7 +25,7 @@ const EditProfile: NextPage = () => {
   const [errorMessage, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { firstName, lastName, bio, avatar, accessToken } = useAuth();
+  const { firstName, lastName, bio, avatar } = useAuth();
 
   const router = useRouter();
 
@@ -50,16 +50,7 @@ const EditProfile: NextPage = () => {
         bio: bioValue,
         avatar: '',
       };
-      console.log(body);
-      const res = await axios.put(
-        `http://localhost:3000/api/users/update`,
-        body,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      await axios.put(`/users/update`, body);
       router.push('/app/profile');
     } catch (error) {
       setError(error.message);
@@ -72,14 +63,7 @@ const EditProfile: NextPage = () => {
       const auth = getAuth();
       const user = auth.currentUser;
       deleteUser(user).then(async () => {
-        const res = await axios.delete(
-          `http://localhost:3000/api/users/delete`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+        const res = await axios.delete(`/users/delete`);
         router.push('/');
       });
     } catch (error) {

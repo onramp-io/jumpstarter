@@ -15,7 +15,7 @@ export class Project {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "text", array: true, nullable: true })
+  @Column({type: 'text', array: true, nullable: true })
   pictures: string[];
 
   @Column("text")
@@ -33,23 +33,26 @@ export class Project {
   @Column("integer")
   currFundGoal: number;
 
-  @Column({ type: "decimal", default: 0 })
+  @Column({ type: 'decimal', default: 0 })
   fundRaised: number;
 
   @Column("timestamp")
   launchDate: string;
 
-  @Column({ type: "timestamp", default: () => "now()" })
+  @Column({ type: 'timestamp', default: () => "now()" })
   createdDate: string;
 
   @Column({ type: "integer", default: 0 })
   likesAmt: number;
 
-  @Column({ type: "integer", default: 0 })
+  @Column({ type: 'integer', default: 0 })
   views: number;
 
-  @Column({ type: "integer", default: 0 })
+  @Column({ type: 'integer', default: 0 })
   trendScore: number;
+
+  @Column({ type: 'timestamp', nullable: true})
+  scoreUpdatedAt: string;
 
   @ManyToOne(() => User, (user) => user.projects)
   user: User;

@@ -9,8 +9,14 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "text", nullable: true })
+  @Column("text")
   uid: string;
+
+  /** 
+   @Column({ type: "text", nullable: true })
+   uid: string;
+   * 
+   */
 
   @Column("text")
   firstName: string;

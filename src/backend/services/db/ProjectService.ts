@@ -218,19 +218,23 @@ const ProjectService = {
   /**
    * READ: 'GET' request for **ONE Record by ID**
    */
-  findById: async (findByIdParams: FindByIdParamsInterface) => {
+  findById: async (findByIdParams) => {
     try {
       const db = await connection();
 
       // get tapa's findById function
-      const foundProject = await createQueryBuilder()
-        .where("project.id = :id", findByIdParams)
+      console.log(findByIdParams.id, "is findByIdParams.id");
+      const foundProject = await db
+        .createQueryBuilder()
+        .where("project.id = :id", findByIdParams.id)
         .getOne();
 
+      /** 
+       if (foundProject === null || foundProject === undefined) {
+         throw new Error("Project not found");
+       }
+       *  */
       // handle errors here
-      if (foundProject === null || foundProject === undefined) {
-        throw new Error("Project not found");
-      }
       return [foundProject, StatusCodes.OK];
     } catch (err) {
       return [null, StatusCodes.INTERNAL_SERVER_ERROR];
@@ -265,11 +269,13 @@ const ProjectService = {
         .execute();
 
       console.log(`updatedProject === ${JSON.stringify(updatedProject)}`);
-      if (updatedProject === null || updatedProject === undefined) {
+      if (updatedProject.affected === 1) {
+        console.log(`checking here!!!!!`);
+        return [updatedProject, StatusCodes.OK];
+      } else {
+        console.warn(`updatedProject.affected !== 1 (probably 0)`);
         throw new Error("Could not update Project");
       }
-
-      return [updatedProject, StatusCodes.OK];
     } catch (err) {
       // Don't log errors in production.
       return [null, StatusCodes.INTERNAL_SERVER_ERROR];

@@ -6,9 +6,11 @@ import { Comment } from "../entities/Comment";
 import { Like } from "../entities/Like";
 import { Category } from "../entities/Category";
 
+import chalk from "chalk";
+
 //create typeorm database connection using ormconfig.json file
 const connection = async () => {
-  console.log("making connection");
+  console.log(chalk.green("Connecting to database..."));
   try {
     const staleConnection = getConnection();
     await staleConnection.close();
@@ -24,7 +26,7 @@ const connection = async () => {
     entities: [User, Project, Investment, Comment, Like, Category],
   });
   if (getConnection().isConnected) {
-    console.log("type orm db connected");
+    console.log(chalk.green("DB Connected!"));
     return getConnection();
   }
 };
