@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
-import { Box, Button, Form, FormField, Grid, Heading, TextInput } from 'grommet';
+import { Box, Button, Form, FormField, Heading, TextInput } from 'grommet';
 
 const Checkout: NextPage = () => {
     return (
-        <Box alignSelf="center" margin="xlarge" direction="row" gap="large">
+        <Box alignSelf="center" margin={{top: "xlarge", horizontal: "10rem"}} direction="row" gap="xlarge">
             <Box gridArea="form" pad="small">
                 <Form>
                     <FormField label="Amount to donate">
@@ -37,8 +37,10 @@ const Checkout: NextPage = () => {
                 </Form>
             </Box>
 
-            <Box gridArea="information">
-                 <Heading>You will pay</Heading>
+            <Box alignSelf="center" align="center" justify="between" height="medium" margin={{left: "xlarge"}}>
+                 <Heading margin={{top: "xlarge"}} level="2">You will pay</Heading>
+                 <Heading>$0</Heading>
+                 <Button primary label="Checkout" margin={{bottom: "large"}}/>
             </Box>
         </Box>
     )
