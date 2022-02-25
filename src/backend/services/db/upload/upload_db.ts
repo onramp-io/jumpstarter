@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk';
+import chalk from 'chalk';
 
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -6,7 +7,7 @@ const s3 = new AWS.S3({
 });
 
 const UploadService = {
-    create: async(createParams) => {
+    create: async(createParams, res) => {
         try {
              const url = s3.getSignedUrl('putObject', {
                  Bucket: createParams.Bucket,
@@ -15,8 +16,15 @@ const UploadService = {
                })
 
                return url;
-        } catch (err) {
-              return err;
+        } catch (error) {
+            console.log(
+                chalk.red.bold(error.name + '@services/upload/upload_db.ts on Line 21'),
+                error.message
+              );
+            res.status(error.code).json({
+                status: error.status,
+                message: error.message,
+            });
         }
     }
 }
