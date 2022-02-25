@@ -72,7 +72,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
         const token = await getIdToken(user);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         getUser();
-        getUserInvestments();
+        // getUserInvestments();
       }
     });
   }, []);
@@ -90,12 +90,12 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
     });
   };
 
-  const getUserInvestments = async () => {
-    const response = await axios.get('/investments/get');
-    setUser({
-      investments: response.data.investments,
-    });
-  };
+  // const getUserInvestments = async () => {
+  //   const response = await axios.get('/investments/get');
+  //   setUser({
+  //     investments: response.data.investments,
+  //   });
+  // };
 
   return (
     <userDispatchContext.Provider value={{ setUser }}>
