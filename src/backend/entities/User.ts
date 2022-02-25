@@ -9,8 +9,8 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("text")
-  uid: String;
+  @Column({ type: "text", nullable: true })
+  uid: string;
 
   @Column("text")
   firstName: string;
@@ -31,10 +31,10 @@ export class User {
   interests: string[];
 
   @Column({ type: "decimal", default: 0 })
-  investedAmt: number;
+  balance: number;
 
   @Column({ type: "decimal", default: 0 })
-  balance: number;
+  investedAmt: number;
 
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
