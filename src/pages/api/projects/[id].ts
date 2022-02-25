@@ -9,61 +9,41 @@ export default async function handler(
   res: NextApiResponse
 ) {
   switch (req.method) {
-    // CREATE - 1 row
-    case RequestMethod.POST:
-      try {
-        console.log(
-          `you're at the /pages/api/projects/index NextApiHandler's POST method!`
-        );
-        const [createdProject, createStatusCode] =
-          await ProjectController.create(req);
-        console.log(`createdProject === ${createdProject}`);
-        if (createStatusCode === 201) {
-          res.status(createStatusCode).json({
-            data: createdProject,
-          });
-        }
-      } catch (err) {
-        console.warn(err.message); // <-- db service error pops up here!! catch hierarchy!!
-      }
-      break;
-
-    // READ - all rows
+    // READ - 1
     case RequestMethod.GET:
       try {
         console.log(
-          `you're at the /pages/api/projects/index NextApiHandler's GET method!`
+          `you're at the /pages/api/projects/[id].ts NextApiHandler's GET method!`
         );
-        const [allProjects, findAllStatusCode] =
-          await ProjectController.findAll(req);
+        const [foundProject, findByIdStatusCode] =
+          await ProjectController.findById(req);
 
-        console.log(`allProjects === ${JSON.stringify(allProjects)}`);
-        console.log(`findAllStatusCode === ${findAllStatusCode}`);
+        console.log(`foundProject === ${JSON.stringify(foundProject)}`);
+        console.log(`findByIdStatusCode === ${findByIdStatusCode}`);
 
-        if (findAllStatusCode === 200) {
-          res.status(findAllStatusCode).json({
-            data: allProjects,
+        if (findByIdStatusCode === 200) {
+          res.status(findByIdStatusCode).json({
+            data: foundProject,
           });
         } else {
-          throw new Error("Projects not found - see index.ts");
+          throw new Error("Project not found - see [id].ts");
         }
       } catch (err) {
         console.warn(err.message); // <-- db service error pops up here!! catch hierarchy!!
       }
       break;
-
     // UPDATE - 1 row
     case RequestMethod.PUT:
       try {
         console.log(
-          `you're at the /pages/api/projects/index NextApiHandler's PUT method!`
+          `you're at the /pages/api/projects/[id].ts NextApiHandler's PUT method!`
         );
         const [updatedProject, updateByIdStatusCode] =
           await ProjectController.updateById(req);
 
         console.log(`updateByIdStatusCode === ${updateByIdStatusCode}`);
         if (updateByIdStatusCode === 200) {
-          res.status(StatusCodes.OK).send({
+          res.status(StatusCodes.OK).json({
             data: updatedProject,
           });
         } else {
@@ -76,7 +56,6 @@ export default async function handler(
 
     // DESTROY - 1 row
     case RequestMethod.DELETE:
-      ProjectController.deleteById(req);
       const [deletedProject, deleteByIdStatusCode] =
         await ProjectController.deleteById(req);
       if (deletedProject !== null && deletedProject !== undefined) {

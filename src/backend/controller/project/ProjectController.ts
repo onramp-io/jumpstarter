@@ -24,12 +24,13 @@ import isAllTruthy from "@backend/utils/isAllTruthy";
  * - (5) **Return that data** you saved (e.g. return createdProject)
  */
 const ProjectController = {
-  // CREATE
+  // CREATE - 1
   create: async (req) => {
     try {
       console.log(`You're at the ProjectController.create( ) method!`);
       console.log(`The keys in req.body are:${Object.keys(req.body)}`);
       if (isAllTruthy(req.body) && Object.keys(req.body).length === 7) {
+        console.log(`***req.body.uid ===>>>> ${req.body.uid}`);
         const createdProj = await ProjectService.create(req.body);
         return [createdProj, StatusCodes.CREATED];
       } else {
@@ -66,38 +67,47 @@ const ProjectController = {
   updateById: async (req) => {
     console.log(`you're at ProjectController.updateById( )!`);
     console.log(
-      `req.body is composed of ${JSON.stringify(
-        Object.keys(req.body)
-      )} and its length is ${req.body.length}`
+      `req.query is composed of ${JSON.stringify(Object.keys(req.query))}`
+    );
+    console.log(
+      `req.body is composed of ${JSON.stringify(Object.keys(req.body))} `
     );
 
-    if (isAllTruthy(req.body) && Object.keys(req.body).length === 8) {
+    if (
+      isAllTruthy(req.body) &&
+      isAllTruthy(req.query) &&
+      Object.keys(req.body).length === 7 &&
+      Object.keys(req.query).length === 1
+    ) {
       console.log(
-        `In ProjectService.updateById(), req.body is indeed all truthy and complete (req.body has complete params!)`
+        `In ProjectService.updateById(), req.body, req.query,id is indeed all truthy and complete (req.body has complete params!)`
       );
-      return ProjectService.updateById(req.body);
+      return ProjectService.updateById(req.body, req.query.id);
     } else {
-      throw new Error("Error: req.body is missing some params. BAD REQUEST.");
+      throw new Error(
+        "Error: req.body, req.query,id is missing some params. BAD REQUEST."
+      );
     }
   },
 
   // DESTROY - 1
   deleteById: async (req) => {
     console.log(`you're at ProjectController.deleteById( )!`);
+    console.log(`req.query looks like ==> ${JSON.stringify(req.query)}`);
     console.log(
-      `req.body is composed of ${JSON.stringify(
-        Object.keys(req.body)
-      )} and its length is ${req.body.length}`
+      `req.query.id is composed of ${JSON.stringify(
+        Object.keys(req.query.id)
+      )} and its length is ${req.query.id.length}`
     );
 
-    if (isAllTruthy(req.body) && Object.keys(req.body).length === 1) {
+    if (isAllTruthy(req.query.id) && Object.keys(req.query).length === 1) {
       console.log(
-        `In ProjectService.deleteById(), req.body is indeed all truthy and complete (req.body has complete params!)`
+        `In ProjectService.deleteById(), req.body is indeed all truthy and complete (req.query.id has complete params!)`
       );
-      return ProjectService.deleteById(req.body);
+      return ProjectService.deleteById(req.query.id);
     } else {
       throw new Error(
-        "Error: req.body is missing some params (id)! BAD REQUEST."
+        "Error: req.query.id is missing some params (id)! BAD REQUEST."
       );
       return [null, StatusCodes.BAD_REQUEST];
     }

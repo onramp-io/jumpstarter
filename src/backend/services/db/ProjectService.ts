@@ -108,7 +108,7 @@ const ProjectService = {
   /**
    * CREATE: 'POST' request to **Insert ONE Record**
    */
-  create: async (createParams: CreateParamsInterface) => {
+  create: async (createParams) => {
     try {
       console.log(`You're at the ProjectService.create( ) method!`);
       const db = await connection();
@@ -123,6 +123,20 @@ const ProjectService = {
         .into(Project)
         .values(createParams) // <-- hardcode from now!
         // .returning(["id"]) // --> PUT,
+        // "project.id = :id"
+        // "user.uid = :uid"
+        /** 
+         * 
+         .where("uid = :uid", {
+           uid: createParams.body.uid,
+         })
+         */
+        /**
+         .where("id = :id", {
+           id: createParams.id,
+         })
+         * 
+         */
         .execute();
 
       /** 
@@ -158,18 +172,16 @@ const ProjectService = {
   /**
    * READ: 'GET' request for **ALL** Records
    */
-  findAll: async (findAllParams: FindAllParamsInterface) => {
+  findAll: async (findAllParams) => {
     try {
       await connection();
 
       const allProjectRows: Project[] = await getRepository(Project)
         .createQueryBuilder("project")
         .getMany(); // way to paginate .. findAll not in prod! cache gives u ids that are most relevant!! backend worker job on interval (Cron?) -- pieces of code, automated run on interval, message queue on AWs, every 15 mins... any language! run on its own! something waiting on result to capture! cron job 15 db with new values
-      if (allProjectRows !== null && allProjectRows !== undefined) {
-        return [allProjectRows, StatusCodes.OK];
-      } else {
-        throw new Error("Projects not found");
-      }
+      console.log(allProjectRows);
+      return [allProjectRows, StatusCodes.OK];
+      throw new Error("Projects not found - see ProjectService.findAll");
     } catch (err) {
       return [null, StatusCodes.INTERNAL_SERVER_ERROR];
     }
@@ -228,7 +240,7 @@ const ProjectService = {
   /**
    * UPDATE: 'PUT' request for ONE Record by ID
    */
-  updateById: async (updateByIdParams: UpdateByIdParamsInterface) => {
+  updateById: async (updateByIdParams, id) => {
     console.log(`you're at ProjectService.updateById( )!`);
     console.log(
       `in ProjectService.updateById(), updateByIdParams === ${JSON.stringify(
@@ -238,13 +250,17 @@ const ProjectService = {
     try {
       const db = await connection();
 
+      console.log(
+        `updateByIdParams looks like ==> ${JSON.stringify(updateByIdParams)}`
+      );
+
       const updatedProject = await db
         .createQueryBuilder()
-        .select()
+        // .select()
         .update(Project)
         // not matching actual columns
         .set(updateByIdParams) // <-- this is where we pass in the params we want to update records with
-        .where("id = :id", { id: updateByIdParams.id })
+        .where("id = :id", { id })
         // .returning() // look into returning entire row
         .execute();
 
@@ -263,16 +279,18 @@ const ProjectService = {
   /**
    * DESTROY: 'DELETE' request for ONE Record by ID
    */
-  deleteById: async (deleteByIdParams: DeleteByIdParamsInterface) => {
+  deleteById: async (deleteByIdParams) => {
     try {
+      console.log(`you're at the ProjectService.deleteById( ) !`);
       // refactor prepareDbConnection to @backend/config/db function
-      await prepareDbConnection();
+      const db = await connection();
 
-      const deletedProject = await getConnection()
+      console.log(`id is ${deleteByIdParams}`);
+      const deletedProject = await db
         .createQueryBuilder()
         .delete()
         .from(Project)
-        .where("id = :id", { id: deleteByIdParams.id }) //<--
+        .where("id = :id", { id: deleteByIdParams }) //<--
         .execute();
 
       if (deletedProject !== null && deletedProject !== undefined) {
@@ -281,6 +299,7 @@ const ProjectService = {
         throw new Error("Project not deleted");
       }
     } catch (err) {
+      console.warn(err.message);
       return [null, StatusCodes.INTERNAL_SERVER_ERROR];
     }
   },
