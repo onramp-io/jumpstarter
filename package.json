@@ -9,8 +9,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@aws-amplify/cli": "^7.6.19",
-    "@aws-amplify/ui-react": "^2.4.0",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@material-ui/core": "latest",
@@ -20,9 +18,8 @@
     "@stripe/stripe-js": "^1.23.0",
     "@types/jest": "^27.4.0",
     "@types/supertest": "^2.0.11",
-    "amazon-cognito-identity-js": "^5.2.6",
-    "aws-amplify": "^4.3.14",
     "axios": "^0.25.0",
+    "chalk": "^5.0.0",
     "classnames": "latest",
     "emotion": "^11.0.0",
     "firebase": "^9.6.6",

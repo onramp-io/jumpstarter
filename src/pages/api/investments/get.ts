@@ -1,6 +1,6 @@
 import { verifyRequest } from '@backend/middleware/verify_request';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { UserController } from '../../../backend/controller/user/user';
+import { InvestmentController } from '@backend/controller/investment/investment';
 
 import chalk from 'chalk';
 import {
@@ -17,11 +17,12 @@ interface Request extends NextApiRequest {
 const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
-      case 'POST':
-        const userData = await UserController.post(req);
+      case 'GET':
+        const userData = await InvestmentController.getAll(req);
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
+          userData,
         });
         break;
       default:
@@ -29,7 +30,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
     }
   } catch (error) {
     console.log(
-      chalk.red.bold(error.name + '@user/create.ts on Line 32'),
+      chalk.red.bold(error.name + '@investments/get.ts on Line 32'),
       error.message
     );
     res.status(error.code).json({

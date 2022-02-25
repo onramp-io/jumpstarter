@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import investmentController from '../../../backend/controller/investment/investmentController';
+import { InvestmentController } from '@backend/controller/investment/investment';
 import {
     MethodNotAllowedError,
   } from 'helpers/ErrorHandling/errors';
@@ -15,7 +15,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
         //Add new user to database if user does not already exist
         switch(req.method) {
             case 'POST':
-                const response = investmentController.create(req)
+                const response = await InvestmentController.create(req)
                 res.status(Success.code).json({
                     status: Success.status,
                     message: Success.message,
