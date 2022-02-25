@@ -4,6 +4,7 @@ import { Project } from '../entities/Project';
 import { Investment } from '../entities/Investment';
 import { Comment } from '../entities/Comment';
 import { Like } from '../entities/Like';
+import { Category } from '../entities/Category';
 
 import chalk from 'chalk';
 import { Category } from '@backend/entities/Category';
@@ -21,7 +22,7 @@ const connection = async () => {
   const temp = await createConnection({
     type: process.env.DB_TYPE as any,
     url: process.env.DB_CONNECTION_STRING,
-    // logging: true, //statements/queries console logged to terminal -> should remove when not debugging
+    //logging: true, //statements/queries console logged to terminal -> should remove when not debugging
     synchronize: true, //will tralslate logic to sql
     entities: [User, Project, Investment, Comment, Like, Category],
   });
