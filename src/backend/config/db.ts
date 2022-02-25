@@ -5,9 +5,11 @@ import { Investment } from '../entities/Investment';
 import { Comment } from '../entities/Comment';
 import { Like } from '../entities/Like';
 
+import chalk from 'chalk';
+
 //create typeorm database connection using ormconfig.json file
 const connection = async () => {
-  console.log("making connection");
+  console.log(chalk.green('Connecting to database...'));
   try {
     const staleConnection = getConnection();
     await staleConnection.close();
@@ -18,15 +20,14 @@ const connection = async () => {
   const temp = await createConnection({
     type: process.env.DB_TYPE as any,
     url: process.env.DB_CONNECTION_STRING,
-    //logging: true, //statements/queries console logged to terminal -> should remove when not debugging
+    // logging: true, //statements/queries console logged to terminal -> should remove when not debugging
     synchronize: true, //will tralslate logic to sql
     entities: [User, Project, Investment, Comment, Like],
   });
   if (getConnection().isConnected) {
-    console.log('type orm db connected');
+    console.log(chalk.green('DB Connected!'));
     return getConnection();
   }
-  
 };
 
 export default connection;

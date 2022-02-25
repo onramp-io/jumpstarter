@@ -1,24 +1,42 @@
 import { verifyRequest } from '@backend/middleware/verify_request';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getUserController } from '../../../backend/controller/user/user';
+import { UserController } from '../../../backend/controller/user/user';
+
+import chalk from 'chalk';
+import {
+  DatabaseError,
+  MethodNotAllowedError,
+  NotFoundError,
+} from 'helpers/ErrorHandling/errors';
+import { Success } from 'helpers/ErrorHandling/success';
 
 interface Request extends NextApiRequest {
   user: any;
 }
+
 const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case 'GET':
-        getUserController(req, res);
+        const userData = await UserController.get(req);
+        res.status(Success.code).json({
+          status: Success.status,
+          message: Success.message,
+          userData,
+        });
         break;
       default:
-        res.status(404).json({
-          message: 'Method not found',
-        });
+        throw new MethodNotAllowedError('Method not found');
     }
   } catch (error) {
-    console.log('ERROR: handler() in user.ts', error);
-    res.status(401).json({ error });
+    console.log(
+      chalk.red.bold(error.name + '@user/get.ts on Line 32'),
+      error.message
+    );
+    res.status(error.code).json({
+      status: error.status,
+      message: error.message,
+    });
   }
 };
 
