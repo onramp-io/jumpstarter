@@ -1,30 +1,84 @@
-import {
-  getUser,
-  insertUser,
-  updateUser,
-  deleteUser,
-} from '@backend/services/db/user/user_db';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { userService } from '@backend/services/db/user/userService';
 import { Request } from '@backend/middleware/verify_request';
 
-export const getUserController = async (req: Request, res: NextApiResponse) => {
-  getUser(req, res);
-};
+export interface IUserPost {
+  post: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    avatar: string;
+    bio: string;
+    investedAmt: number;
+    uid: string;
+  };
+}
 
-export const postUserController = async (
-  req: Request,
-  res: NextApiResponse
-) => {
-  insertUser(req, res);
-};
+export interface IUserPut {
+  put: {
+    firstName: string;
+    lastName: string;
+    avatar: string;
+    bio: string;
+    email: string;
+    uid: string;
+  };
+}
 
-export const putUserController = async (req: Request, res: NextApiResponse) => {
-  updateUser(req, res);
-};
+export const UserController = {
+  get: async (req: Request) => {
+    const {
+      user: { uid },
+    } = req;
+    const userData = userService.get(uid);
+    return userData;
+  },
 
-export const deleteUserController = async (
-  req: Request,
-  res: NextApiResponse
-) => {
-  deleteUser(req, res);
+  post: async (req: Request) => {
+    const {
+      body: { firstName, lastName, email },
+      user: { uid },
+    } = req;
+    const dataToInsert: IUserPost = {
+      post: {
+        email,
+        firstName,
+        lastName,
+        avatar: '',
+        bio: '',
+        investedAmt: 0,
+        uid,
+      },
+    };
+    const userData = userService.insert(dataToInsert);
+    return userData;
+  },
+
+  put: async (req: Request) => {
+    const email = req.user.email;
+    const {
+      body: { firstName, lastName, bio, avatar },
+      user: { uid },
+    } = req;
+    const dataToUpdate: IUserPut = {
+      put: { email, firstName, lastName, bio, avatar, uid },
+    };
+    const userData = userService.update(dataToUpdate);
+    return userData;
+  },
+
+  delete: async (req: Request) => {
+    const {
+      user: { uid },
+    } = req;
+    const userData = userService.delete(uid);
+    return userData;
+  },
+
+  payOut: async (req: Request) => {
+    const {
+      user: { uid },
+    } = req;
+    const userData = userService.payOut(uid);
+    return userData;
+  },
 };

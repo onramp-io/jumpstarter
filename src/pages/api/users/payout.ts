@@ -17,8 +17,8 @@ interface Request extends NextApiRequest {
 const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
-      case 'POST':
-        const userData = await UserController.post(req);
+      case 'PUT':
+        await UserController.payOut(req);
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
@@ -29,7 +29,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
     }
   } catch (error) {
     console.log(
-      chalk.red.bold(error.name + '@user/create.ts on Line 32'),
+      chalk.red.bold(error.name + '@user/payout.ts on Line 32'),
       error.message
     );
     res.status(error.code).json({

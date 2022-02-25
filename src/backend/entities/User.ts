@@ -10,6 +10,9 @@ export class User {
   id: number;
 
   @Column('text')
+  uid: string;
+
+  @Column('text')
   firstName: string;
 
   @Column('text')
@@ -26,6 +29,9 @@ export class User {
 
   @Column({ type: 'text', array: true, nullable: true })
   interests: string[];
+
+  @Column({ type: 'decimal', default: 0 })
+  balance: number;
 
   @Column({ type: 'decimal', default: 0 })
   investedAmt: number;

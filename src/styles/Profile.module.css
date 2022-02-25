@@ -32,3 +32,17 @@
 .editButton {
   margin-top: 20px !important;
 }
+
+.withdrawFunds {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  /* background-color: red; */
+  padding: 10px;
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px !important;
+}
