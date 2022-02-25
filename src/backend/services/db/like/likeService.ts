@@ -16,18 +16,33 @@ const likeService = {
         const db = await connection();
 
         try {
-        const like = await db.createQueryBuilder()
-            .insert()
-            .into(Like)
-            .values([
-                { user: userId, project: projectId },
-            ])
-            .execute()
-            return like;
-        } 
+            //Increment project likesAmt
+            const projectLikes = await db.createQueryBuilder()
+                .select()
+                .update(Project)
+                .set({
+                    likesAmt: () => `"likesAmt" + 1`
+                })
+                .where("id = :id", { id: projectId })
+                .execute()
+        }
         catch {
             throw new DatabaseError('Database connection failed');
         }
+
+        try {
+            const like = await db.createQueryBuilder()
+                .insert()
+                .into(Like)
+                .values([
+                    { user: userId, project: projectId },
+                ])
+                .execute()
+                return like;
+            } 
+            catch {
+                throw new DatabaseError('Database connection failed');
+            }
     }
 }
 
