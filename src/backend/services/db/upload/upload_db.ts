@@ -9,13 +9,14 @@ const s3 = new AWS.S3({
 const UploadService = {
     create: async(createParams, res) => {
         try {
-             const url = s3.getSignedUrl('putObject', {
+            const key = createParams.key
+            const url = s3.getSignedUrl('putObject', {
                  Bucket: createParams.Bucket,
                  ContentType: createParams.ContentType,
                  Key: createParams.key
                })
 
-               return url;
+            return {url, key};
         } catch (error) {
             console.log(
                 chalk.red.bold(error.name + '@services/upload/upload_db.ts on Line 21'),
