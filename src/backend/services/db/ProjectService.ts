@@ -33,6 +33,7 @@ import {
   getStatusCode,
 } from "http-status-codes";
 import { User } from "@backend/entities/User";
+import { DatabaseError, NotFoundError } from "helpers/ErrorHandling/errors";
 
 /** 
  * 
@@ -77,7 +78,7 @@ import { User } from "@backend/entities/User";
    naming conventions for Controllers:
    filename: /controller/EntityController.ts
    purpose:
-   - (0) Only takes in the NextApiRequest as a param (no NextApiResponse in params needed)
+   - (0) Only takes in the NextAp Status Code 500iRequest as a param (no NextApiResponse in params needed)
    - (1) Extracts/Destructures data from req.body
    - (2) Validates & pre-processes that data if needed
    - (3) Calls the corresponding EntityService.method( ) and passes in that pre-processed data, and saves it** to a variable
@@ -119,10 +120,6 @@ const ProjectService = {
         .into(Project)
         .values([
           {
-            user: () =>
-              `(SELECT user.id FROM user WHERE user.uid = ${createParams.uid})
-              
-              `,
             title: createParams.title,
             category: createParams.category,
             description: createParams.description,
@@ -130,6 +127,8 @@ const ProjectService = {
             currFundGoal: createParams.currFundGoal,
             fundRaised: createParams.fundRaised,
             launchDate: createParams.launchDate,
+            user: () =>
+              `(SELECT id FROM public.user WHERE uid = '${createParams.uid}')`,
           },
         ])
         .execute();
@@ -185,6 +184,29 @@ const ProjectService = {
       // TODO: Add DB layer error handling here! --> do status code 500
       // console.warn(err.message); // remove <<--- only for local debugging
       // distributed tracing - in prod --> all instances at runtime - sends out event log
+    }
+  },
+
+  /**
+   *
+   * @param findAllByUserParams contains req.user.uid --> uid
+   */
+  findAllByUser: async (findAllByUserParams) => {
+    try {
+      const db = await connection();
+      if (!db) throw new DatabaseError("Database connection failed");
+      const userData = await db
+        .createQueryBuilder()
+        .select("*")
+        .from("project", "project")
+        .where(
+          `project.user = (SELECT user.id FROM user WHERE user.uid = ${findAllByUserParams.uid})`
+        )
+        .getRawMany();
+      if (!userData) throw new NotFoundError("User not found");
+      return userData;
+    } catch (err) {
+      console.warn(`${err.message} Status Code 500`);
     }
   },
 

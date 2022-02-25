@@ -29,19 +29,20 @@ const ProjectController = {
     try {
       console.log(`You're at the ProjectController.create( ) method!`);
       console.log(`The keys in req.body are:${Object.keys(req.body)}`);
+
+      console.log("req.user is>>>>", req.user); //<--- undefined if access token is expired
+      const createParamsWithUid = {
+        ...req.body,
+        uid: req.user.uid,
+      };
+      console.log(
+        `createParamsWithUid ===> ${JSON.stringify(createParamsWithUid)}`
+      );
+      const createdProj = await ProjectService.create(createParamsWithUid);
+      return [createdProj, StatusCodes.CREATED];
       if (isAllTruthy(req.body) && Object.keys(req.body).length === 6) {
         // <--- used to be 7 with id.
         console.log(`***req.user.uid ===>>>> ${req.user.uid}`);
-
-        const createParamsWithUid = {
-          ...req.body,
-          uid: req.user.uid,
-        };
-        console.log(
-          `createParamsWithUid ===> ${JSON.stringify(createParamsWithUid)}`
-        );
-        const createdProj = await ProjectService.create(createParamsWithUid);
-        return [createdProj, StatusCodes.CREATED];
       } else {
         console.warn(`req.body is missing a parameter!`);
         return [null, StatusCodes.BAD_REQUEST]; // 400 (client error, since they forgot to pass in the params needed)
