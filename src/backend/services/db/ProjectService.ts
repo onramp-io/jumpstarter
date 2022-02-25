@@ -112,39 +112,58 @@ const ProjectService = {
     try {
       console.log(`You're at the ProjectService.create( ) method!`);
       const db = await connection();
-      console.log(`db === ${db}`);
-
       // toss in reusable helper function if same pattern exactly followed
-      // returns something - successful query
-      // raw: ["how many things inserted"]
-      const projectInsertResult = await db
+      const projectInsertResult = db
         .createQueryBuilder()
         .insert()
         .into(Project)
-        .values(createParams) // <-- hardcode from now!
-        // .returning(["id"]) // --> PUT,
-        // "project.id = :id"
-        // "user.uid = :uid"
-        /** 
-         * 
-         .where("uid = :uid", {
-           uid: createParams.body.uid,
-         })
-         */
-        /**
-         .where("id = :id", {
-           id: createParams.id,
-         })
-         * 
-         */
+        .values([
+          {
+            user: () =>
+              `(SELECT user.id FROM user WHERE user.uid = ${createParams.uid})
+              
+              `,
+            title: createParams.title,
+            category: createParams.category,
+            description: createParams.description,
+            fundTiers: createParams.fundTiers,
+            currFundGoal: createParams.currFundGoal,
+            fundRaised: createParams.fundRaised,
+            launchDate: createParams.launchDate,
+          },
+        ])
         .execute();
+      // returns something - successful query
+      // raw: ["how many things inserted"]
+
+      // const projectInsertResult = await db.createQueryBuilder();
 
       /** 
-         console.log(
-           `${JSON.stringify(projectInsertResult)} is the projectInsertResult`
-         );
-         * 
-         */
+       * don't delete this:
+       * this works!!
+       const projectInsertResult = await db.createQueryRunner().query(`
+         INSERT INTO public.project
+ ("pictures", "title", "category", "description", "fundTiers", "currFundGoal", "fundRaised", "launchDate", "createdDate", "likesAmt", "views", "trendScore", "scoreUpdatedAt", "userId") 
+ VALUES (DEFAULT, 'AAA', 'BBB', 'CCC', '{200, 300}', '200', DEFAULT, '2022-02-25T03:44:02.278Z', DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT,
+ (SELECT id FROM public.user WHERE uid = '4wtCXCVeb3a8fVJEOuQQGRf9ykA3'))
+ RETURNING "id", "fundRaised", "createdDate", "likesAmt", "views", "trendScore"
+         `);
+       * 
+       */
+      /** 
+       .createQueryBuilder()
+       .select("*")
+       .from("project", "project")
+       .where(
+         `project.user = (SELECT user.id FROM user WHERE user.uid = ${createParams.uid})`
+       )
+       .getRawMany();
+       * 
+       */
+      //  .values(createParams)
+      /**
+       *
+       */
 
       if (projectInsertResult === null || projectInsertResult === undefined) {
         throw new Error("Project not created");
@@ -158,7 +177,7 @@ const ProjectService = {
 
       return [projectInsertResult, StatusCodes.CREATED];
     } catch (err) {
-      console.warn(err.message);
+      console.warn(err);
       throw new Error(
         "Project not created! - check project service catch block"
       );
@@ -220,14 +239,39 @@ const ProjectService = {
    */
   findById: async (findByIdParams) => {
     try {
+      console.log(`you're in ProjectService.findById() !!!!`);
       const db = await connection();
 
       // get tapa's findById function
       console.log(findByIdParams.id, "is findByIdParams.id");
       const foundProject = await db
         .createQueryBuilder()
-        .where("project.id = :id", findByIdParams.id)
-        .getOne();
+        .select("*")
+        .from("project", "project")
+        .where(`project.id = ${findByIdParams.id}`)
+        .execute();
+      /** 
+       .createQueryBuilder()
+       .select("*")
+       .from("project", "project")
+       .where(
+         `project.user = (SELECT user.id FROM user WHERE user.uid = ${findByIdParams.id})`
+       )
+       .getRawMany();
+       * 
+       */
+      console.log(`foundProject ===> ${foundProject} ekgfilshrus9t8`);
+      /**
+       */
+      /**
+       *
+       */
+      /** 
+       .createQueryBuilder()
+       .where("project.id = :id", findByIdParams.id)
+       .getOne();
+       * 
+       */
 
       /** 
        if (foundProject === null || foundProject === undefined) {
@@ -298,6 +342,8 @@ const ProjectService = {
         .from(Project)
         .where("id = :id", { id: deleteByIdParams }) //<--
         .execute();
+
+      // look into destroying all relations and the record itself <---
 
       if (deletedProject !== null && deletedProject !== undefined) {
         return [deletedProject, StatusCodes.OK];

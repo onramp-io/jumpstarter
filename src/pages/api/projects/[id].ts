@@ -43,7 +43,7 @@ export default async function handler(
 
         console.log(`updateByIdStatusCode === ${updateByIdStatusCode}`);
         if (updateByIdStatusCode === 200) {
-          res.status(StatusCodes.OK).json({
+          res.status(StatusCodes.OK).send({
             data: updatedProject,
           });
         } else {

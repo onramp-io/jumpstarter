@@ -29,9 +29,18 @@ const ProjectController = {
     try {
       console.log(`You're at the ProjectController.create( ) method!`);
       console.log(`The keys in req.body are:${Object.keys(req.body)}`);
-      if (isAllTruthy(req.body) && Object.keys(req.body).length === 7) {
-        console.log(`***req.body.uid ===>>>> ${req.body.uid}`);
-        const createdProj = await ProjectService.create(req.body);
+      if (isAllTruthy(req.body) && Object.keys(req.body).length === 6) {
+        // <--- used to be 7 with id.
+        console.log(`***req.user.uid ===>>>> ${req.user.uid}`);
+
+        const createParamsWithUid = {
+          ...req.body,
+          uid: req.user.uid,
+        };
+        console.log(
+          `createParamsWithUid ===> ${JSON.stringify(createParamsWithUid)}`
+        );
+        const createdProj = await ProjectService.create(createParamsWithUid);
         return [createdProj, StatusCodes.CREATED];
       } else {
         console.warn(`req.body is missing a parameter!`);
@@ -54,11 +63,14 @@ const ProjectController = {
 
   // READ - 1
   findById: async (req) => {
-    if (isAllTruthy(req.body) && Object.keys(req.body).length === 1) {
-      return await ProjectService.findById(req.body);
+    console.log(req.query);
+    console.log(isAllTruthy(req.query));
+    console.log(Object.keys(req.query).length === 1);
+    if (isAllTruthy(req.query) && Object.keys(req.query).length === 1) {
+      return await ProjectService.findById(req.query);
     } else {
-      console.warn("req.body is missing id (project id)");
-      throw new Error("req.body is missing id (project id). BAD REQUEST.");
+      console.warn("req.query is missing id (project id)");
+      throw new Error("req.query is missing id (project id). BAD REQUEST.");
       return [null, StatusCodes.BAD_REQUEST];
     }
   },
@@ -73,10 +85,18 @@ const ProjectController = {
       `req.body is composed of ${JSON.stringify(Object.keys(req.body))} `
     );
 
+    /** 
+     console.log(isAllTruthy(req.body));
+     console.log(isAllTruthy(req.query));
+     console.log(Object.keys(req.body).length === 8);
+     console.log(Object.keys(req.query).length === 1);
+     console.log(Object.keys(req.query.id).length);
+     * 
+     */
     if (
       isAllTruthy(req.body) &&
       isAllTruthy(req.query) &&
-      Object.keys(req.body).length === 7 &&
+      Object.keys(req.body).length === 8 &&
       Object.keys(req.query).length === 1
     ) {
       console.log(
@@ -89,6 +109,8 @@ const ProjectController = {
       );
     }
   },
+
+  //
 
   // DESTROY - 1
   deleteById: async (req) => {

@@ -21,7 +21,7 @@ const connection = async () => {
   const temp = await createConnection({
     type: process.env.DB_TYPE as any,
     url: process.env.DB_CONNECTION_STRING,
-    //logging: true, //statements/queries console logged to terminal -> should remove when not debugging
+    logging: true, //statements/queries console logged to terminal -> should remove when not debugging
     synchronize: true, //will tralslate logic to sql
     entities: [User, Project, Investment, Comment, Like, Category],
   });

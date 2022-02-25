@@ -3,11 +3,9 @@ import ProjectController from "@backend/controller/project/ProjectController";
 import { getReasonPhrase, StatusCodes } from "http-status-codes";
 import jumpstarterApiErrorHandler from "@backend/utils/JumpstarterApiErrorHandler";
 import RequestMethod from "@backend/common/RequestMethod";
+import { verifyRequest } from "@backend/middleware/verify_request";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     // CREATE - 1 row
     case RequestMethod.POST:
@@ -28,7 +26,7 @@ export default async function handler(
       }
       break;
 
-    // READ - all rows
+    // READ - all row
     case RequestMethod.GET:
       try {
         console.log(
@@ -93,4 +91,6 @@ export default async function handler(
         error: getReasonPhrase(StatusCodes.METHOD_NOT_ALLOWED),
       });
   }
-}
+};
+
+export default verifyRequest(handler);
