@@ -163,9 +163,19 @@ const ProjectController = {
         uid: req.user.uid,
       };
 
+      /** 
+       * 
+       console.log(
+         chalk.bgGreenBright(
+           `req.body === ${JSON.stringify(
+             req.body
+           )}, req.query === ${JSON.stringify(req.query)}`
+         )
+       );
+       */
       if (
         isAllTruthy(req.body) &&
-        Object.keys(req.body).length >= 8 &&
+        Object.keys(req.body).length >= 7 &&
         Object.keys(req.query).length === 1
       ) {
         /** 
@@ -182,7 +192,7 @@ const ProjectController = {
           );
         }
 
-        if (Object.keys(req.body).length < 8) {
+        if (Object.keys(req.body).length < 7) {
           throw new BadRequestError("req.body has missing parameters.");
         }
       }
