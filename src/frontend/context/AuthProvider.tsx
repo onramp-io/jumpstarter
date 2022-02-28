@@ -15,6 +15,7 @@ import { getIdToken } from 'firebase/auth';
 import axios from '../../axios/instance';
 
 export interface AuthContextType {
+  userId: number;
   firstName: string;
   lastName: string;
   bio: string;
@@ -26,6 +27,7 @@ export interface AuthContextType {
 }
 
 export const AuthContext = createContext<AuthContextType>({
+  userId: 0,
   firstName: '',
   lastName: '',
   bio: '',
@@ -39,6 +41,7 @@ export const AuthContext = createContext<AuthContextType>({
 const userDispatchContext = createContext({});
 
 const initialState = {
+  userId: 0,
   firstName: '',
   lastName: '',
   bio: '',
@@ -72,7 +75,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
         const token = await getIdToken(user);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         getUser();
-        getUserInvestments();
+        //getUserInvestments();
       }
     });
   }, []);
@@ -80,6 +83,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
   const getUser = async () => {
     const response = await axios.get('/users/get');
     setUser({
+      userId: response.data.userData['id'],
       firstName: response.data.userData['firstName'],
       lastName: response.data.userData['lastName'],
       bio: response.data.userData['bio'],
