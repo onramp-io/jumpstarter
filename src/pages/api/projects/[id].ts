@@ -55,7 +55,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       break;
 
     default:
-      const methodNotAllowed = new MethodNotAllowedError("Routing error");
+      const methodNotAllowed = new MethodNotAllowedError("Method Not Allowed");
 
       res.status(methodNotAllowed.code).json({
         status: methodNotAllowed.status,
