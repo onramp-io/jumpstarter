@@ -40,7 +40,11 @@ const ProjectController = {
  
        * 
        */
-      if (req.user.uid === undefined || req.user.uid === null) {
+      if (
+        req.user === undefined ||
+        req.user.uid === undefined ||
+        req.user.uid === null
+      ) {
         throw new AuthorizationError(
           "Auth token does not exist or has expired"
         );
@@ -152,7 +156,11 @@ const ProjectController = {
        console.log(Object.keys(req.query.id).length);
        * 
        */
-      if (req.user.uid === undefined || req.user.uid === null) {
+      if (
+        req.user === undefined ||
+        req.user.uid === undefined ||
+        req.user.uid === null
+      ) {
         throw new AuthorizationError(
           "Auth token does not exist or has expired"
         );
@@ -217,7 +225,11 @@ const ProjectController = {
      * 
      */
     try {
-      if (req.user.uid === undefined || req.user.uid === null) {
+      if (
+        req.user === undefined ||
+        req.user.uid === undefined ||
+        req.user.uid === null
+      ) {
         throw new AuthorizationError(
           "Auth token does not exist or has expired"
         );
@@ -238,7 +250,11 @@ const ProjectController = {
       // console.log(deleteParamsWithUid.uid, "IS THE UID");
 
       if (Object.keys(req.query).length === 1) {
-        return await ProjectService.deleteById(req.query);
+        // console.log(chalk.bgGreenBright(typeof req.query)); // ---> object
+        // console.log(chalk.bgGreenBright(typeof req.query.id)); // ---> string
+        // console.log(chalk.bgGreenBright(parseInt(req.query.id))); // ---> string
+
+        return await ProjectService.deleteById(parseInt(req.query.id));
       } else {
         throw new BadRequestError(
           "req.query is missing id (project id) - Did you forget to add the id on the endpoint? e.g. /api/project/10"
