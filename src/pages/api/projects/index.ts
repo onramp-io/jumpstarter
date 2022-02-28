@@ -4,25 +4,36 @@ import { getReasonPhrase, StatusCodes } from "http-status-codes";
 import jumpstarterApiErrorHandler from "@backend/utils/JumpstarterApiErrorHandler";
 import RequestMethod from "@backend/common/RequestMethod";
 import { verifyRequest } from "@backend/middleware/verify_request";
+import chalk from "chalk";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     // CREATE - 1 row
     case RequestMethod.POST:
       try {
-        console.log(
-          `you're at the /pages/api/projects/index NextApiHandler's POST method!`
-        );
+        /** 
+         console.log(
+           `you're at the /pages/api/projects/index NextApiHandler's POST method!`
+         );
+         * 
+         */
         const [createdProject, createStatusCode] =
           await ProjectController.create(req);
-        console.log(`createdProject === ${createdProject}`);
-        if (createStatusCode === 201) {
+        /** 
+         console.log(`createdProject === ${createdProject}`);
+         * 
+         */
+        if (createStatusCode === 201 || createStatusCode === 200) {
           res.status(createStatusCode).json({
             data: createdProject,
           });
         }
       } catch (err) {
-        console.warn(err.message); // <-- db service error pops up here!! catch hierarchy!!
+        console.warn(
+          chalk.bgRed(`Error caught at Project NextApiHandler - ${err.message}`)
+        );
+        throw err;
+        // console.warn(err.message); // <-- db service error pops up here!! catch hierarchy!!
       }
       break;
 
