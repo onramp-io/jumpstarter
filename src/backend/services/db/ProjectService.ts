@@ -454,13 +454,22 @@ const ProjectService = {
         .execute();
 
       // look into destroying all relations and the record itself <---
-      console.log(chalk.bgCyan(deletedProject));
+      // console.log(chalk.bgCyan(JSON.stringify(deletedProject)));
 
-      if (deletedProject !== null && deletedProject !== undefined) {
+      if (deletedProject.affected === 1) {
         return [deletedProject, StatusCodes.OK];
       } else {
-        throw new Error("Project not deleted");
+        throw new NotFoundError(
+          `Project not deleted. ${deletedProject.affected} rows affected.`
+        );
       }
+      /** 
+       if (deletedProject !== null && deletedProject !== undefined) {
+       } else {
+         throw new Error("Project not deleted");
+       }
+       * 
+       */
     } catch (err) {
       console.warn(
         chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
@@ -479,26 +488,31 @@ const ProjectService = {
   sortBy: async (sortByParams) => {
     if (sortByParams === SortByConfig.NEWEST) {
       try {
-        await prepareDbConnection();
-
-        const newestProjectsFirst = await getConnection()
-          .createQueryBuilder(Project, "projects")
-          .leftJoinAndSelect("projects.createdAt", "createdAt")
-          .orderBy("createdAt", "ASC")
-          .getMany();
-
-        if (newestProjectsFirst !== null && newestProjectsFirst !== undefined) {
-          return [newestProjectsFirst, StatusCodes.OK];
-        } else {
-          throw new Error("Projects could not be sorted by createdAt");
-        }
+        // TODO: Add logic for Sorting (@Pran)
       } catch (err) {
-        return [null, StatusCodes.INTERNAL_SERVER_ERROR];
+        console.warn(
+          chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
+        );
+        throw err;
       }
     } else if (sortByParams === SortByConfig.TRENDING) {
-      // TODO: Add logic for Trending (@Pran) // whole scale
+      try {
+        // TODO: Add logic for Trending (@Pran)
+      } catch (err) {
+        console.warn(
+          chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
+        );
+        throw err;
+      }
     } else if (sortByParams === SortByConfig.RECOMMENDED) {
-      // TODO: Add logic here for Recommended (@Tapa) // needs info from user.. depends on signals they're looking at
+      try {
+        // TODO: Add logic here for Recommended (@Tapa)
+      } catch (err) {
+        console.warn(
+          chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
+        );
+        throw err;
+      }
     }
   },
 };
