@@ -8,7 +8,8 @@ const Checkout: NextPage = () => {
         firstName: '',
         lastName: '',
         cardNumber: '',
-        expirationDate: '',
+        expirationMonth: '',
+        expirationYear: '',
         CVV: ''
     }
 
@@ -96,16 +97,50 @@ const Checkout: NextPage = () => {
 
                     <Box direction="row" justify="between" gap="medium">
                         <FormField 
-                            name="expirationDate"
-                            htmlFor="expirationDate"
+                            name="expirationMonth"
                             label="Expiration date" 
-                            width="medium"
+                            htmlFor="expirationMonth"
+                            contentProps={{border: false}}
+                            validate={(val) => {
+                                val = state.expirationMonth;
+
+                                if (Number(val) < 1 || Number(val) > 12) {
+                                    return { message: "Invalid month", status: "error"}
+                                }
+                            }}
                         >
-                            <DateInput
-                                name="expirationDate"
-                                format="mm/yyyy"
-                                onChange={(event) => setState({...state, expirationDate: event.value.toString()})}
-                            />
+                        <FormField 
+                            name="expirationYear"
+                            htmlFor="expirationYear"
+                            validate={(val) => {
+                                val = state.expirationYear;
+
+                                if (Number(val) < 2023) {
+                                    return { message: "Card expired", status: "error"}
+                                }
+                            }}
+                        >
+                            <Box direction="row">
+                                <TextInput 
+                                    type="number"
+                                    name="expirationMonth"
+                                    placeholder="MM" 
+                                    min="1"
+                                    max="12"
+                                    plain={true}
+                                    onChange={(event) => setState({...state, expirationMonth: event.target.value})}
+                                />
+                                <Text alignSelf="center">/</Text>
+                                <TextInput 
+                                    type="number"
+                                    name="expirationYear"
+                                    placeholder="YYYY" 
+                                    min="2023"
+                                    plain={true}
+                                    onChange={(event) => setState({...state, expirationYear: event.target.value})}
+                                />
+                            </Box>
+                        </FormField>
                         </FormField>
 
                         <FormField 
