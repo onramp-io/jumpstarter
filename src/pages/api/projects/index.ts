@@ -5,6 +5,12 @@ import jumpstarterApiErrorHandler from "@backend/utils/JumpstarterApiErrorHandle
 import RequestMethod from "@backend/common/RequestMethod";
 import { verifyRequest } from "@backend/middleware/verify_request";
 import chalk from "chalk";
+import { Created, Success } from "helpers/ErrorHandling/success";
+import {
+  BadRequestError,
+  MethodNotAllowedError,
+  NotFoundError,
+} from "helpers/ErrorHandling/errors";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
@@ -24,8 +30,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
          * 
          */
         if (createStatusCode === 201 || createStatusCode === 200) {
-          res.status(createStatusCode).json({
+          res.status(Created.code).json({
+            status: Created.status,
+            message: Created.message,
             data: createdProject,
+          });
+        } else {
+          const badRequest = new BadRequestError("Routing error");
+
+          res.status(badRequest.code).json({
+            status: badRequest.status,
+            message: badRequest.message,
           });
         }
       } catch (err) {
@@ -40,66 +55,116 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // READ - all rows
     case RequestMethod.GET:
       try {
-        console.log(
-          `you're at the /pages/api/projects/index NextApiHandler's GET method!`
-        );
+        /** 
+         console.log(
+           `you're at the /pages/api/projects/index NextApiHandler's GET method!`
+         );
+         * 
+         */
         const [allProjects, findAllStatusCode] =
           await ProjectController.findAll(req);
 
-        console.log(`allProjects === ${JSON.stringify(allProjects)}`);
-        console.log(`findAllStatusCode === ${findAllStatusCode}`);
+        /** 
+         console.log(`allProjects === ${JSON.stringify(allProjects)}`);
+         console.log(`findAllStatusCode === ${findAllStatusCode}`);
+         * 
+         */
 
         if (findAllStatusCode === 200) {
-          res.status(findAllStatusCode).json({
+          res.status(Success.code).json({
+            status: Success.status,
+            message: Success.message,
             data: allProjects,
           });
         } else {
-          throw new Error("Projects not found - see index.ts");
+          const badRequest = new BadRequestError("Routing error");
+
+          res.status(badRequest.code).json({
+            status: badRequest.status,
+            message: badRequest.message,
+          });
         }
       } catch (err) {
-        console.warn(err.message); // <-- db service error pops up here!! catch hierarchy!!
+        console.warn(
+          chalk.bgRed(`Error caught at Project NextApiHandler - ${err.message}`)
+        );
+        throw err;
+        // console.warn(err.message); // <-- db service error pops up here!! catch hierarchy!!
       }
       break;
 
     // UPDATE - 1 row
     case RequestMethod.PUT:
       try {
-        console.log(
-          `you're at the /pages/api/projects/index NextApiHandler's PUT method!`
-        );
+        /** 
+         console.log(
+           `you're at the /pages/api/projects/index NextApiHandler's PUT method!`
+         );
+         * 
+         */
         const [updatedProject, updateByIdStatusCode] =
           await ProjectController.updateById(req);
 
-        console.log(`updateByIdStatusCode === ${updateByIdStatusCode}`);
+        /** 
+           console.log(`updateByIdStatusCode === ${updateByIdStatusCode}`);
+           * 
+           */
         if (updateByIdStatusCode === 200) {
-          res.status(StatusCodes.OK).send({
+          res.status(Success.code).json({
+            status: Success.status,
+            message: Success.message,
             data: updatedProject,
           });
         } else {
-          throw new Error("Project not updated - see index.ts");
+          const badRequest = new BadRequestError("Routing error");
+
+          res.status(badRequest.code).json({
+            status: badRequest.status,
+            message: badRequest.message,
+          });
         }
       } catch (err) {
-        console.warn(err.message);
+        console.warn(
+          chalk.bgRed(`Error caught at Project NextApiHandler - ${err.message}`)
+        );
+        throw err;
       }
       break;
 
     // DESTROY - 1 row
     case RequestMethod.DELETE:
-      ProjectController.deleteById(req);
-      const [deletedProject, deleteByIdStatusCode] =
-        await ProjectController.deleteById(req);
-      if (deletedProject !== null && deletedProject !== undefined) {
-        res.status(StatusCodes.OK).send({
-          data: deletedProject,
-        });
-      } else {
-        return jumpstarterApiErrorHandler(res, deleteByIdStatusCode);
+      try {
+        const [deletedProject, deleteByIdStatusCode] =
+          await ProjectController.deleteById(req);
+
+        if (deleteByIdStatusCode === 200) {
+          res.status(Success.code).json({
+            status: Success.status,
+            message: Success.message,
+            data: deletedProject,
+          });
+        } else {
+          const badRequest = new BadRequestError("Routing error");
+
+          res.status(badRequest.code).json({
+            status: badRequest.status,
+            message: badRequest.message,
+          });
+        }
+      } catch (err) {
+        console.warn(
+          chalk.bgRed(`Error caught at Project NextApiHandler - ${err.message}`)
+        );
+        throw err;
       }
       break;
 
     default:
-      res.status(StatusCodes.METHOD_NOT_ALLOWED).send({
-        error: getReasonPhrase(StatusCodes.METHOD_NOT_ALLOWED),
+      const methodNotAllowed = new MethodNotAllowedError("Routing error");
+
+      res.status(methodNotAllowed.code).json({
+        status: methodNotAllowed.status,
+        message: methodNotAllowed.message,
       });
   }
 };
