@@ -49,7 +49,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             `Error caught at /api/projects/[id] Project NextApiHandler - ${err.message}`
           )
         );
-        throw err;
+        res.status(err.code).json({
+          status: err.status,
+          message: err.message,
+        });
         // console.warn(err.message); // <-- db service error pops up here!! catch hierarchy!!
       }
       break;
@@ -89,7 +92,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             `Error caught at /api/projects/[id] Project NextApiHandler - ${err.message}`
           )
         );
-        throw err;
+        res.status(err.code).json({
+          status: err.status,
+          message: err.message,
+        });
+        // throw err;
       }
       /** 
        * 
@@ -140,7 +147,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             `Error caught at /api/projects/[id] Project NextApiHandler - ${err.message}`
           )
         );
-        throw err;
+        res.status(err.code).json({
+          status: err.status,
+          message: err.message,
+        });
+        // throw err;
       }
       /** 
        const [deletedProject, deleteByIdStatusCode] =

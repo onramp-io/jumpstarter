@@ -52,7 +52,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             `Error caught at /api/projects/index Project NextApiHandler - ${err.message}`
           )
         );
-        throw err;
+        // throw err;
+        res.status(err.code).json({
+          status: err.status,
+          message: err.message,
+        });
         // console.warn(err.message); // <-- db service error pops up here!! catch hierarchy!!
       }
       break;
