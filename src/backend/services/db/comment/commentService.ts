@@ -8,10 +8,6 @@ import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors'
 const commentService = {
   //Add a like to a project by a user
     getAllById: async (body, query) => {
-        console.log("inside service");
-    /*const {
-        user: { uid },
-      } = body;*/
     const id = query.id;
     const db = await connection();
 
@@ -21,7 +17,6 @@ const commentService = {
             .select()
             .from(Comment, 'comment')
             .where('"projectId" = :id', { id })
-            //.andWhere('user = :uid', { uid })
             .getRawMany();
 
         console.log(comments);
@@ -62,7 +57,6 @@ const commentService = {
         .delete()
         .from(Comment)
         .where('"projectId" = :id', { id })
-        //.andWhere('user = :uid', { uid })
         .execute();
 
       return deleteCategory;

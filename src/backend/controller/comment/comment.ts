@@ -7,7 +7,6 @@ import {
 
 const commentController = {
   getAllById: async (req: Request) => {
-      console.log("inside getallbyid");
     return commentService.getAllById(req.body, req.query);
   },
 
