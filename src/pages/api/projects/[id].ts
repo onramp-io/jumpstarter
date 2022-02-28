@@ -53,108 +53,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         // console.warn(err.message); // <-- db service error pops up here!! catch hierarchy!!
       }
       break;
-    // UPDATE - 1 row
-    case RequestMethod.PUT:
-      try {
-        /** 
-         console.log(
-           `you're at the /pages/api/projects/index NextApiHandler's PUT method!`
-         );
-         * 
-         */
-        const [updatedProject, updateByIdStatusCode] =
-          await ProjectController.updateById(req);
-
-        /** 
-           console.log(`updateByIdStatusCode === ${updateByIdStatusCode}`);
-           * 
-           */
-        if (updateByIdStatusCode === 200) {
-          res.status(Success.code).json({
-            status: Success.status,
-            message: Success.message,
-            data: updatedProject,
-          });
-        } else {
-          const badRequest = new BadRequestError("Routing error");
-
-          res.status(badRequest.code).json({
-            status: badRequest.status,
-            message: badRequest.message,
-          });
-        }
-      } catch (err) {
-        console.warn(
-          chalk.bgRed(
-            `Error caught at /api/projects/[id] Project NextApiHandler - ${err.message}`
-          )
-        );
-        throw err;
-      }
-      /** 
-       * 
-       try {
-         console.log(
-           `you're at the /pages/api/projects/[id].ts NextApiHandler's PUT method!`
-         );
-         const [updatedProject, updateByIdStatusCode] =
-           await ProjectController.updateById(req);
- 
-         console.log(`updateByIdStatusCode === ${updateByIdStatusCode}`);
-         if (updateByIdStatusCode === 200) {
-           res.status(StatusCodes.OK).send({
-             data: updatedProject,
-           });
-         } else {
-           throw new Error("Project not updated - see index.ts");
-         }
-       } catch (err) {
-         console.warn(err.message);
-       }
-       */
-      break;
-
-    // DESTROY - 1 row
-    case RequestMethod.DELETE:
-      try {
-        const [deletedProject, deleteByIdStatusCode] =
-          await ProjectController.deleteById(req);
-
-        if (deleteByIdStatusCode === 200) {
-          res.status(Success.code).json({
-            status: Success.status,
-            message: Success.message,
-            data: deletedProject,
-          });
-        } else {
-          const badRequest = new BadRequestError("Routing error");
-
-          res.status(badRequest.code).json({
-            status: badRequest.status,
-            message: badRequest.message,
-          });
-        }
-      } catch (err) {
-        console.warn(
-          chalk.bgRed(
-            `Error caught at /api/projects/[id] Project NextApiHandler - ${err.message}`
-          )
-        );
-        throw err;
-      }
-      /** 
-       const [deletedProject, deleteByIdStatusCode] =
-         await ProjectController.deleteById(req);
-       if (deletedProject !== null && deletedProject !== undefined) {
-         res.status(StatusCodes.OK).send({
-           data: deletedProject,
-         });
-       } else {
-         return jumpstarterApiErrorHandler(res, deleteByIdStatusCode);
-       }
-       * 
-       */
-      break;
 
     default:
       const methodNotAllowed = new MethodNotAllowedError("Routing error");
@@ -166,4 +64,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default verifyRequest(handler);
+export default handler;

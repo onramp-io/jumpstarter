@@ -14,44 +14,6 @@ import {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
-    // CREATE - 1 row
-    case RequestMethod.POST:
-      try {
-        /** 
-         console.log(
-           `you're at the /pages/api/projects/index NextApiHandler's POST method!`
-         );
-         * 
-         */
-        const [createdProject, createStatusCode] =
-          await ProjectController.create(req);
-        /** 
-         console.log(`createdProject === ${createdProject}`);
-         * 
-         */
-        if (createStatusCode === 201 || createStatusCode === 200) {
-          res.status(Created.code).json({
-            status: Created.status,
-            message: Created.message,
-            data: createdProject,
-          });
-        } else {
-          const badRequest = new BadRequestError("Routing error");
-
-          res.status(badRequest.code).json({
-            status: badRequest.status,
-            message: badRequest.message,
-          });
-        }
-      } catch (err) {
-        console.warn(
-          chalk.bgRed(`Error caught at Project NextApiHandler - ${err.message}`)
-        );
-        throw err;
-        // console.warn(err.message); // <-- db service error pops up here!! catch hierarchy!!
-      }
-      break;
-
     // READ - all rows
     case RequestMethod.GET:
       try {
@@ -86,76 +48,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
       } catch (err) {
         console.warn(
-          chalk.bgRed(`Error caught at Project NextApiHandler - ${err.message}`)
+          chalk.bgRed(
+            `Error caught at /api/projects/index Project NextApiHandler - ${err.message}`
+          )
         );
         throw err;
         // console.warn(err.message); // <-- db service error pops up here!! catch hierarchy!!
-      }
-      break;
-
-    // UPDATE - 1 row
-    case RequestMethod.PUT:
-      try {
-        /** 
-         console.log(
-           `you're at the /pages/api/projects/index NextApiHandler's PUT method!`
-         );
-         * 
-         */
-        const [updatedProject, updateByIdStatusCode] =
-          await ProjectController.updateById(req);
-
-        /** 
-           console.log(`updateByIdStatusCode === ${updateByIdStatusCode}`);
-           * 
-           */
-        if (updateByIdStatusCode === 200) {
-          res.status(Success.code).json({
-            status: Success.status,
-            message: Success.message,
-            data: updatedProject,
-          });
-        } else {
-          const badRequest = new BadRequestError("Routing error");
-
-          res.status(badRequest.code).json({
-            status: badRequest.status,
-            message: badRequest.message,
-          });
-        }
-      } catch (err) {
-        console.warn(
-          chalk.bgRed(`Error caught at Project NextApiHandler - ${err.message}`)
-        );
-        throw err;
-      }
-      break;
-
-    // DESTROY - 1 row
-    case RequestMethod.DELETE:
-      try {
-        const [deletedProject, deleteByIdStatusCode] =
-          await ProjectController.deleteById(req);
-
-        if (deleteByIdStatusCode === 200) {
-          res.status(Success.code).json({
-            status: Success.status,
-            message: Success.message,
-            data: deletedProject,
-          });
-        } else {
-          const badRequest = new BadRequestError("Routing error");
-
-          res.status(badRequest.code).json({
-            status: badRequest.status,
-            message: badRequest.message,
-          });
-        }
-      } catch (err) {
-        console.warn(
-          chalk.bgRed(`Error caught at Project NextApiHandler - ${err.message}`)
-        );
-        throw err;
       }
       break;
 
@@ -169,4 +67,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default verifyRequest(handler);
+export default handler;
