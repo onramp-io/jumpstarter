@@ -7,7 +7,6 @@ import { Like } from '../entities/Like';
 import { Category } from '../entities/Category';
 
 import chalk from 'chalk';
-import { Category } from '@backend/entities/Category';
 
 //create typeorm database connection using ormconfig.json file
 const connection = async () => {
