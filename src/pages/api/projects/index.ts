@@ -1,10 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import chalk from "chalk";
+
 import ProjectController from "@backend/controller/project/ProjectController";
 import { getReasonPhrase, StatusCodes } from "http-status-codes";
 import jumpstarterApiErrorHandler from "@backend/utils/JumpstarterApiErrorHandler";
 import RequestMethod from "@backend/common/RequestMethod";
 import { verifyRequest } from "@backend/middleware/verify_request";
-import chalk from "chalk";
 import { Created, Success } from "helpers/ErrorHandling/success";
 import {
   BadRequestError,
@@ -17,20 +18,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // READ - all rows
     case RequestMethod.GET:
       try {
-        /** 
-         console.log(
-           `you're at the /pages/api/projects/index NextApiHandler's GET method!`
-         );
-         * 
-         */
         const [allProjects, findAllStatusCode] =
           await ProjectController.findAll(req);
-
-        /** 
-         console.log(`allProjects === ${JSON.stringify(allProjects)}`);
-         console.log(`findAllStatusCode === ${findAllStatusCode}`);
-         * 
-         */
 
         if (findAllStatusCode === 200) {
           res.status(Success.code).json({
@@ -52,12 +41,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             `Error caught at /api/projects/index Project NextApiHandler - ${err.message}`
           )
         );
-        // throw err;
         res.status(err.code).json({
           status: err.status,
           message: err.message,
         });
-        // console.warn(err.message); // <-- db service error pops up here!! catch hierarchy!!
       }
       break;
 
