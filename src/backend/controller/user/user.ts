@@ -88,4 +88,12 @@ export const UserController = {
     return userData;
   },
 
+  updateInterest: async (req: Request) => {
+    const {
+      body: { categories },
+      user: { uid },
+    } = req;
+    const userData = userService.updateInterest(categories, uid);
+    return userData;
+  },
 };
