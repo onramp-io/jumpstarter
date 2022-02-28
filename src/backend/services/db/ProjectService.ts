@@ -35,6 +35,7 @@ import {
 import { User } from "@backend/entities/User";
 import { DatabaseError, NotFoundError } from "helpers/ErrorHandling/errors";
 import chalk from "chalk";
+import existInDb from "@backend/utils/existsInDb";
 
 /** 
  * 
@@ -176,11 +177,6 @@ const ProjectService = {
       /**
        *
        */
-
-      console.log(
-        chalk.bgCyanBright(JSON.stringify(await projectInsertResult))
-      );
-
       return [projectInsertResult, StatusCodes.CREATED];
 
       // return projectInsertResult; // return both projInsertResult AND status code [projectInsertResult, statusCode]
@@ -364,18 +360,31 @@ const ProjectService = {
    * UPDATE: 'PUT' request for ONE Record by ID
    */
   updateById: async (updateByIdParams, id) => {
-    console.log(`you're at ProjectService.updateById( )!`);
-    console.log(
-      `in ProjectService.updateById(), updateByIdParams === ${JSON.stringify(
-        updateByIdParams
-      )}`
-    );
+    /** 
+     console.log(`you're at ProjectService.updateById( )!`);
+     console.log(
+       `in ProjectService.updateById(), updateByIdParams === ${JSON.stringify(
+         updateByIdParams
+       )}`
+     );
+     * 
+     */
+
     try {
       const db = await connection();
+      // console.log(chalk.bgBlackBright(this, "=== this"));
+      if (!existInDb("project", id)) {
+        throw new NotFoundError("Project does not exist");
+      }
 
-      console.log(
-        `updateByIdParams looks like ==> ${JSON.stringify(updateByIdParams)}`
-      );
+      //  const foundProject = this.findById();
+
+      /**
+       console.log(
+         `updateByIdParams looks like ==> ${JSON.stringify(updateByIdParams)}`
+       );
+       *
+       */
 
       const updatedProject = await db
         .createQueryBuilder()
@@ -387,17 +396,31 @@ const ProjectService = {
         // .returning() // look into returning entire row
         .execute();
 
-      console.log(`updatedProject === ${JSON.stringify(updatedProject)}`);
+      // console.log(chalk.bgBlue(updatedProject.affected));
       if (updatedProject.affected === 1) {
-        console.log(`checking here!!!!!`);
         return [updatedProject, StatusCodes.OK];
       } else {
-        console.warn(`updatedProject.affected !== 1 (probably 0)`);
-        throw new Error("Could not update Project");
+        throw new DatabaseError("Project was not updated");
       }
+      /** 
+       console.log(`updatedProject === ${JSON.stringify(updatedProject)}`);
+       if (updatedProject.affected === 1) {
+         console.log(`checking here!!!!!`);
+         return [updatedProject, StatusCodes.OK];
+       } else {
+         console.warn(`updatedProject.affected !== 1 (probably 0)`);
+         throw new Error("Could not update Project");
+       }
+       * 
+       */
     } catch (err) {
+      console.warn(
+        chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
+      );
+      throw err;
+
       // Don't log errors in production.
-      return [null, StatusCodes.INTERNAL_SERVER_ERROR];
+      // return [null, StatusCodes.INTERNAL_SERVER_ERROR];
     }
   },
 
