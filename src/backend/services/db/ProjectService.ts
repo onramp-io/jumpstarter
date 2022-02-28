@@ -373,7 +373,8 @@ const ProjectService = {
     try {
       const db = await connection();
       // console.log(chalk.bgBlackBright(this, "=== this"));
-      if (!existInDb("project", id)) {
+
+      if (!existInDb("project", Project, id)) {
         throw new NotFoundError("Project does not exist");
       }
 
@@ -400,7 +401,15 @@ const ProjectService = {
       if (updatedProject.affected === 1) {
         return [updatedProject, StatusCodes.OK];
       } else {
-        throw new DatabaseError("Project was not updated");
+        throw new NotFoundError(
+          `Could not update project (Project not found). ${updatedProject.affected} rows affected.`
+        );
+        /** 
+         throw new DatabaseError(
+           `Project was not updated. ${updatedProject.affected} rows affected.`
+         );
+         * 
+         */
       }
       /** 
        console.log(`updatedProject === ${JSON.stringify(updatedProject)}`);
@@ -429,11 +438,14 @@ const ProjectService = {
    */
   deleteById: async (projectId) => {
     try {
-      console.log(`you're at the ProjectService.deleteById( ) !`);
+      // console.log(`you're at the ProjectService.deleteById( ) !`);
       // refactor prepareDbConnection to @backend/config/db function
       const db = await connection();
 
-      console.log(`id is ${projectId}`);
+      if (!existInDb("project", Project, projectId)) {
+        throw new NotFoundError("Project does not exist");
+      }
+      // console.log(`id is ${projectId}`);
       const deletedProject = await db
         .createQueryBuilder()
         .delete()
