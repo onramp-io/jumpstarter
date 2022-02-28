@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getConnection } from "typeorm";
-import Project from "../../entities/Project";
-import User from "../../entities/Project";
+import { Project } from "../../entities/Project";
+import { User } from "../../entities/User";
 import ProjectService from "@backend/services/db/ProjectService";
 import {
   ProjectCreateApiRequest, // CREATE
@@ -14,6 +14,12 @@ import {
 import { StatusCodes } from "http-status-codes";
 import isNotNullNorUndefined from "@backend/utils/isNotNullNorUndefined";
 import isAllTruthy from "@backend/utils/isAllTruthy";
+import {
+  AuthorizationError,
+  BadRequestError,
+  UserFacingError,
+} from "helpers/ErrorHandling/errors";
+import chalk from "chalk";
 
 /**
  * **From each of the methods** on the Controller (e.g. ProjectController.create() ), you:
@@ -27,28 +33,60 @@ const ProjectController = {
   // CREATE - 1
   create: async (req) => {
     try {
-      console.log(`You're at the ProjectController.create( ) method!`);
-      console.log(`The keys in req.body are:${Object.keys(req.body)}`);
-
-      console.log("req.user is>>>>", req.user); //<--- undefined if access token is expired
+      /** 
+       console.log(`You're at the ProjectController.create( ) method!`);
+       console.log(`The keys in req.body are:${Object.keys(req.body)}`);
+       console.log("req.user is>>>>", req.user); //<--- undefined if access token is expired
+ 
+       * 
+       */
       const createParamsWithUid = {
         ...req.body,
         uid: req.user.uid,
       };
-      console.log(
-        `createParamsWithUid ===> ${JSON.stringify(createParamsWithUid)}`
-      );
-      const createdProj = await ProjectService.create(createParamsWithUid);
-      return [createdProj, StatusCodes.CREATED];
-      if (isAllTruthy(req.body) && Object.keys(req.body).length === 6) {
-        // <--- used to be 7 with id.
-        console.log(`***req.user.uid ===>>>> ${req.user.uid}`);
+
+      /** 
+       console.log(
+         `createParamsWithUid ===> ${JSON.stringify(createParamsWithUid)}`
+       );
+       console.log(isAllTruthy(createParamsWithUid)); // true when auth token is new
+       console.log(Object.keys(createParamsWithUid).length === 7); // true when auth token is new
+       * 
+       */
+      if (
+        isAllTruthy(createParamsWithUid) &&
+        Object.keys(createParamsWithUid).length === 7 // <--- used to be 7 with id.
+      ) {
+        const createdProj = await ProjectService.create(createParamsWithUid);
+        return [createdProj, StatusCodes.CREATED];
+        // const awaitedProj = await createdProj;
+        // console.log("DFSAFA", awaitedProj);
+
+        /** 
+         console.log(
+           chalk.green("createdProj[0]===", JSON.stringify(await createdProj[0]))
+         );
+         * 
+         */
       } else {
-        console.warn(`req.body is missing a parameter!`);
-        return [null, StatusCodes.BAD_REQUEST]; // 400 (client error, since they forgot to pass in the params needed)
+        if (createParamsWithUid.uid === undefined) {
+          throw new AuthorizationError("Auth token has expired");
+        }
+
+        throw new BadRequestError("Missing params on req.body");
+        // return [null, StatusCodes.BAD_REQUEST]; // 400 (client error, since they forgot to pass in the params needed)
       }
+
+      /** 
+       console.log(`***req.user.uid ===>>>> ${req.user.uid}`);
+       console.warn(`req.body is missing a parameter!`);
+       * 
+       */
     } catch (err) {
-      console.warn(err.message);
+      console.warn(
+        chalk.bgRed(`Error caught at ProjectController - ${err.message}`)
+      );
+      throw err;
     }
   },
 
