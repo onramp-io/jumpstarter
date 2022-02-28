@@ -26,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
       break;
 
-    // READ - all row
+    // READ - all rows
     case RequestMethod.GET:
       try {
         console.log(

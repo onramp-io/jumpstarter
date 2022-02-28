@@ -10,7 +10,7 @@ export interface CreateParamsInterface {
   description: string;
   fundTiers: number[];
   currFundGoal: number;
-  userId: number;
+  userId: number; 
   // Is launchdate required soon as proj is being created?
   // if not, pls remove the next line.
   launchDate?: string;
