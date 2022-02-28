@@ -87,7 +87,7 @@ export const UserController = {
     const {
       user: { uid },
     } = req;
-    const userData = userService.getCategories(uid);
+    const userData = userService.getCategories();
     return userData;
   },
 };
