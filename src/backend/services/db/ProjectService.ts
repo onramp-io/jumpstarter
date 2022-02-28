@@ -454,6 +454,7 @@ const ProjectService = {
         .execute();
 
       // look into destroying all relations and the record itself <---
+      console.log(chalk.bgCyan(deletedProject));
 
       if (deletedProject !== null && deletedProject !== undefined) {
         return [deletedProject, StatusCodes.OK];
@@ -461,8 +462,13 @@ const ProjectService = {
         throw new Error("Project not deleted");
       }
     } catch (err) {
-      console.warn(err.message);
-      return [null, StatusCodes.INTERNAL_SERVER_ERROR];
+      console.warn(
+        chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
+      );
+      throw err;
+
+      // console.warn(err.message);
+      // return [null, StatusCodes.INTERNAL_SERVER_ERROR];
     }
   },
 
