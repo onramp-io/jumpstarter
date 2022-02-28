@@ -1,5 +1,6 @@
 import connection from '@backend/config/db';
 import { IUserPost, IUserPut } from '@backend/controller/user/user';
+import { Project } from '@backend/entities/Project';
 import { User } from '@backend/entities/User';
 import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors';
 
@@ -84,5 +85,17 @@ export const userService = {
       .execute();
     if (!userData) throw new NotFoundError('User not found');
     return userData;
+  },
+
+  getCategories: async () => {
+    const db = await connection();
+    if (!db) throw new DatabaseError('Database connection failed');
+    const categories = await db
+      .createQueryBuilder()
+      .select('*')
+      .from('category', 'category')
+      .getRawMany();
+    if (!categories) throw new NotFoundError('Categories not found');
+    return categories;
   },
 };
