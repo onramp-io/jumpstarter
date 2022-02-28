@@ -83,11 +83,9 @@ export const UserController = {
     return userData;
   },
 
-  getCategories: async (req: Request) => {
-    const {
-      user: { uid },
-    } = req;
+  getCategories: async () => {
     const userData = userService.getCategories();
     return userData;
   },
+
 };
