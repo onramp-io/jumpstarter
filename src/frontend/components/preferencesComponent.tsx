@@ -1,61 +1,98 @@
-import { NextPageContext } from "next";
-import axios from "axios";
+import { NextPageContext } from 'next';
+import axios from 'axios';
 import PreferenceCard, {
   ProjectCategory,
-} from "@frontend/components/preferenceCard";
-import SectionHeader from "@frontend/components/sectionHeader";
-import { Box, Button, ResponsiveContext } from "grommet";
-import JumpstarterLink from "@frontend/components/jumpstarterLink";
+} from '@frontend/components/preferenceCard';
+import SectionHeader from '@frontend/components/sectionHeader';
+import { Box, Button, Heading, ResponsiveContext } from 'grommet';
+import JumpstarterLink from '@frontend/components/jumpstarterLink';
 
-interface UserPreferencesProps {}
+import styles from '../../styles/Preference.module.css';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { AlertTitle, Alert } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 
-const UserPreferences = function UserPreferencesComponent<
-  UserPreferencesProps
->({}) {
-  const APIPayload = [
-    {
-      imageUrl: `https://picsum.photos/${Math.floor(Math.random() * 1000)}`,
-      projectCategory: ProjectCategory.CATEGORY_1,
-    },
-    {
-      imageUrl: `https://picsum.photos/${Math.floor(Math.random() * 1000)}`,
-      projectCategory: ProjectCategory.CATEGORY_2,
-    },
-    {
-      imageUrl: `https://picsum.photos/${Math.floor(Math.random() * 1000)}`,
-      projectCategory: ProjectCategory.CATEGORY_3,
-    },
-    {
-      imageUrl: `https://picsum.photos/${Math.floor(Math.random() * 1000)}`,
-      projectCategory: ProjectCategory.CATEGORY_4,
-    },
-    {
-      imageUrl: `https://picsum.photos/${Math.floor(Math.random() * 1000)}`,
-      projectCategory: ProjectCategory.CATEGORY_5,
-    },
-    {
-      imageUrl: `https://picsum.photos/${Math.floor(Math.random() * 1000)}`,
-      projectCategory: ProjectCategory.CATEGORY_6,
-    },
-  ];
+interface UserPreferencesProps {
+  categories: any;
+}
+
+const UserPreferences: React.FC<UserPreferencesProps> = ({ categories }) => {
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [errorMessage, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const router = useRouter();
+
+  const addPreference = (category: string) => {
+    if (selectedCategories.includes(category)) {
+      setSelectedCategories(selectedCategories.filter((c) => c !== category));
+    } else {
+      setSelectedCategories([...selectedCategories, category]);
+    }
+  };
+
+  const submitPreferences = async () => {
+    setIsSubmitting(true);
+    try {
+      await axios.put('/api/categories', {
+        categories: selectedCategories,
+      });
+      router.push('/app/profile');
+    } catch (error) {
+      console.log(error);
+      setError(error.message);
+    }
+    setIsSubmitting(false);
+  };
 
   return (
     <>
+      <Box className={styles.wrapper}>
+        <Heading className={styles.header}>Preferences</Heading>
+        <Box className={styles.container}>
+          {categories.map((item) => (
+            <>
+              <Box
+                className={styles.cards}
+                onClick={() => addPreference(item.category)}
+                key={item.id}
+              >
+                <div>{item.category}</div>
+              </Box>
+            </>
+          ))}
+        </Box>
+        {isSubmitting ? (
+          <>
+            <CircularProgress />
+          </>
+        ) : (
+          <>
+            <Button
+              primary
+              label="Submit my preferences"
+              onClick={submitPreferences}
+              disabled={isSubmitting}
+            />
+            {errorMessage !== '' && (
+              <Alert severity="error">
+                <AlertTitle>{errorMessage}</AlertTitle>
+              </Alert>
+            )}
+          </>
+        )}
+      </Box>
+      {/* 
       <SectionHeader
         margin="large"
         sectionHeader="Welcome to JumpStarter!"
         sectionDescription="To get started, let us know what kinds of projects you're interested in seeing."
       />
-
       <ResponsiveContext.Consumer>
         {(size) =>
-          size === "small" ? (
+          size === 'small' ? (
             <Box align="center">
-              {/** 
-               edit the Box right below this comment if you need
-               to troubleshoot the cards on the
-               /preference page
-               */}
               <Box
                 justify="center"
                 align="center"
@@ -64,13 +101,6 @@ const UserPreferences = function UserPreferencesComponent<
                 wrap={true}
                 direction="row"
               >
-                {APIPayload.map(({ imageUrl, projectCategory }, i) => {
-                  <PreferenceCard
-                    key={i}
-                    imageUrl={imageUrl}
-                    projectCategory={projectCategory}
-                  />;
-                })}
                 <Box width="70%" margin="medium" gap="medium">
                   <Button primary label="Submit my preferences" />
                   <JumpstarterLink
@@ -83,11 +113,6 @@ const UserPreferences = function UserPreferencesComponent<
             </Box>
           ) : (
             <Box align="center">
-              {/** 
-               edit the Box right below this comment if you need
-               to troubleshoot the cards on the
-               /preference page
-               */}
               <Box
                 justify="center"
                 align="center"
@@ -116,6 +141,7 @@ const UserPreferences = function UserPreferencesComponent<
           )
         }
       </ResponsiveContext.Consumer>
+       */}
     </>
   );
 };
