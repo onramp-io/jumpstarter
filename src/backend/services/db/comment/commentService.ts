@@ -19,7 +19,6 @@ const commentService = {
             .where('"projectId" = :id', { id })
             .getRawMany();
 
-        console.log(comments);
         return comments;
     }
     catch {
