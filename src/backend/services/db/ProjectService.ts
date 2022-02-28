@@ -141,6 +141,10 @@ const ProjectService = {
         ])
         // .returning("id") <-- only returns id if enabled. otherwise, returns entire record.
         .execute();
+
+      if (projectInsertResult === null || projectInsertResult === undefined) {
+        throw new DatabaseError("Project not created. Insert result is falsy.");
+      }
       // returns something - successful query
       // raw: ["how many things inserted"]
 
@@ -176,10 +180,6 @@ const ProjectService = {
       console.log(
         chalk.bgCyanBright(JSON.stringify(await projectInsertResult))
       );
-
-      if (projectInsertResult === null || projectInsertResult === undefined) {
-        throw new DatabaseError("Project not created. Insert result is falsy.");
-      }
 
       return [projectInsertResult, StatusCodes.CREATED];
 
@@ -222,25 +222,42 @@ const ProjectService = {
       if (!userData) throw new NotFoundError("User not found");
       return userData;
     } catch (err) {
-      console.warn(`${err.message} Status Code 500`);
+      console.warn(
+        chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
+      );
+      throw err;
+      // console.warn(`${err.message} Status Code 500`);
     }
   },
 
   /**
    * READ: 'GET' request for **ALL** Records
    */
-  findAll: async (findAllParams) => {
+  findAll: async () => {
     try {
-      await connection();
+      const db = await connection();
+
+      if (db === undefined || db === null) {
+        throw new DatabaseError("Database connection failed");
+      }
 
       const allProjectRows: Project[] = await getRepository(Project)
         .createQueryBuilder("project")
         .getMany(); // way to paginate .. findAll not in prod! cache gives u ids that are most relevant!! backend worker job on interval (Cron?) -- pieces of code, automated run on interval, message queue on AWs, every 15 mins... any language! run on its own! something waiting on result to capture! cron job 15 db with new values
-      console.log(allProjectRows);
+      // console.log(allProjectRows);
+
+      // console.log(chalk.bgGreenBright(JSON.stringify(allProjectRows)));
+
+      if (allProjectRows === undefined || allProjectRows === null) {
+        throw new NotFoundError("Projects not found");
+      }
+
       return [allProjectRows, StatusCodes.OK];
-      throw new Error("Projects not found - see ProjectService.findAll");
     } catch (err) {
-      return [null, StatusCodes.INTERNAL_SERVER_ERROR];
+      console.warn(
+        chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
+      );
+      throw err;
     }
   },
 
@@ -277,17 +294,33 @@ const ProjectService = {
    */
   findById: async (findByIdParams) => {
     try {
-      console.log(`you're in ProjectService.findById() !!!!`);
+      // console.log(`you're in ProjectService.findById() !!!!`);
       const db = await connection();
 
+      if (db === undefined || db === null) {
+        throw new DatabaseError("Database connection failed");
+      }
+
       // get tapa's findById function
-      console.log(findByIdParams.id, "is findByIdParams.id");
+      // console.log(findByIdParams.id, "is findByIdParams.id");
+      // console.log(findByIdParams.id);
       const foundProject = await db
         .createQueryBuilder()
         .select("*")
         .from("project", "project")
         .where(`project.id = ${findByIdParams.id}`)
-        .execute();
+        .getRawOne();
+      // .execute(); <-- doesnt work. only works with getRawOne
+
+      // console.log(chalk.bgBlueBright(JSON.stringify(foundProject)));
+
+      if (
+        foundProject === null ||
+        foundProject === undefined ||
+        foundProject.length === 0
+      ) {
+        throw new DatabaseError("Project not found. Found project is falsy.");
+      }
       /** 
        .createQueryBuilder()
        .select("*")
@@ -298,7 +331,7 @@ const ProjectService = {
        .getRawMany();
        * 
        */
-      console.log(`foundProject ===> ${foundProject} ekgfilshrus9t8`);
+      // console.log(`foundProject ===> ${foundProject}`);
       /**
        */
       /**
@@ -319,7 +352,11 @@ const ProjectService = {
       // handle errors here
       return [foundProject, StatusCodes.OK];
     } catch (err) {
-      return [null, StatusCodes.INTERNAL_SERVER_ERROR];
+      console.warn(
+        chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
+      );
+      throw err;
+      // return [null, StatusCodes.INTERNAL_SERVER_ERROR];
     }
   },
 
@@ -367,18 +404,18 @@ const ProjectService = {
   /**
    * DESTROY: 'DELETE' request for ONE Record by ID
    */
-  deleteById: async (deleteByIdParams) => {
+  deleteById: async (projectId) => {
     try {
       console.log(`you're at the ProjectService.deleteById( ) !`);
       // refactor prepareDbConnection to @backend/config/db function
       const db = await connection();
 
-      console.log(`id is ${deleteByIdParams}`);
+      console.log(`id is ${projectId}`);
       const deletedProject = await db
         .createQueryBuilder()
         .delete()
         .from(Project)
-        .where("id = :id", { id: deleteByIdParams }) //<--
+        .where("id = :id", { id: projectId }) //<--
         .execute();
 
       // look into destroying all relations and the record itself <---
