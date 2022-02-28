@@ -34,6 +34,7 @@ import {
 } from "http-status-codes";
 import { User } from "@backend/entities/User";
 import { DatabaseError, NotFoundError } from "helpers/ErrorHandling/errors";
+import chalk from "chalk";
 
 /** 
  * 
@@ -111,8 +112,15 @@ const ProjectService = {
    */
   create: async (createParams) => {
     try {
-      console.log(`You're at the ProjectService.create( ) method!`);
+      /** 
+       console.log(`You're at the ProjectService.create( ) method!`);
+       * 
+       */
       const db = await connection();
+
+      if (db === undefined || db === null) {
+        throw new DatabaseError("Database connection failed");
+      }
       // toss in reusable helper function if same pattern exactly followed
       const projectInsertResult = db
         .createQueryBuilder()
@@ -131,6 +139,7 @@ const ProjectService = {
               `(SELECT id FROM public.user WHERE uid = '${createParams.uid}')`,
           },
         ])
+        // .returning("id") <-- only returns id if enabled. otherwise, returns entire record.
         .execute();
       // returns something - successful query
       // raw: ["how many things inserted"]
@@ -164,23 +173,30 @@ const ProjectService = {
        *
        */
 
-      if (projectInsertResult === null || projectInsertResult === undefined) {
-        throw new Error("Project not created");
-      }
-      // return projectInsertResult; // return both projInsertResult AND status code [projectInsertResult, statusCode]
       console.log(
-        `created the project! it's on pgAdmin! ${JSON.stringify(
-          projectInsertResult
-        )}.. but it's typeof is ${typeof projectInsertResult}`
+        chalk.bgCyanBright(JSON.stringify(await projectInsertResult))
       );
 
+      if (projectInsertResult === null || projectInsertResult === undefined) {
+        throw new DatabaseError("Project not created. Insert result is falsy.");
+      }
+
       return [projectInsertResult, StatusCodes.CREATED];
+
+      // return projectInsertResult; // return both projInsertResult AND status code [projectInsertResult, statusCode]
+      /** 
+       console.log(
+         `created the project! it's on pgAdmin! ${JSON.stringify(
+           projectInsertResult
+         )}.. but it's typeof is ${typeof projectInsertResult}`
+       );
+       * 
+       */
     } catch (err) {
-      console.warn(err);
-      throw new Error(
-        "Project not created! - check project service catch block"
+      console.warn(
+        chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
       );
-      return [null, StatusCodes.INTERNAL_SERVER_ERROR];
+      throw err;
       // TODO: Add DB layer error handling here! --> do status code 500
       // console.warn(err.message); // remove <<--- only for local debugging
       // distributed tracing - in prod --> all instances at runtime - sends out event log
