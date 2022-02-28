@@ -170,7 +170,7 @@ const Checkout: NextPage = () => {
             <Box alignSelf="center" align="center" justify="between" height="medium" margin={{left: "xlarge"}}>
                  <Heading margin={{top: "xlarge"}} level="2">You will pay</Heading>
                  <Heading>${state.donation.toLocaleString()}</Heading>
-                 <Button primary label="Checkout" margin={{bottom: "large"}}/>
+                 <Button primary label="Checkout" margin={{bottom: "large"}} onClick={() => {}}/>
             </Box>
         </Box>
     )
