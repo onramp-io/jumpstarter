@@ -13,8 +13,7 @@ const existInDb = async function (
     .select("*")
     .from(entity, entityName)
     .where(`${entityName}.id = ${id}`)
-    .getRawOne(); // .getOne() works
-  console.log(chalk.blueBright(result !== undefined));
+    .getRawOne();
 
   return result !== undefined;
 };
