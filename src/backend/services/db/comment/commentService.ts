@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getRepository, getConnection } from 'typeorm';
 import { Comment } from '@backend/entities/Comment';
 import { Project } from '@backend/entities/Project';
+import { User } from '@backend/entities/User';
 import connection from '@backend/config/db';
 import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors'
 
@@ -16,9 +17,9 @@ const commentService = {
             .createQueryBuilder()
             .select()
             .from(Comment, 'comment')
+            .innerJoin(User, 'user', 'comment.userId = user.id')
             .where('"projectId" = :id', { id })
             .getRawMany();
-
         return comments;
     }
     catch {
@@ -26,9 +27,8 @@ const commentService = {
     }
   },
 
-  create: async (body) => {
+  create: async (body, user) => {
     const { userId, projectId, comment } = body;
-
     try {
     const db = await connection();
     //add new category

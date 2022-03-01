@@ -1,7 +1,9 @@
 import type { NextPage } from 'next';
 import { Anchor, Box, Image, Meter, Text } from 'grommet';
+import { useRouter } from 'next/router';
 
 type projectType = {
+  id: number, //added
   user_name: string,
   title: string,
   category: string,
@@ -16,8 +18,17 @@ interface LargeProjectCardProps {
 }
 
 const LargeProjectCard: NextPage<LargeProjectCardProps> = ({projectData}): JSX.Element => {
+  const router = useRouter();
+  
+  const goToProject = async (event: MouseEvent) => {
+    console.log("go to project" + projectData.id);
+    router.push('/app/project/' + projectData.id);
+  }
+
   return (
     <Box
+      style={{cursor: "pointer"}}
+      onClick={(event) => goToProject(event)}
       flex={{shrink: 0}}
       margin={{
         vertical: "small",
