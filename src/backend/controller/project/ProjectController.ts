@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getConnection } from "typeorm";
 import { Project } from "../../entities/Project";
 import { User } from "../../entities/User";
-import ProjectService from "@backend/services/db/ProjectService";
+import ProjectService from "@backend/services/db/project/ProjectService";
 import { StatusCodes } from "http-status-codes";
 import isAllTruthy from "@backend/utils/isAllTruthy";
 import {
