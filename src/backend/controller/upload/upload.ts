@@ -1,4 +1,4 @@
-import UploadService from '@backend/services/db/upload/upload_db';
+import UploadService from '@backend/services/db/upload/uploads3';
 import { NotFoundError } from 'helpers/ErrorHandling/errors';
 import { Request } from '@backend/middleware/verify_request';
 
