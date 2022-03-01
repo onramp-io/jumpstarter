@@ -22,6 +22,7 @@ import { User } from "@backend/entities/User";
 import { DatabaseError, NotFoundError } from "helpers/ErrorHandling/errors";
 import chalk from "chalk";
 import existInDb from "@backend/utils/existsInDb";
+import { dbError, notFoundError } from "helpers/ErrorHandling/messaging";
 
 const ProjectService = {
   /**
@@ -32,7 +33,7 @@ const ProjectService = {
       const db = await connection();
 
       if (db === undefined || db === null) {
-        throw new DatabaseError("Database connection failed");
+        throw new DatabaseError(dbError);
       }
 
       const projectInsertResult = db
@@ -71,7 +72,7 @@ const ProjectService = {
   findAllByUser: async (findAllByUserParams) => {
     try {
       const db = await connection();
-      if (!db) throw new DatabaseError("Database connection failed");
+      if (!db) throw new DatabaseError(dbError);
       const userData = await db
         .createQueryBuilder()
         .select("*")
@@ -80,7 +81,7 @@ const ProjectService = {
           `project.user = (SELECT user.id FROM user WHERE user.uid = ${findAllByUserParams.uid})`
         )
         .getRawMany();
-      if (!userData) throw new NotFoundError("User not found");
+      if (!userData) throw new NotFoundError(notFoundError);
       return userData;
     } catch (err) {
       throw err;
@@ -95,7 +96,7 @@ const ProjectService = {
       const db = await connection();
 
       if (db === undefined || db === null) {
-        throw new DatabaseError("Database connection failed");
+        throw new DatabaseError(dbError);
       }
 
       const allProjectRows: Project[] = await getRepository(Project)
@@ -103,7 +104,7 @@ const ProjectService = {
         .getMany();
 
       if (allProjectRows === undefined || allProjectRows === null) {
-        throw new NotFoundError("Projects not found");
+        throw new NotFoundError(notFoundError);
       }
 
       return [allProjectRows, StatusCodes.OK];
@@ -120,7 +121,7 @@ const ProjectService = {
       const db = await connection();
 
       if (db === undefined || db === null) {
-        throw new DatabaseError("Database connection failed");
+        throw new DatabaseError(dbError);
       }
 
       const foundProject = await db
@@ -151,7 +152,7 @@ const ProjectService = {
       const db = await connection();
 
       if (!existInDb("project", Project, id)) {
-        throw new NotFoundError("Project does not exist");
+        throw new NotFoundError(notFoundError);
       }
 
       const updatedProject = await db
@@ -181,7 +182,7 @@ const ProjectService = {
       const db = await connection();
 
       if (!existInDb("project", Project, projectId)) {
-        throw new NotFoundError("Project does not exist");
+        throw new NotFoundError(notFoundError);
       }
       const deletedProject = await db
         .createQueryBuilder()
@@ -212,13 +213,13 @@ const ProjectService = {
       try {
         return await getSortedProjects("createdDate");
       } catch (err) {
-        throw new DatabaseError('Database connection failed');
+        throw new DatabaseError(dbError);
       }
     } else if (query.sortType === SortByConfig.TRENDING) {
       try {
         return await getSortedProjects("trendScore");
       } catch (err) {
-        throw new DatabaseError('Database connection failed');
+        throw new DatabaseError(dbError);
       }
     } else if (query.sortType === SortByConfig.RECOMMENDED) {
       try {
@@ -230,8 +231,8 @@ const ProjectService = {
   },
 
   addView: async (query) => {
+    
     const id = query.id;
-
     const db = await connection();
 
     try {
@@ -246,7 +247,7 @@ const ProjectService = {
           .execute()
     }
     catch {
-        throw new DatabaseError('Database connection failed');
+        throw new DatabaseError(dbError);
     }
   },
 
@@ -264,7 +265,7 @@ const ProjectService = {
           .execute()
 ;    }
     catch {
-        throw new DatabaseError('Database connection failed');
+        throw new DatabaseError(dbError);
     }
 
   },
@@ -286,7 +287,7 @@ const ProjectService = {
       
     }
     catch {
-        throw new DatabaseError('Database connection failed');
+        throw new DatabaseError(dbError);
     }
 
   }
@@ -301,8 +302,6 @@ const getSortedProjects = async (column) => {
   .createQueryBuilder("project")
   .orderBy(`project.${column}`, 'DESC')
   .getMany();
-
-  console.log(projectData);
 
   return projectData;
 }

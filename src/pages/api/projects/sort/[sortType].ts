@@ -22,7 +22,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
     }
   }
   catch (error) {
-    clientResponse(res, Success.code, Success.status, Success.message);
+    clientResponse(res, error.code, error.status, error.message);
   }
 }
 
