@@ -15,6 +15,10 @@ module.exports = {
     FB_ADMIN_CLIENT_EMAIL: process.env.FB_ADMIN_CLIENT_EMAIL,
     FB_ADMIN_CLIENT_ID: process.env.FB_ADMIN_CLIENT_ID,
     PUBLIC_API_URL_DEV: process.env.PUBLIC_API_URL_DEV,
+    AWS_ACCESS_KEY: process.env.AWS_ACCESS_KEY,
+    AWS_SECRET_KEY: process.env.AWS_SECRET_KEY,
+    AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME,
+    AWS_BUCKET_URL: process.env.AWS_BUCKET_URL,
   },
   images: {
     domains: ['images.unsplash.com'],

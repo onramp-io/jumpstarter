@@ -1,8 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { Comment } from "./Comment";
-import { Project } from "./Project";
-import { Investment } from "./Investment";
-import { Like } from "./Like";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Comment } from './Comment';
+import { Project } from './Project';
+import { Investment } from './Investment';
+import { Like } from './Like';
 
 @Entity()
 export class User {
@@ -12,28 +12,28 @@ export class User {
   @Column({ type: 'text', nullable: true })
   uid: string;
 
-  @Column("text")
+  @Column('text')
   firstName: string;
 
-  @Column("text")
+  @Column('text')
   lastName: string;
 
-  @Column("text")
+  @Column('text')
   email: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: 'text', nullable: true })
   avatar: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: 'text', nullable: true })
   bio: string;
 
-  @Column({ type: "text", array: true, nullable: true })
+  @Column({ type: 'text', array: true, nullable: true })
   interests: string[];
 
-  @Column({ type: "decimal", default: 0 })
+  @Column({ type: 'decimal', default: 0 })
   balance: number;
 
-  @Column({ type: "decimal", default: 0 })
+  @Column({ type: 'decimal', default: 0 })
   investedAmt: number;
 
   @OneToMany(() => Comment, (comment) => comment.user)
