@@ -281,7 +281,32 @@ const ProjectService = {
         throw new DatabaseError('Database connection failed');
     }
 
+  },
+
+  getLikes: async (query) => {
+    const id = query.id;
+    const db = await connection();
+
+    try {
+      //Increment project likesAmt
+      const projectLikes = await db
+        .createQueryBuilder()
+        .select("project.likesAmt", "likesAmt")
+        .from(Project, "project")
+        .where("id = :id", { id })
+        .getRawOne();
+      
+      console.log(projectLikes);
+
+      return projectLikes;
+      
+    }
+    catch {
+        throw new DatabaseError('Database connection failed');
+    }
+
   }
+  
 };
 
 export default ProjectService;
