@@ -1,7 +1,9 @@
 import type { NextPage } from 'next';
 import { Box, CheckBox, CheckBoxGroup, Heading, InfiniteScroll, NameValueList, Select, Sidebar, Text } from 'grommet';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LargeProjectCard from '@frontend/components/largeprojectcard';
+import axios from 'axios';
+import { useAuth } from '@frontend/context/AuthProvider';
 
 const Discover: NextPage = () => {
   const categoryState = {
@@ -90,6 +92,16 @@ const Discover: NextPage = () => {
       end_date: new Date(),
     },
   ];
+
+  const { accessToken } = useAuth();
+
+  const calculateTrendScore = async () => {
+    await axios.put('/api/projects/trend', {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
+  }
+
+  useEffect(()=>{
+    calculateTrendScore();
+  }, []); 
 
   return (
     <>

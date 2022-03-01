@@ -251,7 +251,23 @@ const ProjectService = {
 
   updateTrendScore: async () => {
     const db = await connection();
-
+    console.log("hey");
+    try {
+      //Increment project likesAmt
+      const projectScore = await db.createQueryBuilder()
+          .select()
+          .update(Project)
+          .set({
+              trendScore: () => `("likesAmt"-"likesAmtLast") + ("views"-"viewsLast") + ("fundRaised"-"fundRaisedLast")`
+          })
+          .where("(now() - scoreUpdatedAt) > INTERVAL '5 min'")
+          .execute()
+      
+      console.log("made it here")
+;    }
+    catch {
+        throw new DatabaseError('Database connection failed');
+    }
 
   }
 };
