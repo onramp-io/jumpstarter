@@ -187,7 +187,7 @@ const ProjectService = {
         .createQueryBuilder()
         .delete()
         .from(Project)
-        .where("id = :id", { id: projectId }) //<--
+        .where("id = :id", { id: projectId })
         .execute();
 
       if (deletedProject.affected === 1) {
