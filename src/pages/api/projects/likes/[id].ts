@@ -5,6 +5,7 @@ import {
   MethodNotAllowedError,
 } from 'helpers/ErrorHandling/errors';
 import { Success } from 'helpers/ErrorHandling/success';
+import { clientResponse } from 'helpers/ErrorHandling/response'
 
 interface Request extends NextApiRequest {
   user: any;
@@ -15,19 +16,13 @@ const handler = async (req: Request, res: NextApiResponse) => {
     switch(req.method) {
       case 'GET':
         await ProjectController.getLikes(req)
-        res.status(Success.code).json({
-          status: Success.status,
-          message: Success.message,
-        });
+        clientResponse(res, Success.code, Success.status, Success.message);
         break;
       default:throw new MethodNotAllowedError('Method not found');
     }
   }
   catch (error) {
-    res.status(error.code).json({
-      status: error.status,
-      message: error.message,
-    }); 
+    clientResponse(res, Success.code, Success.status, Success.message);
   }
 }
 
