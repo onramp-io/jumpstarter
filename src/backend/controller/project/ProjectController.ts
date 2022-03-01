@@ -10,16 +10,13 @@ import {
   BadRequestError,
 } from "helpers/ErrorHandling/errors";
 import chalk from "chalk";
+import reqIsUnauthorized from "@backend/utils/isAuthorized";
 
 const ProjectController = {
   // CREATE - 1
   create: async (req) => {
     try {
-      if (
-        req.user === undefined ||
-        req.user.uid === undefined ||
-        req.user.uid === null
-      ) {
+      if (reqIsUnauthorized(req)) {
         throw new AuthorizationError(
           "Auth token does not exist or has expired"
         );
@@ -80,11 +77,7 @@ const ProjectController = {
   // UPDATE - 1
   updateById: async (req) => {
     try {
-      if (
-        req.user === undefined ||
-        req.user.uid === undefined ||
-        req.user.uid === null
-      ) {
+      if (reqIsUnauthorized(req)) {
         throw new AuthorizationError(
           "Auth token does not exist or has expired"
         );
@@ -118,11 +111,7 @@ const ProjectController = {
   // DESTROY - 1
   deleteById: async (req) => {
     try {
-      if (
-        req.user === undefined ||
-        req.user.uid === undefined ||
-        req.user.uid === null
-      ) {
+      if (reqIsUnauthorized(req)) {
         throw new AuthorizationError(
           "Auth token does not exist or has expired"
         );
