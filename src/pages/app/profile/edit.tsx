@@ -13,7 +13,8 @@ import {
   FileInput,
   Text,
 } from 'grommet';
-import axios from '../../../axios/instance';
+// import axios from '../../../axios/instance';
+import axios from 'axios';
 import { useAuth } from '@frontend/context/AuthProvider';
 import { deleteUser, getAuth } from 'firebase/auth';
 import { Alert, AlertTitle } from '@mui/material';
@@ -22,10 +23,11 @@ const EditProfile: NextPage = () => {
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
   const [bioValue, setBio] = useState('');
+  const [avatarImg, setAvatar] = useState<File>(null);
   const [errorMessage, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { firstName, lastName, bio, avatar } = useAuth();
+  const { firstName, lastName, bio, avatar, accessToken } = useAuth();
 
   const router = useRouter();
 
@@ -48,9 +50,23 @@ const EditProfile: NextPage = () => {
         firstName: fName,
         lastName: lName,
         bio: bioValue,
-        avatar: '',
       };
-      await axios.put(`/users/update`, body);
+
+      const headers = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+
+      const updateUser = await axios.put('/api/users/update', body, headers);
+      
+      await axios.put('/api/users/updateAvatar', avatarImg, {
+        headers: {
+          'Content-type': avatarImg.type,
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
       router.push('/app/profile');
     } catch (error) {
       setError(error.message);
@@ -85,13 +101,11 @@ const EditProfile: NextPage = () => {
               />
             </Box>
             <FileInput
-              name="file"
+              name="image"
+              type="File"
               placeholder="Upload a profile picture"
               onChange={(event) => {
-                const fileList = event.target.files;
-                for (let i = 0; i < fileList.length; i += 1) {
-                  const file = fileList[i];
-                }
+                setAvatar(event.target.files[0]);
               }}
             />
           </Box>
