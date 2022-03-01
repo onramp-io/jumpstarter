@@ -13,13 +13,8 @@ export const verifyRequest = (handler) => {
     const accessToken = req.headers["authorization"];
     let token: string = "";
 
-    console.log(accessToken);
-
     try {
       if (!accessToken) {
-        console.log(
-          chalk.red.bold("ERROR: verify_request() in verify_request.ts")
-        );
         throw new AuthorizationError("Access token is required");
       } else {
         token = accessToken.split(" ")[1];
@@ -31,10 +26,6 @@ export const verifyRequest = (handler) => {
       }
     } catch (error) {
       if (error instanceof AuthorizationError) {
-        console.log(
-          chalk.red.bold(error.name + " @verify_request.ts on Line 32: "),
-          error.message
-        );
         res.status(error.code).json({
           status: error.status,
           error: error.message,
