@@ -18,6 +18,7 @@ const connection = async () => {
   const temp = await createConnection({
     type: process.env.DB_TYPE as any,
     url: process.env.DB_CONNECTION_STRING,
+    logging: true,
     synchronize: true,
     entities: [User, Project, Investment, Comment, Like, Category],
   });

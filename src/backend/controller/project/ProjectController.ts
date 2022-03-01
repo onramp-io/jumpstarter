@@ -123,11 +123,11 @@ const ProjectController = {
   // TODO: (Tapa) BS2-16 [BE]: Create endpoint to return a list of recommended Projects based on Projects a User has liked/funded
   sortBy: async (req) => {
     try {
-      if (reqParamsAreComplete(req.body, 1)) {
-        return ProjectService.sortBy(req);
+      if (reqParamsAreComplete(req.query, 1)) {
+        return ProjectService.sortBy(req.query);
       } else {
         throw new Error(
-          "req.body is missing sortBy params! (i.e. SortByString.NEWEST, or SortByString.RECOMMENDED, or SortByString.TRENDING"
+          "req.query is missing sortBy params! (i.e. SortByString.NEWEST, or SortByString.RECOMMENDED, or SortByString.TRENDING"
         );
       }
     } catch (err) {

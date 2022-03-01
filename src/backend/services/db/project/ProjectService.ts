@@ -206,20 +206,35 @@ const ProjectService = {
    * READ: 'GET' request for **ALL** Records of a Particular Category
    *
    */
-  sortBy: async (sortByParams) => {
-    if (sortByParams === SortByConfig.NEWEST) {
+  sortBy: async (query) => {
+    console.log(query.sortType);
+    const db = await connection();
+
+    if (query.sortType === SortByConfig.NEWEST) {
       try {
-        // TODO: Add logic for Sorting (@Pran)
+          const projectData = await getRepository(Project)
+            .createQueryBuilder("project")
+            .orderBy('project.createdDate', 'DESC')
+            .getMany();
+
+          return projectData;
+
       } catch (err) {
-        throw err;
+        throw new DatabaseError('Database connection failed');
       }
-    } else if (sortByParams === SortByConfig.TRENDING) {
+    } else if (query.sortType === SortByConfig.TRENDING) {
       try {
-        // TODO: Add logic for Trending (@Pran)
+        const projectData = await getRepository(Project)
+          .createQueryBuilder("project")
+          .orderBy('project.trendScore', 'DESC')
+          .getMany();
+
+        return projectData;
+
       } catch (err) {
-        throw err;
+        throw new DatabaseError('Database connection failed');
       }
-    } else if (sortByParams === SortByConfig.RECOMMENDED) {
+    } else if (query.sortType === SortByConfig.RECOMMENDED) {
       try {
         // TODO: Add logic here for Recommended (@Tapa)
       } catch (err) {
@@ -251,7 +266,6 @@ const ProjectService = {
 
   updateTrendScore: async () => {
     const db = await connection();
-    console.log("hey");
     try {
       //Increment project likesAmt
       const projectScore = await db.createQueryBuilder()
@@ -262,8 +276,6 @@ const ProjectService = {
           })
           .where("(now() - scoreUpdatedAt) > INTERVAL '5 min'")
           .execute()
-      
-      console.log("made it here")
 ;    }
     catch {
         throw new DatabaseError('Database connection failed');
