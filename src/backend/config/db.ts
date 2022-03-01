@@ -13,9 +13,7 @@ const connection = async () => {
   try {
     const staleConnection = getConnection();
     await staleConnection.close();
-  } catch (error) {
-    throw error;
-  }
+  } catch (error) {}
 
   const temp = await createConnection({
     type: process.env.DB_TYPE as any,
