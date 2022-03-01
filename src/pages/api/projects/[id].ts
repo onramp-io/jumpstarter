@@ -8,49 +8,20 @@ import {
   BadRequestError,
   MethodNotAllowedError,
 } from "helpers/ErrorHandling/errors";
-import { verifyRequest } from "@backend/middleware/verify_request";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
-    // UPDATE - 1 row
-    case RequestMethod.PUT:
+    // READ - 1
+    case RequestMethod.GET:
       try {
-        const [updatedProject, updateByIdStatusCode] =
-          await ProjectController.updateById(req);
+        const [foundProject, findByIdStatusCode] =
+          await ProjectController.findById(req);
 
-        if (updateByIdStatusCode === 200) {
+        if (findByIdStatusCode === 200) {
           res.status(Success.code).json({
             status: Success.status,
             message: Success.message,
-            data: updatedProject,
-          });
-        } else {
-          const badRequest = new BadRequestError("Routing error");
-
-          res.status(badRequest.code).json({
-            status: badRequest.status,
-            message: badRequest.message,
-          });
-        }
-      } catch (err) {
-        res.status(err.code).json({
-          status: err.status,
-          message: err.message,
-        });
-      }
-      break;
-
-    // DESTROY - 1 row
-    case RequestMethod.DELETE:
-      try {
-        const [deletedProject, deleteByIdStatusCode] =
-          await ProjectController.deleteById(req);
-
-        if (deleteByIdStatusCode === 200) {
-          res.status(Success.code).json({
-            status: Success.status,
-            message: Success.message,
-            data: deletedProject,
+            data: foundProject,
           });
         } else {
           const badRequest = new BadRequestError("Routing error");
@@ -78,4 +49,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default verifyRequest(handler);
+export default handler;

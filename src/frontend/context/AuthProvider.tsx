@@ -13,8 +13,11 @@ import { onAuthStateChanged } from '@firebase/auth';
 import { auth } from '../../firebase/client/client';
 import { getIdToken } from 'firebase/auth';
 import axios from '../../axios/instance';
+import { tokenToString } from 'typescript';
+import { Token } from '@mui/icons-material';
 
 export interface AuthContextType {
+  accessToken: string;
   firstName: string;
   lastName: string;
   bio: string;
@@ -23,10 +26,10 @@ export interface AuthContextType {
   interests: string[];
   balance: number;
   investments: any[];
-  accessToken: string;
 }
 
 export const AuthContext = createContext<AuthContextType>({
+  accessToken: '',
   firstName: '',
   lastName: '',
   bio: '',
@@ -35,12 +38,12 @@ export const AuthContext = createContext<AuthContextType>({
   interests: [],
   balance: 0,
   investments: [],
-  accessToken: 'string',
 });
 
 const userDispatchContext = createContext({});
 
 const initialState = {
+  accessToken: '',
   firstName: '',
   lastName: '',
   bio: '',
@@ -49,7 +52,6 @@ const initialState = {
   interests: [],
   balance: 0,
   investments: [],
-  accessToken: '',
 };
 
 const reducer = (state, action) => {

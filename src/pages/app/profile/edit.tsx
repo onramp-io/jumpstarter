@@ -1,7 +1,7 @@
-import type { NextPage } from 'next';
-import styles from '../../../styles/EditUser.module.css';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import type { NextPage } from "next";
+import styles from "../../../styles/EditUser.module.css";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 import {
   Heading,
@@ -12,6 +12,7 @@ import {
   Avatar,
   FileInput,
   Text,
+<<<<<<< HEAD
 } from 'grommet';
 // import axios from '../../../axios/instance';
 import axios from 'axios';
@@ -25,6 +26,19 @@ const EditProfile: NextPage = () => {
   const [bioValue, setBio] = useState('');
   const [avatarImg, setAvatar] = useState<File>(null);
   const [errorMessage, setError] = useState('');
+=======
+} from "grommet";
+import axios from "../../../axios/instance";
+import { useAuth, useUserDispatch } from "@frontend/context/AuthProvider";
+import { deleteUser, getAuth } from "firebase/auth";
+import { Alert, AlertTitle } from "@mui/material";
+
+const EditProfile: NextPage = () => {
+  const [fName, setFName] = useState("");
+  const [lName, setLName] = useState("");
+  const [bioValue, setBio] = useState("");
+  const [errorMessage, setError] = useState("");
+>>>>>>> main
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { firstName, lastName, bio, avatar, accessToken } = useAuth();
@@ -80,7 +94,7 @@ const EditProfile: NextPage = () => {
       const user = auth.currentUser;
       deleteUser(user).then(async () => {
         const res = await axios.delete(`/users/delete`);
-        router.push('/');
+        router.push("/");
       });
     } catch (error) {
       setError(error.message);
@@ -162,7 +176,7 @@ const EditProfile: NextPage = () => {
         <Text onClick={delUser} className={styles.deleteUser}>
           Delete Account
         </Text>
-        {errorMessage !== '' && (
+        {errorMessage !== "" && (
           <Alert severity="error">
             <AlertTitle>{errorMessage}</AlertTitle>
           </Alert>
