@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { verifyRequest } from '@backend/middleware/verify_request';
 import commentController from '@backend/controller/comment/comment';
 import {
   MethodNotAllowedError,
@@ -39,4 +40,4 @@ const handler = async (req: Request, res: NextApiResponse) => {
   }
   
 
-  export default handler;
+  export default verifyRequest(handler);

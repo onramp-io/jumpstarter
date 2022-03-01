@@ -5,11 +5,14 @@ import Comment from '@frontend/components/comment';
 import SingleProjectInfo from '@frontend/components/singleprojectinfo';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useAuth } from '@frontend/context/AuthProvider';
+
 
 const Project: NextPage = () => {
   const [comment, setComment] = useState('');
   const [commentList, setCommentList] = useState([]);
   const router = useRouter();
+  const { accessToken } = useAuth();
 
   const projectDetails = {
       title: 'Project XYZ',
@@ -22,17 +25,18 @@ const Project: NextPage = () => {
     };
 
   const getComments = async (projectId) => {
-    const commentData = await axios.get('/api/comments/' + projectId);
+    const commentData = await axios.get('/api/comments/' + projectId, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}}) ;
     setCommentList(commentData.data.response);
   }
 
   const submitComment = async (event: MouseEvent) => {
+    const user = await axios.get('/api/users/get', {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
     const body = {
-      userId: 1,
+      userId: user.data.userData['id'],
       projectId: router.query.projectId,
       comment: comment
     }
-    await axios.post('/api/comments', body);
+    await axios.post('/api/comments', body, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
     getComments(router.query.projectId);
   }
 
@@ -40,7 +44,8 @@ const Project: NextPage = () => {
     //make sure url is populated before pulling query params
     if(!router.isReady) return;
 
-    //projectId = router.query.projectId;
+    setComment('');
+
     getComments(router.query.projectId);
 
   }, [router.isReady]); 

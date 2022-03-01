@@ -27,9 +27,8 @@ const commentService = {
     }
   },
 
-  create: async (body) => {
+  create: async (body, user) => {
     const { userId, projectId, comment } = body;
-    console.log(body);
     try {
     const db = await connection();
     //add new category
