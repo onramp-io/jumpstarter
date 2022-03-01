@@ -72,23 +72,12 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
         const token = await getIdToken(user);
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         getUser();
-        // getUserInvestments();
       }
     });
   }, []);
 
   const getUser = async () => {
-    console.log(`we're in the getUser function!`);
     const response = await axios.get("/users/get");
-    /** 
-     const response = await fetch("http://localhost:3000/users/get")
-       .then((res) => res.json())
-       .then(({ data }) => {
-         console.log(`data ===> ${data}`);
-       })
-       .catch((err) => console.warn(err));
-     * 
-     */
     setUser({
       firstName: response.data.userData["firstName"],
       lastName: response.data.userData["lastName"],
