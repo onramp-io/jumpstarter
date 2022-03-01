@@ -21,6 +21,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
+          response
         });
         break;
       case 'POST':

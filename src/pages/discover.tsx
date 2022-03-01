@@ -1,19 +1,31 @@
 import type { NextPage } from 'next';
 import { Box, CheckBox, CheckBoxGroup, Heading, InfiniteScroll, NameValueList, Select, Sidebar, Text } from 'grommet';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LargeProjectCard from '@frontend/components/largeprojectcard';
-
+import axios from 'axios';
 const Discover: NextPage = () => {
-  const categoryState = {
-    Film: true,
-    Tech: true,
-    Literature: true,
-    Games: true,
-    Music: true,
-    Food: true
-  }
+  // const categoryState = {
+  //   Film: true,
+  //   Tech: true,
+  //   Literature: true,
+  //   Games: true,
+  //   Music: true,
+  //   Food: true
+  // }
 
-  const [categories, setCategories] = useState(categoryState);
+  const [categories, setCategories] = useState({});
+
+  useEffect(() => {
+    const getCategories = async () => {
+      const response = await axios.get('/api/categories');
+
+      const categoryList = response.data.response()
+
+      setCategories(response.data.response)
+    }
+
+    getCategories();
+  }, [])
 
   const onChangeHandler = (category) => {
     console.log(category); 
@@ -26,6 +38,7 @@ const Discover: NextPage = () => {
     setCategories(copyOfCategories)
   }
 
+  console.log(categories)
   const categoryList = ["Film", "Tech", "Literature", "Games", "Music", "Food"];
 
   const projectData = [
