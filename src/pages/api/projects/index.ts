@@ -9,6 +9,10 @@ import {
   MethodNotAllowedError,
 } from "helpers/ErrorHandling/errors";
 
+// TODO: (Pran) BS2-113: [BE] Add Projects API for Trending Logic
+// TODO: (Pran) BS2-14 [BE]: Create endpoint to fetch a list of Projects sorted in newest to oldest order
+// TODO: (Tapa) BS2-16 [BE]: Create endpoint to return a list of recommended Projects based on Projects a User has liked/funded
+// TODO: (Tapa) BS2-114 [BE] Wire up ProjectService.findAllByUser to corresponding Api handler
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     // READ - all rows

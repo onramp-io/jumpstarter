@@ -68,7 +68,7 @@ const ProjectService = {
   },
 
   /**
-   *
+   * // TODO: (Tapa) BS2-114 [BE] Wire up ProjectService.findAllByUser to corresponding Api handler
    * @param findAllByUserParams contains req.user.uid --> uid
    */
   findAllByUser: async (findAllByUserParams) => {

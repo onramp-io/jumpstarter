@@ -118,7 +118,9 @@ const ProjectController = {
     }
   },
 
-  // SORT - all (TODO: add logic to ProjectService.sortBy -- Tapa & Pran)
+  // TODO: (Pran) BS2-113: Add Projects API for Trending Logic
+  // TODO: (Pran) BS2-14 [BE]: Create endpoint to fetch a list of Projects sorted in newest to oldest order
+  // TODO: (Tapa) BS2-16 [BE]: Create endpoint to return a list of recommended Projects based on Projects a User has liked/funded
   sortBy: async (req) => {
     try {
       if (reqParamsAreComplete(req.body, 1)) {
