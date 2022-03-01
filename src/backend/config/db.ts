@@ -10,23 +10,20 @@ import chalk from "chalk";
 
 //create typeorm database connection using ormconfig.json file
 const connection = async () => {
-  console.log(chalk.green("Connecting to database..."));
   try {
     const staleConnection = getConnection();
     await staleConnection.close();
   } catch (error) {
-    // no stale connection to clean up
+    throw error;
   }
 
   const temp = await createConnection({
     type: process.env.DB_TYPE as any,
     url: process.env.DB_CONNECTION_STRING,
-    // logging: true, //statements/queries console logged to terminal -> should remove when not debugging
-    synchronize: true, //will tralslate logic to sql
+    synchronize: true,
     entities: [User, Project, Investment, Comment, Like, Category],
   });
   if (getConnection().isConnected) {
-    console.log(chalk.green("DB Connected!"));
     return getConnection();
   }
 };
