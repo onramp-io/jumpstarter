@@ -23,6 +23,7 @@ export interface AuthContextType {
   interests: string[];
   balance: number;
   investments: any[];
+  accessToken: string;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -34,6 +35,7 @@ export const AuthContext = createContext<AuthContextType>({
   interests: [],
   balance: 0,
   investments: [],
+  accessToken: 'string',
 });
 
 const userDispatchContext = createContext({});
@@ -47,6 +49,7 @@ const initialState = {
   interests: [],
   balance: 0,
   investments: [],
+  accessToken: '',
 };
 
 const reducer = (state, action) => {
@@ -64,9 +67,10 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
   const setUser = (payload) => dispatch({ type: 'SET_USER', payload });
 
   useEffect(() => {
-    const getUser = async () => {
+    const getUser = async (token: string) => {
       const response = await axios.get('/users/get');
       setUser({
+        accessToken: token,
         firstName: response.data.userData['firstName'],
         lastName: response.data.userData['lastName'],
         bio: response.data.userData['bio'],
@@ -91,7 +95,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
       } else {
         const token = await getIdToken(user);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        getUser();
+        getUser(token);
         // getUserInvestments();
         getCategories();
       }
