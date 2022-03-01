@@ -13,8 +13,11 @@ import { onAuthStateChanged } from '@firebase/auth';
 import { auth } from '../../firebase/client/client';
 import { getIdToken } from 'firebase/auth';
 import axios from '../../axios/instance';
+import { tokenToString } from 'typescript';
+import { Token } from '@mui/icons-material';
 
 export interface AuthContextType {
+  userId: number;
   accessToken: string;
   firstName: string;
   lastName: string;
@@ -27,6 +30,7 @@ export interface AuthContextType {
 }
 
 export const AuthContext = createContext<AuthContextType>({
+  userId: 0,
   accessToken: '',
   firstName: '',
   lastName: '',
@@ -42,6 +46,7 @@ const userDispatchContext = createContext({});
 
 const initialState = {
   accessToken: '',
+  userId: 0,
   firstName: '',
   lastName: '',
   bio: '',

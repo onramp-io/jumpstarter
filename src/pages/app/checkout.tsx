@@ -1,10 +1,15 @@
 import type { NextPage } from 'next';
-import { Box, Button, DateInput, Form, FormField, Heading, Text, TextInput } from 'grommet';
+import { Box, Button, Form, FormField, Heading, Text, TextInput } from 'grommet';
 import { useState } from 'react';
+import { useAuth } from '@frontend/context/AuthProvider';
+import { useRouter } from 'next/router';
+import { Alert, AlertTitle } from '@mui/material';
+import axios from 'axios';
 
 const Checkout: NextPage = () => {
     const initialState = {
         donation: 0,
+        projectId: 1,
         firstName: '',
         lastName: '',
         cardNumber: '',
@@ -14,13 +19,50 @@ const Checkout: NextPage = () => {
     }
 
     const [state, setState] = useState(initialState);
+    const [validForm, setValidForm] = useState(false);
+    const [errorMessage, setError] = useState('');
+    const router = useRouter();
+    const { userId } = useAuth();
+
+    const checkout = async () => {
+        if (validForm) {
+            try {
+                const body = {
+                    userId: userId,
+                    projectId: state.projectId,
+                    fundAmt: state.donation
+                }
+                await axios.post('/api/investments', body);
+                router.push('/app/profile');
+            } catch (error) {
+                console.log(error);
+                setError('Invalid form data');
+            }
+        } else {
+            setError('Invalid form');
+        }
+    }
 
     return (
+        <>
+        <Box>
+            {errorMessage !== '' && (
+                <Alert severity="error">
+                    <AlertTitle>{errorMessage}</AlertTitle>
+                </Alert>
+            )}
+        </Box>
+        
         <Box alignSelf="center" margin={{top: "xlarge", horizontal: "10rem"}} direction="row" gap="xlarge">
             <Box gridArea="form" pad="small">
                 <Form
                     value={state}
                     validate="blur"
+                    onValidate={(event) => {
+                        if (event.valid) {
+                            setValidForm(true);
+                        }
+                    }}
                 >
                     <FormField 
                         name="amount"
@@ -170,9 +212,11 @@ const Checkout: NextPage = () => {
             <Box alignSelf="center" align="center" justify="between" height="medium" margin={{left: "xlarge"}}>
                  <Heading margin={{top: "xlarge"}} level="2">You will pay</Heading>
                  <Heading>${state.donation.toLocaleString()}</Heading>
-                 <Button primary label="Checkout" margin={{bottom: "large"}}/>
+                 <Button primary label="Checkout" margin={{bottom: "large"}} onClick={() => {checkout()}}/>
             </Box>
         </Box>
+        </>
+        
     )
 }
 
