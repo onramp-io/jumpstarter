@@ -36,11 +36,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           });
         }
       } catch (err) {
-        console.warn(
-          chalk.bgRed(
-            `Error caught at /api/projects/index Project NextApiHandler - ${err.message}`
-          )
-        );
         res.status(err.code).json({
           status: err.status,
           message: err.message,
