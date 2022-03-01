@@ -95,48 +95,20 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
         delete axios.defaults.headers.common["Authorization"];
       } else {
         const token = await getIdToken(user);
-<<<<<<< HEAD
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         getUser();
         // getUserInvestments();
         getCategories();
-=======
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        getUser(token);
->>>>>>> main
       }
     });
   }, []);
 
-<<<<<<< HEAD
   // const getUserInvestments = async () => {
   //   const response = await axios.get('/investments/get');
   //   setUser({
   //     investments: response.data.investments,
   //   });
   // };
-=======
-  const getUser = async (token) => {
-    const response = await axios.get("/users/get");
-    setUser({
-      accessToken: token,
-      firstName: response.data.userData["firstName"],
-      lastName: response.data.userData["lastName"],
-      bio: response.data.userData["bio"],
-      avatar: response.data.userData["avatar"],
-      investedAmt: response.data.userData["investedAmt"],
-      interests: response.data.userData["interests"],
-      balance: response.data.userData["balance"],
-    });
-  };
-
-  const getUserInvestments = async () => {
-    const response = await axios.get("/investments/get");
-    setUser({
-      investments: response.data.investments,
-    });
-  };
->>>>>>> main
 
   return (
     <userDispatchContext.Provider value={{ setUser }}>
