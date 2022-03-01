@@ -1,3 +1,57 @@
+:root {
+  font-size: 16px;
+  --BRAND: rgba(11, 37, 64, 1);
+  --WHITE: #ffff;
+  --BLACK: #242424;
+  --BRANDLIGHT: #373737;
+  --GREY: #bfbfbf;
+  --GREYLIGHT: #d4d4d4;
+  --GREYDARK: #e1e1e1;
+  --WHITEBG: #f5f5f3;
+  --RED: #eb5757;
+  --GREEN: #12d60e;
+  --ANCHOR: #373737;
+  --BODY: BRAND;
+  --BODYLIGHT: #787878;
+  --BORDER: #c6c6c6;
+  --ERROR: #bfbfbf;
+  --LINK: var(--ACCENT);
+  --ACCENT: #635bff;
+}
+
+@font-face {
+  font-family: "InterR";
+  src: url(/fonts/inter-R.ttf);
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "InterM";
+  src: url(/fonts/inter-M.otf);
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "InterB";
+  src: url(/fonts/inter-B.otf);
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "InterEB";
+  src: url(/fonts/inter-EB.otf);
+  letter-spacing: -1.2px !important;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 html,
 body {
   padding: 0;
@@ -14,6 +68,7 @@ a {
 * {
   box-sizing: border-box;
 }
+
 /* Box sizing rules */
 *,
 *::before,
