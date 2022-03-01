@@ -13,8 +13,6 @@ import { onAuthStateChanged } from '@firebase/auth';
 import { auth } from '../../firebase/client/client';
 import { getIdToken } from 'firebase/auth';
 import axios from '../../axios/instance';
-import { tokenToString } from 'typescript';
-import { Token } from '@mui/icons-material';
 
 export interface AuthContextType {
   accessToken: string;
@@ -91,7 +89,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
     };
 
     const getUserProjects = async () => {
-      const response = await axios.get('/users/projects/get');
+      const response = await axios.get('/users/projects/');
     };
 
     const getUserInvestments = async () => {
@@ -110,9 +108,9 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
           const token = await getIdToken(user);
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
           getUser(token);
-          getUserInvestments();
+          // getUserInvestments();
           getCategories();
-          getUserProjects();
+          // getUserProjects();
         }
       } catch (error) {
         console.log(error);
