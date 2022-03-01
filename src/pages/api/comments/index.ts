@@ -13,6 +13,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch(req.method) {
         case 'POST':
+            console.log("inside api call");
             await commentController.create(req)
             res.status(Success.code).json({
                 status: Success.status,

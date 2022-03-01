@@ -11,9 +11,11 @@ const commentController = {
   },
 
   create: async (req: Request) => {
+    console.log(req.body);
     if ((req.body.comment == null) || (req.body.projectId == null) || (req.body.userId == null)) {
       throw new DatabaseError('Database connection failed');
     }
+    console.log("made it");
     return commentService.create(req.body);
   },
 
