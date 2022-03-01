@@ -36,7 +36,10 @@ export class Project {
   @Column({ type: 'decimal', default: 0 })
   fundRaised: number;
 
-  @Column("timestamp")
+  @Column({ type: 'decimal', default: 0 })
+  fundRaisedLast: number;
+
+  @Column('timestamp')
   launchDate: string;
 
   @Column({ type: 'timestamp', default: () => "now()" })
@@ -46,7 +49,13 @@ export class Project {
   likesAmt: number;
 
   @Column({ type: 'integer', default: 0 })
+  likesAmtLast: number;
+
+  @Column({ type: 'integer', default: 0 })
   views: number;
+
+  @Column({ type: 'integer', default: 0 })
+  viewsLast: number;
 
   @Column({ type: 'integer', default: 0 })
   trendScore: number;
