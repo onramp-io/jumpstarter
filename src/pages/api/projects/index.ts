@@ -8,49 +8,24 @@ import {
   BadRequestError,
   MethodNotAllowedError,
 } from "helpers/ErrorHandling/errors";
-import { verifyRequest } from "@backend/middleware/verify_request";
 
+// TODO: (Pran) BS2-113: [BE] Add Projects API for Trending Logic
+// TODO: (Pran) BS2-14 [BE]: Create endpoint to fetch a list of Projects sorted in newest to oldest order
+// TODO: (Tapa) BS2-16 [BE]: Create endpoint to return a list of recommended Projects based on Projects a User has liked/funded
+// TODO: (Tapa) BS2-114 [BE] Wire up ProjectService.findAllByUser to corresponding Api handler
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
-    // UPDATE - 1 row
-    case RequestMethod.PUT:
+    // READ - all rows
+    case RequestMethod.GET:
       try {
-        const [updatedProject, updateByIdStatusCode] =
-          await ProjectController.updateById(req);
+        const [allProjects, findAllStatusCode] =
+          await ProjectController.findAll(req);
 
-        if (updateByIdStatusCode === 200) {
+        if (findAllStatusCode === 200) {
           res.status(Success.code).json({
             status: Success.status,
             message: Success.message,
-            data: updatedProject,
-          });
-        } else {
-          const badRequest = new BadRequestError("Routing error");
-
-          res.status(badRequest.code).json({
-            status: badRequest.status,
-            message: badRequest.message,
-          });
-        }
-      } catch (err) {
-        res.status(err.code).json({
-          status: err.status,
-          message: err.message,
-        });
-      }
-      break;
-
-    // DESTROY - 1 row
-    case RequestMethod.DELETE:
-      try {
-        const [deletedProject, deleteByIdStatusCode] =
-          await ProjectController.deleteById(req);
-
-        if (deleteByIdStatusCode === 200) {
-          res.status(Success.code).json({
-            status: Success.status,
-            message: Success.message,
-            data: deletedProject,
+            data: allProjects,
           });
         } else {
           const badRequest = new BadRequestError("Routing error");
@@ -78,4 +53,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default verifyRequest(handler);
+export default handler;
