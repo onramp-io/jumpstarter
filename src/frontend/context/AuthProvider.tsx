@@ -17,6 +17,7 @@ import { tokenToString } from "typescript";
 import { Token } from "@mui/icons-material";
 
 export interface AuthContextType {
+  userId: number;
   accessToken: string;
   firstName: string;
   lastName: string;
@@ -29,11 +30,12 @@ export interface AuthContextType {
 }
 
 export const AuthContext = createContext<AuthContextType>({
-  accessToken: "",
-  firstName: "",
-  lastName: "",
-  bio: "",
-  avatar: "",
+  userId: 0,
+  accessToken: '',
+  firstName: '',
+  lastName: '',
+  bio: '',
+  avatar: '',
   totalInvestments: 0,
   interests: [],
   balance: 0,
@@ -43,11 +45,12 @@ export const AuthContext = createContext<AuthContextType>({
 const userDispatchContext = createContext({});
 
 const initialState = {
-  accessToken: "",
-  firstName: "",
-  lastName: "",
-  bio: "",
-  avatar: "",
+  userId: 0,
+  accesssToken: '',
+  firstName: '',
+  lastName: '',
+  bio: '',
+  avatar: '',
   totalInvestments: 0,
   interests: [],
   balance: 0,
@@ -69,14 +72,36 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
   const setUser = (payload) => dispatch({ type: "SET_USER", payload });
 
   useEffect(() => {
+    const getUser = async () => {
+      const response = await axios.get('/users/get');
+      setUser({
+        firstName: response.data.userData['firstName'],
+        lastName: response.data.userData['lastName'],
+        bio: response.data.userData['bio'],
+        avatar: response.data.userData['avatar'],
+        investedAmt: response.data.userData['investedAmt'],
+        interests: response.data.userData['interests'],
+        balance: response.data.userData['balance'],
+      });
+    };
+
+    const getCategories = async () => {
+      const response = await axios.get('/users/preferences/get');
+      setUser({
+        interests: response.data.categories,
+      });
+    };
+
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         router.push("/");
         delete axios.defaults.headers.common["Authorization"];
       } else {
         const token = await getIdToken(user);
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        getUser(token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        getUser();
+        // getUserInvestments();
+        getCategories();
       }
     });
   }, []);
@@ -84,6 +109,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
   const getUser = async (token) => {
     const response = await axios.get("/users/get");
     setUser({
+      userId: response.data.userData['id'],
       accessToken: token,
       firstName: response.data.userData["firstName"],
       lastName: response.data.userData["lastName"],

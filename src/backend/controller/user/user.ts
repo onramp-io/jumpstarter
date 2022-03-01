@@ -1,5 +1,6 @@
 import { userService } from '@backend/services/db/user/userService';
 import { Request } from '@backend/middleware/verify_request';
+import { BadRequestError } from 'helpers/ErrorHandling/errors';
 
 export interface IUserPost {
   post: {
@@ -79,6 +80,20 @@ export const UserController = {
       user: { uid },
     } = req;
     const userData = userService.payOut(uid);
+    return userData;
+  },
+
+  getCategories: async () => {
+    const userData = userService.getCategories();
+    return userData;
+  },
+
+  updateInterest: async (req: Request) => {
+    const {
+      body: { categories },
+      user: { uid },
+    } = req;
+    const userData = userService.updateInterest(categories, uid);
     return userData;
   },
 };
