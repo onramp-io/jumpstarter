@@ -9,15 +9,8 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // this solved the 500
   @Column({ type: "text", nullable: true })
   uid: string;
-  /** 
-   @Column("text")
-   uid: string;
-   // 
-   * 
-   */
 
   @Column("text")
   firstName: string;
