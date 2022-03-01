@@ -82,7 +82,7 @@ export const NavBar = () => {
                     },
                     {
                       label: <Box pad="small">Create a New Project</Box>,
-                      href: '/project',
+                      href: '/login',
                     },
                     {
                       label: <Box pad="small">Discover</Box>,
@@ -130,10 +130,10 @@ export const NavBar = () => {
           ) : (
             <Box className={navbar.wrapper}>
               <Box direction="row" justify="start" gap="xlarge">
-                <Link href="/project">
+                <Link href="/login">
                   <Anchor
                     className="no-text-wrap"
-                    href="/project"
+                    href="/login"
                     label="Create a New Project"
                   />
                 </Link>
