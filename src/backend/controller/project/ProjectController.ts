@@ -35,9 +35,6 @@ const ProjectController = {
         throw new BadRequestError("Missing params on req.body");
       }
     } catch (err) {
-      console.warn(
-        chalk.bgRed(`Error caught at ProjectController - ${err.message}`)
-      );
       throw err;
     }
   },
@@ -47,9 +44,6 @@ const ProjectController = {
     try {
       return await ProjectService.findAll();
     } catch (err) {
-      console.warn(
-        chalk.bgRed(`Error caught at ProjectController - ${err.message}`)
-      );
       throw err;
     }
   },
@@ -65,9 +59,6 @@ const ProjectController = {
         );
       }
     } catch (err) {
-      console.warn(
-        chalk.bgRed(`Error caught at ProjectController - ${err.message}`)
-      );
       throw err;
     }
   },
@@ -98,9 +89,6 @@ const ProjectController = {
         }
       }
     } catch (err) {
-      console.warn(
-        chalk.bgRed(`Error caught at ProjectController - ${err.message}`)
-      );
       throw err;
     }
   },
@@ -126,9 +114,6 @@ const ProjectController = {
         );
       }
     } catch (err) {
-      console.warn(
-        chalk.bgRed(`Error caught at ProjectController - ${err.message}`)
-      );
       throw err;
     }
   },
@@ -144,9 +129,6 @@ const ProjectController = {
         );
       }
     } catch (err) {
-      console.warn(
-        chalk.bgRed(`Error caught at ProjectController - ${err.message}`)
-      );
       throw err;
     }
   },
