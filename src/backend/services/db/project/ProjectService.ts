@@ -207,30 +207,16 @@ const ProjectService = {
    *
    */
   sortBy: async (query) => {
-    console.log(query.sortType);
-    const db = await connection();
 
     if (query.sortType === SortByConfig.NEWEST) {
       try {
-          const projectData = await getRepository(Project)
-            .createQueryBuilder("project")
-            .orderBy('project.createdDate', 'DESC')
-            .getMany();
-
-          return projectData;
-
+        return await getSortedProjects("createdDate");
       } catch (err) {
         throw new DatabaseError('Database connection failed');
       }
     } else if (query.sortType === SortByConfig.TRENDING) {
       try {
-        const projectData = await getRepository(Project)
-          .createQueryBuilder("project")
-          .orderBy('project.trendScore', 'DESC')
-          .getMany();
-
-        return projectData;
-
+        return await getSortedProjects("trendScore");
       } catch (err) {
         throw new DatabaseError('Database connection failed');
       }
@@ -249,7 +235,7 @@ const ProjectService = {
     const db = await connection();
 
     try {
-      //Increment project likesAmt
+      //Increment project views
       const projectViews = await db.createQueryBuilder()
           .select()
           .update(Project)
@@ -295,8 +281,6 @@ const ProjectService = {
         .from(Project, "project")
         .where("id = :id", { id })
         .getRawOne();
-      
-      console.log(projectLikes);
 
       return projectLikes;
       
@@ -308,5 +292,19 @@ const ProjectService = {
   }
   
 };
+
+//Helper function to sort projects
+const getSortedProjects = async (column) => {
+  const db = await connection();
+
+  const projectData = await getRepository(Project)
+  .createQueryBuilder("project")
+  .orderBy(`project.${column}`, 'DESC')
+  .getMany();
+
+  console.log(projectData);
+
+  return projectData;
+}
 
 export default ProjectService;
