@@ -9,7 +9,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "text", nullable: true })
+  @Column("text")
   uid: string;
 
   @Column("text")
