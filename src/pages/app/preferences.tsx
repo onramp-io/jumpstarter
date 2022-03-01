@@ -1,13 +1,13 @@
 import type { NextPage } from 'next';
-import { Box, Heading } from 'grommet';
-import styles from '../../styles/Signup.module.css';
+import UserPreferences from '@frontend/components/preferencesComponent';
+import { useAuth } from '@frontend/context/AuthProvider';
 
 const Preferences: NextPage = () => {
+  const { interests } = useAuth();
+
   return (
     <>
-      <Box className={styles.signup_wrapper}>
-        <Heading>Preferences</Heading>
-      </Box>
+      <UserPreferences categories={interests} />
     </>
   );
 };

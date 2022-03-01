@@ -47,7 +47,7 @@ const Signup: NextPage = () => {
         email: email,
       };
       await axios.post('/users/create', body);
-      router.push('/app/profile');
+      router.push('/app/preferences');
     } catch (error) {
       setError('Invalid email or password');
     }

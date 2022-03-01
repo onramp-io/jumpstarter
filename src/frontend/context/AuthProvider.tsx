@@ -72,14 +72,36 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
   const setUser = (payload) => dispatch({ type: "SET_USER", payload });
 
   useEffect(() => {
+    const getUser = async () => {
+      const response = await axios.get('/users/get');
+      setUser({
+        firstName: response.data.userData['firstName'],
+        lastName: response.data.userData['lastName'],
+        bio: response.data.userData['bio'],
+        avatar: response.data.userData['avatar'],
+        investedAmt: response.data.userData['investedAmt'],
+        interests: response.data.userData['interests'],
+        balance: response.data.userData['balance'],
+      });
+    };
+
+    const getCategories = async () => {
+      const response = await axios.get('/users/preferences/get');
+      setUser({
+        interests: response.data.categories,
+      });
+    };
+
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         router.push("/");
         delete axios.defaults.headers.common["Authorization"];
       } else {
         const token = await getIdToken(user);
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        getUser(token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        getUser();
+        // getUserInvestments();
+        getCategories();
       }
     });
   }, []);
