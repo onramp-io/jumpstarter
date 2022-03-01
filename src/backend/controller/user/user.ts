@@ -18,9 +18,13 @@ export interface IUserPut {
   put: {
     firstName: string;
     lastName: string;
-    avatar: string;
     bio: string;
-    email: string;
+    uid: string;
+  };
+}
+export interface IUserPutAvatar {
+  putAvatar: {
+    avatar: string;
     uid: string;
   };
 }
@@ -55,15 +59,27 @@ export const UserController = {
   },
 
   put: async (req: Request) => {
-    const email = req.user.email;
     const {
       body: { firstName, lastName, bio, avatar },
       user: { uid },
     } = req;
     const dataToUpdate: IUserPut = {
-      put: { email, firstName, lastName, bio, avatar, uid },
+      put: { firstName, lastName, bio, uid },
     };
     const userData = userService.update(dataToUpdate);
+    return userData;
+  },
+
+  putAvatar: async (req: Request) => {
+    console.log(req.body);
+    const {
+      body: { avatar },
+      user: { uid },
+    } = req;
+    const dataToUpdate: IUserPutAvatar = {
+      putAvatar: { avatar, uid },
+    };
+    const userData = userService.updateAvatar(dataToUpdate);
     return userData;
   },
 
