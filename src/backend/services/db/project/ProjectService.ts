@@ -247,6 +247,12 @@ const ProjectService = {
     catch {
         throw new DatabaseError('Database connection failed');
     }
+  },
+
+  updateTrendScore: async () => {
+    const db = await connection();
+
+
   }
 };
 

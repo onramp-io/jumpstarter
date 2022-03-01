@@ -149,6 +149,10 @@ const ProjectController = {
       throw err;
     }
   },
+
+  updateTrendScore: async (req) => {
+    return await ProjectService.updateTrendScore();
+  },
 };
 
 export default ProjectController;
