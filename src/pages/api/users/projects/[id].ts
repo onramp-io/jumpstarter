@@ -51,8 +51,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const [deletedProject, deleteByIdStatusCode] =
           await ProjectController.deleteById(req);
 
-        console.log(chalk.bgGreenBright(deleteByIdStatusCode));
-
         if (deleteByIdStatusCode === 200) {
           res.status(Success.code).json({
             status: Success.status,

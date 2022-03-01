@@ -2,15 +2,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import chalk from "chalk";
 
 import ProjectController from "@backend/controller/project/ProjectController";
-import { getReasonPhrase, StatusCodes } from "http-status-codes";
-import jumpstarterApiErrorHandler from "@backend/utils/JumpstarterApiErrorHandler";
 import RequestMethod from "@backend/common/RequestMethod";
-import { verifyRequest } from "@backend/middleware/verify_request";
-import { Created, Success } from "helpers/ErrorHandling/success";
+import { Success } from "helpers/ErrorHandling/success";
 import {
   BadRequestError,
   MethodNotAllowedError,
-  NotFoundError,
 } from "helpers/ErrorHandling/errors";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
