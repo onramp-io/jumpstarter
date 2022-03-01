@@ -26,7 +26,7 @@ import { useRouter } from 'next/router';
 import navbar from '../../styles/Navbar.module.css';
 
 export const NavBar = () => {
-  const { firstName } = useAuth();
+  const { firstName, avatar } = useAuth();
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const router = useRouter();
@@ -43,6 +43,18 @@ export const NavBar = () => {
         });
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const RenderAvatar = () => {
+    if (!avatar) {
+      console.log('no avatar');
+      return (
+        <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
+      );
+    } else {
+      console.log('avatar found');
+      return <Avatar src={process.env.AWS_BUCKET_URL + avatar} />;
     }
   };
 
@@ -155,9 +167,7 @@ export const NavBar = () => {
                 <>
                   <Text>Welcome back, {firstName}</Text>
                   <DropButton
-                    label={
-                      <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
-                    }
+                    label={<RenderAvatar />}
                     className={navbar.dropdown}
                     dropAlign={{ top: 'bottom', right: 'right' }}
                     dropContent={
