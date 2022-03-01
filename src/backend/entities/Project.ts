@@ -4,11 +4,11 @@ import {
   Column,
   ManyToOne,
   OneToMany,
-} from 'typeorm';
-import { User } from './User';
-import { Comment } from './Comment';
-import { Investment } from './Investment';
-import { Like } from './Like';
+} from "typeorm";
+import { User } from "./User";
+import { Comment } from "./Comment";
+import { Investment } from "./Investment";
+import { Like } from "./Like";
 
 @Entity()
 export class Project {
@@ -18,23 +18,26 @@ export class Project {
   @Column({type: 'text', array: true, nullable: true })
   pictures: string[];
 
-  @Column('text')
+  @Column("text")
   title: string;
 
-  @Column('text')
+  @Column("text")
   category: string;
 
-  @Column('text')
+  @Column("text")
   description: string;
 
-  @Column('decimal', { array: true })
+  @Column("decimal", { array: true })
   fundTiers: number[];
 
-  @Column('integer')
+  @Column("integer")
   currFundGoal: number;
 
   @Column({ type: 'decimal', default: 0 })
   fundRaised: number;
+
+  @Column({ type: 'decimal', default: 0 })
+  fundRaisedLast: number;
 
   @Column('timestamp')
   launchDate: string;
@@ -42,11 +45,17 @@ export class Project {
   @Column({ type: 'timestamp', default: () => "now()" })
   createdDate: string;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: "integer", default: 0 })
   likesAmt: number;
 
   @Column({ type: 'integer', default: 0 })
+  likesAmtLast: number;
+
+  @Column({ type: 'integer', default: 0 })
   views: number;
+
+  @Column({ type: 'integer', default: 0 })
+  viewsLast: number;
 
   @Column({ type: 'integer', default: 0 })
   trendScore: number;

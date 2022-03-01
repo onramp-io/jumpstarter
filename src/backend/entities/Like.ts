@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { User } from './User';
-import { Project } from './Project';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { User } from "./User";
+import { Project } from "./Project";
 
 @Entity()
 export class Like {
@@ -10,6 +10,8 @@ export class Like {
   @ManyToOne(() => User, (user) => user.likes)
   user: User;
 
-  @ManyToOne(() => Project, (project) => project.likes)
+  @ManyToOne(() => Project, (project) => project.likes, {
+    onDelete: "CASCADE",
+  })
   project: Project;
 }

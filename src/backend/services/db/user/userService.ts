@@ -7,20 +7,20 @@ import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors';
 export const userService = {
   get: async (uid: string) => {
     const db = await connection();
-    if (!db) throw new DatabaseError('Database connection failed');
+    if (!db) throw new DatabaseError("Database connection failed");
     const userData = await db
       .createQueryBuilder()
-      .select('*')
-      .from('user', 'user')
-      .where('uid = :uid', { uid })
+      .select("*")
+      .from("user", "user")
+      .where("uid = :uid", { uid })
       .getRawOne();
-    if (!userData) throw new NotFoundError('User not found');
+    if (!userData) throw new NotFoundError("User not found"); // <---- this is where the 404 is coming from
     return userData;
   },
 
   insert: async (dataToInsert: IUserPost) => {
     const db = await connection();
-    if (!db) throw new DatabaseError('Database connection failed');
+    if (!db) throw new DatabaseError("Database connection failed");
     const userData = await db
       .createQueryBuilder()
       .insert()
@@ -30,20 +30,20 @@ export const userService = {
           firstName: dataToInsert.post.firstName,
           lastName: dataToInsert.post.lastName,
           email: dataToInsert.post.email,
-          avatar: '',
-          bio: '',
+          avatar: "",
+          bio: "",
           investedAmt: 0,
           uid: dataToInsert.post.uid,
         },
       ])
       .execute();
-    if (!userData) throw new NotFoundError('User not created');
+    if (!userData) throw new NotFoundError("User not created");
     return userData;
   },
 
   update: async (dataToUpdate: IUserPut) => {
     const db = await connection();
-    if (!db) throw new DatabaseError('Database connection failed');
+    if (!db) throw new DatabaseError("Database connection failed");
     const userData = await db
       .createQueryBuilder()
       .update(User)
@@ -53,37 +53,37 @@ export const userService = {
         avatar: dataToUpdate.put.avatar,
         bio: dataToUpdate.put.bio,
       })
-      .where('uid = :uid', { uid: dataToUpdate.put.uid })
+      .where("uid = :uid", { uid: dataToUpdate.put.uid })
       .execute();
-    if (!userData) throw new NotFoundError('User not found');
+    if (!userData) throw new NotFoundError("User not found");
     return userData;
   },
 
   delete: async (uid: string) => {
     const db = await connection();
-    if (!db) throw new DatabaseError('Database connection failed');
+    if (!db) throw new DatabaseError("Database connection failed");
     const userData = await db
       .createQueryBuilder()
       .delete()
       .from(User)
-      .where('uid = :uid', { uid })
+      .where("uid = :uid", { uid })
       .execute();
-    if (!userData) throw new NotFoundError('User not found');
+    if (!userData) throw new NotFoundError("User not found");
     return userData;
   },
 
   payOut: async (uid: string) => {
     const db = await connection();
-    if (!db) throw new DatabaseError('Database connection failed');
+    if (!db) throw new DatabaseError("Database connection failed");
     const userData = await db
       .createQueryBuilder()
       .update(User)
       .set({
         balance: 0,
       })
-      .where('uid = :uid', { uid })
+      .where("uid = :uid", { uid })
       .execute();
-    if (!userData) throw new NotFoundError('User not found');
+    if (!userData) throw new NotFoundError("User not found");
     return userData;
   },
 
