@@ -40,11 +40,15 @@ const Project: NextPage = () => {
     getComments(router.query.projectId);
   }
 
+  const addView = async () => {
+    await axios.put('/api/projects/views/' + router.query.projectId);
+  }
+
   useEffect(()=>{
     //make sure url is populated before pulling query params
     if(!router.isReady) return;
 
-    setComment('');
+    addView();
 
     getComments(router.query.projectId);
 

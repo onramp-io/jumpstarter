@@ -227,6 +227,27 @@ const ProjectService = {
       }
     }
   },
+
+  addView: async (query) => {
+    const id = query.id;
+
+    const db = await connection();
+
+    try {
+      //Increment project likesAmt
+      const projectViews = await db.createQueryBuilder()
+          .select()
+          .update(Project)
+          .set({
+              views: () => `"views" + 1`
+          })
+          .where("id = :id", { id: id })
+          .execute()
+    }
+    catch {
+        throw new DatabaseError('Database connection failed');
+    }
+  }
 };
 
 export default ProjectService;
