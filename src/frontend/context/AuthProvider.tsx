@@ -13,9 +13,12 @@ import { onAuthStateChanged } from '@firebase/auth';
 import { auth } from '../../firebase/client/client';
 import { getIdToken } from 'firebase/auth';
 import axios from '../../axios/instance';
+import { tokenToString } from 'typescript';
+import { Token } from '@mui/icons-material';
 
 export interface AuthContextType {
   userId: number;
+  accessToken: string;
   firstName: string;
   lastName: string;
   bio: string;
@@ -28,6 +31,7 @@ export interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType>({
   userId: 0,
+  accessToken: '',
   firstName: '',
   lastName: '',
   bio: '',
@@ -42,6 +46,7 @@ const userDispatchContext = createContext({});
 
 const initialState = {
   userId: 0,
+  accesssToken: '',
   firstName: '',
   lastName: '',
   bio: '',
@@ -74,16 +79,17 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
       } else {
         const token = await getIdToken(user);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        getUser();
+        getUser(token);
         //getUserInvestments();
       }
     });
   }, []);
 
-  const getUser = async () => {
+  const getUser = async (token) => {
     const response = await axios.get('/users/get');
     setUser({
       userId: response.data.userData['id'],
+      accessToken: token,
       firstName: response.data.userData['firstName'],
       lastName: response.data.userData['lastName'],
       bio: response.data.userData['bio'],

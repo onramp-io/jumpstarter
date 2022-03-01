@@ -20,8 +20,15 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
 
   const [projectState, setProjectState] = useState(projectFormState);
   const [imageFile, setImageFile] = useState<File>();
+  const [create, setCreate] = useState(true);
 
-  const onSubmit = (event) => {
+  const onSubmitCreate = (event) => {
+    event.preventDefault();
+
+    console.log(JSON.stringify(event.value));
+  }
+
+  const onSubmitEdit = (event) => {
     event.preventDefault();
 
     console.log(JSON.stringify(event.value));
@@ -58,7 +65,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
       </Box>
       <Form
         value={projectState}
-        onSubmit={(event) => onSubmit(event)}
+        onSubmit={(event) => create ? onSubmitCreate(event) : onSubmitEdit(event)}
         validate="blur"
       >
         <Box direction="column" gap="xlarge">

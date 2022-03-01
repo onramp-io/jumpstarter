@@ -30,6 +30,7 @@ const Discover: NextPage = () => {
 
   const projectData = [
     {
+      id: 1,
       user_name: "User 1",
       title: "New Film",
       category: "Film",
@@ -39,6 +40,7 @@ const Discover: NextPage = () => {
       end_date: new Date(),
     },
     {
+      id: 17,
       user_name: "User 2",
       title: "Smart Watch",
       category: "Tech",
@@ -48,6 +50,7 @@ const Discover: NextPage = () => {
       end_date: new Date(),
     },
     {
+      id: 2,
       user_name: "User 3",
       title: "New Book",
       category: "Literature",
@@ -57,6 +60,7 @@ const Discover: NextPage = () => {
       end_date: new Date(),
     },
     {
+      id: 3,
       user_name: "User 4",
       title: "New Game",
       category: "Games",
@@ -66,6 +70,7 @@ const Discover: NextPage = () => {
       end_date: new Date(),
     },
     {
+      id: 4,
       user_name: "User 5",
       title: "New Album",
       category: "Music",
@@ -75,6 +80,7 @@ const Discover: NextPage = () => {
       end_date: new Date(),
     },
     {
+      id: 5,
       user_name: "User 6",
       title: "New Snack",
       category: "Food",

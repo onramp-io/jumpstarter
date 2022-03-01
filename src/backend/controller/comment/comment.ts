@@ -14,7 +14,7 @@ const commentController = {
     if ((req.body.comment == null) || (req.body.projectId == null) || (req.body.userId == null)) {
       throw new DatabaseError('Database connection failed');
     }
-    return commentService.create(req.body);
+    return commentService.create(req.body, req.user);
   },
 
   deleteById: async (req: Request) => {
