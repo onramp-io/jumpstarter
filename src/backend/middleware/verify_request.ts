@@ -1,5 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import admin from "../../firebase/admin/admin";
+import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
+import admin from '../../firebase/admin/admin';
 
 import chalk from "chalk";
 import { AuthorizationError } from "helpers/ErrorHandling/errors";
@@ -8,7 +8,7 @@ export interface Request extends NextApiRequest {
   user: any;
 }
 
-export const verifyRequest = (handler) => {
+export const verifyRequest = (handler: NextApiHandler) => {
   return async (req: Request, res: NextApiResponse) => {
     const accessToken = req.headers["authorization"];
     let token: string = "";
