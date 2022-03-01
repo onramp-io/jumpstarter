@@ -1,20 +1,20 @@
-import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
+import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import React, {
   createContext,
   useContext,
   useEffect,
   useState,
   useReducer,
-} from 'react';
+} from "react";
 
-import { onAuthStateChanged } from '@firebase/auth';
+import { onAuthStateChanged } from "@firebase/auth";
 
-import { auth } from '../../firebase/client/client';
-import { getIdToken } from 'firebase/auth';
-import axios from '../../axios/instance';
-import { tokenToString } from 'typescript';
-import { Token } from '@mui/icons-material';
+import { auth } from "../../firebase/client/client";
+import { getIdToken } from "firebase/auth";
+import axios from "../../axios/instance";
+import { tokenToString } from "typescript";
+import { Token } from "@mui/icons-material";
 
 export interface AuthContextType {
   userId: number;
@@ -59,7 +59,7 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'SET_USER':
+    case "SET_USER":
       return { ...state, ...action.payload };
     default:
       throw new Error(`Unknown action: ${action.type}`);
@@ -69,39 +69,38 @@ const reducer = (state, action) => {
 export const PrivateRouteProvider: NextPage = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const router = useRouter();
-  const setUser = (payload) => dispatch({ type: 'SET_USER', payload });
+  const setUser = (payload) => dispatch({ type: "SET_USER", payload });
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        router.push('/');
-        delete axios.defaults.headers.common['Authorization'];
+        router.push("/");
+        delete axios.defaults.headers.common["Authorization"];
       } else {
         const token = await getIdToken(user);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         getUser(token);
-        //getUserInvestments();
       }
     });
   }, []);
 
   const getUser = async (token) => {
-    const response = await axios.get('/users/get');
+    const response = await axios.get("/users/get");
     setUser({
       userId: response.data.userData['id'],
       accessToken: token,
-      firstName: response.data.userData['firstName'],
-      lastName: response.data.userData['lastName'],
-      bio: response.data.userData['bio'],
-      avatar: response.data.userData['avatar'],
-      investedAmt: response.data.userData['investedAmt'],
-      interests: response.data.userData['interests'],
-      balance: response.data.userData['balance'],
+      firstName: response.data.userData["firstName"],
+      lastName: response.data.userData["lastName"],
+      bio: response.data.userData["bio"],
+      avatar: response.data.userData["avatar"],
+      investedAmt: response.data.userData["investedAmt"],
+      interests: response.data.userData["interests"],
+      balance: response.data.userData["balance"],
     });
   };
 
   const getUserInvestments = async () => {
-    const response = await axios.get('/investments/get');
+    const response = await axios.get("/investments/get");
     setUser({
       investments: response.data.investments,
     });
