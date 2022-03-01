@@ -10,11 +10,11 @@ import React, {
 
 import { onAuthStateChanged } from "@firebase/auth";
 
-import { auth } from '../../firebase/client/client';
-import { getIdToken } from 'firebase/auth';
-import axios from '../../axios/instance';
-import { tokenToString } from 'typescript';
-import { Token } from '@mui/icons-material';
+import { auth } from "../../firebase/client/client";
+import { getIdToken } from "firebase/auth";
+import axios from "../../axios/instance";
+import { tokenToString } from "typescript";
+import { Token } from "@mui/icons-material";
 
 export interface AuthContextType {
   accessToken: string;
@@ -29,11 +29,11 @@ export interface AuthContextType {
 }
 
 export const AuthContext = createContext<AuthContextType>({
-  accessToken: '',
-  firstName: '',
-  lastName: '',
-  bio: '',
-  avatar: '',
+  accessToken: "",
+  firstName: "",
+  lastName: "",
+  bio: "",
+  avatar: "",
   totalInvestments: 0,
   interests: [],
   balance: 0,
@@ -43,11 +43,11 @@ export const AuthContext = createContext<AuthContextType>({
 const userDispatchContext = createContext({});
 
 const initialState = {
-  accesssToken: '',
-  firstName: '',
-  lastName: '',
-  bio: '',
-  avatar: '',
+  accessToken: "",
+  firstName: "",
+  lastName: "",
+  bio: "",
+  avatar: "",
   totalInvestments: 0,
   interests: [],
   balance: 0,
@@ -75,23 +75,23 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
         delete axios.defaults.headers.common["Authorization"];
       } else {
         const token = await getIdToken(user);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         getUser(token);
       }
     });
   }, []);
 
   const getUser = async (token) => {
-    const response = await axios.get('/users/get');
+    const response = await axios.get("/users/get");
     setUser({
       accessToken: token,
-      firstName: response.data.userData['firstName'],
-      lastName: response.data.userData['lastName'],
-      bio: response.data.userData['bio'],
-      avatar: response.data.userData['avatar'],
-      investedAmt: response.data.userData['investedAmt'],
-      interests: response.data.userData['interests'],
-      balance: response.data.userData['balance'],
+      firstName: response.data.userData["firstName"],
+      lastName: response.data.userData["lastName"],
+      bio: response.data.userData["bio"],
+      avatar: response.data.userData["avatar"],
+      investedAmt: response.data.userData["investedAmt"],
+      interests: response.data.userData["interests"],
+      balance: response.data.userData["balance"],
     });
   };
 
