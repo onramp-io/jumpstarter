@@ -1,8 +1,15 @@
 import connection from '@backend/config/db';
-import { IUserPost, IUserPut } from '@backend/controller/user/user';
+import {
+  IUserPost,
+  IUserPut,
+  IUserPutAvatar,
+} from '@backend/controller/user/user';
 import { Project } from '@backend/entities/Project';
 import { User } from '@backend/entities/User';
 import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors';
+
+// import axios from '../../../../axios/instance';
+import axios from 'axios';
 
 export const userService = {
   get: async (uid: string) => {
@@ -50,13 +57,26 @@ export const userService = {
       .set({
         firstName: dataToUpdate.put.firstName,
         lastName: dataToUpdate.put.lastName,
-        avatar: dataToUpdate.put.avatar,
         bio: dataToUpdate.put.bio,
       })
       .where('uid = :uid', { uid: dataToUpdate.put.uid })
       .execute();
     if (!userData) throw new NotFoundError('User not found');
     return userData;
+  },
+
+  updateAvatar: async (dataToUpdate: IUserPutAvatar) => {
+    console.log('dataToUpdate', dataToUpdate);
+    /*
+
+    const uploadConfig = await axios.post('/api/upload');
+
+    await axios.put(uploadConfig.url, file, {
+      headers: {
+        'Content-type': file.type,
+      },
+    });
+    */
   },
 
   delete: async (uid: string) => {
