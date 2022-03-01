@@ -129,7 +129,6 @@ const ProjectService = {
         .from("project", "project")
         .where(`project.id = ${findByIdParams.id}`)
         .getRawOne();
-      // .execute(); <-- doesnt work. only works with getRawOne
 
       if (
         foundProject === null ||
@@ -205,7 +204,7 @@ const ProjectService = {
 
   /**
    * READ: 'GET' request for **ALL** Records of a Particular Category
-   * expects eithe
+   *
    */
   sortBy: async (sortByParams) => {
     if (sortByParams === SortByConfig.NEWEST) {
