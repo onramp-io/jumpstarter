@@ -10,7 +10,8 @@ import {
   BadRequestError,
 } from "helpers/ErrorHandling/errors";
 import chalk from "chalk";
-import reqIsUnauthorized from "@backend/utils/isAuthorized";
+import reqIsUnauthorized from "@backend/utils/reqIsUnauthorized";
+import reqParamsAreComplete from "@backend/utils/reqParamsAreComplete";
 
 const ProjectController = {
   // CREATE - 1
@@ -27,10 +28,7 @@ const ProjectController = {
         uid: req.user.uid,
       };
 
-      if (
-        isAllTruthy(createParamsWithUid) &&
-        Object.keys(createParamsWithUid).length >= 7
-      ) {
+      if (reqParamsAreComplete(createParamsWithUid, 7)) {
         const createdProj = await ProjectService.create(createParamsWithUid);
         return [createdProj, StatusCodes.CREATED];
       } else {
@@ -59,7 +57,7 @@ const ProjectController = {
   // READ - 1
   findById: async (req) => {
     try {
-      if (Object.keys(req.query).length === 1) {
+      if (reqParamsAreComplete(req.query, 1)) {
         return await ProjectService.findById(req.query);
       } else {
         throw new BadRequestError(
@@ -84,19 +82,18 @@ const ProjectController = {
       }
 
       if (
-        isAllTruthy(req.body) &&
-        Object.keys(req.body).length >= 7 &&
-        Object.keys(req.query).length === 1
+        reqParamsAreComplete(req.body, 7) &&
+        reqParamsAreComplete(req.query, 1)
       ) {
         return ProjectService.updateById(req.body, req.query.id);
       } else {
-        if (Object.keys(req.query).length < 1) {
+        if (!reqParamsAreComplete(req.query, 1)) {
           throw new BadRequestError(
             "req.query is missing id (project id) - Did you forget to add the id on the endpoint? e.g. /api/project/10"
           );
         }
 
-        if (Object.keys(req.body).length < 7) {
+        if (!reqParamsAreComplete(req.body, 7)) {
           throw new BadRequestError("req.body has missing parameters.");
         }
       }
@@ -121,7 +118,7 @@ const ProjectController = {
         uid: req.user.uid,
       };
 
-      if (Object.keys(req.query).length === 1) {
+      if (reqParamsAreComplete(req.query, 1)) {
         return await ProjectService.deleteById(parseInt(req.query.id));
       } else {
         throw new BadRequestError(
@@ -139,7 +136,7 @@ const ProjectController = {
   // SORT - all (TODO: add logic to ProjectService.sortBy -- Tapa & Pran)
   sortBy: async (req) => {
     try {
-      if (isAllTruthy(req.body) && Object.keys(req.body).length === 1) {
+      if (reqParamsAreComplete(req.body, 1)) {
         return ProjectService.sortBy(req);
       } else {
         throw new Error(
