@@ -60,9 +60,6 @@ const ProjectService = {
 
       return [projectInsertResult, StatusCodes.CREATED];
     } catch (err) {
-      console.warn(
-        chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
-      );
       throw err;
     }
   },
@@ -86,9 +83,6 @@ const ProjectService = {
       if (!userData) throw new NotFoundError("User not found");
       return userData;
     } catch (err) {
-      console.warn(
-        chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
-      );
       throw err;
     }
   },
@@ -114,9 +108,6 @@ const ProjectService = {
 
       return [allProjectRows, StatusCodes.OK];
     } catch (err) {
-      console.warn(
-        chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
-      );
       throw err;
     }
   },
@@ -149,9 +140,6 @@ const ProjectService = {
       }
       return [foundProject, StatusCodes.OK];
     } catch (err) {
-      console.warn(
-        chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
-      );
       throw err;
     }
   },
@@ -182,9 +170,6 @@ const ProjectService = {
         );
       }
     } catch (err) {
-      console.warn(
-        chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
-      );
       throw err;
     }
   },
@@ -214,9 +199,6 @@ const ProjectService = {
         );
       }
     } catch (err) {
-      console.warn(
-        chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
-      );
       throw err;
     }
   },
@@ -230,27 +212,18 @@ const ProjectService = {
       try {
         // TODO: Add logic for Sorting (@Pran)
       } catch (err) {
-        console.warn(
-          chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
-        );
         throw err;
       }
     } else if (sortByParams === SortByConfig.TRENDING) {
       try {
         // TODO: Add logic for Trending (@Pran)
       } catch (err) {
-        console.warn(
-          chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
-        );
         throw err;
       }
     } else if (sortByParams === SortByConfig.RECOMMENDED) {
       try {
         // TODO: Add logic here for Recommended (@Tapa)
       } catch (err) {
-        console.warn(
-          chalk.bgRed(`Error caught at ProjectService - ${err.message}`)
-        );
         throw err;
       }
     }
