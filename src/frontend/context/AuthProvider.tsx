@@ -90,26 +90,35 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
       });
     };
 
+    const getUserProjects = async () => {
+      const response = await axios.get('/users/projects/get');
+    };
+
+    const getUserInvestments = async () => {
+      const response = await axios.get('/investments/get');
+      setUser({
+        investments: response.data.investments,
+      });
+    };
+
     onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        router.push('/');
-        delete axios.defaults.headers.common['Authorization'];
-      } else {
-        const token = await getIdToken(user);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        getUser(token);
-        // getUserInvestments();
-        getCategories();
+      try {
+        if (!user) {
+          router.push('/');
+          delete axios.defaults.headers.common['Authorization'];
+        } else {
+          const token = await getIdToken(user);
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          getUser(token);
+          getUserInvestments();
+          getCategories();
+          getUserProjects();
+        }
+      } catch (error) {
+        console.log(error);
       }
     });
   }, []);
-
-  // const getUserInvestments = async () => {
-  //   const response = await axios.get('/investments/get');
-  //   setUser({
-  //     investments: response.data.investments,
-  //   });
-  // };
 
   return (
     <userDispatchContext.Provider value={{ setUser }}>
