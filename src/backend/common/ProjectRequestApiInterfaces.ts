@@ -1,7 +1,3 @@
-import { Comment } from "@backend/entities/Comment";
-import { Investment } from "@backend/entities/Investment";
-import { Like } from "@backend/entities/Like";
-import { User } from "@backend/entities/User";
 import { NextApiRequest } from "next";
 
 export interface CreateParamsInterface {
@@ -10,28 +6,12 @@ export interface CreateParamsInterface {
   description: string;
   fundTiers: number[];
   currFundGoal: number;
-  userId: number; 
-  // Is launchdate required soon as proj is being created?
-  // if not, pls remove the next line.
+  userId: number;
   launchDate?: string;
 }
 
 export interface ProjectCreateApiRequest extends NextApiRequest {
-  // req.body.createParams.description
   body: CreateParamsInterface;
-}
-
-/** 
- * 
- export interface ProjectFindAllParamsInterface {
-   undefined?: undefined | null;
- }
- 
- export interface ProjectFindAllApiRequest extends NextApiRequest {
-   body: {
-     findAllParams: ProjectFindAllParamsInterface;
-   };
- */
 }
 
 export interface FindByIdParamsInterface {
@@ -43,7 +23,6 @@ export interface ProjectFindByIdApiRequest extends NextApiRequest {
 }
 
 export interface UpdateByIdParamsInterface {
-  // id: string; <-- auto passed by query
   project: number;
   pictures?: string[];
   title?: string;
@@ -51,11 +30,6 @@ export interface UpdateByIdParamsInterface {
   description?: string;
   fundTiers?: number[];
   currFundGoal?: number;
-  // comments?: Comment[]; <--- take this* out in other files
-  // investments?: Investment[]; <-- and this*
-  // likes?: Like[]; <-- and this*
-  // Is launchdate required soon as proj is being createdte?
-  // if not, pls remove the next line.
   launchDate?: string;
 }
 
@@ -73,77 +47,23 @@ export interface ProjectDeleteByIdApiRequest extends NextApiRequest {
 
 export const SortByString = {
   NEWEST: "createdDate",
-  TRENDING: "likesAmt", // TODO: Add column you want to sort by (instead of "likesAmt") @Pran
-  RECOMMENDED: "user.id", // TODO: Add column you want to sort by (instead of "user.id") @Tapa
+  TRENDING: "likesAmt", // TODO: (Pran) BS2-113: Add Projects API for Trending Logic
+  RECOMMENDED: "user.id",
 };
 
 export enum SortByStringEnum {
-  NEWEST = "createdDate",
-  TRENDING = "likesAmt", // TODO: Add column you want to sort by (instead of "likesAmt") @Pran
-  RECOMMENDED = "user.id", // TODO: Add column you want to sort by (instead of "user.id") @Tapa
+  NEWEST = "createdDate", // TODO: (Pran) BS2-14 [BE]: Create endpoint to fetch a list of Projects sorted in newest to oldest order
+  TRENDING = "likesAmt", // TODO: (Pran) BS2-113 [BE]: Add Projects API for Trending Logic
+  RECOMMENDED = "user.id", // TODO: (Tapa) BS2-16 [BE]: Create endpoint to return a list of recommended Projects based on Projects a User has liked/funded
 }
-// SortByString.NEWEST
-// SortByString.TRENDING
-// SortByString.RECOMMENDED
 
 export type SortByParamsType = {
   SortByString:
-    | SortByStringEnum.NEWEST
-    | SortByStringEnum.TRENDING
-    | SortByStringEnum.RECOMMENDED;
+    | SortByStringEnum.NEWEST // TODO: (Pran) BS2-14 [BE]: Create endpoint to fetch a list of Projects sorted in newest to oldest order
+    | SortByStringEnum.TRENDING // TODO: (Pran) BS2-113 [BE]: Add Projects API for Trending Logic
+    | SortByStringEnum.RECOMMENDED; // TODO: (Tapa) BS2-16 [BE]: Create endpoint to return a list of recommended Projects based on Projects a User has liked/funded
 };
 
 export interface ProjectSortByApiRequest extends NextApiRequest {
   body: SortByParamsType;
 }
-
-/** 
- * 
- const ProjectPayload = {
-   create: {
-     pictures,
-     title,
-     category,
-     description,
-     fundTiers,
-     currFundGoal,
-     user,
-     // Is launchdate required soon as proj is being created?
-     // if not, pls remove the next line.
-     launchDate,
-   },
- 
-   findAll: undefined,
- 
-   findById: {
-     id,
-   },
- 
-   updateById: {
-     id,
-     pictures,
-     title,
-     category,
-     description,
-     fundTiers,
-     currFundGoal,
-     comments,
-     investments,
-     likes,
-     // Is launchdate required soon as proj is being created?
-     // if not, pls remove the next line.
-     launchDate,
-   },
- 
-   deleteById: {
-     id,
-   },
- 
-   sortBy: {
-     // TODO: (Tapa) Add fields as needed for recommendation algorithm
-     column,
-   },
- };
- 
- export default ProjectPayload;
- */
