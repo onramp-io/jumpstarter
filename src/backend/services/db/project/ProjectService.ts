@@ -1,7 +1,7 @@
-import connection from "@backend/config/db";
-import { Project } from "@backend/entities/Project";
-import type { NextApiRequest, NextApiResponse } from "next";
-import { Request } from "@backend/middleware/verify_request";
+import connection from '@backend/config/db';
+import { Project } from '@backend/entities/Project';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { Request } from '@backend/middleware/verify_request';
 import {
   createQueryBuilder,
   CustomRepositoryDoesNotHaveEntityError,
@@ -9,19 +9,19 @@ import {
   getConnection,
   getRepository,
   UpdateQueryBuilder,
-} from "typeorm";
-import SortByConfig from "@backend/common/SortByConfig";
-import index from "pages";
+} from 'typeorm';
+import SortByConfig from '@backend/common/SortByConfig';
+import index from 'pages';
 import {
   ReasonPhrases,
   StatusCodes,
   getReasonPhrase,
   getStatusCode,
-} from "http-status-codes";
-import { User } from "@backend/entities/User";
-import { DatabaseError, NotFoundError } from "helpers/ErrorHandling/errors";
-import chalk from "chalk";
-import existInDb from "@backend/utils/existsInDb";
+} from 'http-status-codes';
+import { User } from '@backend/entities/User';
+import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors';
+import chalk from 'chalk';
+import existInDb from '@backend/utils/existsInDb';
 
 const ProjectService = {
   /**
@@ -32,7 +32,7 @@ const ProjectService = {
       const db = await connection();
 
       if (db === undefined || db === null) {
-        throw new DatabaseError("Database connection failed");
+        throw new DatabaseError('Database connection failed');
       }
 
       const projectInsertResult = db
@@ -55,7 +55,7 @@ const ProjectService = {
         .execute();
 
       if (projectInsertResult === null || projectInsertResult === undefined) {
-        throw new DatabaseError("Project not created. Insert result is falsy.");
+        throw new DatabaseError('Project not created. Insert result is falsy.');
       }
 
       return [projectInsertResult, StatusCodes.CREATED];
@@ -71,16 +71,16 @@ const ProjectService = {
   findAllByUser: async (findAllByUserParams) => {
     try {
       const db = await connection();
-      if (!db) throw new DatabaseError("Database connection failed");
+      if (!db) throw new DatabaseError('Database connection failed');
       const userData = await db
         .createQueryBuilder()
-        .select("*")
-        .from("project", "project")
+        .select('*')
+        .from('project', 'project')
         .where(
           `project.user = (SELECT user.id FROM user WHERE user.uid = ${findAllByUserParams.uid})`
         )
         .getRawMany();
-      if (!userData) throw new NotFoundError("User not found");
+      if (!userData) throw new NotFoundError('User not found');
       return userData;
     } catch (err) {
       throw err;
@@ -95,15 +95,15 @@ const ProjectService = {
       const db = await connection();
 
       if (db === undefined || db === null) {
-        throw new DatabaseError("Database connection failed");
+        throw new DatabaseError('Database connection failed');
       }
 
       const allProjectRows: Project[] = await getRepository(Project)
-        .createQueryBuilder("project")
+        .createQueryBuilder('project')
         .getMany();
 
       if (allProjectRows === undefined || allProjectRows === null) {
-        throw new NotFoundError("Projects not found");
+        throw new NotFoundError('Projects not found');
       }
 
       return [allProjectRows, StatusCodes.OK];
@@ -120,13 +120,13 @@ const ProjectService = {
       const db = await connection();
 
       if (db === undefined || db === null) {
-        throw new DatabaseError("Database connection failed");
+        throw new DatabaseError('Database connection failed');
       }
 
       const foundProject = await db
         .createQueryBuilder()
-        .select("*")
-        .from("project", "project")
+        .select('*')
+        .from('project', 'project')
         .where(`project.id = ${findByIdParams.id}`)
         .getRawOne();
 
@@ -135,7 +135,7 @@ const ProjectService = {
         foundProject === undefined ||
         foundProject.length === 0
       ) {
-        throw new DatabaseError("Project not found. Found project is falsy.");
+        throw new DatabaseError('Project not found. Found project is falsy.');
       }
       return [foundProject, StatusCodes.OK];
     } catch (err) {
@@ -150,15 +150,15 @@ const ProjectService = {
     try {
       const db = await connection();
 
-      if (!existInDb("project", Project, id)) {
-        throw new NotFoundError("Project does not exist");
+      if (!existInDb('project', Project, id)) {
+        throw new NotFoundError('Project does not exist');
       }
 
       const updatedProject = await db
         .createQueryBuilder()
         .update(Project)
         .set(updateByIdParams)
-        .where("id = :id", { id })
+        .where('id = :id', { id })
         .execute();
 
       if (updatedProject.affected === 1) {
@@ -180,14 +180,14 @@ const ProjectService = {
     try {
       const db = await connection();
 
-      if (!existInDb("project", Project, projectId)) {
-        throw new NotFoundError("Project does not exist");
+      if (!existInDb('project', Project, projectId)) {
+        throw new NotFoundError('Project does not exist');
       }
       const deletedProject = await db
         .createQueryBuilder()
         .delete()
         .from(Project)
-        .where("id = :id", { id: projectId })
+        .where('id = :id', { id: projectId })
         .execute();
 
       if (deletedProject.affected === 1) {

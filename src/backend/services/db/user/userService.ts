@@ -7,9 +7,6 @@ import {
 import { User } from '@backend/entities/User';
 import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors';
 
-// import axios from '../../../../axios/instance';
-import axios from 'axios';
-
 export const userService = {
   get: async (uid: string) => {
     const db = await connection();
@@ -20,10 +17,9 @@ export const userService = {
       .from('user', 'user')
       .where('uid = :uid', { uid })
       .getRawOne();
-    if (!userData) throw new NotFoundError('User not found'); // <---- this is where the 404 is coming from
+    if (!userData) throw new NotFoundError('User not found');
     return userData;
   },
-
   insert: async (dataToInsert: IUserPost) => {
     const db = await connection();
     if (!db) throw new DatabaseError('Database connection failed');
