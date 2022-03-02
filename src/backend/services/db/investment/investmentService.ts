@@ -42,11 +42,14 @@ const InvestmentsDbService = {
     const db = await connection();
 
     try {
-        //Increment project fundRaised
+        //Increment project fundRaised and investors
         const projFund = await db.createQueryBuilder()
             .select()
             .update(Project)
-            .set({ fundRaised: () => `"fundRaised" + ${fundAmt}` })
+            .set({ 
+                fundRaised: () => `"fundRaised" + ${fundAmt}`,
+                investors: () => `"investors" + 1`
+            })
             .where("id = :id", { id: projectId })
             .returning(['fundRaised', 'fundTiers', 'currFundGoal', 'user'])
             .execute()

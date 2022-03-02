@@ -15,7 +15,8 @@ type projectType = {
   fund_raised: number,
   end_date: Date,
   pictures: string[],
-  investors: number
+  investors: number,
+  likesAmt: number
 }
 
 interface SingleProjectInfoProps {
@@ -26,7 +27,7 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
 
   const { firstName, accessToken } = useAuth();
   const [like, setLike] = useState(false);
-  const [likesAmt, setLikesAmt] = useState('');
+  const [likeTotal, setLikeTotal] = useState(0);
   const router = useRouter();
 
   const checkIfLiked = async (projectId) => {
@@ -37,26 +38,30 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
   }
 
   const submitLike = async (event: any) => {
+    let newLikeTotal = 0;
     if (!like) {
       const user = await axios.get('/users/get');
+      newLikeTotal = likeTotal + 1;
       const body = {
         userId: user.data.userData['id'],
         projectId: router.query.projectId,
       }
       await axios.post('/likes', body);
       setLike(true);
-      setLikesAmt(`${likesAmt}+1`)
     } else {
+      newLikeTotal = likeTotal - 1;
       await axios.delete('/likes/' + router.query.projectId);
       setLike(false);
-      setLikesAmt(`${likesAmt}-1`)
     }
+    setLikeTotal(newLikeTotal);
   }
 
-  //saving project likes amount to likesAmt state
-  const getLikes = async (projectId) => {
-    const likeData = await axios.get('/projects/likes/' + projectId);
-    setLikesAmt(likeData.data.data.likesAmt);
+  const goToCheckOut = async (event: any) => {
+    if (firstName) {
+      router.push('/app/checkout/' + router.query.projectId);
+    } else {
+      router.push('/login');
+    }
   }
 
   useEffect(()=>{
@@ -65,7 +70,6 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
     
     if (firstName) {
       checkIfLiked(router.query.projectId);
-      getLikes(router.query.projectId);
     }
 
   }, [router.isReady, firstName]); 
@@ -139,11 +143,13 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
                     <TableCell scope="col"><strong>Raised</strong></TableCell>
                     <TableCell scope="col"><strong>Remaining</strong></TableCell>
                     <TableCell scope="col"><strong>Investors</strong></TableCell>
+                    <TableCell scope="col"><strong>Likes</strong></TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell scope="col">${projectDetails.fund_raised.toLocaleString()}</TableCell>
                     <TableCell scope="col">${(projectDetails.fund_goal - projectDetails.fund_raised).toLocaleString()}</TableCell>
                     <TableCell scope="col">{projectDetails.investors.toLocaleString()}</TableCell>
+                    <TableCell scope="col">{projectDetails.likesAmt.toLocaleString()}</TableCell>
                   </TableRow>
               </Table>
               <Meter max={projectDetails.fund_goal} value={projectDetails.fund_raised}  background="light-3" size="full" margin={{
@@ -161,7 +167,7 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
             }}>{projectDetails.description}</Paragraph>
           </Box>
 
-          <Button gridArea="button" margin={{horizontal: "xlarge"}} primary label="JumpStart this project"/>
+          <Button onClick={(event) => goToCheckOut(event)} gridArea="button" margin={{horizontal: "xlarge"}} primary label="JumpStart this project"/>
         </Grid>
       </Box>
   );

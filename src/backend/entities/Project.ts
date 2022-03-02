@@ -63,6 +63,9 @@ export class Project {
   @Column({ type: 'timestamp', nullable: true})
   scoreUpdatedAt: string;
 
+  @Column({ type: 'integer', default: 0 })
+  investors: number;
+
   @ManyToOne(() => User, (user) => user.projects)
   user: User;
 

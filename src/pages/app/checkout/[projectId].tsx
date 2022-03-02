@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { Box, Button, Form, FormField, Heading, Text, TextInput } from 'grommet';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@frontend/context/AuthProvider';
 import { useRouter } from 'next/router';
 import { Alert, AlertTitle } from '@mui/material';
@@ -21,15 +21,15 @@ const Checkout: NextPage = () => {
     const [state, setState] = useState(initialState);
     const [validForm, setValidForm] = useState(false);
     const [errorMessage, setError] = useState('');
+    const { userId, firstName } = useAuth();
     const router = useRouter();
-    const { userId } = useAuth();
 
     const checkout = async () => {
         if (validForm) {
             try {
                 const body = {
                     userId: userId,
-                    projectId: state.projectId,
+                    projectId: router.query.projectId,
                     fundAmt: state.donation
                 }
                 await axios.post('/api/investments', body);
@@ -42,6 +42,12 @@ const Checkout: NextPage = () => {
             setError('Invalid form');
         }
     }
+
+    useEffect(()=>{
+        //make sure url is populated before pulling query params
+        if(!router.isReady || !firstName) return;
+    
+    }, [router.isReady, firstName]); 
 
     return (
         <>

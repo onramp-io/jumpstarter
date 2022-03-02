@@ -9,21 +9,34 @@ import { useAuth } from '@frontend/context/AuthProvider';
 
 
 const Project: NextPage = () => {
+
+  interface ProjectDetails {
+    id: number;
+    title: string;
+    description: string;
+    fund_goal: number;
+    fund_raised: number;
+    end_date: Date;
+    pictures: string[];
+    investors: number;
+    likesAmt: number;
+  }
+
   const [comment, setComment] = useState('');
   const [commentList, setCommentList] = useState([]);
+  const [projectDetails, setProjectDetails] = useState<ProjectDetails>({
+        id: 64,
+        title: '',
+        description: '',
+        fund_goal: 0,
+        fund_raised: 0,
+        end_date: new Date(),
+        pictures: [],
+        investors: 0,
+        likesAmt: 0
+      });
   const router = useRouter();
   const { accessToken, firstName } = useAuth();
-
-  const projectDetails = {
-      id: 64,
-      title: 'Project XYZ',
-      description: 'A brief description of what this project is. A second line for good measure. Maybe even a third line why not.',
-      fund_goal: 1000,
-      fund_raised: 100,
-      end_date: new Date(),
-      pictures: ["//v2.grommet.io/assets/Wilderpeople_Ricky.jpg"],
-      investors: 12
-    };
 
   const getComments = async (projectId) => {
     var url = '/api/comments/';
@@ -49,11 +62,31 @@ const Project: NextPage = () => {
     await axios.put(url + router.query.projectId);
   }
 
+  const getProject = async (projectId) => {
+    var url = '/api/projects/';
+    const project = await axios.get(url + router.query.projectId);
+    console.log(project.data);
+    const data = {
+      id: project.data.data.id,
+      title: project.data.data.title,
+      description: project.data.data.description,
+      fund_goal: 0,
+      fund_raised: project.data.data.fundRaised,
+      end_date: new Date(),
+      pictures: ["//v2.grommet.io/assets/Wilderpeople_Ricky.jpg"],
+      investors: 0,
+      likesAmt: project.data.data.likesAmt
+    }
+    setProjectDetails(data);
+  }
+
   useEffect(()=>{
     //make sure url is populated before pulling query params
     if(!router.isReady || !firstName) return;
 
     addView();
+
+    getProject(router.query.projectId);
 
     getComments(router.query.projectId);
 
