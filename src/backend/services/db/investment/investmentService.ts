@@ -34,7 +34,6 @@ const InvestmentsDbService = {
     */
   create: async (body) => {
     const { userId, projectId, fundAmt } = body;
-    console.log(body);
     let currFundGoal = 0;
     let fundTiers = [];
     let fundRaised = 0;
