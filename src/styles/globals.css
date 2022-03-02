@@ -161,3 +161,24 @@ body > * {
   font-family: InterR;
   color: var(--BRAND);
 }
+
+h1 {
+  font-family: InterEB !important;
+  line-height: 40px;
+  font-size: 48px;
+  letter-spacing: -1.1px;
+}
+
+h2 {
+  font-family: InterEB !important;
+  line-height: 40px;
+  font-size: 40px;
+  letter-spacing: 0.01em;
+}
+
+h3 {
+  font-family: InterB !important;
+  line-height: 40px;
+  font-size: 26px;
+  letter-spacing: -0.9px;
+}
