@@ -1,8 +1,14 @@
 import type { NextPage } from 'next';
 import { Box, Button, Grid, Heading, Image, Meter, Paragraph, Table, TableRow, TableCell, Text } from 'grommet';
-import { Favorite } from 'grommet-icons';
+import { Like } from 'grommet-icons';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@frontend/context/AuthProvider';
+import axios from '../../axios/instance';
+
 
 type projectType = {
+  id: number;
   title: string,
   description: string,
   fund_goal: number,
@@ -17,6 +23,51 @@ interface SingleProjectInfoProps {
 }
 
 const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails }): JSX.Element => {
+
+  const { firstName, accessToken } = useAuth();
+  const [like, setLike] = useState(false);
+  const [likesAmt, setLikesAmt] = useState('');
+  const router = useRouter();
+
+  const checkIfLiked = async (projectId) => {
+    const response = await axios.get('/likes/' + projectId);
+    if (response.data.likeData) {
+      setLike(true);
+    }
+  }
+
+  const submitLike = async (event: any) => {
+    if (!like) {
+      const user = await axios.get('/users/get');
+      const body = {
+        userId: user.data.userData['id'],
+        projectId: router.query.projectId,
+      }
+      await axios.post('/likes', body);
+      setLike(true);
+    } else {
+      await axios.delete('/likes/' + router.query.projectId);
+      setLike(false);
+    }
+  }
+
+  /*const getLikes = async (projectId) => {
+    const user = await axios.get('/likes/' + projectId);
+    console.log(user.data.likes);
+    setLikesAmt(user.data.likes);
+  }*/
+
+  useEffect(()=>{
+    //make sure url is populated and user is logged in before pulling query params
+    if(!router.isReady || !firstName) return;
+    
+    if (firstName) {
+      checkIfLiked(router.query.projectId);
+      //getLikes(router.query.projectId);
+    }
+
+  }, [router.isReady, firstName]); 
+
   return (
     <Box 
         direction="column" 
@@ -62,7 +113,12 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
                         <Text>Target Date: {projectDetails.end_date.toDateString()}</Text>
                     </Box>
                     <Box margin="small" align="end">
-                        <Favorite size="large"/>
+                        {((firstName) && (!like)) && (
+                          <Like onClick={(event) => submitLike(event)} size="large" style={{cursor: "pointer"}}/>
+                        )}
+                        {((firstName) && (like)) && (
+                          <Text onClick={(event) => submitLike(event)} color="brand" style={{cursor: "pointer"}}>Liked</Text>
+                        )}
                     </Box>
               </Grid>
           </Box>

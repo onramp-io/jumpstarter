@@ -12,9 +12,10 @@ const Project: NextPage = () => {
   const [comment, setComment] = useState('');
   const [commentList, setCommentList] = useState([]);
   const router = useRouter();
-  const { accessToken } = useAuth();
+  const { accessToken, firstName } = useAuth();
 
   const projectDetails = {
+      id: 64,
       title: 'Project XYZ',
       description: 'A brief description of what this project is. A second line for good measure. Maybe even a third line why not.',
       fund_goal: 1000,
@@ -42,13 +43,13 @@ const Project: NextPage = () => {
 
   useEffect(()=>{
     //make sure url is populated before pulling query params
-    if(!router.isReady) return;
+    if(!router.isReady || !firstName) return;
 
     setComment('');
 
     getComments(router.query.projectId);
 
-  }, [router.isReady]); 
+  }, [router.isReady, firstName]); 
 
 
   return (
@@ -59,17 +60,18 @@ const Project: NextPage = () => {
 
       <Heading textAlign="center" fill={true} margin={{left: '2rem', top: '5rem'}}>Comments</Heading>
 
-      <Box margin={{horizontal: '25rem'}} height="small">
-        <TextArea 
-            placeholder="Leave a comment." 
-            resize={false} 
-            fill={true} 
-            size="medium"
-            onChange={event => setComment(event.target.value)}
-        />
-        <Button primary label="Post comment" alignSelf="end" margin={{top: "1.5rem"}} onClick={(event) => submitComment(event)}/>
-      </Box>
-
+      {(firstName) && (
+        <Box margin={{horizontal: '25rem'}} height="small">
+          <TextArea 
+              placeholder="Leave a comment." 
+              resize={false} 
+              fill={true} 
+              size="medium"
+              onChange={event => setComment(event.target.value)}
+          />
+          <Button primary label="Post comment" alignSelf="end" margin={{top: "1.5rem"}} onClick={(event) => submitComment(event)}/>
+        </Box>
+      )}
       {commentList.map((comment, index) => {
         return (
           <Comment 
