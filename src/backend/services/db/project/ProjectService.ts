@@ -22,6 +22,8 @@ import { User } from '@backend/entities/User';
 import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors';
 import chalk from 'chalk';
 import existInDb from '@backend/utils/existsInDb';
+import { dbError, notFoundError } from 'helpers/ErrorHandling/messaging';
+import { NorthWest } from '@mui/icons-material';
 
 const ProjectService = {
   /**
@@ -32,7 +34,7 @@ const ProjectService = {
       const db = await connection();
 
       if (db === undefined || db === null) {
-        throw new DatabaseError('Database connection failed');
+        throw new DatabaseError(dbError);
       }
 
       const projectInsertResult = db
@@ -67,7 +69,7 @@ const ProjectService = {
   findAllByUser: async (uid) => {
     try {
       const db = await connection();
-      if (!db) throw new DatabaseError('Database connection failed');
+      if (!db) throw new DatabaseError(dbError);
       const userData = await db
         .createQueryBuilder()
         .select('*')
@@ -76,7 +78,7 @@ const ProjectService = {
           `project.user = (SELECT id FROM public.user WHERE uid = '${uid}')`
         )
         .getRawMany();
-      if (!userData) throw new NotFoundError('User not found');
+      if (!userData) throw new NotFoundError(notFoundError);
       return userData;
     } catch (err) {
       throw err;
@@ -91,7 +93,7 @@ const ProjectService = {
       const db = await connection();
 
       if (db === undefined || db === null) {
-        throw new DatabaseError('Database connection failed');
+        throw new DatabaseError(dbError);
       }
 
       const allProjectRows: Project[] = await getRepository(Project)
@@ -99,7 +101,7 @@ const ProjectService = {
         .getMany();
 
       if (allProjectRows === undefined || allProjectRows === null) {
-        throw new NotFoundError('Projects not found');
+        throw new NotFoundError(notFoundError);
       }
 
       return [allProjectRows, StatusCodes.OK];
@@ -116,7 +118,7 @@ const ProjectService = {
       const db = await connection();
 
       if (db === undefined || db === null) {
-        throw new DatabaseError('Database connection failed');
+        throw new DatabaseError(dbError);
       }
 
       const foundProject = await db
@@ -147,7 +149,7 @@ const ProjectService = {
       const db = await connection();
 
       if (!existInDb('project', Project, id)) {
-        throw new NotFoundError('Project does not exist');
+        throw new NotFoundError(notFoundError);
       }
 
       const updatedProject = await db
@@ -177,7 +179,7 @@ const ProjectService = {
       const db = await connection();
 
       if (!existInDb('project', Project, projectId)) {
-        throw new NotFoundError('Project does not exist');
+        throw new NotFoundError(notFoundError);
       }
       const deletedProject = await db
         .createQueryBuilder()
@@ -202,20 +204,20 @@ const ProjectService = {
    * READ: 'GET' request for **ALL** Records of a Particular Category
    *
    */
-  sortBy: async (sortByParams) => {
-    if (sortByParams === SortByConfig.NEWEST) {
+  sortBy: async (query) => {
+    if (query.sortType === SortByConfig.NEWEST) {
       try {
-        // TODO: Add logic for Sorting (@Pran)
+        return await getSortedProjects('createdDate');
       } catch (err) {
-        throw err;
+        throw new DatabaseError(dbError);
       }
-    } else if (sortByParams === SortByConfig.TRENDING) {
+    } else if (query.sortType === SortByConfig.TRENDING) {
       try {
-        // TODO: Add logic for Trending (@Pran)
+        return await getSortedProjects('trendScore');
       } catch (err) {
-        throw err;
+        throw new DatabaseError(dbError);
       }
-    } else if (sortByParams === SortByConfig.RECOMMENDED) {
+    } else if (query.sortType === SortByConfig.RECOMMENDED) {
       try {
         // TODO: Add logic here for Recommended (@Tapa)
       } catch (err) {
@@ -223,6 +225,79 @@ const ProjectService = {
       }
     }
   },
+
+  addView: async (query) => {
+    const id = query.id;
+    const db = await connection();
+
+    try {
+      //Increment project views
+      const projectViews = await db
+        .createQueryBuilder()
+        .select()
+        .update(Project)
+        .set({
+          views: () => `"views" + 1`,
+        })
+        .where('id = :id', { id: id })
+        .execute();
+    } catch {
+      throw new DatabaseError(dbError);
+    }
+  },
+
+  updateTrendScore: async () => {
+    const db = await connection();
+    try {
+      var trendEquation =
+        '("likesAmt"-"likesAmtLast") + ("views"-"viewsLast") + ("fundRaised"-"fundRaisedLast")';
+      var trendCondition = "(now() - scoreUpdatedAt) > INTERVAL '5 sec'";
+
+      await db
+        .createQueryBuilder()
+        .select()
+        .update(Project)
+        .set({
+          trendScore: () => `${trendEquation}`,
+          scoreUpdatedAt: () => `now()`,
+        })
+        .where(`${trendCondition}`)
+        .execute();
+    } catch {
+      throw new DatabaseError(dbError);
+    }
+  },
+
+  getLikes: async (query) => {
+    const id = query.id;
+    const db = await connection();
+
+    try {
+      //Increment project likesAmt
+      const projectLikes = await db
+        .createQueryBuilder()
+        .select('project.likesAmt', 'likesAmt')
+        .from(Project, 'project')
+        .where('id = :id', { id })
+        .getRawOne();
+
+      return projectLikes;
+    } catch {
+      throw new DatabaseError(dbError);
+    }
+  },
+};
+
+//Helper function to sort projects
+const getSortedProjects = async (column) => {
+  const db = await connection();
+
+  const projectData = await getRepository(Project)
+    .createQueryBuilder('project')
+    .orderBy(`project.${column}`, 'DESC')
+    .getMany();
+
+  return projectData;
 };
 
 export default ProjectService;
