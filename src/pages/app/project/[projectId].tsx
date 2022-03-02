@@ -25,6 +25,8 @@ const Project: NextPage = () => {
 
   const [comment, setComment] = useState('');
   const [commentList, setCommentList] = useState([]);
+  const [currentUser, setCurrentUser] = useState(0);
+  const [projectOwner, setProjectOwner] = useState(0);
   const [projectDetails, setProjectDetails] = useState<ProjectDetails>({
         id: 64,
         title: '',
@@ -47,10 +49,9 @@ const Project: NextPage = () => {
   }
 
   const submitComment = async (event: MouseEvent) => {
-    var userUrl = '/api/users/get';
-    const user = await axios.get(userUrl, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
+    
     const body = {
-      userId: user.data.userData['id'],
+      userId: currentUser,
       projectId: router.query.projectId,
       comment: comment
     }
@@ -75,7 +76,7 @@ const Project: NextPage = () => {
       remainingGoal = `$${lastGoal.toLocaleString()}`
     }
 
-    console.log(remainingGoal);
+    setProjectOwner(project.data.data.userId);
 
     const data = {
       id: project.data.data.id,
@@ -92,9 +93,21 @@ const Project: NextPage = () => {
     setProjectDetails(data);
   }
 
+  const getCurrentUser = async () => {
+    var userUrl = '/api/users/get';
+    const user = await axios.get(userUrl, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
+    setCurrentUser(user.data.userData['id']);
+  }
+
+  const goToEdit = async () => {
+    router.push('/app/edit/' + router.query.projectId);
+  }
+
   useEffect(()=>{
     //make sure url is populated before pulling query params
     if(!router.isReady || !firstName) return;
+
+    getCurrentUser()
 
     addView();
 
@@ -110,7 +123,11 @@ const Project: NextPage = () => {
       <SingleProjectInfo 
         projectDetails={projectDetails}
       />
-
+        {(currentUser != projectOwner) && (
+        <Box margin={{horizontal: '25rem'}} height="small">
+          <Button primary label="Edit Project" alignSelf="end" margin={{top: "1.5rem"}} onClick={() => goToEdit()}/>
+        </Box>
+        )}
       <Heading textAlign="center" fill={true} margin={{left: '2rem', top: '5rem'}}>Comments</Heading>
 
       {(firstName) && (

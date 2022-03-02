@@ -5,17 +5,42 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import SectionCard from "@frontend/components/sectionCard";
 import { Heading, Text, Box } from "grommet";
+import { useEffect, useState } from 'react';
 
 import styled from "styled-components";
 
 import { NextPageContext } from "next";
 import SectionMarquee from "@frontend/components/sectionMarquee";
 import { useAuth } from '@frontend/context/AuthProvider';
+import axios from 'axios';
 
 interface indexProps {}
 
 const index: NextPage = function indexComponent<indexProps>({}) {
   const { firstName } = useAuth();
+
+  const [trendingProjects, setTrendingProjects] = useState([]);
+
+  const getTrendingProjects = async () => {
+    const url = '/api/projects/sort/TRENDING'
+    const result = await axios.get(url) ;
+    result.data.data.forEach(element => {
+      trendingProjects.push({
+        projectId: element.id,
+        projectTitle: element.title,
+        projectDescription: element.description,
+        projectCreator: element.firstName,
+        projectImageUrl: `https://picsum.photos/${Math.floor(
+          Math.random() * 1000
+        )}`
+      })
+    });
+    setTrendingProjects(trendingProjects)
+  }
+
+  useEffect(()=>{
+    getTrendingProjects();
+  }, []); 
 
   const personalPicks = [
     {
@@ -26,7 +51,7 @@ const index: NextPage = function indexComponent<indexProps>({}) {
       projectCreator: "Example Creator 1",
       projectImageUrl: `https://picsum.photos/${Math.floor(
         Math.random() * 1000
-      )}`,
+      )}`
     },
     {
       projectId: 2,
@@ -51,49 +76,6 @@ const index: NextPage = function indexComponent<indexProps>({}) {
     {
       projectId: 4,
       projectTitle: "Personal Picks Project 4",
-      projectDescription:
-        "A brief description of what this project is. A second line for good measure.",
-      projectCreator: "Example Creator 4",
-      projectImageUrl: `https://picsum.photos/${Math.floor(
-        Math.random() * 1000
-      )}`,
-    },
-  ];
-
-  const trendingProjects = [
-    {
-      projectId: 5,
-      projectTitle: "Trending Project 1",
-      projectDescription:
-        "A brief description of what this project is. A second line for good measure.",
-      projectCreator: "Example Creator 1",
-      projectImageUrl: `https://picsum.photos/${Math.floor(
-        Math.random() * 1000
-      )}`,
-    },
-    {
-      projectId: 6,
-      projectTitle: "Trending Project 2",
-      projectDescription:
-        "A brief description of what this project is. A second line for good measure.",
-      projectCreator: "Example Creator 2",
-      projectImageUrl: `https://picsum.photos/${Math.floor(
-        Math.random() * 1000
-      )}`,
-    },
-    {
-      projectId: 7,
-      projectTitle: "Trending Project 3",
-      projectDescription:
-        "A brief description of what this project is. A second line for good measure.",
-      projectCreator: "Example Creator 3",
-      projectImageUrl: `https://picsum.photos/${Math.floor(
-        Math.random() * 1000
-      )}`,
-    },
-    {
-      projectId: 8,
-      projectTitle: "Trending Project 4",
       projectDescription:
         "A brief description of what this project is. A second line for good measure.",
       projectCreator: "Example Creator 4",
