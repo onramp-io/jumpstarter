@@ -5,6 +5,7 @@ import { Project } from '@backend/entities/Project';
 import { Like } from '@backend/entities/Like';
 import connection from '@backend/config/db';
 import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors'
+import { dbError } from "helpers/ErrorHandling/messaging";
 
 
 const likeService = {
@@ -28,7 +29,7 @@ const likeService = {
                 .execute()
         }
         catch {
-            throw new DatabaseError('Database connection failed');
+            throw new DatabaseError(dbError);
         }
 
         try {
@@ -42,7 +43,7 @@ const likeService = {
                 return like;
             } 
             catch {
-                throw new DatabaseError('Database connection failed');
+                throw new DatabaseError(dbError);
             }
     },
 
