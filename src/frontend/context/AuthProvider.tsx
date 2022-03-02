@@ -86,6 +86,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
         investedAmt: response.data.userData['investedAmt'],
         interests: response.data.userData['interests'],
         balance: response.data.userData['balance'],
+        totalInvestments: response.data.userData['investedAmt'],
       });
     };
 
@@ -106,7 +107,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
     const getUserInvestments = async () => {
       const response = await axios.get('/investments/get');
       setUser({
-        investments: response.data.investments,
+        investments: response.data.userInvestments,
       });
     };
 
@@ -119,7 +120,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
           const token = await getIdToken(user);
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
           getUser(token);
-          // getUserInvestments();
+          getUserInvestments();
           getCategories();
           getUserProjects();
         }
