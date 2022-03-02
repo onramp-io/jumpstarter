@@ -5,11 +5,12 @@ import { Investment } from '@backend/entities/Investment';
 import connection from '@backend/config/db';
 import { connectAuthEmulator } from 'firebase/auth';
 import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors'
+import { dbError, notFoundError } from "helpers/ErrorHandling/messaging";
 
 const InvestmentsDbService = {
   getAll: async (uid: string) => {
     const db = await connection();
-    if (!db) throw new DatabaseError('Database connection failed');
+    if (!db) throw new DatabaseError(dbError);
     const userInvestments = await db
       .createQueryBuilder()
       .select('investment.id', 'investmentId')
@@ -22,7 +23,7 @@ const InvestmentsDbService = {
       .innerJoin(User, 'user', 'investment.userId = user.id')
       .where('user.uid = :uid', { uid })
       .getRawMany();
-    if (!userInvestments) throw new NotFoundError('User Investments Not found');
+    if (!userInvestments) throw new NotFoundError(notFoundError);
     return userInvestments;
   },
 
@@ -42,7 +43,6 @@ const InvestmentsDbService = {
     const db = await connection();
 
     try {
-        console.log("hey");
         //Increment project fundRaised
         const projFund = await db.createQueryBuilder()
             .select()
@@ -60,7 +60,7 @@ const InvestmentsDbService = {
         projectOwnerId = projFund.raw[0].userId;
         }
     catch {
-        throw new DatabaseError('Database connection failed');
+        throw new DatabaseError(dbError);
     }
 
     try {
@@ -75,13 +75,12 @@ const InvestmentsDbService = {
             .execute()
     }
     catch {
-        throw new DatabaseError('Database connection failed');
+        throw new DatabaseError(dbError);
     }
 
     //figure out how much money the project owner can be paid out
     const data = moveMilestoneAndPayoutUser(currFundGoal, fundTiers, fundRaised, fundAmt);
 
-    console.log(projectOwnerId);
 
     try {
         //Increment project owner balance as necessary
@@ -95,10 +94,9 @@ const InvestmentsDbService = {
             .execute()
     }
     catch {
-        throw new DatabaseError('Database connection failed');
+        throw new DatabaseError(dbError);
     }
 
-    console.log("hey");
 
     try {
         //Update project current funding milestone
@@ -110,7 +108,7 @@ const InvestmentsDbService = {
             .execute()
         }
     catch {
-        throw new DatabaseError('Database connection failed');
+        throw new DatabaseError(dbError);
     }
 
     try {
@@ -123,7 +121,7 @@ const InvestmentsDbService = {
             return investment;
         }
     catch {
-        throw new DatabaseError('Database connection failed');
+        throw new DatabaseError(dbError);
     }
     }
 

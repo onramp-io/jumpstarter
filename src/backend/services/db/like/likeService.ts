@@ -18,14 +18,7 @@ const likeService = {
 
         try {
             //Increment project likesAmt
-            const projectLikes = await db.createQueryBuilder()
-                .select()
-                .update(Project)
-                .set({
-                    likesAmt: () => `"likesAmt" + 1`
-                })
-                .where("id = :id", { id: projectId })
-                .execute()
+            updateLikeAmt("increment", db, projectId);
         }
         catch {
             throw new DatabaseError(dbError);
@@ -91,15 +84,8 @@ const likeService = {
         }
 
         try {
-            //Decrement project likesAmt
-            const projectLikes = await db.createQueryBuilder()
-                .select()
-                .update(Project)
-                .set({
-                    likesAmt: () => `"likesAmt" - 1`
-                })
-                .where("id = :id", { id: projectId })
-                .execute()
+            //decrement like amount
+            updateLikeAmt("decrement", db, projectId);
         }
         catch {
             throw new DatabaseError(dbError);
@@ -120,6 +106,26 @@ const likeService = {
             throw new DatabaseError(dbError);
         }
     }
+}
+
+const updateLikeAmt = async (selector, db, projectId) => {
+
+    let setString = "";
+  
+    if (selector == "increment") {
+        setString = '"likesAmt" + 1'
+    } else if (selector == "decrement") {
+        setString = '"likesAmt" - 1'
+    }
+
+    await db.createQueryBuilder()
+        .select()
+        .update(Project)
+        .set({
+            likesAmt: () => `${setString}`
+        })
+        .where("id = :id", { id: projectId })
+        .execute()
 }
 
 export default likeService;
