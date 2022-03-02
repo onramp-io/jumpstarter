@@ -16,7 +16,7 @@ import {
 import axios from 'axios';
 import { useAuth } from '@frontend/context/AuthProvider';
 import { deleteUser, getAuth } from 'firebase/auth';
-import { Alert, AlertTitle } from '@mui/material';
+import { Alert, AlertTitle, CircularProgress } from '@mui/material';
 
 const EditProfile: NextPage = () => {
   const [fName, setFName] = useState('');
@@ -158,14 +158,22 @@ const EditProfile: NextPage = () => {
               />
             </Box>
             <Box>
-              <Button
-                disabled={isSubmitting}
-                type="submit"
-                onClick={handleSubmit}
-                className={styles.saveButton}
-              >
-                Save Changes
-              </Button>
+              {isSubmitting ? (
+                <>
+                  <CircularProgress />
+                </>
+              ) : (
+                <>
+                  <Button
+                    disabled={isSubmitting}
+                    type="submit"
+                    onClick={handleSubmit}
+                    className={styles.saveButton}
+                  >
+                    Save Changes
+                  </Button>
+                </>
+              )}
             </Box>
           </Box>
         </Box>
