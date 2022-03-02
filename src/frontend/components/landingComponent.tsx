@@ -11,7 +11,14 @@ const LandingComponent = function landingComponentComponent<
   landingComponentProps
 >({ landingImageUrl }) {
   return (
-    <Box direction="column" align="center" margin="large">
+    <Box
+      direction="column"
+      align="center"
+      margin={{
+        left: "large",
+        right: "large",
+      }}
+    >
       <Box
         height="medium"
         width="large"
@@ -19,12 +26,13 @@ const LandingComponent = function landingComponentComponent<
           bottom: "xsmall",
         }}
       >
-        <Image fit="cover" src={landingImageUrl} />
+        <Image className="landing-image" fit="cover" src={landingImageUrl} />
       </Box>
       <Heading margin="medium" fill={true} level={1}>
         Welcome to JumpStarter!
       </Heading>
       <Main
+        className="subtitle"
         margin={{
           bottom: "medium",
         }}

@@ -105,7 +105,7 @@ const index: NextPage = function indexComponent<indexProps>({}) {
           sectionDescription="Here are some projects we think you'll love"
         />
       </Box>
-      <Box align="center" direction="row" margin="small">
+      <Box className="marquee" align="center" direction="row" margin="small">
         <SectionMarquee
           APIPayload={personalPicks}
           linkHref="/personalpicks"
@@ -118,7 +118,7 @@ const index: NextPage = function indexComponent<indexProps>({}) {
           sectionDescription="See what's popular now"
         />
       </Box>
-      <Box align="center" direction="row" margin="small">
+      <Box className="marquee" align="center" direction="row" margin="small">
         <SectionMarquee
           APIPayload={trendingProjects}
           linkHref="/trending"

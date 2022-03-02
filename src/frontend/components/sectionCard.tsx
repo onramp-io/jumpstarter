@@ -15,17 +15,18 @@ export const ProjectInfo = function ProjectInfoComponent<sectionCardProps>({
   projectCreator,
 }) {
   return (
-    <Box>
+    <Box className="card">
       <Box
+        className="card"
         align="left"
         margin={{
           top: "small",
-          bottom: "small",
         }}
       >
         <Heading level={3}>{projectTitle}</Heading>
       </Box>
       <Box
+        className="card"
         align="left"
         margin={{
           top: "small",
@@ -67,6 +68,7 @@ export const CreatorText = function CreatorTextComponent<sectionCardProps>({
   return (
     <>
       <Box
+        className="card"
         align="left"
         margin={{
           top: "small",
@@ -109,18 +111,19 @@ const SectionCard = function sectionCardsComponent({
 
   return (
     <Box
+      className="card"
       margin={{
         top: "xsmall",
         left: "xsmall",
       }}
       align="center"
-      pad="small"
+      pad="medium"
       width="medium"
       height="min-content"
       elevation="medium"
     >
       <Box width="large" height="small">
-        <Image fit="cover" src={projectImageUrl} />
+        <Image className="section-card_img" fit="cover" src={projectImageUrl} />
       </Box>
       <Meter type="bar" value={percentageFunded} />
       <ProjectInfo
