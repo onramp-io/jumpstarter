@@ -1,3 +1,16 @@
+:root {
+  --BRAND: rgba(11, 37, 64, 1);
+  --WHITE: #ffff;
+  --WHITEBG: #f5f5f3;
+  --ACCENT: #635bff;
+  --BLACK: #242424;
+  --BRANDLIGHT: #373737;
+  --RED: #eb5757;
+  --GREEN: #12d60e;
+  --LINK: var(--accentColor);
+  --GREY: rgb(161, 161, 161);
+}
+
 html,
 body {
   padding: 0;
