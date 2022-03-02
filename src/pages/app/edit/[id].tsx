@@ -20,7 +20,7 @@ const EditProject: NextPage = () => {
 
   useEffect(()=>{
     //make sure url is populated before pulling query params
-    if(!router.isReady || !firstName) return;
+    if(!router.isReady && !firstName) return;
 
     console.log(router.query.projectId);
 

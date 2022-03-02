@@ -36,9 +36,9 @@ const Checkout: NextPage = () => {
                 }
                 const investmentUrl = '/investments';
                 await axios.post(investmentUrl, body);
-                router.push('/app/profile');
+                const redirectUrl = '/app/profile';
+                router.push(redirectUrl);
             } catch (error) {
-                console.log(error);
                 setError('Invalid form data');
             }
         } else {
@@ -48,7 +48,7 @@ const Checkout: NextPage = () => {
 
     useEffect(()=>{
         //make sure url is populated before pulling query params
-        if(!router.isReady || !firstName) return;
+        if(!router.isReady && !firstName) return;
     
     }, [router.isReady, firstName]); 
 

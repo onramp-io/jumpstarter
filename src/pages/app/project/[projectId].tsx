@@ -106,7 +106,7 @@ const Project: NextPage = () => {
 
   useEffect(()=>{
     //make sure url is populated before pulling query params
-    if(!router.isReady || !firstName) return;
+    if(!router.isReady && !firstName) return;
 
     getCurrentUser()
 
