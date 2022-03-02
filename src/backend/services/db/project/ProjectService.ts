@@ -11,19 +11,15 @@ import {
   UpdateQueryBuilder,
 } from "typeorm";
 import SortByConfig from "@backend/common/SortByConfig";
-import index from "pages";
 import {
   ReasonPhrases,
   StatusCodes,
   getReasonPhrase,
   getStatusCode,
 } from "http-status-codes";
-import { User } from "@backend/entities/User";
 import { DatabaseError, NotFoundError } from "helpers/ErrorHandling/errors";
-import chalk from "chalk";
 import existInDb from "@backend/utils/existsInDb";
 import { dbError, notFoundError } from "helpers/ErrorHandling/messaging";
-import { NorthWest } from "@mui/icons-material";
 
 const ProjectService = {
   /**
@@ -149,8 +145,7 @@ const ProjectService = {
     try {
       const db = await connection();
        if (db === undefined || db === null) {
-         console.log("db issue")
-         throw new DatabaseError('Database connection failed');
+         throw new DatabaseError(dbError);
        }
       const foundProjectUser = await db
         .createQueryBuilder()
@@ -166,7 +161,7 @@ const ProjectService = {
         foundProjectUser === undefined ||
         foundProjectUser.length === 0
       ) {
-        throw new DatabaseError('Project user not found. Found project user is falsy.');
+        throw new DatabaseError(notFoundError);
       }
 
       return [foundProjectUser, StatusCodes.OK];

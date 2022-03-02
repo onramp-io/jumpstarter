@@ -4,3 +4,4 @@ export const missingParamsError = "req.body has missing parameters.";
 export const dbError = "Database connection failed";
 export const notFoundError = "Item not found";
 export const methodNotFoundError = "Method not found";
+export const routingError = "Routing error";

@@ -13,7 +13,6 @@ const handler = async (req: Request, res: NextApiResponse) => {
     switch (req.method) {
       case 'GET':
         const categoriesList = await categoryController.getAll(req);
-        console.log(categoriesList);
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,

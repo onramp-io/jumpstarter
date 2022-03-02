@@ -40,27 +40,6 @@ export class QueryError extends Error {
     };
   }
 }
-export class QueryError extends Error {
-  code: number;
-  status: string;
-
-  constructor(message: string) {
-    super(message);
-    this.name = 'QueryError';
-    this.message = message;
-    this.code = 500;
-    this.status = 'Internal Server Error';
-  }
-
-  toJSON() {
-    return {
-      name: this.name,
-      code: this.code,
-      status: this.status,
-      message: this.message,
-    };
-  }
-}
 
 export class UserFacingError extends Error {
   constructor(message: string) {

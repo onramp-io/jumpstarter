@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import { Anchor, Box, Image, Meter, Text } from 'grommet';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
+import { projectUrl } from 'helpers/Urls/index';
 import axios from 'axios';
 
 type projectType = {
@@ -13,6 +14,7 @@ type projectType = {
   fundTiers: number[],
   fundRaised: number,
   launchDate: Date,
+  createdDate: Date,
   pictures: string[]
 }
 
@@ -24,7 +26,7 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({projectData}): JSX.E
   const [state, setState] = useState(projectData);
   useEffect(() => {
     const getUser = async (id) => {
-      const projectInfo = await axios.get(`/api/projects/project/${id}`);
+      const projectInfo = await axios.get(projectUrl + id);
 
       setState({...state, user_name: projectInfo.data.data.firstName + " " + projectInfo.data.data.lastName});
     }
@@ -36,6 +38,14 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({projectData}): JSX.E
   
   const goToProject = async (event: MouseEvent) => {
     router.push('/app/project/' + projectData.id);
+  }
+
+  const calculateDates = () => {
+    const created = new Date(state.createdDate);
+    const launch = new Date (state.launchDate);
+
+    const timeDifference = launch.getTime() - created.getTime();
+    return Math.round(timeDifference / (1000 * 3600 * 24));
   }
 
   return (
@@ -72,8 +82,8 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({projectData}): JSX.E
         </Box>
         <Meter type="bar" value={ state.fundRaised } max={ state.fundTiers[3] }/>
         <Box margin={{bottom: "small"}}>
-          <Text><strong>${state.fundRaised ? state.fundRaised.toLocaleString() : 0}</strong> <small>raised out of ${state.fundTiers[3].toLocaleString()} </small></Text>
-          <Text size="small">12 days left</Text>
+          <Text><strong>${state.fundRaised.toLocaleString()}</strong> <small>raised out of ${state.fundTiers[3].toLocaleString()} </small></Text>
+          <Text size="small">{`${calculateDates()} days remaining`}</Text>
         </Box>
       </Box>
     </Box>

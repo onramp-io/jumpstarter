@@ -8,6 +8,7 @@ import {
   BadRequestError,
   MethodNotAllowedError,
 } from "helpers/ErrorHandling/errors";
+import { methodNotFoundError, routingError } from "helpers/ErrorHandling/messaging";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
@@ -23,7 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             data: foundUser,
           });
         } else {
-          const badRequest = new BadRequestError("Routing error");
+          const badRequest = new BadRequestError(routingError);
 
           res.status(badRequest.code).json({
             status: badRequest.status,
@@ -39,7 +40,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       break;
 
     default:
-      const methodNotAllowed = new MethodNotAllowedError("Method Not Allowed");
+      const methodNotAllowed = new MethodNotAllowedError(methodNotFoundError);
 
       res.status(methodNotAllowed.code).json({
         status: methodNotAllowed.status,

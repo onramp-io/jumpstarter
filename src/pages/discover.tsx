@@ -1,8 +1,11 @@
 import type { NextPage } from 'next';
-import { Box, CheckBox, CheckBoxGroup, Heading, InfiniteScroll, NameValueList, Select, Sidebar, Text } from 'grommet';
+import { Box, CheckBox, Heading, InfiniteScroll, Select, Sidebar, Text } from 'grommet';
 import React, { useState, useEffect } from 'react';
 import LargeProjectCard from '@frontend/components/largeprojectcard';
 import axios from 'axios';
+import { NotFoundError } from 'helpers/ErrorHandling/errors';
+import { notFoundError } from 'helpers/ErrorHandling/messaging';
+
 const Discover: NextPage = () => {
   const testState = {
     TECH: true
@@ -16,14 +19,14 @@ const Discover: NextPage = () => {
       try {
         const response = await axios.get('/api/categories');
 
-        const categoryList = response.data.response.map(
+        const categoryList = response.data.categoriesList.map(
           (categoryObj) => {
             return categoryObj.category;
           }
         );
 
         const categoryState = {};
-        const testArray = ["TECH"]
+        const testArray = ["TECH"];
         setCategoryArray([...categoryList, ...testArray]);
 
         for (const category of categoryList) {
@@ -32,7 +35,7 @@ const Discover: NextPage = () => {
 
         setCategories({...categoryState, ...testState});
       } catch (error) {
-        console.log(error)
+        throw new NotFoundError(notFoundError);
       }
     }
 
@@ -42,7 +45,7 @@ const Discover: NextPage = () => {
 
         setProjectData(response.data.data);
       } catch (error) {
-        console.log(error);
+        throw new NotFoundError(notFoundError);
       }
     }
 
@@ -89,7 +92,6 @@ const Discover: NextPage = () => {
             items={projectData.filter(project => categories[project.category])}
             step={3}
             onMore={() => {
-              console.log()
             }}
           >
             {
