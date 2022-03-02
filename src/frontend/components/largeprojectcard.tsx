@@ -1,6 +1,8 @@
 import type { NextPage } from 'next';
 import { Anchor, Box, Image, Meter, Text } from 'grommet';
 import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 type projectType = {
   id: number, //added
@@ -8,9 +10,9 @@ type projectType = {
   title: string,
   category: string,
   description: string,
-  fund_goal: number,
-  fund_raised: number
-  end_date: Date,
+  currFundGoal: number,
+  fundRaised: number
+  launchDate: Date,
 }
 
 interface LargeProjectCardProps {
@@ -18,10 +20,21 @@ interface LargeProjectCardProps {
 }
 
 const LargeProjectCard: NextPage<LargeProjectCardProps> = ({projectData}): JSX.Element => {
+  const [state, setState] = useState(projectData);
+  useEffect(() => {
+    const getUser = async (id) => {
+      const projectInfo = await axios.get(`/api/projects//project/${id}`);
+
+      setState({...state, user_name: projectInfo.data.data.firstName + " " + projectInfo.data.data.lastName});
+    }
+
+    getUser(projectData.id);
+  }, [])
+
+  console.log(projectData.fundRaised)
   const router = useRouter();
   
   const goToProject = async (event: MouseEvent) => {
-    console.log("go to project" + projectData.id);
     router.push('/app/project/' + projectData.id);
   }
 
@@ -32,7 +45,7 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({projectData}): JSX.E
       flex={{shrink: 0}}
       margin={{
         vertical: "small",
-        horizontal: "0.8rem",
+        horizontal: "0.5rem",
       }}
       align="center"
       pad="small"
@@ -55,11 +68,11 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({projectData}): JSX.E
         </Box>
         <Box margin={{top: "small", bottom: "medium"}}>
           <Text size="small">Created by</Text>
-          <Anchor href="#" label={ projectData.user_name } />
+          <Anchor href="#" label={ state.user_name } />
         </Box>
-        <Meter type="bar" value={ projectData.fund_raised } max={ projectData.fund_goal }/>
+        <Meter type="bar" value={ projectData.fundRaised } max={ projectData.currFundGoal }/>
         <Box margin={{bottom: "small"}}>
-          <Text><strong>${projectData.fund_raised.toLocaleString()}</strong> <small>raised out of ${projectData.fund_goal.toLocaleString()} </small></Text>
+          <Text><strong>${projectData.fundRaised.toLocaleString()}</strong> <small>raised out of ${projectData.currFundGoal[-1].toLocaleString()} </small></Text>
           <Text size="small">12 days left</Text>
         </Box>
       </Box>

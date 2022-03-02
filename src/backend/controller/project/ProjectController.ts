@@ -63,6 +63,20 @@ const ProjectController = {
     }
   },
 
+  findProjectUserById: async (req) => {
+    try {
+      if (reqParamsAreComplete(req.query, 1)) {
+        return await ProjectService.findProjectUserById(req.query);
+      } else {
+        throw new BadRequestError(
+          "req.query is missing id (project id) - Did you forget to add the id on the endpoint? e.g. /api/project/10"
+        );
+      }
+    } catch (err) {
+      throw err;
+    }
+  },
+
   // UPDATE - 1
   updateById: async (req) => {
     try {

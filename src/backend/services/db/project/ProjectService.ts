@@ -143,6 +143,36 @@ const ProjectService = {
     }
   },
 
+  findProjectUserById: async (findProjectUserByIdParams) => {
+    try {
+      const db = await connection();
+       if (db === undefined || db === null) {
+         console.log("db issue")
+         throw new DatabaseError('Database connection failed');
+       }
+      const foundProjectUser = await db
+        .createQueryBuilder()
+        .select('*')
+        .from('user', 'user')
+        .where(
+          `"user"."id" = (SELECT "project"."userId" FROM "project" WHERE "project"."id" = ${findProjectUserByIdParams.id})`
+        )
+        .getRawOne();
+
+      if (
+        foundProjectUser === null ||
+        foundProjectUser === undefined ||
+        foundProjectUser.length === 0
+      ) {
+        throw new DatabaseError('Project user not found. Found project user is falsy.');
+      }
+
+      return [foundProjectUser, StatusCodes.OK];
+    } catch (err) {
+      throw err;
+    }
+  },
+
   /**
    * UPDATE: 'PUT' request for ONE Record by ID
    */
