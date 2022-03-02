@@ -46,6 +46,7 @@ const ProjectService = {
             currFundGoal: createParams.currFundGoal,
             fundRaised: createParams.fundRaised,
             launchDate: createParams.launchDate,
+            pictures: createParams.pictures,
             user: () =>
               `(SELECT id FROM public.user WHERE uid = '${createParams.uid}')`,
           },

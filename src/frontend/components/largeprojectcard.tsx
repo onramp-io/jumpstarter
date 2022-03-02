@@ -48,6 +48,8 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({projectData}): JSX.E
     return Math.round(timeDifference / (1000 * 3600 * 24));
   }
 
+  console.log(state.pictures)
+
   return (
     <Box
       style={{cursor: "pointer"}}
@@ -67,7 +69,7 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({projectData}): JSX.E
         width="large"
         height="small"
       >
-        <Image fit="cover" src={state.pictures ? state.pictures[0] : "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"} />
+        <Image fit="cover" src={state.pictures ? process.env.AWS_BUCKET_URL + state.pictures[0] : "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"} />
       </Box>
 
       <Box direction="column" gap="small" margin={{vertical: "medium", horizontal: "medium"}}>
