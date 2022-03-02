@@ -14,33 +14,6 @@ import axios from '../../../axios/instance';
 import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const userData2 = [
-  {
-    projectTitle: 'Example Project 1',
-    projectDescription:
-      'A brief description of what this project is. A second line for good measure.',
-    projectCreator: 'Example Creator 1',
-  },
-  {
-    projectTitle: 'Example Project 2',
-    projectDescription:
-      'A brief description of what this project is. A second line for good measure.',
-    projectCreator: 'Example Creator 2',
-  },
-  {
-    projectTitle: 'Example Project 3',
-    projectDescription:
-      'A brief description of what this project is. A second line for good measure.',
-    projectCreator: 'Example Creator 3',
-  },
-  {
-    projectTitle: 'Example Project 4',
-    projectDescription:
-      'A brief description of what this project is. A second line for good measure.',
-    projectCreator: 'Example Creator 4',
-  },
-];
-
 function MyProfile() {
   const {
     firstName,
@@ -71,10 +44,18 @@ function MyProfile() {
     <>
       <Box className={profile.wrapper}>
         <Box className={profile.userData}>
-          <Avatar
-            src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80"
-            size="3xl"
-          />
+          {avatar ? (
+            <>
+              <Avatar src={process.env.AWS_BUCKET_URL + avatar} size="3xl" />
+            </>
+          ) : (
+            <>
+              <Avatar
+                src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80"
+                size="3xl"
+              />
+            </>
+          )}
           <Heading className={profile.heading}>
             {firstName} {lastName}
           </Heading>

@@ -30,7 +30,7 @@ export class Project {
   @Column("decimal", { array: true })
   fundTiers: number[];
 
-  @Column({type: "integer", default: 0})
+  @Column({ type: "integer", default: 0})
   currFundGoal: number;
 
   @Column({ type: 'decimal', default: 0 })

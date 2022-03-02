@@ -6,7 +6,10 @@ import { Like } from '@backend/entities/Like';
 import connection from '@backend/config/db';
 import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors'
 import { dbError } from "helpers/ErrorHandling/messaging";
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
 
 const likeService = {
     //Add a like to a project by a user
