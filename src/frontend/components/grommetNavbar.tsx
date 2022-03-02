@@ -48,12 +48,10 @@ export const NavBar = () => {
 
   const RenderAvatar = () => {
     if (!avatar) {
-      console.log('no avatar');
       return (
         <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
       );
     } else {
-      console.log('avatar found');
       return <Avatar src={process.env.AWS_BUCKET_URL + avatar} />;
     }
   };
