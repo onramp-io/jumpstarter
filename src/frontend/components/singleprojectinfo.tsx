@@ -31,7 +31,7 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
 
   const checkIfLiked = async (projectId) => {
     const response = await axios.get('/likes/' + projectId);
-    if (response.data.likeData) {
+    if (response.data.data) {
       setLike(true);
     }
   }
@@ -45,17 +45,19 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
       }
       await axios.post('/likes', body);
       setLike(true);
+      setLikesAmt(`${likesAmt}+1`)
     } else {
       await axios.delete('/likes/' + router.query.projectId);
       setLike(false);
+      setLikesAmt(`${likesAmt}-1`)
     }
   }
 
-  /*const getLikes = async (projectId) => {
-    const user = await axios.get('/likes/' + projectId);
-    console.log(user.data.likes);
-    setLikesAmt(user.data.likes);
-  }*/
+  //saving project likes amount to likesAmt state
+  const getLikes = async (projectId) => {
+    const likeData = await axios.get('/projects/likes/' + projectId);
+    setLikesAmt(likeData.data.data.likesAmt);
+  }
 
   useEffect(()=>{
     //make sure url is populated and user is logged in before pulling query params
@@ -63,7 +65,7 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
     
     if (firstName) {
       checkIfLiked(router.query.projectId);
-      //getLikes(router.query.projectId);
+      getLikes(router.query.projectId);
     }
 
   }, [router.isReady, firstName]); 

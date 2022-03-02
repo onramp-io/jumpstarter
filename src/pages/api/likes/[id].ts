@@ -5,6 +5,9 @@ import {
   } from 'helpers/ErrorHandling/errors';
   import { Success } from 'helpers/ErrorHandling/success';
 import { verifyRequest } from '@backend/middleware/verify_request';
+import RequestMethod from "@backend/common/RequestMethod";
+import { methodNotFoundError } from "helpers/ErrorHandling/messaging";
+import { clientResponse } from 'helpers/ErrorHandling/response'
 
 interface Request extends NextApiRequest {
     user: any;
@@ -13,29 +16,19 @@ interface Request extends NextApiRequest {
 const handler = async (req: Request,res: NextApiResponse) => {
     try {
         switch(req.method) {
-        case 'GET':
+        case RequestMethod.GET:
             const likeData = await likeController.getLike(req)
-            res.status(Success.code).json({
-                status: Success.status,
-                message: Success.message,
-                likeData
-                }); 
+            clientResponse(res, Success.code, Success.status, Success.message, likeData);
             break;
-        case 'DELETE':
+        case RequestMethod.DELETE:
             await likeController.deleteLike(req)
-            res.status(Success.code).json({
-                status: Success.status,
-                message: Success.message,
-                }); 
+            clientResponse(res, Success.code, Success.status, Success.message);
             break;
-        default: new MethodNotAllowedError('Method not found');
+        default: new MethodNotAllowedError(methodNotFoundError);
         }
     }
     catch (error) {
-        res.status(error.code).json({
-            status: error.status,
-            message: error.message,
-          });
+        clientResponse(res, error.code, error.status, error.message);
     }
 }
 

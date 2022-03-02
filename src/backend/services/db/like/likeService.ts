@@ -66,7 +66,7 @@ const likeService = {
             return projectLikes;
         }
         catch {
-            throw new DatabaseError('Database connection failed');
+            throw new DatabaseError(dbError);
         }
     },
 
@@ -88,7 +88,7 @@ const likeService = {
             userId = userData.id;
         }
         catch {
-            throw new DatabaseError('Database connection failed');
+            throw new DatabaseError(dbError);
         }
 
         try {
@@ -103,7 +103,7 @@ const likeService = {
                 .execute()
         }
         catch {
-            throw new DatabaseError('Database connection failed');
+            throw new DatabaseError(dbError);
         }
 
         try {
@@ -118,7 +118,7 @@ const likeService = {
             return projectLikes;
         }
         catch {
-            throw new DatabaseError('Database connection failed');
+            throw new DatabaseError(dbError);
         }
     }
 }
