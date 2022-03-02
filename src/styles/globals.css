@@ -11,6 +11,47 @@
   --GREY: rgb(161, 161, 161);
 }
 
+@font-face {
+  font-family: "InterR";
+  src: url(/fonts/inter-R.ttf);
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "InterM";
+  src: url(/fonts/inter-M.otf);
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "InterB";
+  src: url(/fonts/inter-B.otf);
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "InterEB";
+  src: url(/fonts/inter-EB.otf);
+  letter-spacing: -1.2px !important;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "InterL";
+  src: url(/fonts/inter-L.otf);
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 html,
 body {
   padding: 0;
