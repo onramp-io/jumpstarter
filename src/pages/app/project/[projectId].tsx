@@ -123,7 +123,7 @@ const Project: NextPage = () => {
       <SingleProjectInfo 
         projectDetails={projectDetails}
       />
-        {(currentUser != projectOwner) && (
+        {(currentUser == projectOwner) && (
         <Box margin={{horizontal: '25rem'}} height="small">
           <Button primary label="Edit Project" alignSelf="end" margin={{top: "1.5rem"}} onClick={() => goToEdit()}/>
         </Box>
