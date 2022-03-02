@@ -27,6 +27,7 @@ export interface AuthContextType {
   interests: string[];
   balance: number;
   investments: any[];
+  userProjects: any[];
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -40,6 +41,7 @@ export const AuthContext = createContext<AuthContextType>({
   interests: [],
   balance: 0,
   investments: [],
+  userProjects: [],
 });
 
 const userDispatchContext = createContext({});
@@ -55,6 +57,7 @@ const initialState = {
   interests: [],
   balance: 0,
   investments: [],
+  userProjects: [],
 };
 
 const reducer = (state, action) => {
@@ -94,7 +97,10 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
     };
 
     const getUserProjects = async () => {
-      const response = await axios.get('/users/projects/');
+      const response = await axios.get('/users/projects/getAll');
+      setUser({
+        userProjects: response.data.userProjects,
+      });
     };
 
     const getUserInvestments = async () => {
@@ -115,7 +121,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
           getUser(token);
           // getUserInvestments();
           getCategories();
-          // getUserProjects();
+          getUserProjects();
         }
       } catch (error) {
         console.log(error);
