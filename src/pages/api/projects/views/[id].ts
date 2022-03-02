@@ -5,6 +5,9 @@ import {
   MethodNotAllowedError,
 } from 'helpers/ErrorHandling/errors';
 import { Success } from 'helpers/ErrorHandling/success';
+import { methodNotFoundError } from "helpers/ErrorHandling/messaging";
+import { clientResponse } from 'helpers/ErrorHandling/response';
+import RequestMethod from "@backend/common/RequestMethod";
 
 interface Request extends NextApiRequest {
   user: any;
@@ -13,21 +16,15 @@ interface Request extends NextApiRequest {
 const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch(req.method) {
-      case 'PUT':
+      case RequestMethod.PUT:
         await ProjectController.addView(req)
-        res.status(Success.code).json({
-          status: Success.status,
-          message: Success.message,
-        });
+        clientResponse(res, Success.code, Success.status, Success.message);
         break;
-      default:throw new MethodNotAllowedError('Method not found');
+      default:throw new MethodNotAllowedError(methodNotFoundError);
     }
   }
   catch (error) {
-    res.status(error.code).json({
-      status: error.status,
-      message: error.message,
-    }); 
+    clientResponse(res, error.code, error.status, error.message);
   }
 }
 

@@ -25,23 +25,27 @@ const Project: NextPage = () => {
     };
 
   const getComments = async (projectId) => {
-    const commentData = await axios.get('/api/comments/' + projectId, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}}) ;
+    var url = '/api/comments/';
+    const commentData = await axios.get(url + projectId, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}}) ;
     setCommentList(commentData.data.response);
   }
 
   const submitComment = async (event: MouseEvent) => {
-    const user = await axios.get('/api/users/get', {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
+    var userUrl = '/api/users/get';
+    const user = await axios.get(userUrl, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
     const body = {
       userId: user.data.userData['id'],
       projectId: router.query.projectId,
       comment: comment
     }
-    await axios.post('/api/comments', body, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
+    var commentsUrl = '/api/comments';
+    await axios.post(commentsUrl, body, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
     getComments(router.query.projectId);
   }
 
   const addView = async () => {
-    await axios.put('/api/projects/views/' + router.query.projectId);
+    var url = '/api/projects/views/';
+    await axios.put(url + router.query.projectId);
   }
 
   useEffect(()=>{

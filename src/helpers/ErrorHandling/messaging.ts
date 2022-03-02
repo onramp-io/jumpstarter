@@ -3,3 +3,4 @@ export const authError = "Auth token does not exist or has expired";
 export const missingParamsError = "req.body has missing parameters.";
 export const dbError = "Database connection failed";
 export const notFoundError = "Item not found";
+export const methodNotFoundError = "Method not found";

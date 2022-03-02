@@ -141,7 +141,6 @@ const ProjectController = {
 
   getLikes: async (req) => {
     try {
-      console.log("hey");
       if (reqParamsAreComplete(req.query, 1)) {
         return await ProjectService.getLikes(req.query);
       } else {

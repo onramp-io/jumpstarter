@@ -23,6 +23,7 @@ import { DatabaseError, NotFoundError } from "helpers/ErrorHandling/errors";
 import chalk from "chalk";
 import existInDb from "@backend/utils/existsInDb";
 import { dbError, notFoundError } from "helpers/ErrorHandling/messaging";
+import { NorthWest } from "@mui/icons-material";
 
 const ProjectService = {
   /**
@@ -231,7 +232,7 @@ const ProjectService = {
   },
 
   addView: async (query) => {
-    
+
     const id = query.id;
     const db = await connection();
 
@@ -254,14 +255,17 @@ const ProjectService = {
   updateTrendScore: async () => {
     const db = await connection();
     try {
-      //Increment project likesAmt
-      const projectScore = await db.createQueryBuilder()
+      var trendEquation = '("likesAmt"-"likesAmtLast") + ("views"-"viewsLast") + ("fundRaised"-"fundRaisedLast")';
+      var trendCondition = "(now() - scoreUpdatedAt) > INTERVAL '5 sec'";
+
+      await db.createQueryBuilder()
           .select()
           .update(Project)
           .set({
-              trendScore: () => `("likesAmt"-"likesAmtLast") + ("views"-"viewsLast") + ("fundRaised"-"fundRaisedLast")`
+              trendScore: () => `${trendEquation}`,
+              scoreUpdatedAt: () => `now()`
           })
-          .where("(now() - scoreUpdatedAt) > INTERVAL '5 min'")
+          .where(`${trendCondition}`)
           .execute()
 ;    }
     catch {

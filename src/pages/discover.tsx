@@ -96,7 +96,8 @@ const Discover: NextPage = () => {
   const { accessToken } = useAuth();
 
   const calculateTrendScore = async () => {
-    await axios.put('/api/projects/trend', {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
+    var url = '/api/projects/trend';
+    await axios.put(url, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
   }
 
   useEffect(()=>{
