@@ -1,6 +1,7 @@
 import { userService } from '@backend/services/db/user/userService';
 import { Request } from '@backend/middleware/verify_request';
 import { BadRequestError } from 'helpers/ErrorHandling/errors';
+import ProjectService from '@backend/services/db/project/ProjectService';
 
 export interface IUserPost {
   post: {
@@ -98,6 +99,14 @@ export const UserController = {
       user: { uid },
     } = req;
     const userData = userService.updateInterest(categories, uid);
+    return userData;
+  },
+
+  getUserProject: async (req: Request) => {
+    const {
+      user: { uid },
+    } = req;
+    const userData = ProjectService.findAllByUser(uid);
     return userData;
   },
 };
