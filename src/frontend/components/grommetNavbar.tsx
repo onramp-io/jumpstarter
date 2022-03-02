@@ -25,6 +25,8 @@ import { useRouter } from 'next/router';
 
 import navbar from '../../styles/Navbar.module.css';
 
+import axios from '../../axios/instance';
+
 export const NavBar = () => {
   const { firstName, avatar } = useAuth();
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -36,6 +38,7 @@ export const NavBar = () => {
       signOut(auth)
         .then(() => {
           setIsAuthenticated(false);
+          delete axios.defaults.headers.common['Authorization'];
           router.push('/');
         })
         .catch((error) => {
