@@ -32,7 +32,8 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
   const router = useRouter();
 
   const checkIfLiked = async (projectId) => {
-    const response = await axios.get('/likes/' + projectId);
+    const url = '/likes/';
+    const response = await axios.get(url + projectId);
     if (response.data.data) {
       setLike(true);
     }
@@ -40,38 +41,35 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
 
   const submitLike = async (event: any) => {
     let newLikeTotal = 0;
+    const likeUrl = '/likes/';
     if (!like) {
-      const user = await axios.get('/users/get');
+      const userUrl = '/users/get';
+      const user = await axios.get(userUrl);
       newLikeTotal = likeTotal + 1;
       const body = {
         userId: user.data.userData['id'],
         projectId: router.query.projectId,
       }
-      await axios.post('/likes', body);
+      await axios.post(likeUrl, body);
       setLike(true);
     } else {
       newLikeTotal = likeTotal - 1;
-      await axios.delete('/likes/' + router.query.projectId);
+      await axios.delete(likeUrl + router.query.projectId);
       setLike(false);
     }
     setLikeTotal(newLikeTotal);
   }
 
   const goToCheckOut = async (event: any) => {
+    let url = '';
     if (firstName) {
-      router.push('/app/checkout/' + router.query.projectId);
+      url = '/app/checkout/';
+      router.push(url + router.query.projectId);
     } else {
-      router.push('/login');
+      url = '/login';
+      router.push(url);
     }
   }
-
-  /*const calculateRemaining = async () => {
-    if (projectDetails.fund_raised > projectDetails.lastGoal) {
-      return "Goal reached!"
-    } else {
-      return `$ + ${(projectDetails.fund_goal - projectDetails.fund_raised).toLocaleString()}`
-    }
-  }*/
 
   useEffect(()=>{
     //make sure url is populated and user is logged in before pulling query params

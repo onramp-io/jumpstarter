@@ -106,7 +106,8 @@ const SectionCard = function sectionCardsComponent({
   const router = useRouter();
 
   const goToProject = async (event: MouseEvent) => {
-    router.push('/app/project/' + projectId);
+    var url = '/app/project/';
+    router.push(url + projectId);
   }
 
   useEffect(() => {

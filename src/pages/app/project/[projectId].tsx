@@ -100,7 +100,8 @@ const Project: NextPage = () => {
   }
 
   const goToEdit = async () => {
-    router.push('/app/edit/' + router.query.projectId);
+    var url = '/app/edit/';
+    router.push(url + router.query.projectId);
   }
 
   useEffect(()=>{

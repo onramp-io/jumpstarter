@@ -27,13 +27,15 @@ const Checkout: NextPage = () => {
     const checkout = async () => {
         if (validForm) {
             try {
-                const user = await axios.get('/users/get');
+                var userUrl = '/users/get'
+                const user = await axios.get(userUrl);
                 const body = {
                     userId: user.data.userData['id'],
                     projectId: router.query.projectId,
                     fundAmt: state.donation
                 }
-                await axios.post('/investments', body);
+                const investmentUrl = '/investments';
+                await axios.post(investmentUrl, body);
                 router.push('/app/profile');
             } catch (error) {
                 console.log(error);
