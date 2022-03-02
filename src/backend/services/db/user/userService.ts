@@ -114,4 +114,102 @@ export const userService = {
     if (!userData) throw new NotFoundError('User not found');
     return userData;
   },
+
+  getUserRecommendation: async (uid: string) => {
+    const db = await connection();
+
+    // 1. Get all projects not created by the user
+    if (!db) throw new DatabaseError('Database connection failed');
+    const projects = await db
+      .createQueryBuilder()
+      .select('*')
+      .from('project', 'project')
+      .where(
+        `project.user != (SELECT id FROM public.user WHERE uid = '${uid}')`
+      )
+      .getRawMany();
+    if (!projects) throw new NotFoundError('Projects not found');
+    // 2. Get the projects that the user has invested in
+    const projectsInvested = await db
+      .createQueryBuilder()
+      .select('*')
+      .from('investment', 'investment')
+      .where(
+        `investment.userId = (SELECT id FROM public.user WHERE uid = '${uid}')`
+      )
+      .getRawMany();
+    if (!projectsInvested) throw new NotFoundError('Projects not found');
+
+    // 3. Get the projects that the user has created
+    const projectsCreated = await db
+      .createQueryBuilder()
+      .select('*')
+      .from('project', 'project')
+      .where(`project.user = (SELECT id FROM public.user WHERE uid = '${uid}')`)
+      .getRawMany();
+    if (!projectsCreated) throw new NotFoundError('Projects not found');
+
+    // 4. Get the projects that the user has liked
+    const projectsLiked = await db
+      .createQueryBuilder()
+      .select('*')
+      .from('like', 'like')
+      .where(`like.userId = (SELECT id FROM public.user WHERE uid = '${uid}')`)
+      .getRawMany();
+    if (!projectsLiked) throw new NotFoundError('Projects not found');
+
+    // 5. Get the projects that the user has commented on
+    const projectsCommented = await db
+      .createQueryBuilder()
+      .select('*')
+      .from('comment', 'comment')
+      .where(
+        `comment.userId = (SELECT id FROM public.user WHERE uid = '${uid}')`
+      )
+      .getRawMany();
+    if (!projectsCommented) throw new NotFoundError('Projects not found');
+
+    /**
+     * 6. Give scores to each project based on the above criteria
+     * - Invested projects get a score of 4
+     * - Created projects get a score of 3
+     * - Liked projects get a score of 2
+     * - Commented projects get a score of 1
+     */
+    const projectsWithScores = projects.map((project) => {
+      let score = 0;
+      projectsInvested.forEach((investment) => {
+        if (project.id === investment.projectId) {
+          score += 4;
+        }
+      });
+      projectsCreated.forEach((createdProject) => {
+        if (project.id === createdProject.id) {
+          score += 3;
+        }
+      });
+      projectsLiked.forEach((likedProject) => {
+        if (project.id === likedProject.projectId) {
+          score += 2;
+        }
+      });
+      projectsCommented.forEach((commentedProject) => {
+        if (project.id === commentedProject.projectId) {
+          score += 1;
+        }
+      });
+      return { ...project, score };
+    });
+
+    console.log(projectsWithScores);
+
+    // 7. Sort the projects based on the scores
+
+    const sortedProjects = projectsWithScores.sort((a, b) => {
+      return b.score - a.score;
+    });
+
+    // 8. Return the top 10 projects
+    return sortedProjects.slice(0, 10);
+  },
 };
