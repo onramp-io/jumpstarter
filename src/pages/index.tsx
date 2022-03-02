@@ -6,6 +6,7 @@ import styles from "../styles/Home.module.css";
 import SectionCard from "@frontend/components/sectionCard";
 import { Heading, Text, Box } from "grommet";
 import { useEffect, useState } from 'react';
+import urls from 'helpers/urls'; 
 
 import styled from "styled-components";
 
@@ -21,25 +22,28 @@ const index: NextPage = function indexComponent<indexProps>({}) {
 
   const [trendingProjects, setTrendingProjects] = useState([]);
 
+
   const getTrendingProjects = async () => {
-    const url = '/api/projects/sort/TRENDING'
-    const result = await axios.get(url) ;
-    result.data.data.forEach(element => {
+    const result = await axios.get(urls.trending) ;
+
+    for (let i = 0; i < 4; i++) {
       trendingProjects.push({
-        projectId: element.id,
-        projectTitle: element.title,
-        projectDescription: element.description,
-        projectCreator: element.firstName,
+        projectId: result.data.data[i].id,
+        projectTitle: result.data.data[i].title,
+        projectDescription: result.data.data[i].description,
+        projectCreator: result.data.data[i].firstName,
         projectImageUrl: `https://picsum.photos/${Math.floor(
           Math.random() * 1000
         )}`
       })
-    });
-    setTrendingProjects(trendingProjects)
+    }
+    setTrendingProjects(trendingProjects);
   }
 
   useEffect(()=>{
+
     getTrendingProjects();
+
   }, []); 
 
   const personalPicks = [

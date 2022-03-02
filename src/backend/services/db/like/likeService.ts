@@ -110,19 +110,21 @@ const likeService = {
 
 const updateLikeAmt = async (selector, db, projectId) => {
 
-    let setString = "";
+    enum UpdateLike { Increment = ' + 1', Decrement = ' - 1' }
+    const setString = '"likesAmt"';
+    let updateType;
   
     if (selector == "increment") {
-        setString = '"likesAmt" + 1'
+        updateType = UpdateLike.Increment;
     } else if (selector == "decrement") {
-        setString = '"likesAmt" - 1'
+        updateType = UpdateLike.Decrement;
     }
 
     await db.createQueryBuilder()
         .select()
         .update(Project)
         .set({
-            likesAmt: () => `${setString}`
+            likesAmt: () => `${setString + updateType}`
         })
         .where("id = :id", { id: projectId })
         .execute()

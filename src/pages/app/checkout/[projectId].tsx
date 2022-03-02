@@ -5,6 +5,7 @@ import { useAuth } from '@frontend/context/AuthProvider';
 import { useRouter } from 'next/router';
 import { Alert, AlertTitle } from '@mui/material';
 import axios from '../../../axios/instance';
+import urls from 'helpers/urls'; 
 
 const Checkout: NextPage = () => {
     const initialState = {
@@ -27,17 +28,14 @@ const Checkout: NextPage = () => {
     const checkout = async () => {
         if (validForm) {
             try {
-                var userUrl = '/users/get'
-                const user = await axios.get(userUrl);
+                const user = await axios.get(urls.getUser);
                 const body = {
                     userId: user.data.userData['id'],
                     projectId: router.query.projectId,
                     fundAmt: state.donation
                 }
-                const investmentUrl = '/investments';
-                await axios.post(investmentUrl, body);
-                const redirectUrl = '/app/profile';
-                router.push(redirectUrl);
+                await axios.post(urls.addInvestment, body);
+                router.push(urls.profileRedirect);
             } catch (error) {
                 setError('Invalid form data');
             }
@@ -48,7 +46,7 @@ const Checkout: NextPage = () => {
 
     useEffect(()=>{
         //make sure url is populated before pulling query params
-        if(!router.isReady && !firstName) return;
+        if(!urls.urlCheck(router, firstName)) return;
     
     }, [router.isReady, firstName]); 
 

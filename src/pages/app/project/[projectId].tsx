@@ -6,6 +6,7 @@ import SingleProjectInfo from '@frontend/components/singleprojectinfo';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '@frontend/context/AuthProvider';
+import urls from 'helpers/urls'; 
 
 
 const Project: NextPage = () => {
@@ -43,8 +44,7 @@ const Project: NextPage = () => {
   const { accessToken, firstName } = useAuth();
 
   const getComments = async (projectId) => {
-    var url = '/api/comments/';
-    const commentData = await axios.get(url + projectId, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}}) ;
+    const commentData = await axios.get(urls.comments + projectId, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}}) ;
     setCommentList(commentData.data.response);
   }
 
@@ -55,19 +55,16 @@ const Project: NextPage = () => {
       projectId: router.query.projectId,
       comment: comment
     }
-    var commentsUrl = '/api/comments';
-    await axios.post(commentsUrl, body, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
+    await axios.post(urls.comments, body, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
     getComments(router.query.projectId);
   }
 
   const addView = async () => {
-    var url = '/api/projects/views/';
-    await axios.put(url + router.query.projectId);
+    await axios.put(urls.projectView + router.query.projectId);
   }
 
   const getProject = async (projectId) => {
-    var url = '/api/projects/';
-    const project = await axios.get(url + router.query.projectId);
+    const project = await axios.get(urls.projects + router.query.projectId);
     const lastGoal = project.data.data.fundTiers[project.data.data.fundTiers.length - 1];
     let remainingGoal = "";
     if (project.data.data.fundRaised > lastGoal) {
@@ -86,7 +83,7 @@ const Project: NextPage = () => {
       fund_raised: project.data.data.fundRaised,
       end_date: new Date(),
       pictures: ["//v2.grommet.io/assets/Wilderpeople_Ricky.jpg"],
-      investors: 0,
+      investors: project.data.data.investors,
       likesAmt: project.data.data.likesAmt,
       remaining: remainingGoal
     }
@@ -94,27 +91,24 @@ const Project: NextPage = () => {
   }
 
   const getCurrentUser = async () => {
-    var userUrl = '/api/users/get';
-    const user = await axios.get(userUrl, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
+    const user = await axios.get(urls.getUserApi, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
     setCurrentUser(user.data.userData['id']);
   }
 
   const goToEdit = async () => {
-    var url = '/app/edit/';
-    router.push(url + router.query.projectId);
+    router.push(urls.edit + router.query.projectId);
   }
 
   useEffect(()=>{
     //make sure url is populated before pulling query params
     if(!router.isReady && !firstName) return;
 
-    getCurrentUser()
-
-    addView();
-
     getProject(router.query.projectId);
-
+    addView();
     getComments(router.query.projectId);
+
+    if (!firstName) return;
+    getCurrentUser()
 
   }, [router.isReady, firstName]); 
 

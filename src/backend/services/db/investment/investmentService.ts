@@ -48,7 +48,8 @@ const InvestmentsDbService = {
             .select()
             .update(Project)
             .set({ 
-                fundRaised: () => `"fundRaised" + ${fundAmt}`
+                fundRaised: () => `"fundRaised" + ${fundAmt}`,
+                investors: () => `"investors" + 1`
             })
             .where("id = :id", { id: projectId })
             .returning(['fundRaised', 'fundTiers', 'currFundGoal', 'user'])

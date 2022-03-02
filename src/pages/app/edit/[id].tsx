@@ -4,6 +4,7 @@ import ProjectForm from '@frontend/components/projectForm';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useAuth } from '@frontend/context/AuthProvider';
+import urls from 'helpers/urls';
 
 const EditProject: NextPage = () => {
   const projectFormDetails = {
@@ -20,9 +21,7 @@ const EditProject: NextPage = () => {
 
   useEffect(()=>{
     //make sure url is populated before pulling query params
-    if(!router.isReady && !firstName) return;
-
-    console.log(router.query.projectId);
+    if(urls.urlCheck(router, firstName)) return; //use router.query.projectId to grab id
 
   }, [router.isReady, firstName]); 
 
