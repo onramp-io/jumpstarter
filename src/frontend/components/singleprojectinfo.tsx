@@ -16,7 +16,8 @@ type projectType = {
   end_date: Date,
   pictures: string[],
   investors: number,
-  likesAmt: number
+  likesAmt: number,
+  remaining: string
 }
 
 interface SingleProjectInfoProps {
@@ -63,6 +64,14 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
       router.push('/login');
     }
   }
+
+  /*const calculateRemaining = async () => {
+    if (projectDetails.fund_raised > projectDetails.lastGoal) {
+      return "Goal reached!"
+    } else {
+      return `$ + ${(projectDetails.fund_goal - projectDetails.fund_raised).toLocaleString()}`
+    }
+  }*/
 
   useEffect(()=>{
     //make sure url is populated and user is logged in before pulling query params
@@ -147,7 +156,7 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
                   </TableRow>
                   <TableRow>
                     <TableCell scope="col">${projectDetails.fund_raised.toLocaleString()}</TableCell>
-                    <TableCell scope="col">${(projectDetails.fund_goal - projectDetails.fund_raised).toLocaleString()}</TableCell>
+                    <TableCell scope="col">{projectDetails.remaining}</TableCell>
                     <TableCell scope="col">{projectDetails.investors.toLocaleString()}</TableCell>
                     <TableCell scope="col">{projectDetails.likesAmt.toLocaleString()}</TableCell>
                   </TableRow>

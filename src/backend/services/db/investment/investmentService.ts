@@ -34,6 +34,7 @@ const InvestmentsDbService = {
     */
   create: async (body) => {
     const { userId, projectId, fundAmt } = body;
+    console.log(body);
     let currFundGoal = 0;
     let fundTiers = [];
     let fundRaised = 0;
@@ -42,13 +43,13 @@ const InvestmentsDbService = {
     const db = await connection();
 
     try {
-        //Increment project fundRaised and investors
+        console.log("hey");
+        //Increment project fundRaised
         const projFund = await db.createQueryBuilder()
             .select()
             .update(Project)
             .set({ 
-                fundRaised: () => `"fundRaised" + ${fundAmt}`,
-                investors: () => `"investors" + 1`
+                fundRaised: () => `"fundRaised" + ${fundAmt}`
             })
             .where("id = :id", { id: projectId })
             .returning(['fundRaised', 'fundTiers', 'currFundGoal', 'user'])
@@ -97,6 +98,8 @@ const InvestmentsDbService = {
     catch {
         throw new DatabaseError('Database connection failed');
     }
+
+    console.log("hey");
 
     try {
         //Update project current funding milestone

@@ -20,6 +20,7 @@ const Project: NextPage = () => {
     pictures: string[];
     investors: number;
     likesAmt: number;
+    remaining: string;
   }
 
   const [comment, setComment] = useState('');
@@ -33,7 +34,8 @@ const Project: NextPage = () => {
         end_date: new Date(),
         pictures: [],
         investors: 0,
-        likesAmt: 0
+        likesAmt: 0,
+        remaining: ''
       });
   const router = useRouter();
   const { accessToken, firstName } = useAuth();
@@ -65,17 +67,27 @@ const Project: NextPage = () => {
   const getProject = async (projectId) => {
     var url = '/api/projects/';
     const project = await axios.get(url + router.query.projectId);
-    console.log(project.data);
+    const lastGoal = project.data.data.fundTiers[project.data.data.fundTiers.length - 1];
+    let remainingGoal = "";
+    if (project.data.data.fundRaised > lastGoal) {
+      remainingGoal = "All goals Reached!"
+    } else {
+      remainingGoal = `$${lastGoal.toLocaleString()}`
+    }
+
+    console.log(remainingGoal);
+
     const data = {
       id: project.data.data.id,
       title: project.data.data.title,
       description: project.data.data.description,
-      fund_goal: 0,
+      fund_goal: project.data.data.fundTiers[project.data.data.currFundGoal],
       fund_raised: project.data.data.fundRaised,
       end_date: new Date(),
       pictures: ["//v2.grommet.io/assets/Wilderpeople_Ricky.jpg"],
       investors: 0,
-      likesAmt: project.data.data.likesAmt
+      likesAmt: project.data.data.likesAmt,
+      remaining: remainingGoal
     }
     setProjectDetails(data);
   }

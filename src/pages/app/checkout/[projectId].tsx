@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@frontend/context/AuthProvider';
 import { useRouter } from 'next/router';
 import { Alert, AlertTitle } from '@mui/material';
-import axios from 'axios';
+import axios from '../../../axios/instance';
 
 const Checkout: NextPage = () => {
     const initialState = {
@@ -21,18 +21,19 @@ const Checkout: NextPage = () => {
     const [state, setState] = useState(initialState);
     const [validForm, setValidForm] = useState(false);
     const [errorMessage, setError] = useState('');
-    const { userId, firstName } = useAuth();
+    const { firstName } = useAuth();
     const router = useRouter();
 
     const checkout = async () => {
         if (validForm) {
             try {
+                const user = await axios.get('/users/get');
                 const body = {
-                    userId: userId,
+                    userId: user.data.userData['id'],
                     projectId: router.query.projectId,
                     fundAmt: state.donation
                 }
-                await axios.post('/api/investments', body);
+                await axios.post('/investments', body);
                 router.push('/app/profile');
             } catch (error) {
                 console.log(error);
