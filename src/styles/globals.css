@@ -149,5 +149,5 @@ select {
 }
 
 .grey-text {
-  color: rgb(161, 161, 161) !important;
+  color: var(--GREY) !important;
 }
