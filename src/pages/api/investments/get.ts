@@ -18,11 +18,11 @@ const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case 'GET':
-        const userData = await InvestmentController.getAll(req);
+        const userInvestments = await InvestmentController.getAll(req);
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
-          userData,
+          userInvestments,
         });
         break;
       default:
