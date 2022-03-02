@@ -64,11 +64,7 @@ const ProjectService = {
     }
   },
 
-  /**
-   * // TODO: (Tapa) BS2-114 [BE] Wire up ProjectService.findAllByUser to corresponding Api handler
-   * @param findAllByUserParams contains req.user.uid --> uid
-   */
-  findAllByUser: async (findAllByUserParams) => {
+  findAllByUser: async (uid) => {
     try {
       const db = await connection();
       if (!db) throw new DatabaseError('Database connection failed');
@@ -77,7 +73,7 @@ const ProjectService = {
         .select('*')
         .from('project', 'project')
         .where(
-          `project.user = (SELECT user.id FROM user WHERE user.uid = ${findAllByUserParams.uid})`
+          `project.user = (SELECT id FROM public.user WHERE uid = '${uid}')`
         )
         .getRawMany();
       if (!userData) throw new NotFoundError('User not found');
