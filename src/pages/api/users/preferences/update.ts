@@ -1,7 +1,13 @@
+import { verifyRequest } from '@backend/middleware/verify_request';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import categoryController from '@backend/controller/category/categoryController';
-import { Rss } from 'grommet-icons';
-import { MethodNotAllowedError } from 'helpers/ErrorHandling/errors';
+import { UserController } from '../../../../backend/controller/user/user';
+
+import chalk from 'chalk';
+import {
+  DatabaseError,
+  MethodNotAllowedError,
+  NotFoundError,
+} from 'helpers/ErrorHandling/errors';
 import { Success } from 'helpers/ErrorHandling/success';
 
 interface Request extends NextApiRequest {
@@ -11,17 +17,8 @@ interface Request extends NextApiRequest {
 const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
-      case 'GET':
-        const categoriesList = await categoryController.getAll(req);
-        console.log(categoriesList);
-        res.status(Success.code).json({
-          status: Success.status,
-          message: Success.message,
-          categoriesList,
-        });
-        break;
-      case 'POST':
-        const response = await categoryController.create(req);
+      case 'PUT':
+        const userData = await UserController.updateInterest(req);
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
@@ -31,6 +28,10 @@ const handler = async (req: Request, res: NextApiResponse) => {
         throw new MethodNotAllowedError('Method not found');
     }
   } catch (error) {
+    console.log(
+      chalk.red.bold(error.name + '@user/create.ts on Line 32'),
+      error.message
+    );
     res.status(error.code).json({
       status: error.status,
       message: error.message,
@@ -38,4 +39,4 @@ const handler = async (req: Request, res: NextApiResponse) => {
   }
 };
 
-export default handler;
+export default verifyRequest(handler);

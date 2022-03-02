@@ -17,6 +17,7 @@ import { tokenToString } from "typescript";
 import { Token } from "@mui/icons-material";
 
 export interface AuthContextType {
+  userId: number;
   accessToken: string;
   firstName: string;
   lastName: string;
@@ -29,11 +30,12 @@ export interface AuthContextType {
 }
 
 export const AuthContext = createContext<AuthContextType>({
-  accessToken: "",
-  firstName: "",
-  lastName: "",
-  bio: "",
-  avatar: "",
+  userId: 0,
+  accessToken: '',
+  firstName: '',
+  lastName: '',
+  bio: '',
+  avatar: '',
   totalInvestments: 0,
   interests: [],
   balance: 0,
@@ -43,11 +45,12 @@ export const AuthContext = createContext<AuthContextType>({
 const userDispatchContext = createContext({});
 
 const initialState = {
-  accessToken: "",
-  firstName: "",
-  lastName: "",
-  bio: "",
-  avatar: "",
+  accessToken: '',
+  userId: 0,
+  firstName: '',
+  lastName: '',
+  bio: '',
+  avatar: '',
   totalInvestments: 0,
   interests: [],
   balance: 0,
@@ -69,6 +72,34 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
   const setUser = (payload) => dispatch({ type: "SET_USER", payload });
 
   useEffect(() => {
+    const getUser = async (token) => {
+      const response = await axios.get('/users/get');
+      setUser({
+        accessToken: token,
+        firstName: response.data.userData['firstName'],
+        lastName: response.data.userData['lastName'],
+        bio: response.data.userData['bio'],
+        avatar: response.data.userData['avatar'],
+        investedAmt: response.data.userData['investedAmt'],
+        interests: response.data.userData['interests'],
+        balance: response.data.userData['balance'],
+      });
+    };
+
+    const getCategories = async () => {
+      const response = await axios.get('/users/preferences/get');
+      setUser({
+        interests: response.data.categories,
+      });
+    };
+    
+    const getUserInvestments = async () => {
+      const response = await axios.get('/investments/get');
+      setUser({
+        investments: response.data.investments,
+      });
+    };
+
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         router.push("/");
@@ -77,6 +108,8 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
         const token = await getIdToken(user);
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         getUser(token);
+        getUserInvestments();
+        getCategories();
       }
     });
   }, []);
@@ -84,6 +117,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
   const getUser = async (token) => {
     const response = await axios.get("/users/get");
     setUser({
+      userId: response.data.userData['id'],
       accessToken: token,
       firstName: response.data.userData["firstName"],
       lastName: response.data.userData["lastName"],

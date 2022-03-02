@@ -1,7 +1,13 @@
-import connection from "@backend/config/db";
-import { IUserPost, IUserPut } from "@backend/controller/user/user";
-import { User } from "@backend/entities/User";
-import { DatabaseError, NotFoundError } from "helpers/ErrorHandling/errors";
+import connection from '@backend/config/db';
+import {
+  IUserPost,
+  IUserPut,
+  IUserPutAvatar,
+} from '@backend/controller/user/user';
+import { User } from '@backend/entities/User';
+import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors';
+
+import axios from 'axios';
 
 export const userService = {
   get: async (uid: string) => {
@@ -49,15 +55,14 @@ export const userService = {
       .set({
         firstName: dataToUpdate.put.firstName,
         lastName: dataToUpdate.put.lastName,
-        avatar: dataToUpdate.put.avatar,
         bio: dataToUpdate.put.bio,
+        avatar: dataToUpdate.put.avatarImgUrl,
       })
       .where("uid = :uid", { uid: dataToUpdate.put.uid })
       .execute();
     if (!userData) throw new NotFoundError("User not found");
     return userData;
   },
-
   delete: async (uid: string) => {
     const db = await connection();
     if (!db) throw new DatabaseError("Database connection failed");
@@ -83,6 +88,33 @@ export const userService = {
       .where("uid = :uid", { uid })
       .execute();
     if (!userData) throw new NotFoundError("User not found");
+    return userData;
+  },
+
+  getCategories: async () => {
+    const db = await connection();
+    if (!db) throw new DatabaseError('Database connection failed');
+    const categories = await db
+      .createQueryBuilder()
+      .select('*')
+      .from('category', 'category')
+      .getRawMany();
+    if (!categories) throw new NotFoundError('Categories not found');
+    return categories;
+  },
+
+  updateInterest: async (categories: string[], uid: string) => {
+    const db = await connection();
+    if (!db) throw new DatabaseError('Database connection failed');
+    const userData = await db
+      .createQueryBuilder()
+      .update(User)
+      .set({
+        interests: categories,
+      })
+      .where('uid = :uid', { uid })
+      .execute();
+    if (!userData) throw new NotFoundError('User not found');
     return userData;
   },
 };

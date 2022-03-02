@@ -1,17 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
 export class Category {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column("text")
+  category: string;
 
-    @Column("text")
-    category: string;
-  
-    @Column("text")
-    picture: string;
-  
-    @Column({ type: "text", nullable: true })
-    description: string;
+  @Column("text")
+  picture: string;
+
+  @Column({ type: "text", nullable: true })
+  description: string;
 }
