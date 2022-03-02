@@ -3,6 +3,7 @@ import axios from "axios";
 import { Box, Heading, Image, Meter, Text } from "grommet";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
+import urls from 'helpers/urls';
 
 interface ProjectInfoProps {
   projectId: number;
@@ -106,8 +107,7 @@ const SectionCard = function sectionCardsComponent({
   const router = useRouter();
 
   const goToProject = async (event: MouseEvent) => {
-    var url = '/app/project/';
-    router.push(url + projectId);
+    router.push(urls.projectRedirect + projectId);
   }
 
   useEffect(() => {

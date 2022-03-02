@@ -7,6 +7,11 @@ const projectView = '/api/projects/views/';
 const projects = '/api/projects/';
 const edit = '/app/edit/';
 const trending = '/api/projects/sort/TRENDING';
+const likes = '/likes/';
+const checkout = '/app/checkout/';
+const loginRedirect = '/login';
+const projectRedirect = '/app/project/';
+
 
 const urlCheck = async (router, user) => {
     if (!router && !user) {
@@ -17,4 +22,5 @@ const urlCheck = async (router, user) => {
 }
     
 export default { addInvestment, getUser, profileRedirect, 
-    comments, projectView, projects, getUserApi, edit, urlCheck, trending }
+    comments, projectView, projects, getUserApi, edit, urlCheck, 
+    trending, likes, checkout, loginRedirect, projectRedirect }

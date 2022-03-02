@@ -7,6 +7,8 @@ import connection from '@backend/config/db';
 import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors'
 import { dbError } from "helpers/ErrorHandling/messaging";
 
+enum UpdateLike { Increment = ' + 1', Decrement = ' - 1' }
+
 const likeService = {
     //Add a like to a project by a user
     create: async (body) => {
@@ -18,7 +20,7 @@ const likeService = {
 
         try {
             //Increment project likesAmt
-            updateLikeAmt("increment", db, projectId);
+            updateLikeAmt(UpdateLike.Decrement, db, projectId);
         }
         catch {
             throw new DatabaseError(dbError);
@@ -85,7 +87,7 @@ const likeService = {
 
         try {
             //decrement like amount
-            updateLikeAmt("decrement", db, projectId);
+            updateLikeAmt(UpdateLike.Decrement, db, projectId);
         }
         catch {
             throw new DatabaseError(dbError);
@@ -110,21 +112,13 @@ const likeService = {
 
 const updateLikeAmt = async (selector, db, projectId) => {
 
-    enum UpdateLike { Increment = ' + 1', Decrement = ' - 1' }
     const setString = '"likesAmt"';
-    let updateType;
-  
-    if (selector == "increment") {
-        updateType = UpdateLike.Increment;
-    } else if (selector == "decrement") {
-        updateType = UpdateLike.Decrement;
-    }
 
     await db.createQueryBuilder()
         .select()
         .update(Project)
         .set({
-            likesAmt: () => `${setString + updateType}`
+            likesAmt: () => `${setString + selector}`
         })
         .where("id = :id", { id: projectId })
         .execute()

@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@frontend/context/AuthProvider';
 import axios from '../../axios/instance';
+import urls from 'helpers/urls'; 
 
 
 type projectType = {
@@ -32,8 +33,7 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
   const router = useRouter();
 
   const checkIfLiked = async (projectId) => {
-    const url = '/likes/';
-    const response = await axios.get(url + projectId);
+    const response = await axios.get(urls.likes + projectId);
     if (response.data.data) {
       setLike(true);
     }
@@ -41,33 +41,28 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
 
   const submitLike = async (event: any) => {
     let newLikeTotal = 0;
-    const likeUrl = '/likes/';
     if (!like) {
-      const userUrl = '/users/get';
-      const user = await axios.get(userUrl);
+      const user = await axios.get(urls.getUser);
       newLikeTotal = likeTotal + 1;
       const body = {
         userId: user.data.userData['id'],
         projectId: router.query.projectId,
       }
-      await axios.post(likeUrl, body);
+      await axios.post(urls.likes, body);
       setLike(true);
     } else {
       newLikeTotal = likeTotal - 1;
-      await axios.delete(likeUrl + router.query.projectId);
+      await axios.delete(urls.likes + router.query.projectId);
       setLike(false);
     }
     setLikeTotal(newLikeTotal);
   }
 
   const goToCheckOut = async (event: any) => {
-    let url = '';
     if (firstName) {
-      url = '/app/checkout/';
-      router.push(url + router.query.projectId);
+      router.push(urls.checkout + router.query.projectId);
     } else {
-      url = '/login';
-      router.push(url);
+      router.push(urls.loginRedirect);
     }
   }
 
