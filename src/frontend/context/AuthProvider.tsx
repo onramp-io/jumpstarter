@@ -114,8 +114,8 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
     onAuthStateChanged(auth, async (user) => {
       try {
         if (!user) {
-          router.push('/');
           delete axios.defaults.headers.common['Authorization'];
+          router.push('/');
         } else {
           const token = await getIdToken(user);
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
