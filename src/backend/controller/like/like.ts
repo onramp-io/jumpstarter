@@ -1,6 +1,6 @@
 import likeService from '@backend/services/db/like/likeService';
-  import type { NextApiRequest, NextApiResponse } from 'next';
-  import { Request } from '@backend/middleware/verify_request';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { Request } from '@backend/middleware/verify_request';
 import { useRadioGroup } from '@mui/material';
 
 const likeController = {

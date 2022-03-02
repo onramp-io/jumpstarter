@@ -1,20 +1,26 @@
+import { verifyRequest } from '@backend/middleware/verify_request';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { MethodNotAllowedError } from 'helpers/ErrorHandling/errors';
-import UploadController from '@backend/controller/upload/upload';
-import RequestMethod from '@backend/common/RequestMethod';
+import { UserController } from '../../../../backend/controller/user/user';
+
 import chalk from 'chalk';
+import {
+  DatabaseError,
+  MethodNotAllowedError,
+  NotFoundError,
+} from 'helpers/ErrorHandling/errors';
 import { Success } from 'helpers/ErrorHandling/success';
 
-import { Request, verifyRequest } from '@backend/middleware/verify_request';
+import { Request } from '../../../../backend/middleware/verify_request';
+
 const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
-      case RequestMethod.GET:
-        const uploadConfig = await UploadController.create(req);
+      case 'GET':
+        const categories = await UserController.getCategories();
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
-          uploadConfig,
+          categories,
         });
         break;
       default:
@@ -22,7 +28,10 @@ const handler = async (req: Request, res: NextApiResponse) => {
     }
   } catch (error) {
     console.log(
-      chalk.red.bold(error.name + '@api/upload.ts on Line 23'),
+      chalk.red.bold(
+        'ERROR: ',
+        error.name + '@users/preferences/get.ts on Line 32'
+      ),
       error.message
     );
     res.status(error.code).json({
