@@ -151,3 +151,13 @@ select {
 .grey-text {
   color: var(--GREY) !important;
 }
+
+* {
+  font-family: InterR;
+  background-color: var(--WHITEBG);
+}
+
+body > * {
+  font-family: InterR;
+  color: var(--BRAND);
+}
