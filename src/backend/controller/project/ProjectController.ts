@@ -60,6 +60,18 @@ const ProjectController = {
     }
   },
 
+  findProjectUserById: async (req) => {
+    try {
+      if (reqParamsAreComplete(req.query, 1)) {
+        return await ProjectService.findProjectUserById(req.query);
+      } else {
+        throw new BadRequestError(queryIdError);
+      }
+    } catch (err) {
+      throw err;
+    }
+  },
+
   // UPDATE - 1
   updateById: async (req) => {
     try {

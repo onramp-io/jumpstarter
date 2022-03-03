@@ -1,43 +1,120 @@
 import { Box, Button, DateInput, FileInput, Form, FormField, Select, Text, TextArea, TextInput } from 'grommet';
 import type { NextPage } from 'next';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@frontend/context/AuthProvider';
+import { useRouter } from 'next/router';
+import { NotFoundError } from 'helpers/ErrorHandling/errors';
+import { notFoundError } from 'helpers/ErrorHandling/messaging';
+import axios from 'axios';
 
 type projectFormType = {
   title: string,
   category: string,
   description: string,
-  end_date: string,
-  fund_goal: number,
-  fund_tiers: number[],
+  launchDate: Date,
+  fundTiers: number[],
   pictures: string[],
+  currFundGoal: number,
 }
 
 interface ProjectFormProps {
     projectFormState: projectFormType
+    createOrEdit: string
 }
 
-const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Element => {
+const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState, createOrEdit}): JSX.Element => {
 
   const [projectState, setProjectState] = useState(projectFormState);
   const [imageFile, setImageFile] = useState<File>();
-  const [create, setCreate] = useState(true);
+  const { userId, accessToken } = useAuth();
+  const router = useRouter();
 
-  const onSubmitCreate = (event) => {
-    event.preventDefault();
+  const onSubmitCreate = async (event) => {
+    try {
+      const headers = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
 
-    console.log(JSON.stringify(event.value));
+      const uploadConfig = await axios.get('/api/upload', headers);
+
+      const projectImage = await axios.put(
+        uploadConfig.data.uploadConfig.url,
+        imageFile,
+        {
+          headers: {
+            'Content-type': imageFile.type,
+          },
+        }
+      );
+
+      const pictureArray = [uploadConfig.data.uploadConfig.randomKey];
+
+      const body = {
+        title: projectState.title,
+        category: projectState.category,
+        description: projectState.description,
+        fundTiers: projectState.fundTiers,
+        currFundGoal: 0,
+        user: userId,
+        launchDate: projectState.launchDate,
+        pictures: pictureArray
+      }
+
+      const createProject = await axios.post('/api/users/projects', body, headers);
+
+      router.push('/discover')
+    } catch (error) {
+      throw new NotFoundError(notFoundError);
+    }
+    
   }
 
-  const onSubmitEdit = (event) => {
-    event.preventDefault();
+  const onSubmitEdit = async (event) => {
+    try {
+      const headers = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
 
-    console.log(JSON.stringify(event.value));
+      const uploadConfig = await axios.get('/api/upload', headers);
+
+      const projectImage = await axios.put(
+        uploadConfig.data.uploadConfig.url,
+        imageFile,
+        {
+          headers: {
+            'Content-type': imageFile.type,
+          },
+        }
+      );
+
+      const pictureArray = [uploadConfig.data.uploadConfig.randomKey];
+
+      const body = {
+        pictures: pictureArray,
+        title: projectState.title,
+        category: projectState.category,
+        description: projectState.description,
+        fundTiers: projectState.fundTiers,
+        currFundGoal: projectState.currFundGoal,
+        launchDate: projectState.launchDate,
+      }
+
+      const projectId = 66;
+
+      const editProject = await axios.put(`/api/users/projects/${103}`, body, headers);
+
+      router.push('/discover')
+    } catch (error) {
+      throw new NotFoundError(notFoundError);
+    }
   }
-
-  console.log(projectState.fund_goal)
 
   const updateTier = (newValue, index) => {
-    const newTiers = projectState.fund_tiers.map((tier, i) => {
+    const newTiers = projectState.fundTiers.map((tier, i) => {
       if (i === index) {
         return Number(newValue);
       } else {
@@ -45,7 +122,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
       }
     })
 
-    setProjectState({...projectState, fund_tiers: newTiers})
+    setProjectState({...projectState, fundTiers: newTiers})
   }
 
   const dateDifference = (dateString) => {
@@ -65,7 +142,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
       </Box>
       <Form
         value={projectState}
-        onSubmit={(event) => create ? onSubmitCreate(event) : onSubmitEdit(event)}
+        onSubmit={(event) => createOrEdit === "create" ? onSubmitCreate(event) : onSubmitEdit(event)}
         validate="blur"
       >
         <Box direction="column" gap="xlarge">
@@ -83,7 +160,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
             label="Project Category">
             <Select
               name="category"
-              options={['Film', 'Tech', 'Games', 'Music', 'Literature', 'Food']}
+              options={['Arts', 'Design & Tech', 'Film', 'Food & Craft', 'Games', 'Music']}
               onChange={({ option }) => setProjectState({...projectState, category: option})}
             />
           </FormField>
@@ -102,7 +179,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
             htmlFor="endDate"
             label="Target Date"
             validate={(val) => {
-              val = projectState.end_date;
+              val = projectState.launchDate;
 
               const dateOverflow = dateDifference(val);
 
@@ -111,23 +188,8 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
               }
             }}
           >
-            <DateInput name="endDate" format="mm/dd/yyyy" onChange={(event) => setProjectState({...projectState, end_date: event.value.toString()})} />
+            <DateInput name="endDate" format="mm/dd/yyyy" value={projectState.launchDate.toString()} onChange={(event) => setProjectState({...projectState, launchDate: new Date(event.value.toString())})} />
           </FormField>
-
-          <FormField
-            name="goal"
-            htmlFor="goal"
-            label="Funding Goal"
-            validate={(val) => {
-              val = projectState.fund_goal
-              if (val <= 0) {
-                return { message: "Funding goal must be greater than 0.", status: "error"}
-              }
-            }}
-          >
-            <TextInput name="goal" type="number" value={projectState.fund_goal} onChange={(event) => { setProjectState({...projectState, fund_goal: Number(event.target.value)}) }}/>
-          </FormField>
-
 
           <Box margin={{left: "small"}}>
             <Text margin={{ vertical: "small" }}>Tier 1</Text>
@@ -135,17 +197,17 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
               name="tier1"
               htmlFor="tier1"
               validate={(val) => {
-                val = projectState.fund_tiers[1]
+                val = projectState.fundTiers[1]
 
                 if (val <= 0) {
                   return {message: "Tier goals must be greater than 0."}
                 }
 
-                if (val >= projectState.fund_goal) {
+                if (val >= projectState.fundTiers[3]) {
                   return {message: "Tier goals must not be equal to or surpass total project goal."}
                 }
 
-                if (val >= projectState.fund_tiers[2] || val >= projectState.fund_tiers[3]) {
+                if (val >= projectState.fundTiers[2] || val >= projectState.fundTiers[3]) {
                   return { message: "Tier 1 goal cannot be higher than tiers 2 and 3."}
                 }
               }}
@@ -153,8 +215,8 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
               <TextInput
                 name="tier1"
                 type="number"
+                value={projectState.fundTiers[1]}
                 placeholder="$0"
-                value={projectState.fund_tiers[1]}
                 onChange={(event) => updateTier(event.target.value, 1)}
               />
             </FormField>
@@ -164,17 +226,17 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
               name="tier2"
               htmlFor="tier2"
               validate={(val) => {
-                val = projectState.fund_tiers[2]
+                val = projectState.fundTiers[2]
 
                 if (val <= 0) {
                   return {message: "Tier goals must be greater than 0."}
                 }
 
-                if (val >= projectState.fund_goal) {
+                if (val >= projectState.fundTiers[3]) {
                   return {message: "Tier goals must not be equal to or surpass total project goal."}
                 }
 
-                if (val >= projectState.fund_tiers[3]) {
+                if (val >= projectState.fundTiers[3]) {
                   return { message: "Tier 2 goal cannot be higher than tier 3."}
                 }
               }}
@@ -182,39 +244,35 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
               <TextInput
                 name="tier2"
                 type="number"
+                value={projectState.fundTiers[2]}
                 placeholder="$0"
-                value={projectState.fund_tiers[2]}
                 onChange={(event) => updateTier(event.target.value, 2)}
                 />
             </FormField>
 
-            <Text margin={{ vertical: "small" }}>Tier 3</Text>
+            <Text margin={{ vertical: "small" }}>Final goal</Text>
             <FormField
               name="tier3"
               htmlFor="tier3"
               validate={(val) => {
-                val = projectState.fund_tiers[2]
+                val = projectState.fundTiers[3]
 
                 if (val <= 0) {
-                  return {message: "Tier goals must be greater than 0."}
-                }
-
-                if (val >= projectState.fund_goal) {
-                  return {message: "Tier goals must not be equal to or surpass total project goal."}
+                  return {message: "Goal must be greater than 0."}
                 }
               }}
             >
               <TextInput
                 name="tier3"
                 type="number"
+                value={projectState.fundTiers[3]}
                 placeholder="$0"
-                value={projectState.fund_tiers[3]}
                 onChange={(event) => updateTier(event.target.value, 3)}
               />
             </FormField>
           </Box>
 
-          <Button type="submit" primary label="Create project" />
+          <Button type="submit" primary label={createOrEdit === "create" ? "Create project" : "Edit project"} />
         </Box>
       </Form>
     </Box>
