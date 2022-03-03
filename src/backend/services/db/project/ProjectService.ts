@@ -1,7 +1,7 @@
-import connection from "@backend/config/db";
-import { Project } from "@backend/entities/Project";
-import type { NextApiRequest, NextApiResponse } from "next";
-import { Request } from "@backend/middleware/verify_request";
+import connection from '@backend/config/db';
+import { Project } from '@backend/entities/Project';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { Request } from '@backend/middleware/verify_request';
 import {
   createQueryBuilder,
   CustomRepositoryDoesNotHaveEntityError,
@@ -9,17 +9,21 @@ import {
   getConnection,
   getRepository,
   UpdateQueryBuilder,
-} from "typeorm";
-import SortByConfig from "@backend/common/SortByConfig";
+} from 'typeorm';
+import SortByConfig from '@backend/common/SortByConfig';
+import index from 'pages';
 import {
   ReasonPhrases,
   StatusCodes,
   getReasonPhrase,
   getStatusCode,
-} from "http-status-codes";
-import { DatabaseError, NotFoundError } from "helpers/ErrorHandling/errors";
-import existInDb from "@backend/utils/existsInDb";
-import { dbError, notFoundError } from "helpers/ErrorHandling/messaging";
+} from 'http-status-codes';
+import { User } from '@backend/entities/User';
+import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors';
+import chalk from 'chalk';
+import existInDb from '@backend/utils/existsInDb';
+import { dbError, notFoundError } from 'helpers/ErrorHandling/messaging';
+import { NorthWest } from '@mui/icons-material';
 
 const ProjectService = {
   /**
@@ -54,7 +58,7 @@ const ProjectService = {
         .execute();
 
       if (projectInsertResult === null || projectInsertResult === undefined) {
-        throw new DatabaseError("Project not created. Insert result is falsy.");
+        throw new DatabaseError('Project not created. Insert result is falsy.');
       }
 
       return [projectInsertResult, StatusCodes.CREATED];
@@ -63,20 +67,16 @@ const ProjectService = {
     }
   },
 
-  /**
-   * // TODO: (Tapa) BS2-114 [BE] Wire up ProjectService.findAllByUser to corresponding Api handler
-   * @param findAllByUserParams contains req.user.uid --> uid
-   */
-  findAllByUser: async (findAllByUserParams) => {
+  findAllByUser: async (uid) => {
     try {
       const db = await connection();
       if (!db) throw new DatabaseError(dbError);
       const userData = await db
         .createQueryBuilder()
-        .select("*")
-        .from("project", "project")
+        .select('*')
+        .from('project', 'project')
         .where(
-          `project.user = (SELECT user.id FROM user WHERE user.uid = ${findAllByUserParams.uid})`
+          `project.user = (SELECT id FROM public.user WHERE uid = '${uid}')`
         )
         .getRawMany();
       if (!userData) throw new NotFoundError(notFoundError);
@@ -98,7 +98,7 @@ const ProjectService = {
       }
 
       const allProjectRows: Project[] = await getRepository(Project)
-        .createQueryBuilder("project")
+        .createQueryBuilder('project')
         .getMany();
 
       if (allProjectRows === undefined || allProjectRows === null) {
@@ -124,8 +124,8 @@ const ProjectService = {
 
       const foundProject = await db
         .createQueryBuilder()
-        .select("*")
-        .from("project", "project")
+        .select('*')
+        .from('project', 'project')
         .where(`project.id = ${findByIdParams.id}`)
         .getRawOne();
 
@@ -134,7 +134,7 @@ const ProjectService = {
         foundProject === undefined ||
         foundProject.length === 0
       ) {
-        throw new DatabaseError("Project not found. Found project is falsy.");
+        throw new DatabaseError('Project not found. Found project is falsy.');
       }
       return [foundProject, StatusCodes.OK];
     } catch (err) {
@@ -178,7 +178,7 @@ const ProjectService = {
     try {
       const db = await connection();
 
-      if (!existInDb("project", Project, id)) {
+      if (!existInDb('project', Project, id)) {
         throw new NotFoundError(notFoundError);
       }
 
@@ -186,7 +186,7 @@ const ProjectService = {
         .createQueryBuilder()
         .update(Project)
         .set(updateByIdParams)
-        .where("id = :id", { id })
+        .where('id = :id', { id })
         .execute();
 
       if (updatedProject.affected === 1) {
@@ -208,14 +208,14 @@ const ProjectService = {
     try {
       const db = await connection();
 
-      if (!existInDb("project", Project, projectId)) {
+      if (!existInDb('project', Project, projectId)) {
         throw new NotFoundError(notFoundError);
       }
       const deletedProject = await db
         .createQueryBuilder()
         .delete()
         .from(Project)
-        .where("id = :id", { id: projectId })
+        .where('id = :id', { id: projectId })
         .execute();
 
       if (deletedProject.affected === 1) {
@@ -235,16 +235,15 @@ const ProjectService = {
    *
    */
   sortBy: async (query) => {
-
     if (query.sortType === SortByConfig.NEWEST) {
       try {
-        return await getSortedProjects("createdDate");
+        return await getSortedProjects('createdDate');
       } catch (err) {
         throw new DatabaseError(dbError);
       }
     } else if (query.sortType === SortByConfig.TRENDING) {
       try {
-        return await getSortedProjects("trendScore");
+        return await getSortedProjects('trendScore');
       } catch (err) {
         throw new DatabaseError(dbError);
       }
@@ -258,46 +257,45 @@ const ProjectService = {
   },
 
   addView: async (query) => {
-
     const id = query.id;
     const db = await connection();
 
     try {
       //Increment project views
-      const projectViews = await db.createQueryBuilder()
-          .select()
-          .update(Project)
-          .set({
-              views: () => `"views" + 1`
-          })
-          .where("id = :id", { id: id })
-          .execute()
-    }
-    catch {
-        throw new DatabaseError(dbError);
+      const projectViews = await db
+        .createQueryBuilder()
+        .select()
+        .update(Project)
+        .set({
+          views: () => `"views" + 1`,
+        })
+        .where('id = :id', { id: id })
+        .execute();
+    } catch {
+      throw new DatabaseError(dbError);
     }
   },
 
   updateTrendScore: async () => {
     const db = await connection();
     try {
-      var trendEquation = '("likesAmt"-"likesAmtLast") + ("views"-"viewsLast") + ("fundRaised"-"fundRaisedLast")';
+      var trendEquation =
+        '("likesAmt"-"likesAmtLast") + ("views"-"viewsLast") + ("fundRaised"-"fundRaisedLast")';
       var trendCondition = "(now() - scoreUpdatedAt) > INTERVAL '5 sec'";
 
-      await db.createQueryBuilder()
-          .select()
-          .update(Project)
-          .set({
-              trendScore: () => `${trendEquation}`,
-              scoreUpdatedAt: () => `now()`
-          })
-          .where(`${trendCondition}`)
-          .execute()
-;    }
-    catch {
-        throw new DatabaseError(dbError);
+      await db
+        .createQueryBuilder()
+        .select()
+        .update(Project)
+        .set({
+          trendScore: () => `${trendEquation}`,
+          scoreUpdatedAt: () => `now()`,
+        })
+        .where(`${trendCondition}`)
+        .execute();
+    } catch {
+      throw new DatabaseError(dbError);
     }
-
   },
 
   getLikes: async (query) => {
@@ -308,20 +306,16 @@ const ProjectService = {
       //Increment project likesAmt
       const projectLikes = await db
         .createQueryBuilder()
-        .select("project.likesAmt", "likesAmt")
-        .from(Project, "project")
-        .where("id = :id", { id })
+        .select('project.likesAmt', 'likesAmt')
+        .from(Project, 'project')
+        .where('id = :id', { id })
         .getRawOne();
 
       return projectLikes;
-      
+    } catch {
+      throw new DatabaseError(dbError);
     }
-    catch {
-        throw new DatabaseError(dbError);
-    }
-
-  }
-  
+  },
 };
 
 //Helper function to sort projects
@@ -329,11 +323,11 @@ const getSortedProjects = async (column) => {
   const db = await connection();
 
   const projectData = await getRepository(Project)
-  .createQueryBuilder("project")
-  .orderBy(`project.${column}`, 'DESC')
-  .getMany();
+    .createQueryBuilder('project')
+    .orderBy(`project.${column}`, 'DESC')
+    .getMany();
 
   return projectData;
-}
+};
 
 export default ProjectService;
