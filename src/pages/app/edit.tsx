@@ -1,8 +1,9 @@
 import { Box, Heading, Text } from 'grommet';
 import type { NextPage } from 'next';
 import ProjectForm from '@frontend/components/projectForm';
-import { projectsUrl } from 'helpers/Urls';
 import { useState, useEffect } from 'react';
+import { NotFoundError } from 'helpers/ErrorHandling/errors';
+import { notFoundError } from 'helpers/ErrorHandling/messaging';
 import axios from 'axios';
 
 const EditProject: NextPage = () => {
@@ -12,14 +13,14 @@ const EditProject: NextPage = () => {
   useEffect(() => {
     try {
       const getProject = async (id) => {
-        const response = await axios.get(projectsUrl + id);
+        const response = await axios.get('/api/projects/' + id);
         setProjectFormDetails(response.data.data);
         setLoading(false);
       }
 
       getProject(103);
     } catch (error) {
-      console.log(error)
+      throw new NotFoundError(notFoundError);
     }
   }, [])
 

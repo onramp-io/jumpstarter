@@ -3,6 +3,8 @@ import type { NextPage } from 'next';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@frontend/context/AuthProvider';
 import { useRouter } from 'next/router';
+import { NotFoundError } from 'helpers/ErrorHandling/errors';
+import { notFoundError } from 'helpers/ErrorHandling/messaging';
 import axios from 'axios';
 
 type projectFormType = {
@@ -64,7 +66,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState, createOrEdi
 
       router.push('/discover')
     } catch (error) {
-      console.log(error);
+      throw new NotFoundError(notFoundError);
     }
     
   }
@@ -107,7 +109,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState, createOrEdi
 
       router.push('/discover')
     } catch (error) {
-      console.log(error);
+      throw new NotFoundError(notFoundError);
     }
   }
 
