@@ -121,7 +121,6 @@ const updateLikeAmt = async (selector, db, projectId) => {
             likesAmt: () => `${setString + selector}`
         })
         .where("id = :id", { id: projectId })
-        .andWhere("likesAmt >= 0")
         .execute()
 }
 
