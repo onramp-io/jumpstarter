@@ -2,8 +2,8 @@ import { NextPageContext } from "next";
 import axios from "axios";
 import { Box, Heading, Image, Meter, Text } from "grommet";
 import { useState, useEffect } from "react";
-import { useRouter } from 'next/router';
-import urls from 'helpers/urls';
+import { useRouter } from "next/router";
+import urls from "helpers/urls";
 
 interface ProjectInfoProps {
   projectId: number;
@@ -18,7 +18,6 @@ export const ProjectInfo = function ProjectInfoComponent<sectionCardProps>({
   projectDescription,
   projectCreator,
 }) {
-
   return (
     <Box className="card">
       <Box
@@ -110,7 +109,7 @@ const SectionCard = function sectionCardsComponent({
 
   const goToProject = async (event: MouseEvent) => {
     router.push(urls.projectRedirect + projectId);
-  }
+  };
 
   useEffect(() => {
     const timerId = setTimeout(() => {
@@ -132,9 +131,9 @@ const SectionCard = function sectionCardsComponent({
       align="center"
       pad="medium"
       width="medium"
-      height="min-content"
+      height="min(10rem, min-content)"
       elevation="medium"
-      style={{cursor: "pointer"}}
+      style={{ cursor: "pointer" }}
       onClick={(event) => goToProject(event)}
     >
       <Box width="large" height="small">
