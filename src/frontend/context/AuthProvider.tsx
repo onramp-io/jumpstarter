@@ -41,25 +41,33 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
 
   useEffect(() => {
     const getUser = async (token: string) => {
-      const response = await axios.get('/users/get');
-      setUser({
-        accessToken: token,
-        firstName: response.data.userData['firstName'],
-        lastName: response.data.userData['lastName'],
-        bio: response.data.userData['bio'],
-        avatar: response.data.userData['avatar'],
-        investedAmt: response.data.userData['investedAmt'],
-        interests: response.data.userData['interests'],
-        balance: response.data.userData['balance'],
-        totalInvestments: response.data.userData['investedAmt'],
-      });
+      try {
+        const response = await axios.get('/users/get');
+        setUser({
+          accessToken: token,
+          firstName: response.data.userData['firstName'],
+          lastName: response.data.userData['lastName'],
+          bio: response.data.userData['bio'],
+          avatar: response.data.userData['avatar'],
+          investedAmt: response.data.userData['investedAmt'],
+          interests: response.data.userData['interests'],
+          balance: response.data.userData['balance'],
+          totalInvestments: response.data.userData['investedAmt'],
+        });
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     const getCategories = async () => {
-      const response = await axios.get('/users/preferences/get');
-      setUser({
-        interests: response.data.categories,
-      });
+      try {
+        const response = await axios.get('/users/preferences/get');
+        setUser({
+          interests: response.data.categories,
+        });
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     const getUserProjects = async () => {
@@ -70,10 +78,14 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
     };
 
     const getUserInvestments = async () => {
-      const response = await axios.get('/investments/get');
-      setUser({
-        investments: response.data.userInvestments,
-      });
+      try {
+        const response = await axios.get('/investments/get');
+        setUser({
+          investments: response.data.userInvestments,
+        });
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     onAuthStateChanged(auth, async (user) => {
