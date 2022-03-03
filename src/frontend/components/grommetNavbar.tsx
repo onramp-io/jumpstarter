@@ -25,6 +25,8 @@ import { useRouter } from 'next/router';
 
 import navbar from '../../styles/Navbar.module.css';
 
+import axios from '../../axios/instance';
+
 export const NavBar = () => {
   const { firstName, avatar } = useAuth();
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -36,6 +38,7 @@ export const NavBar = () => {
       signOut(auth)
         .then(() => {
           setIsAuthenticated(false);
+          delete axios.defaults.headers.common['Authorization'];
           router.push('/');
         })
         .catch((error) => {
@@ -128,13 +131,23 @@ export const NavBar = () => {
           ) : (
             <Box className={navbar.wrapper}>
               <Box direction="row" justify="start" gap="xlarge">
-                <Link href="/login">
-                  <Anchor
-                    className="no-text-wrap"
-                    href="/login"
-                    label="Create a New Project"
-                  />
-                </Link>
+                {firstName && isAuthenticated ? (
+                  <Link href="/app/create">
+                    <Anchor
+                      className="no-text-wrap"
+                      href="/app/create"
+                      label="Create a New Project"
+                    />
+                  </Link>
+                ) : (
+                  <Link href="/login">
+                    <Anchor
+                      className="no-text-wrap"
+                      href="/login"
+                      label="Create a New Project"
+                    />
+                  </Link>
+                )}
                 <Link href="/discover">
                   <Anchor
                     className="no-text-wrap"

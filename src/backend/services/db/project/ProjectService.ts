@@ -17,13 +17,13 @@ import {
   StatusCodes,
   getReasonPhrase,
   getStatusCode,
-} from "http-status-codes";
-import { User } from "@backend/entities/User";
-import { DatabaseError, NotFoundError } from "helpers/ErrorHandling/errors";
-import chalk from "chalk";
-import existInDb from "@backend/utils/existsInDb";
-import { dbError, notFoundError } from "helpers/ErrorHandling/messaging";
-import { NorthWest } from "@mui/icons-material";
+} from 'http-status-codes';
+import { User } from '@backend/entities/User';
+import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors';
+import chalk from 'chalk';
+import existInDb from '@backend/utils/existsInDb';
+import { dbError, notFoundError } from 'helpers/ErrorHandling/messaging';
+import { NorthWest } from '@mui/icons-material';
 
 const ProjectService = {
   /**
@@ -148,7 +148,7 @@ const ProjectService = {
     try {
       const db = await connection();
 
-      if (!existInDb("project", Project, id)) {
+      if (!existInDb('project', Project, id)) {
         throw new NotFoundError(notFoundError);
       }
 
@@ -178,7 +178,7 @@ const ProjectService = {
     try {
       const db = await connection();
 
-      if (!existInDb("project", Project, projectId)) {
+      if (!existInDb('project', Project, projectId)) {
         throw new NotFoundError(notFoundError);
       }
       const deletedProject = await db
@@ -205,16 +205,15 @@ const ProjectService = {
    *
    */
   sortBy: async (query) => {
-
     if (query.sortType === SortByConfig.NEWEST) {
       try {
-        return await getSortedProjects("createdDate");
+        return await getSortedProjects('createdDate');
       } catch (err) {
         throw new DatabaseError(dbError);
       }
     } else if (query.sortType === SortByConfig.TRENDING) {
       try {
-        return await getSortedProjects("trendScore");
+        return await getSortedProjects('trendScore');
       } catch (err) {
         throw new DatabaseError(dbError);
       }
@@ -228,46 +227,45 @@ const ProjectService = {
   },
 
   addView: async (query) => {
-
     const id = query.id;
     const db = await connection();
 
     try {
       //Increment project views
-      const projectViews = await db.createQueryBuilder()
-          .select()
-          .update(Project)
-          .set({
-              views: () => `"views" + 1`
-          })
-          .where("id = :id", { id: id })
-          .execute()
-    }
-    catch {
-        throw new DatabaseError(dbError);
+      const projectViews = await db
+        .createQueryBuilder()
+        .select()
+        .update(Project)
+        .set({
+          views: () => `"views" + 1`,
+        })
+        .where('id = :id', { id: id })
+        .execute();
+    } catch {
+      throw new DatabaseError(dbError);
     }
   },
 
   updateTrendScore: async () => {
     const db = await connection();
     try {
-      var trendEquation = '("likesAmt"-"likesAmtLast") + ("views"-"viewsLast") + ("fundRaised"-"fundRaisedLast")';
+      var trendEquation =
+        '("likesAmt"-"likesAmtLast") + ("views"-"viewsLast") + ("fundRaised"-"fundRaisedLast")';
       var trendCondition = "(now() - scoreUpdatedAt) > INTERVAL '5 sec'";
 
-      await db.createQueryBuilder()
-          .select()
-          .update(Project)
-          .set({
-              trendScore: () => `${trendEquation}`,
-              scoreUpdatedAt: () => `now()`
-          })
-          .where(`${trendCondition}`)
-          .execute()
-;    }
-    catch {
-        throw new DatabaseError(dbError);
+      await db
+        .createQueryBuilder()
+        .select()
+        .update(Project)
+        .set({
+          trendScore: () => `${trendEquation}`,
+          scoreUpdatedAt: () => `now()`,
+        })
+        .where(`${trendCondition}`)
+        .execute();
+    } catch {
+      throw new DatabaseError(dbError);
     }
-
   },
 
   getLikes: async (query) => {
@@ -278,20 +276,16 @@ const ProjectService = {
       //Increment project likesAmt
       const projectLikes = await db
         .createQueryBuilder()
-        .select("project.likesAmt", "likesAmt")
-        .from(Project, "project")
-        .where("id = :id", { id })
+        .select('project.likesAmt', 'likesAmt')
+        .from(Project, 'project')
+        .where('id = :id', { id })
         .getRawOne();
 
       return projectLikes;
-      
+    } catch {
+      throw new DatabaseError(dbError);
     }
-    catch {
-        throw new DatabaseError(dbError);
-    }
-
-  }
-  
+  },
 };
 
 //Helper function to sort projects
@@ -299,11 +293,11 @@ const getSortedProjects = async (column) => {
   const db = await connection();
 
   const projectData = await getRepository(Project)
-  .createQueryBuilder("project")
-  .orderBy(`project.${column}`, 'DESC')
-  .getMany();
+    .createQueryBuilder('project')
+    .orderBy(`project.${column}`, 'DESC')
+    .getMany();
 
   return projectData;
-}
+};
 
 export default ProjectService;

@@ -71,7 +71,7 @@ function MyProfile() {
               <CircularProgress />
             ) : (
               <>
-                {balance >= 0 ? (
+                {balance <= 0 ? (
                   <>
                     <Button
                       label="Withdraw"

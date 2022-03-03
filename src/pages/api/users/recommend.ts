@@ -1,6 +1,6 @@
 import { verifyRequest } from '@backend/middleware/verify_request';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { UserController } from '../../../../backend/controller/user/user';
+import { UserController } from '../../../backend/controller/user/user';
 
 import chalk from 'chalk';
 import {
@@ -18,18 +18,11 @@ const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case 'GET':
-        const projects = await UserController.getUserProject(req);
-        const userProjects = projects.map((project) => {
-          return {
-            projectId: project.id,
-            projectTitle: project.title,
-            projectDescription: project.description,
-          };
-        });
+        const recommendedProjects = await UserController.getRecommendation(req);
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
-          userProjects,
+          recommendedProjects,
         });
         break;
       default:
@@ -37,7 +30,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
     }
   } catch (error) {
     console.log(
-      chalk.red.bold(error.name + '@users/projects/getAll.ts on Line 32'),
+      chalk.red.bold(error.name + '@users/recommend.ts on Line 32'),
       error.message
     );
     res.status(error.code).json({
@@ -47,4 +40,5 @@ const handler = async (req: Request, res: NextApiResponse) => {
   }
 };
 
-export default verifyRequest(handler);
+// export default verifyRequest(handler);
+export default handler;

@@ -109,4 +109,13 @@ export const UserController = {
     const userData = ProjectService.findAllByUser(uid);
     return userData;
   },
+
+  getRecommendation: async (req: Request) => {
+    const {
+      // user: { uid },
+      body: { uid },
+    } = req;
+    const userData = userService.getUserRecommendation(uid);
+    return userData;
+  },
 };
