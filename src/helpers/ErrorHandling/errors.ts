@@ -19,6 +19,7 @@ export class DatabaseError extends Error {
     };
   }
 }
+
 export class QueryError extends Error {
   code: number;
   status: string;

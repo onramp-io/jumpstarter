@@ -5,6 +5,7 @@ import { Project } from '@backend/entities/Project';
 import { User } from '@backend/entities/User';
 import connection from '@backend/config/db';
 import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors'
+import { dbError, notFoundError } from "helpers/ErrorHandling/messaging";
 
 const commentService = {
   //Add a like to a project by a user
@@ -23,7 +24,7 @@ const commentService = {
         return comments;
     }
     catch {
-        throw new DatabaseError('Database connection failed');
+        throw new DatabaseError(dbError);
     }
   },
 
@@ -42,7 +43,7 @@ const commentService = {
       return newComment;
     }
     catch {
-      throw new DatabaseError('Database connection failed');
+      throw new DatabaseError(dbError);
     }
   },
 
@@ -62,7 +63,7 @@ const commentService = {
 
     }
     catch {
-      throw new DatabaseError('Database connection failed');
+      throw new DatabaseError(dbError);
     }
   }
 }
