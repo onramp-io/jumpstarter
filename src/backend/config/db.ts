@@ -19,7 +19,9 @@ const connection = async () => {
     type: process.env.DB_TYPE as any,
     url: process.env.DB_CONNECTION_STRING,
     synchronize: true,
-    cache: true,
+    cache: {
+      duration: 30000, // 30 seconds
+    },
     entities: [User, Project, Investment, Comment, Like, Category],
   });
   if (getConnection().isConnected) {
