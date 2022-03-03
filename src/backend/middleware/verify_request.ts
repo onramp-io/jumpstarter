@@ -1,5 +1,5 @@
-import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
-import admin from '../../firebase/admin/admin';
+import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+import admin from "../../firebase/admin/admin";
 
 import chalk from "chalk";
 import { AuthorizationError } from "helpers/ErrorHandling/errors";

@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 /* eslint-disable @next/next/link-passhref */
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Anchor,
   Avatar,
@@ -11,21 +11,21 @@ import {
   Menu,
   ResponsiveContext,
   Text,
-} from 'grommet';
+} from "grommet";
 import {
   Grommet as GrommetIcon,
   Menu as MenuIcon,
   PowerShutdown,
-} from 'grommet-icons';
-import Link from 'next/link';
-import { useAuth } from '@frontend/context/AuthProvider';
-import { signOut } from 'firebase/auth';
-import { auth } from '../../firebase/client/client';
-import { useRouter } from 'next/router';
+} from "grommet-icons";
+import Link from "next/link";
+import { useAuth } from "@frontend/context/AuthProvider";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase/client/client";
+import { useRouter } from "next/router";
 
-import navbar from '../../styles/Navbar.module.css';
+import navbar from "../../styles/Navbar.module.css";
 
-import axios from '../../axios/instance';
+import axios from "../../axios/instance";
 
 export const NavBar = () => {
   const { firstName, avatar } = useAuth();
@@ -38,8 +38,8 @@ export const NavBar = () => {
       signOut(auth)
         .then(() => {
           setIsAuthenticated(false);
-          delete axios.defaults.headers.common['Authorization'];
-          router.push('/');
+          delete axios.defaults.headers.common["Authorization"];
+          router.push("/");
         })
         .catch((error) => {
           console.log(error);
@@ -60,66 +60,69 @@ export const NavBar = () => {
   };
 
   return (
-    <Header
-      background="light-2"
-      pad="medium"
-      height="xsmall"
-      elevation="medium"
-    >
+    <Header pad="large" height="xsmall" elevation="small" className="navbar">
       <ResponsiveContext.Consumer>
         {(size) =>
-          size === 'small' ? (
+          size === "small" ? (
             <>
               <Box />
               {!firstName ? (
                 <Menu
                   a11yTitle="Navigation Menu"
-                  dropProps={{ align: { top: 'bottom', right: 'right' } }}
+                  dropProps={{ align: { top: "bottom", right: "right" } }}
                   icon={<MenuIcon color="brand" />}
                   items={[
                     {
-                      label: <Box pad="small">JumpStarter</Box>,
-                      href: '/',
+                      label: (
+                        <Box className="navlink title" pad="small">
+                          JumpStarter
+                        </Box>
+                      ),
+                      href: "/",
                     },
                     {
                       label: <Box pad="small">Create a New Project</Box>,
-                      href: '/login',
+                      href: "/login",
                     },
                     {
                       label: <Box pad="small">Discover</Box>,
-                      href: '/discover',
+                      href: "/discover",
                     },
                     {
                       label: <Box pad="small">Log In</Box>,
-                      href: '/login',
+                      href: "/login",
                     },
                     {
                       label: <Box pad="small">Sign Up</Box>,
-                      href: '/signup',
+                      href: "/signup",
                     },
                   ]}
                 />
               ) : (
                 <Menu
                   a11yTitle="Navigation Menu"
-                  dropProps={{ align: { top: 'bottom', right: 'right' } }}
+                  dropProps={{ align: { top: "bottom", right: "right" } }}
                   icon={<MenuIcon color="brand" />}
                   items={[
                     {
-                      label: <Box pad="small">JumpStarter</Box>,
-                      href: '/',
+                      label: (
+                        <Box className="navlink" pad="small">
+                          JumpStarter
+                        </Box>
+                      ),
+                      href: "/",
                     },
                     {
                       label: <Box pad="small">Create a New Project</Box>,
-                      href: '/project',
+                      href: "/project",
                     },
                     {
                       label: <Box pad="small">Discover</Box>,
-                      href: '/discover',
+                      href: "/discover",
                     },
                     {
                       label: <Box pad="small">Profile</Box>,
-                      href: '/app/profile',
+                      href: "/app/profile",
                     },
                     {
                       label: <PowerShutdown onClick={logOut} />,
@@ -160,8 +163,8 @@ export const NavBar = () => {
                 flex="grow"
                 align="center"
                 margin={{
-                  left: 'xlarge',
-                  right: 'xlarge',
+                  left: "xlarge",
+                  right: "xlarge",
                 }}
                 className={navbar.brand}
               >
@@ -180,7 +183,7 @@ export const NavBar = () => {
                   <DropButton
                     label={<RenderAvatar />}
                     className={navbar.dropdown}
-                    dropAlign={{ top: 'bottom', right: 'right' }}
+                    dropAlign={{ top: "bottom", right: "right" }}
                     dropContent={
                       <Box
                         pad="large"
@@ -228,5 +231,5 @@ export const NavBar = () => {
 };
 
 export default {
-  title: 'Layout/Header/Responsive',
+  title: "Layout/Header/Responsive",
 };

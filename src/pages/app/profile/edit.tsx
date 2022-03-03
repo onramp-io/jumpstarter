@@ -1,7 +1,7 @@
-import type { NextPage } from 'next';
-import styles from '../../../styles/EditUser.module.css';
-import { useContext, useEffect, useReducer, useState } from 'react';
-import { useRouter } from 'next/router';
+import type { NextPage } from "next";
+import styles from "../../../styles/EditUser.module.css";
+import { useContext, useEffect, useReducer, useState } from "react";
+import { useRouter } from "next/router";
 
 import {
   Heading,
@@ -12,18 +12,18 @@ import {
   Avatar,
   FileInput,
   Text,
-} from 'grommet';
-import axios from 'axios';
-import { useAuth } from '@frontend/context/AuthProvider';
-import { deleteUser, getAuth } from 'firebase/auth';
-import { Alert, AlertTitle, CircularProgress } from '@mui/material';
+} from "grommet";
+import axios from "axios";
+import { useAuth } from "@frontend/context/AuthProvider";
+import { deleteUser, getAuth } from "firebase/auth";
+import { Alert, AlertTitle, CircularProgress } from "@mui/material";
 
 const EditProfile: NextPage = () => {
-  const [fName, setFName] = useState('');
-  const [lName, setLName] = useState('');
-  const [bioValue, setBio] = useState('');
+  const [fName, setFName] = useState("");
+  const [lName, setLName] = useState("");
+  const [bioValue, setBio] = useState("");
   const [avatarImg, setAvatar] = useState<File>(null);
-  const [errorMessage, setError] = useState('');
+  const [errorMessage, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { firstName, lastName, bio, avatar, accessToken, setUser } = useAuth();
@@ -40,7 +40,7 @@ const EditProfile: NextPage = () => {
       };
       if (avatarImg) {
         // 1. Get the AWS S3 signed url
-        const uploadConfig = await axios.get('/api/upload', headers);
+        const uploadConfig = await axios.get("/api/upload", headers);
 
         // 2. Upload the file to the signed url
         const userAvatar = await axios.put(
@@ -48,7 +48,7 @@ const EditProfile: NextPage = () => {
           avatarImg,
           {
             headers: {
-              'Content-type': avatarImg.type,
+              "Content-type": avatarImg.type,
             },
           }
         );
@@ -62,7 +62,7 @@ const EditProfile: NextPage = () => {
         };
 
         const updateUserProfile = await axios.put(
-          '/api/users/update',
+          "/api/users/update",
           body,
           headers
         );
@@ -81,7 +81,7 @@ const EditProfile: NextPage = () => {
           avatarImgUrl: avatar,
         };
         const updateUserProfile = await axios.put(
-          '/api/users/update',
+          "/api/users/update",
           body,
           headers
         );
@@ -94,7 +94,7 @@ const EditProfile: NextPage = () => {
         });
       }
 
-      const redirectUrl = '/app/profile';
+      const redirectUrl = "/app/profile";
       router.push(redirectUrl);
     } catch (error) {
       setError(error.message);
@@ -108,7 +108,7 @@ const EditProfile: NextPage = () => {
       const user = auth.currentUser;
       deleteUser(user).then(async () => {
         const res = await axios.delete(`/users/delete`);
-        router.push('/');
+        router.push("/");
       });
     } catch (error) {
       setError(error.message);
@@ -210,7 +210,7 @@ const EditProfile: NextPage = () => {
         <Text onClick={delUser} className={styles.deleteUser}>
           Delete Account
         </Text>
-        {errorMessage !== '' && (
+        {errorMessage !== "" && (
           <Alert severity="error">
             <AlertTitle>{errorMessage}</AlertTitle>
           </Alert>

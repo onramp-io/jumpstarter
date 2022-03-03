@@ -2,8 +2,8 @@ import { NextPageContext } from "next";
 import axios from "axios";
 import { Box, Heading, Image, Meter, Text } from "grommet";
 import { useState, useEffect } from "react";
-import { useRouter } from 'next/router';
-import urls from 'helpers/urls';
+import { useRouter } from "next/router";
+import urls from "helpers/urls";
 
 interface ProjectInfoProps {
   projectId: number;
@@ -18,19 +18,19 @@ export const ProjectInfo = function ProjectInfoComponent<sectionCardProps>({
   projectDescription,
   projectCreator,
 }) {
-
   return (
-    <Box>
+    <Box className="card">
       <Box
+        className="card"
         align="left"
         margin={{
           top: "small",
-          bottom: "small",
         }}
       >
         <Heading level={3}>{projectTitle}</Heading>
       </Box>
       <Box
+        className="card"
         align="left"
         margin={{
           top: "small",
@@ -72,6 +72,7 @@ export const CreatorText = function CreatorTextComponent<sectionCardProps>({
   return (
     <>
       <Box
+        className="card"
         align="left"
         margin={{
           top: "small",
@@ -108,7 +109,7 @@ const SectionCard = function sectionCardsComponent({
 
   const goToProject = async (event: MouseEvent) => {
     router.push(urls.projectRedirect + projectId);
-  }
+  };
 
   useEffect(() => {
     const timerId = setTimeout(() => {
@@ -122,20 +123,21 @@ const SectionCard = function sectionCardsComponent({
 
   return (
     <Box
+      className="card"
       margin={{
         top: "xsmall",
         left: "xsmall",
       }}
       align="center"
-      pad="small"
+      pad="medium"
       width="medium"
-      height="min-content"
+      height="min(10rem, min-content)"
       elevation="medium"
-      style={{cursor: "pointer"}}
+      style={{ cursor: "pointer" }}
       onClick={(event) => goToProject(event)}
     >
       <Box width="large" height="small">
-        <Image fit="cover" src={projectImageUrl} />
+        <Image className="section-card_img" fit="cover" src={projectImageUrl} />
       </Box>
       <Meter type="bar" value={percentageFunded} />
       <ProjectInfo

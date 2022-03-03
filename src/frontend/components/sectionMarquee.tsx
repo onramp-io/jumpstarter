@@ -48,6 +48,7 @@ const SectionMarquee = function SectionMarqueeComponent({
           <Pagination onChange={handlePageChange} numberItems={numberOfPages} />
         </Box>
         <Box
+          className="sectionMarquee_container"
           margin={{
             left: "large",
             right: "large",

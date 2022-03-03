@@ -1,22 +1,22 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import type { NextPage } from 'next';
-import Link from 'next/link';
+import { useState } from "react";
+import { useRouter } from "next/router";
+import type { NextPage } from "next";
+import Link from "next/link";
 
-import styles from '../styles/Signup.module.css';
-import { Heading, TextInput, Box, Button, Notification } from 'grommet';
-import { createUserWithEmailAndPassword, getIdToken } from 'firebase/auth';
-import { auth } from '../firebase/client/client';
-import axios from '../axios/instance';
+import styles from "../styles/Signup.module.css";
+import { Heading, TextInput, Box, Button, Notification } from "grommet";
+import { createUserWithEmailAndPassword, getIdToken } from "firebase/auth";
+import { auth } from "../firebase/client/client";
+import axios from "../axios/instance";
 
-import { Alert, AlertTitle } from '@mui/material';
+import { Alert, AlertTitle } from "@mui/material";
 
 const Signup: NextPage = () => {
-  const [fName, setFName] = useState('');
-  const [lName, setLName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setError] = useState('');
+  const [fName, setFName] = useState("");
+  const [lName, setLName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setError] = useState("");
   const [isSigningUp, setIsSigningUp] = useState(false);
 
   const router = useRouter();
@@ -49,17 +49,27 @@ const Signup: NextPage = () => {
       await axios.post('/users/create', body);
       router.push('/app/preferences');
     } catch (error) {
-      setError('Invalid email or password');
+      setError("Invalid email or password");
     }
     setIsSigningUp(false);
   };
 
   return (
     <>
-      <Box className={styles.signupWrapper}>
-        <Box className={styles.container}>
+      {/**
+       * {styles.signupWrapper}
+       */}
+      <Box className="">
+        {/**
+         * {styles.container}
+         */}
+        <Box className="auth_container">
           <Heading className={styles.header}>Create a new account</Heading>
-          <Box className={styles.form}>
+          {/**
+           *
+           * {styles.form}
+           */}
+          <Box className="auth_inputs">
             <TextInput
               type="text"
               name="name"
@@ -100,7 +110,7 @@ const Signup: NextPage = () => {
               }}
               className={styles.signupInput}
             />
-            {errorMessage !== '' && (
+            {errorMessage !== "" && (
               <Alert severity="error">
                 <AlertTitle>{errorMessage}</AlertTitle>
               </Alert>

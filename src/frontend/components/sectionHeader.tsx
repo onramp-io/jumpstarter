@@ -18,7 +18,9 @@ const SectionHeader = function sectionComponent<sectionProps>({
     <>
       <Box align="center" margin={margin}>
         <Heading level={2}>{sectionHeader.toUpperCase()}</Heading>
-        <Main pad="small">{sectionDescription}</Main>
+        <Main className="section-header_main" pad="small">
+          {sectionDescription}
+        </Main>
       </Box>
     </>
   );

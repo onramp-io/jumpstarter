@@ -1,42 +1,42 @@
-import { Anchor, Box, Header, Menu, ResponsiveContext } from 'grommet';
-import { Grommet as GrommetIcon, Menu as MenuIcon } from 'grommet-icons';
-import Link from 'next/link';
+import { Anchor, Box, Header, Menu, ResponsiveContext } from "grommet";
+import { Grommet as GrommetIcon, Menu as MenuIcon } from "grommet-icons";
+import Link from "next/link";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const NavBar = () => {
   return (
-    <Header background="light-2" pad="medium" height="xsmall">
+    <Header pad="medium" height="xsmall">
       Built by Team Blend 😎
       <ResponsiveContext.Consumer>
         {(size) =>
-          size === 'small' ? (
+          size === "small" ? (
             <>
               <Box justify="end" />
               <Menu
                 a11yTitle="Navigation Menu"
-                dropProps={{ align: { top: 'bottom', right: 'right' } }}
+                dropProps={{ align: { top: "bottom", right: "right" } }}
                 icon={<MenuIcon color="brand" />}
                 items={[
                   {
                     label: <Box pad="small">JumpStarter</Box>,
-                    href: '/',
+                    href: "/",
                   },
                   {
                     label: <Box pad="small">Create a New Project</Box>,
-                    href: '/project',
+                    href: "/project",
                   },
                   {
                     label: <Box pad="small">Discover</Box>,
-                    href: '/discover',
+                    href: "/discover",
                   },
                   {
                     label: <Box pad="small">Log In</Box>,
-                    href: '/login',
+                    href: "/login",
                   },
                   {
                     label: <Box pad="small">Sign Up</Box>,
-                    href: '/signup',
+                    href: "/signup",
                   },
                 ]}
               />
@@ -74,5 +74,5 @@ export const NavBar = () => {
 };
 
 export default {
-  title: 'Layout/Header/Responsive',
+  title: "Layout/Header/Responsive",
 };

@@ -1,4 +1,4 @@
-import type { NextPage } from 'next';
+import type { NextPage } from "next";
 import {
   Box,
   Button,
@@ -11,13 +11,13 @@ import {
   TableRow,
   TableCell,
   Text,
-} from 'grommet';
-import { Like } from 'grommet-icons';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { useAuth } from '@frontend/context/AuthProvider';
-import axios from '../../axios/instance';
-import urls from 'helpers/urls';
+} from "grommet";
+import { Like } from "grommet-icons";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useAuth } from "@frontend/context/AuthProvider";
+import axios from "../../axios/instance";
+import urls from "helpers/urls";
 
 type projectType = {
   id: number;
@@ -62,7 +62,7 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
         const user = await axios.get(urls.getUser);
         newLikeTotal = likeTotal + 1;
         const body = {
-          userId: user.data.userData['id'],
+          userId: user.data.userData["id"],
           projectId: router.query.projectId,
         };
         await axios.post(urls.likes, body);
@@ -98,22 +98,23 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
       direction="column"
       alignContent="center"
       margin={{
-        horizontal: 'xlarge',
+        horizontal: "xlarge",
       }}
     >
       <Grid
-        rows={['0.3fr', '0.7fr', '1fr', '1.fr', '0.3fr']}
-        columns={['1.5fr', '1.5fr']}
+        className="single-project-info_grid"
+        rows={["0.3fr", "0.7fr", "1fr", "1.fr", "0.3fr"]}
+        columns={["1.5fr", "1.5fr"]}
         gap={{
-          column: 'large',
+          column: "large",
         }}
         areas={[
-          { name: 'title', start: [0, 0], end: [1, 0] },
-          { name: 'image', start: [0, 1], end: [0, 4] },
-          { name: 'goal', start: [1, 1], end: [1, 1] },
-          { name: 'progress', start: [1, 2], end: [1, 2] },
-          { name: 'info', start: [1, 3], end: [1, 3] },
-          { name: 'button', start: [1, 4], end: [1, 4] },
+          { name: "title", start: [0, 0], end: [1, 0] },
+          { name: "image", start: [0, 1], end: [0, 4] },
+          { name: "goal", start: [1, 1], end: [1, 1] },
+          { name: "progress", start: [1, 2], end: [1, 2] },
+          { name: "info", start: [1, 3], end: [1, 3] },
+          { name: "button", start: [1, 4], end: [1, 4] },
         ]}
       >
         <Heading gridArea="title" textAlign="center" fill={true}>
@@ -131,18 +132,19 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
 
         <Box gridArea="goal">
           <Grid
-            rows={['1fr']}
-            columns={['2fr', '0.5fr']}
+            rows={["1fr"]}
+            columns={["2fr", "0.5fr"]}
             areas={[
-              { name: 'text', start: [0, 0], end: [0, 0] },
-              { name: 'heart', start: [1, 0], end: [1, 0] },
+              { name: "text", start: [0, 0], end: [0, 0] },
+              { name: "heart", start: [1, 0], end: [1, 0] },
             ]}
           >
             <Box gridArea="text">
               <Heading
+                className="single-project-info_goal"
                 size="xsmall"
                 margin={{
-                  vertical: 'small',
+                  vertical: "small",
                 }}
               >
                 Goal: ${projectDetails.fund_goal.toLocaleString()}
@@ -154,14 +156,14 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
                 <Like
                   onClick={(event) => submitLike(event)}
                   size="large"
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: "pointer" }}
                 />
               )}
               {firstName && like && (
                 <Text
                   onClick={(event) => submitLike(event)}
                   color="brand"
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: "pointer" }}
                 >
                   Liked
                 </Text>
@@ -172,12 +174,12 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
 
         <Box
           gridArea="progress"
-          border={{ color: 'lightgrey' }}
+          border={{ color: "lightgrey" }}
           round={true}
           pad="medium"
           margin={{
-            top: 'large',
-            bottom: 'medium',
+            top: "large",
+            bottom: "medium",
           }}
         >
           <Table>
@@ -214,7 +216,7 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
             background="light-3"
             size="full"
             margin={{
-              top: 'small',
+              top: "small",
             }}
             alignSelf="stretch"
           />
@@ -222,9 +224,10 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
 
         <Box gridArea="info">
           <Heading
+            className="single-project-info_info"
             size="small"
             margin={{
-              bottom: 'small',
+              bottom: "small",
             }}
           >
             Info
@@ -232,8 +235,8 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
           <Paragraph
             fill={true}
             margin={{
-              top: 'none',
-              bottom: 'large',
+              top: "none",
+              bottom: "large",
             }}
           >
             {projectDetails.description}
@@ -241,9 +244,11 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
         </Box>
 
         <Button
+          className="single-project-info_CTA"
+          size="large"
           onClick={(event) => goToCheckOut(event)}
           gridArea="button"
-          margin={{ horizontal: 'xlarge' }}
+          margin={{ horizontal: "large" }}
           primary
           label="JumpStart this project"
         />

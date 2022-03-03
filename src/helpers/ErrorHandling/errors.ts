@@ -4,10 +4,10 @@ export class DatabaseError extends Error {
 
   constructor(message: string) {
     super(message);
-    this.name = 'DatabaseError';
+    this.name = "DatabaseError";
     this.message = message;
     this.code = 500;
-    this.status = 'Internal Server Error';
+    this.status = "Internal Server Error";
   }
 
   toJSON() {
@@ -19,17 +19,16 @@ export class DatabaseError extends Error {
     };
   }
 }
-
 export class QueryError extends Error {
   code: number;
   status: string;
 
   constructor(message: string) {
     super(message);
-    this.name = 'QueryError';
+    this.name = "QueryError";
     this.message = message;
     this.code = 500;
-    this.status = 'Internal Server Error';
+    this.status = "Internal Server Error";
   }
 
   toJSON() {
@@ -45,7 +44,7 @@ export class QueryError extends Error {
 export class UserFacingError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'UserFacingError';
+    this.name = "UserFacingError";
   }
 }
 
@@ -55,10 +54,10 @@ export class BadRequestError extends UserFacingError {
 
   constructor(message: string) {
     super(message);
-    this.name = 'BadRequestError';
+    this.name = "BadRequestError";
     this.message = message;
     this.code = 400;
-    this.status = 'Bad Request';
+    this.status = "Bad Request";
   }
 
   toJSON() {
@@ -77,10 +76,10 @@ export class NotFoundError extends UserFacingError {
 
   constructor(message: string) {
     super(message);
-    this.name = 'NotFoundError';
+    this.name = "NotFoundError";
     this.message = message;
     this.code = 404;
-    this.status = 'Not Found';
+    this.status = "Not Found";
   }
 
   toJSON() {
@@ -99,10 +98,10 @@ export class AuthorizationError extends UserFacingError {
 
   constructor(message: string) {
     super(message);
-    this.name = 'UserNotAuthorizedError';
+    this.name = "UserNotAuthorizedError";
     this.message = message;
     this.code = 401;
-    this.status = 'Unauthorized';
+    this.status = "Unauthorized";
   }
 
   toJSON() {
@@ -121,10 +120,10 @@ export class MethodNotAllowedError extends UserFacingError {
 
   constructor(message: string) {
     super(message);
-    this.name = 'MethodNotAllowedError';
+    this.name = "MethodNotAllowedError";
     this.message = message;
     this.code = 405;
-    this.status = 'Method Not Allowed';
+    this.status = "Method Not Allowed";
   }
 
   toJSON() {

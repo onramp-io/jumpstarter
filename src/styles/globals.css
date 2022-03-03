@@ -1,3 +1,64 @@
+:root {
+  font-size: 16px;
+  --raised-top: inset 0 1px 0 hsl(224, 84%, 74%);
+  --raised-bottom: inset 1px 3px hsla(0, 0, 0, 0.2);
+  --inset-bottom: 0 -2px 0 hsla(0, 0, 100%%, 0.15);
+  --inset-top: 0 2px 2px hsla(0, 0, 0, 0.1);
+  --small: 0 1px 3px hsla(0, 0, 0, 0.2);
+  --medium: 0 4px 6px hsla(0, 0, 0.1);
+  --large: 0 15px 35px hsla(0, 0, 0.2);
+  --BRAND: rgba(11, 37, 64, 1);
+  --WHITE: #ffff;
+  --BLACK: #242424;
+  --BRANDLIGHT: #373737;
+  --GREY: #bfbfbf;
+  --GREYLIGHT: #d4d4d4;
+  --GREYDARK: #e1e1e1;
+  --WHITEBG: #f5f5f3;
+  --RED: #eb5757;
+  --GREEN: #12d60e;
+  --ANCHOR: #373737;
+  --BODY: BRAND;
+  --BODYLIGHT: #787878;
+  --BORDER: #c6c6c6;
+  --ERROR: #bfbfbf;
+  --LINK: var(--ACCENT);
+  --ACCENT: #635bff;
+}
+
+@font-face {
+  font-family: "InterR";
+  src: url(/fonts/inter-R.ttf);
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "InterM";
+  src: url(/fonts/inter-M.otf);
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "InterB";
+  src: url(/fonts/inter-B.otf);
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "InterEB";
+  src: url(/fonts/inter-EB.otf);
+  letter-spacing: -1.2px !important;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 html,
 body {
   padding: 0;
@@ -14,6 +75,7 @@ a {
 * {
   box-sizing: border-box;
 }
+
 /* Box sizing rules */
 *,
 *::before,
@@ -95,4 +157,399 @@ select {
 
 .grey-text {
   color: rgb(161, 161, 161) !important;
+}
+
+/** 
+FIX GLOBAL STYLING (font, background color)
+*/
+
+* {
+  font-family: InterR;
+  background-color: var(--WHITEBG);
+}
+
+body > * {
+  font-family: InterR;
+  color: var(--BRAND);
+}
+
+/**
+FIX NAVBAR STYLING
+ */
+header div {
+  background-color: var(--WHITE);
+}
+
+header a {
+  background-color: var(--WHITE);
+}
+/**
+
+*/
+h1 {
+  font-family: InterEB !important;
+  line-height: 40px;
+  font-size: 48px;
+  letter-spacing: -1.2px;
+}
+
+h2 {
+  font-family: InterEB !important;
+  line-height: 40px;
+  font-size: 40px;
+  letter-spacing: 0.01em;
+}
+
+h3 {
+  font-family: InterB !important;
+  line-height: 40px;
+  font-size: 26px;
+  letter-spacing: -0.9px;
+}
+
+div,
+button,
+span,
+a {
+  font-family: InterM !important;
+  line-height: 24px;
+  font-size: 16px;
+  letter-spacing: 0px;
+}
+
+.navlink {
+  font-family: InterM !important;
+  color: var(--BRAND);
+}
+
+span,
+div,
+textarea {
+  /** 
+  background-color: green;
+  */
+  border-radius: 0.4rem;
+}
+
+.card {
+  background-color: white;
+}
+
+.subtitle {
+  /** 
+  word-wrap: break-word;
+   */
+  justify-content: center;
+  font-family: InterM !important;
+  font-size: 1.3rem;
+  line-height: 2rem;
+  max-width: 40vw;
+  hyphens: auto;
+}
+
+.landing-image {
+  border-radius: 0.4rem;
+}
+
+.section-card_img {
+  border-radius: 0.2rem 0.2rem 0 0;
+}
+
+header {
+  background-color: var(--WHITE) !important;
+}
+
+header > * {
+  background-color: var(--WHITE) !important;
+}
+
+header > div {
+  background-color: var(--WHITE) !important;
+}
+
+a {
+  color: var(--ACCENT) !important;
+}
+
+a:hover,
+a:focus-within {
+  color: var(--BRAND) !important;
+}
+
+.card > * {
+  background-color: var(--WHITE);
+}
+
+input {
+  color: var(--ACCENT) !important;
+}
+
+/** 
+button {
+  background-color: var(--accentColor) !important;
+  color: var(--BRAND) !important;
+  border: none;
+}
+ */
+
+/** 
+ button {
+   border: 0 !important;
+   background-color: white !important;
+   color: black !important;
+ }
+  */
+
+svg {
+  background-color: hsla(0, 0, 0, 0) !important;
+}
+
+section-header_main {
+  font-size: 1.2rem !important;
+}
+
+/** 
+FIX STYLING ON DISCOVER PAGE
+*/
+input {
+  background-color: var(--WHITE) !important;
+}
+
+button div {
+  color: var(--BRAND);
+  background-color: var(--WHITE) !important;
+}
+
+div svg {
+  border: none;
+}
+
+/** 
+FIX CSS ON SINGLE PROJECT PAGE
+*/
+
+.single-project-info_grid {
+  /** 
+  background-color: navy;
+  max-width: 80vw;
+  max-height: 80vh;
+   */
+}
+.single-project-info_grid h1 {
+  /** 
+  background-color: green;
+  margin-top: 6vh;
+   */
+  margin-bottom: 6vh;
+}
+
+.single-project-info_goal {
+  /** 
+  */
+  margin-top: 0 !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.single-project-info_info {
+  /** 
+  */
+  margin-top: 1.5rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.single-project-info_grid span {
+  /** 
+  margin-top: -3.5rem;
+  margin-bottom: 1rem;
+  background-color: red;
+  */
+  margin-bottom: 1.5rem;
+}
+.single-project-info_grid p {
+  /** 
+  background-color: yellow;
+   */
+}
+.single-project-info_grid svg {
+  /** 
+  background-color: blue;
+   */
+}
+
+/** 
+.single-project-info_grid div {
+  flex-direction: column;
+  background-color: cyan;
+  display: flex;
+  margin: 0 !important;
+}
+ */
+
+.single-project-info_grid div {
+  /** 
+  background-color: yellowgreen;
+  */
+  display: flex;
+  flex-direction: column;
+  margin: 0 !important;
+}
+
+.single-project-info_grid table * {
+  /** 
+  background-color: goldenrod;
+  background-color: var(--WHITE);
+   */
+}
+
+/** 
+FIX COMMENTS on SINGLE PROJECT PAGE
+*/
+
+.comment_avatar {
+  margin-top: -2rem;
+}
+
+.comment_username {
+  font-weight: bold;
+  color: var(--BRAND);
+}
+
+.comment_commentbox {
+  border: none !important;
+  align-self: start;
+  width: 34em !important;
+  background-color: var(--WHITE);
+  /** 
+  background-color: green !important;
+   */
+  word-wrap: break-word;
+  height: min-content !important;
+  font-weight: regular;
+  color: var(--BRANDLIGHT);
+}
+
+.comment_commentbox span {
+  background-color: var(--WHITE);
+  font-weight: regular;
+  color: var(--BRANDLIGHT);
+}
+
+main div {
+  display: flex;
+}
+
+main div textarea {
+  /** 
+  background-color: green !important;
+  */
+  background-color: var(--WHITE) !important;
+  align-self: center;
+  width: 35.5em !important;
+  border-radius: 0.6rem !important;
+  box-shadow: var(--inset-bottom) !important;
+}
+
+main div button:nth-child(2) {
+  /** 
+  background-color: green;
+   */
+  align-self: center;
+}
+.comment_grid {
+  align-self: center;
+}
+
+.comment_title {
+  margin-bottom: 1.5rem;
+}
+
+/** 
+FIX CHECKBOXES being cut off
+*/
+
+label svg {
+  width: min-content !important;
+}
+
+/** 
+FIX AUTH / LOGIN STYLES
+*/
+.auth_header {
+  margin: 1.5rem;
+  /** 
+   */
+}
+
+.auth_container {
+  /** 
+  margin-top: min(10vw, 10rem);
+   */
+  align-items: center;
+}
+
+.auth_container button {
+  text-align: center;
+  align-self: center;
+  margin-top: 2rem !important;
+}
+
+.auth_inputs {
+  margin: 2rem;
+  min-width: 15em !important;
+}
+
+.auth_accountNotExists {
+  text-align: center;
+}
+
+.auth_signupLink {
+  align-self: center;
+  text-decoration: underline;
+}
+
+/** 
+fix non-center marquee
+*/
+
+.marquee {
+  justify-content: center;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.marquee:nth-child(1) {
+  margin-right: 0 !important;
+}
+
+/** 
+FIX NON STICKY FOOTER
+*/
+.footer {
+  margin-top: 6em !important;
+}
+
+.navbar {
+  margin-bottom: 6em !important;
+}
+
+main {
+  justify-content: center;
+  min-height: 100vh;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}
+
+::placeholder {
+  font-family: InterR;
+  color: var(--BRANDLIGHT);
+}
+
+/** 
+FIX STYLING ON SECTION MARQUEE
+*/
+
+.sectionMarquee_container {
+  width: 90vw;
+  flex-wrap: wrap;
 }

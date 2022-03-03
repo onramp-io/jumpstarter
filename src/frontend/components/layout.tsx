@@ -1,9 +1,9 @@
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import React, { ReactNode } from 'react';
-import { Grommet } from 'grommet';
-import { NavBar } from './grommetNavbar';
-import Footer from './footer';
+import type { NextPage } from "next";
+import Head from "next/head";
+import React, { ReactNode } from "react";
+import { Grommet } from "grommet";
+import { NavBar } from "./grommetNavbar";
+import Footer from "./footer";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -13,9 +13,9 @@ const Layout: NextPage = ({ children }) => {
   const theme = {
     global: {
       font: {
-        family: 'Arial',
-        size: '16px',
-        height: '18px',
+        family: "Arial",
+        size: "16px",
+        height: "18px",
       },
     },
   };
