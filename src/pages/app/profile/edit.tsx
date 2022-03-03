@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import styles from "../../../styles/EditUser.module.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { useRouter } from "next/router";
 
 import {
@@ -12,21 +12,21 @@ import {
   Avatar,
   FileInput,
   Text,
-} from 'grommet';
-import axios from 'axios';
-import { useAuth } from '@frontend/context/AuthProvider';
-import { deleteUser, getAuth } from 'firebase/auth';
-import { Alert, AlertTitle } from '@mui/material';
+} from "grommet";
+import axios from "axios";
+import { useAuth } from "@frontend/context/AuthProvider";
+import { deleteUser, getAuth } from "firebase/auth";
+import { Alert, AlertTitle, CircularProgress } from "@mui/material";
 
 const EditProfile: NextPage = () => {
-  const [fName, setFName] = useState('');
-  const [lName, setLName] = useState('');
-  const [bioValue, setBio] = useState('');
+  const [fName, setFName] = useState("");
+  const [lName, setLName] = useState("");
+  const [bioValue, setBio] = useState("");
   const [avatarImg, setAvatar] = useState<File>(null);
-  const [errorMessage, setError] = useState('');
+  const [errorMessage, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { firstName, lastName, bio, avatar, accessToken } = useAuth();
+  const { firstName, lastName, bio, avatar, accessToken, setUser } = useAuth();
 
   const router = useRouter();
 
@@ -38,34 +38,64 @@ const EditProfile: NextPage = () => {
           Authorization: `Bearer ${accessToken}`,
         },
       };
-      // 1. Get the AWS S3 signed url
-      const uploadConfig = await axios.get('/api/upload', headers);
+      if (avatarImg) {
+        // 1. Get the AWS S3 signed url
+        const uploadConfig = await axios.get("/api/upload", headers);
 
-      // 2. Upload the file to the signed url
-      const userAvatar = await axios.put(
-        uploadConfig.data.uploadConfig.url,
-        avatarImg,
-        {
-          headers: {
-            'Content-type': avatarImg.type,
-          },
-        }
-      );
+        // 2. Upload the file to the signed url
+        const userAvatar = await axios.put(
+          uploadConfig.data.uploadConfig.url,
+          avatarImg,
+          {
+            headers: {
+              "Content-type": avatarImg.type,
+            },
+          }
+        );
 
-      // 3. Update the user profile
-      const body = {
-        firstName: fName,
-        lastName: lName,
-        bio: bioValue,
-        avatarImgUrl: uploadConfig.data.uploadConfig.randomKey,
-      };
-      const updateUserProfile = await axios.put(
-        '/api/users/update',
-        body,
-        headers
-      );
+        // 3. Update the user profile
+        const body = {
+          firstName: fName || firstName,
+          lastName: lName || lastName,
+          bio: bioValue || bio,
+          avatarImgUrl: uploadConfig.data.uploadConfig.randomKey,
+        };
 
-      router.push('/app/profile');
+        const updateUserProfile = await axios.put(
+          "/api/users/update",
+          body,
+          headers
+        );
+
+        setUser({
+          firstName: fName || firstName,
+          lastName: lName || lastName,
+          bio: bioValue || bio,
+          avatar: uploadConfig.data.uploadConfig.randomKey,
+        });
+      } else {
+        const body = {
+          firstName: fName || firstName,
+          lastName: lName || lastName,
+          bio: bioValue || bio,
+          avatarImgUrl: avatar,
+        };
+        const updateUserProfile = await axios.put(
+          "/api/users/update",
+          body,
+          headers
+        );
+
+        setUser({
+          firstName: fName || firstName,
+          lastName: lName || lastName,
+          bio: bioValue || bio,
+          avatar: avatar,
+        });
+      }
+
+      const redirectUrl = "/app/profile";
+      router.push(redirectUrl);
     } catch (error) {
       setError(error.message);
     }
@@ -158,14 +188,22 @@ const EditProfile: NextPage = () => {
               />
             </Box>
             <Box>
-              <Button
-                disabled={isSubmitting}
-                type="submit"
-                onClick={handleSubmit}
-                className={styles.saveButton}
-              >
-                Save Changes
-              </Button>
+              {isSubmitting ? (
+                <>
+                  <CircularProgress />
+                </>
+              ) : (
+                <>
+                  <Button
+                    disabled={isSubmitting}
+                    type="submit"
+                    onClick={handleSubmit}
+                    className={styles.saveButton}
+                  >
+                    Save Changes
+                  </Button>
+                </>
+              )}
             </Box>
           </Box>
         </Box>

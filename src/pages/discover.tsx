@@ -10,8 +10,10 @@ import {
   Sidebar,
   Text,
 } from "grommet";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LargeProjectCard from "@frontend/components/largeprojectcard";
+import axios from "axios";
+import { useAuth } from "@frontend/context/AuthProvider";
 
 const Discover: NextPage = () => {
   const categoryState = {
@@ -106,6 +108,26 @@ const Discover: NextPage = () => {
       end_date: new Date(),
     },
   ];
+
+  const { accessToken } = useAuth();
+
+  const calculateTrendScore = async () => {
+    try {
+      var url = "/api/projects/trend";
+      await axios.put(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    calculateTrendScore();
+  }, []);
 
   return (
     <>

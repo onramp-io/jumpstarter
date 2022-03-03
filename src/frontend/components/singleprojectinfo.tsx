@@ -12,9 +12,15 @@ import {
   TableCell,
   Text,
 } from "grommet";
-import { Favorite } from "grommet-icons";
+import { Like } from "grommet-icons";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useAuth } from "@frontend/context/AuthProvider";
+import axios from "../../axios/instance";
+import urls from "helpers/urls";
 
 type projectType = {
+  id: number;
   title: string;
   description: string;
   fund_goal: number;
@@ -22,6 +28,8 @@ type projectType = {
   end_date: Date;
   pictures: string[];
   investors: number;
+  likesAmt: number;
+  remaining: string;
 };
 
 interface SingleProjectInfoProps {
@@ -31,6 +39,60 @@ interface SingleProjectInfoProps {
 const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
   projectDetails,
 }): JSX.Element => {
+  const { firstName, accessToken } = useAuth();
+  const [like, setLike] = useState(false);
+  const [likeTotal, setLikeTotal] = useState(0);
+  const router = useRouter();
+
+  const checkIfLiked = async (projectId) => {
+    try {
+      const response = await axios.get(urls.likes + projectId);
+      if (response.data.data) {
+        setLike(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const submitLike = async (event: any) => {
+    try {
+      let newLikeTotal = 0;
+      if (!like) {
+        const user = await axios.get(urls.getUser);
+        newLikeTotal = likeTotal + 1;
+        const body = {
+          userId: user.data.userData["id"],
+          projectId: router.query.projectId,
+        };
+        await axios.post(urls.likes, body);
+        setLike(true);
+      } else {
+        newLikeTotal = likeTotal - 1;
+        await axios.delete(urls.likes + router.query.projectId);
+        setLike(false);
+      }
+      setLikeTotal(newLikeTotal);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const goToCheckOut = async (event: any) => {
+    if (firstName) {
+      router.push(urls.checkout + router.query.projectId);
+    } else {
+      router.push(urls.loginRedirect);
+    }
+  };
+
+  useEffect(() => {
+    //make sure url is populated and user is logged in before pulling query params
+    if (!urls.urlCheck(router, firstName)) return;
+
+    checkIfLiked(router.query.projectId);
+  }, [router.isReady, firstName]);
+
   return (
     <Box
       direction="column"
@@ -69,9 +131,6 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
         </Box>
 
         <Box gridArea="goal">
-          <Box margin="small" align="end">
-            <Favorite size="large" />
-          </Box>
           <Grid
             rows={["1fr"]}
             columns={["2fr", "0.5fr"]}
@@ -91,6 +150,24 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
                 Goal: ${projectDetails.fund_goal.toLocaleString()}
               </Heading>
               <Text>Target Date: {projectDetails.end_date.toDateString()}</Text>
+            </Box>
+            <Box margin="small" align="end">
+              {firstName && !like && (
+                <Like
+                  onClick={(event) => submitLike(event)}
+                  size="large"
+                  style={{ cursor: "pointer" }}
+                />
+              )}
+              {firstName && like && (
+                <Text
+                  onClick={(event) => submitLike(event)}
+                  color="brand"
+                  style={{ cursor: "pointer" }}
+                >
+                  Liked
+                </Text>
+              )}
             </Box>
           </Grid>
         </Box>
@@ -116,19 +193,20 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
               <TableCell scope="col">
                 <strong>Investors</strong>
               </TableCell>
+              <TableCell scope="col">
+                <strong>Likes</strong>
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell scope="col">
                 ${projectDetails.fund_raised.toLocaleString()}
               </TableCell>
-              <TableCell scope="col">
-                $
-                {(
-                  projectDetails.fund_goal - projectDetails.fund_raised
-                ).toLocaleString()}
-              </TableCell>
+              <TableCell scope="col">{projectDetails.remaining}</TableCell>
               <TableCell scope="col">
                 {projectDetails.investors.toLocaleString()}
+              </TableCell>
+              <TableCell scope="col">
+                {projectDetails.likesAmt.toLocaleString()}
               </TableCell>
             </TableRow>
           </Table>
@@ -167,10 +245,11 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
 
         <Button
           className="single-project-info_CTA"
-          primary
           size="large"
+          onClick={(event) => goToCheckOut(event)}
           gridArea="button"
           margin={{ horizontal: "large" }}
+          primary
           label="JumpStart this project"
         />
       </Grid>

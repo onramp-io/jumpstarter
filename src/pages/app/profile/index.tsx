@@ -23,6 +23,7 @@ function MyProfile() {
     totalInvestments,
     balance,
     investments,
+    userProjects,
   } = useAuth();
 
   const [error, setError] = useState('');
@@ -32,7 +33,8 @@ function MyProfile() {
   const handlePayOut = async () => {
     try {
       setMoneyTransferring(true);
-      await axios.put('/users/payout', {});
+      const url = '/users/payout';
+      await axios.put(url, {});
       setMoneyTransferred(true);
       setMoneyTransferring(false);
     } catch (error) {
@@ -69,7 +71,7 @@ function MyProfile() {
               <CircularProgress />
             ) : (
               <>
-                {balance >= 0 ? (
+                {balance <= 0 ? (
                   <>
                     <Button
                       label="Withdraw"
@@ -101,11 +103,19 @@ function MyProfile() {
             <Tab title="My Projects">
               <Box pad="medium">
                 <Box align="center" direction="row" margin="small">
-                  {/* <SectionMarquee
-                    APIPayload={userData2}
-                    linkHref="/personalpicks"
-                    linkCaption="See all recommended projects >"
-                  /> */}
+                  {userProjects.length > 0 ? (
+                    <>
+                      <SectionMarquee
+                        APIPayload={userProjects}
+                        linkHref="/personalpicks"
+                        linkCaption="See all recommended projects >"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Text>You have not launched a project yet.</Text>
+                    </>
+                  )}
                 </Box>
               </Box>
             </Tab>
