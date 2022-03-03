@@ -18,11 +18,11 @@ const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case 'GET':
-        const userData = await UserController.getRecommendation(req);
+        const recommendedProjects = await UserController.getRecommendation(req);
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
-          userData,
+          recommendedProjects,
         });
         break;
       default:
