@@ -24,7 +24,7 @@ export const userService = {
       .where("uid = :uid", { uid })
       .cache(true)
       .getRawOne();
-    if (!userData) throw new NotFoundError("User not found"); // <---- this is where the 404 is coming from
+    if (!userData) throw new NotFoundError("User not found");
     return userData;
   },
   insert: async (dataToInsert: IUserPost) => {
@@ -88,6 +88,33 @@ export const userService = {
       .update(User)
       .set({
         balance: 0,
+      })
+      .where("uid = :uid", { uid })
+      .execute();
+    if (!userData) throw new NotFoundError("User not found");
+    return userData;
+  },
+
+  getCategories: async () => {
+    const db = await connection();
+    if (!db) throw new DatabaseError("Database connection failed");
+    const categories = await db
+      .createQueryBuilder()
+      .select("*")
+      .from("category", "category")
+      .getRawMany();
+    if (!categories) throw new NotFoundError("Categories not found");
+    return categories;
+  },
+
+  updateInterest: async (categories: string[], uid: string) => {
+    const db = await connection();
+    if (!db) throw new DatabaseError("Database connection failed");
+    const userData = await db
+      .createQueryBuilder()
+      .update(User)
+      .set({
+        interests: categories,
       })
       .where("uid = :uid", { uid })
       .execute();
