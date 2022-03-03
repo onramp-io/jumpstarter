@@ -25,6 +25,8 @@ import { useRouter } from 'next/router';
 
 import navbar from '../../styles/Navbar.module.css';
 
+import axios from '../../axios/instance';
+
 export const NavBar = () => {
   const { firstName, avatar } = useAuth();
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -36,6 +38,7 @@ export const NavBar = () => {
       signOut(auth)
         .then(() => {
           setIsAuthenticated(false);
+          delete axios.defaults.headers.common['Authorization'];
           router.push('/');
         })
         .catch((error) => {
@@ -48,12 +51,10 @@ export const NavBar = () => {
 
   const RenderAvatar = () => {
     if (!avatar) {
-      console.log('no avatar');
       return (
         <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
       );
     } else {
-      console.log('avatar found');
       return <Avatar src={process.env.AWS_BUCKET_URL + avatar} />;
     }
   };
@@ -82,7 +83,7 @@ export const NavBar = () => {
                     },
                     {
                       label: <Box pad="small">Create a New Project</Box>,
-                      href: '/project',
+                      href: '/login',
                     },
                     {
                       label: <Box pad="small">Discover</Box>,
@@ -130,13 +131,23 @@ export const NavBar = () => {
           ) : (
             <Box className={navbar.wrapper}>
               <Box direction="row" justify="start" gap="xlarge">
-                <Link href="/project">
-                  <Anchor
-                    className="no-text-wrap"
-                    href="/project"
-                    label="Create a New Project"
-                  />
-                </Link>
+                {firstName && isAuthenticated ? (
+                  <Link href="/app/create">
+                    <Anchor
+                      className="no-text-wrap"
+                      href="/app/create"
+                      label="Create a New Project"
+                    />
+                  </Link>
+                ) : (
+                  <Link href="/login">
+                    <Anchor
+                      className="no-text-wrap"
+                      href="/login"
+                      label="Create a New Project"
+                    />
+                  </Link>
+                )}
                 <Link href="/discover">
                   <Anchor
                     className="no-text-wrap"

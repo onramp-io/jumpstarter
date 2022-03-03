@@ -1,6 +1,6 @@
 import { verifyRequest } from '@backend/middleware/verify_request';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { InvestmentController } from '@backend/controller/investment/investment';
+import { UserController } from '../../../backend/controller/user/user';
 
 import chalk from 'chalk';
 import {
@@ -18,11 +18,11 @@ const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case 'GET':
-        const userInvestments = await InvestmentController.getAll(req);
+        const recommendedProjects = await UserController.getRecommendation(req);
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
-          userInvestments,
+          recommendedProjects,
         });
         break;
       default:
@@ -30,7 +30,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
     }
   } catch (error) {
     console.log(
-      chalk.red.bold(error.name + '@investments/get.ts on Line 32'),
+      chalk.red.bold(error.name + '@users/recommend.ts on Line 32'),
       error.message
     );
     res.status(error.code).json({
@@ -40,4 +40,5 @@ const handler = async (req: Request, res: NextApiResponse) => {
   }
 };
 
-export default verifyRequest(handler);
+// export default verifyRequest(handler);
+export default handler;
