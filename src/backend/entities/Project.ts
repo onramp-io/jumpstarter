@@ -30,7 +30,7 @@ export class Project {
   @Column('decimal', { array: true })
   fundTiers: number[];
 
-  @Column('integer')
+  @Column({ type: 'integer', default: 0 })
   currFundGoal: number;
 
   @Column({ type: 'decimal', default: 0 })
@@ -40,7 +40,7 @@ export class Project {
   fundRaisedLast: number;
 
   @Column('timestamp')
-  launchDate: string;
+  launchDate: Date;
 
   @Column({ type: 'timestamp', default: () => 'now()' })
   createdDate: string;
@@ -63,6 +63,9 @@ export class Project {
   @Column({ type: 'timestamp', nullable: true })
   scoreUpdatedAt: string;
 
+  @Column({ type: 'integer', default: 0 })
+  investors: number;
+
   @ManyToOne(() => User, (user) => user.projects)
   user: User;
 
@@ -74,7 +77,4 @@ export class Project {
 
   @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
-
-  @Column({ type: 'integer', default: 0 })
-  investors: number;
 }

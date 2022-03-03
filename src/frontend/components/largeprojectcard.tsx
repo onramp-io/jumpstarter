@@ -21,7 +21,6 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({projectData}): JSX.E
   const router = useRouter();
   
   const goToProject = async (event: MouseEvent) => {
-    console.log("go to project" + projectData.id);
     router.push('/app/project/' + projectData.id);
   }
 

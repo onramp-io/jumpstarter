@@ -7,6 +7,7 @@ import Link from "next/link";
 import JumpstarterLink from "./jumpstarterLink";
 
 interface SingleAPIPayload {
+  projectId: number;
   projectTitle: string;
   projectDescription: string;
   projectCreator: string;
@@ -57,6 +58,7 @@ const SectionMarquee = function SectionMarqueeComponent({
           {APIPayload.map(
             (
               {
+                projectId,
                 projectTitle,
                 projectDescription,
                 projectCreator,
@@ -67,6 +69,7 @@ const SectionMarquee = function SectionMarqueeComponent({
               return (
                 <SectionCard
                   key={i}
+                  projectId={projectId}
                   projectTitle={projectTitle}
                   projectDescription={projectDescription}
                   projectCreator={projectCreator}

@@ -94,7 +94,8 @@ const EditProfile: NextPage = () => {
         });
       }
 
-      router.push('/app/profile');
+      const redirectUrl = '/app/profile';
+      router.push(redirectUrl);
     } catch (error) {
       setError(error.message);
     }
