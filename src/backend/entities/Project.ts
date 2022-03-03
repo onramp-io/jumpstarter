@@ -40,7 +40,7 @@ export class Project {
   fundRaisedLast: number;
 
   @Column('timestamp')
-  launchDate: string;
+  launchDate: Date;
 
   @Column({ type: 'timestamp', default: () => "now()" })
   createdDate: string;
