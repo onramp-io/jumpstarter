@@ -131,9 +131,9 @@ export const userService = {
 
     const params = {
       allProjects: await getAllProjects(db, uid),
-      investedProjects: await getAllInvestments(db, uid),
-      likedProjects: await getAllLikes(db, uid),
-      commentedProjects: await getAllComments(db, uid),
+      invested: await getAllInvestments(db, uid),
+      liked: await getAllLikes(db, uid),
+      commented: await getAllComments(db, uid),
     };
 
     const recommendedProjects = getRecommendation(params);
