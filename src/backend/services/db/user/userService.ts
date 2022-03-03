@@ -11,6 +11,7 @@ import { User } from '@backend/entities/User';
 import { Comment } from '@backend/entities/Comment';
 import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors';
 import { getRecommendation } from './recommendationService';
+import { Connection } from 'typeorm';
 
 export const userService = {
   get: async (uid: string) => {
@@ -142,7 +143,7 @@ export const userService = {
 };
 
 // 1. Get all projects not created by the user
-const getAllProjects = async (db, uid) => {
+const getAllProjects = async (db: Connection, uid: string) => {
   const projects = await db
     .createQueryBuilder()
     .addSelect('project.id', 'id')
@@ -157,7 +158,7 @@ const getAllProjects = async (db, uid) => {
 };
 
 // 2. Get all the projects that the user has invested in
-const getAllInvestments = async (db, uid) => {
+const getAllInvestments = async (db: Connection, uid: string) => {
   const projectsInvested = await db
     .createQueryBuilder()
     .addSelect('project.id', 'id')
@@ -174,7 +175,7 @@ const getAllInvestments = async (db, uid) => {
 };
 
 // 3. Get all the projects that the user has liked
-const getAllLikes = async (db, uid) => {
+const getAllLikes = async (db: Connection, uid: string) => {
   const projectsLiked = await db
     .createQueryBuilder()
     .addSelect('project.id', 'id')
@@ -191,7 +192,7 @@ const getAllLikes = async (db, uid) => {
 };
 
 // 4. Get all the projects that the user has commented on
-const getAllComments = async (db, uid) => {
+const getAllComments = async (db: Connection, uid: string) => {
   const projectsCommented = await db
     .createQueryBuilder()
     .addSelect('project.id', 'id')
