@@ -1,17 +1,5 @@
 /**
- * * Check the projects and see if the current project's category matches
- * * the project's category the user has liked, invested in, or commented on
- *        - IF current project's category matches the category of a project the user has liked, give 1 points
- *        - IF current project's category matches the category of a project the user has commented on, give 2 points
- *        - IF current project's category matches the category of a project the user has invested in, give 3 points
- * * If the project's category matches the projects the user has liked, invested in, or commented on
- * * add the points to the total points for the project and add the points to the adjacency matrix
- *
- */
-
-/**
- * * Helper methods
- *
+ * * Graph helper methods to add projects and points to the matrix
  */
 
 const addProject = (project: any, matrix: Map<any, any>): Map<any, any> => {
@@ -40,8 +28,11 @@ const addPoints = (
   return matrix;
 };
 
+/**
+ * * Setting up graph by adding new nodes i.e categories and edges i.e projects + points
+ */
+
 const parseData = (allProjects: any, matrix: Map<any, any>): Map<any, any> => {
-  // Add all projects to the adjacency matrix by category
   allProjects.forEach((project) => {
     const { category } = project;
     if (!matrix.has(category)) {
