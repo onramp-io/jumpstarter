@@ -61,6 +61,12 @@ export const getRecommendation = (params: any) => {
     addPoints(id, category, 1, adjacencyMatrix);
   });
 
+  // Add points to the adjacency matrix by commented category projects
+  commented.forEach((project) => {
+    const { id, category } = project;
+    addPoints(id, category, 2, adjacencyMatrix);
+  });
+
   // Add points to the adjacency matrix by investment category projects
   invested.forEach((project) => {
     const { id, category } = project;
