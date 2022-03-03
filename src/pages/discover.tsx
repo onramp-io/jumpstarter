@@ -1,35 +1,59 @@
-import type { NextPage } from "next";
-import {
-  Box,
-  CheckBox,
-  CheckBoxGroup,
-  Heading,
-  InfiniteScroll,
-  NameValueList,
-  Select,
-  Sidebar,
-  Text,
-} from "grommet";
-import React, { useState, useEffect } from "react";
-import LargeProjectCard from "@frontend/components/largeprojectcard";
-import axios from "axios";
-import { useAuth } from "@frontend/context/AuthProvider";
+import type { NextPage } from 'next';
+import { Box, CheckBox, Heading, InfiniteScroll, Select, Sidebar, Text } from 'grommet';
+import React, { useState, useEffect } from 'react';
+import LargeProjectCard from '@frontend/components/largeprojectcard';
+import axios from 'axios';
+import { NotFoundError } from 'helpers/ErrorHandling/errors';
+import { notFoundError } from 'helpers/ErrorHandling/messaging';
 
 const Discover: NextPage = () => {
-  const categoryState = {
-    Film: true,
-    Tech: true,
-    Literature: true,
-    Games: true,
-    Music: true,
-    Food: true,
-  };
+  const testState = {
+    TECH: true
+  }
+  const [categories, setCategories] = useState({});
+  const [categoryArray, setCategoryArray] = useState([]);
+  const [projectData, setProjectData] = useState([]);
 
-  const [categories, setCategories] = useState(categoryState);
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const response = await axios.get('/api/categories');
+
+        const categoryList = response.data.categoriesList.map(
+          (categoryObj) => {
+            return categoryObj.category;
+          }
+        );
+
+        const categoryState = {};
+        const testArray = ["TECH"];
+        setCategoryArray([...categoryList, ...testArray]);
+
+        for (const category of categoryList) {
+          categoryState[category] = true;
+        }
+
+        setCategories({...categoryState, ...testState});
+      } catch (error) {
+        throw new NotFoundError(notFoundError);
+      }
+    }
+
+    const getProjects = async() => {
+      try {
+        const response = await axios.get('/api/projects');
+
+        setProjectData(response.data.data);
+      } catch (error) {
+        throw new NotFoundError(notFoundError);
+      }
+    }
+
+    getProjects();
+    getCategories();
+  }, [])
 
   const onChangeHandler = (category) => {
-    console.log(category);
-
     const checked = categories[category];
     const copyOfCategories = { ...categories };
 
@@ -38,6 +62,7 @@ const Discover: NextPage = () => {
     setCategories(copyOfCategories);
   };
 
+<<<<<<< HEAD
   const categoryList = ["Film", "Tech", "Literature", "Games", "Music", "Food"];
 
   const projectData = [
@@ -129,6 +154,8 @@ const Discover: NextPage = () => {
     calculateTrendScore();
   }, []);
 
+=======
+>>>>>>> main
   return (
     <>
       <Box>
@@ -148,20 +175,16 @@ const Discover: NextPage = () => {
       </Box>
 
       <Box direction="row" margin={{ horizontal: "9rem" }}>
-        <Sidebar margin={{ right: "xlarge" }}>
-          <Text weight="bold" margin={{ top: "large", bottom: "medium" }}>
-            Categories
-          </Text>
-          {categoryList.map((category, index) => {
-            return (
-              <CheckBox
-                key={index}
-                label={category}
-                id={category}
-                checked={categories[category]}
-                onChange={(event) => onChangeHandler(event.target.id)}
-              />
-            );
+        <Sidebar margin={{right: "xlarge"}}>
+          <Text weight="bold" margin={{top: "large", bottom: "medium"}}>Categories</Text>
+          {categoryArray.map((category, index) => {
+            return <CheckBox
+              key={index}
+              label={category}
+              id={category}
+              checked={categories[category]}
+              onChange={(event) => onChangeHandler(event.target.id)}
+            />
           })}
         </Sidebar>
         <Box
@@ -177,7 +200,6 @@ const Discover: NextPage = () => {
             )}
             step={3}
             onMore={() => {
-              console.log();
             }}
           >
             {(item, index) => (

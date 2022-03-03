@@ -1,6 +1,9 @@
 import type { NextPage } from "next";
 import { Anchor, Box, Image, Meter, Text } from "grommet";
 import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
+import { projectUrl } from "helpers/Urls/index";
+import axios from "axios";
 
 type projectType = {
   id: number; //added
@@ -8,9 +11,11 @@ type projectType = {
   title: string;
   category: string;
   description: string;
-  fund_goal: number;
-  fund_raised: number;
-  end_date: Date;
+  fundTiers: number[];
+  fundRaised: number;
+  launchDate: Date;
+  createdDate: Date;
+  pictures: string[];
 };
 
 interface LargeProjectCardProps {
@@ -20,11 +25,38 @@ interface LargeProjectCardProps {
 const LargeProjectCard: NextPage<LargeProjectCardProps> = ({
   projectData,
 }): JSX.Element => {
+  const [state, setState] = useState(projectData);
+  useEffect(() => {
+    const getUser = async (id) => {
+      const projectInfo = await axios.get(projectUrl + id);
+
+      setState({
+        ...state,
+        user_name:
+          projectInfo.data.data.firstName +
+          " " +
+          projectInfo.data.data.lastName,
+      });
+    };
+
+    getUser(projectData.id);
+  }, []);
+
   const router = useRouter();
 
   const goToProject = async (event: MouseEvent) => {
     router.push("/app/project/" + projectData.id);
   };
+
+  const calculateDates = () => {
+    const created = new Date(state.createdDate);
+    const launch = new Date(state.launchDate);
+
+    const timeDifference = launch.getTime() - created.getTime();
+    return Math.round(timeDifference / (1000 * 3600 * 24));
+  };
+
+  console.log(state.pictures);
 
   return (
     <Box
@@ -34,7 +66,7 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({
       flex={{ shrink: 0 }}
       margin={{
         vertical: "small",
-        horizontal: "0.8rem",
+        horizontal: "0.5rem",
       }}
       align="center"
       pad="small"
@@ -45,7 +77,11 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({
       <Box width="large" height="small">
         <Image
           fit="cover"
-          src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+          src={
+            state.pictures
+              ? process.env.AWS_BUCKET_URL + state.pictures[0]
+              : "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+          }
         />
       </Box>
 
@@ -55,38 +91,29 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({
         gap="small"
         margin={{ vertical: "medium", horizontal: "medium" }}
       >
-        <Anchor
-          href="#"
-          label={projectData.category.toUpperCase()}
-          size="small"
-        />
+        <Anchor href="#" label={state.category.toUpperCase()} size="small" />
         <Text weight="bold" size="large">
-          {projectData.title}
+          {state.title}
         </Text>
         <Box max-height="min-content">
-          <Text className="card">{projectData.description}</Text>
+          <Text>{state.description}</Text>
         </Box>
         <Box margin={{ top: "small", bottom: "medium" }}>
           <Text className="card" size="small">
             Created by
           </Text>
-          <Anchor className="card" href="#" label={projectData.user_name} />
+          <Anchor className="card" href="#" label={state.user_name} />
         </Box>
-        <Meter
-          type="bar"
-          value={projectData.fund_raised}
-          max={projectData.fund_goal}
-        />
+        <Meter type="bar" value={state.fundRaised} max={state.fundTiers[3]} />
         <Box margin={{ bottom: "small" }}>
           <Text className="card">
-            <strong>${projectData.fund_raised.toLocaleString()}</strong>{" "}
-            <small>
-              raised out of ${projectData.fund_goal.toLocaleString()}{" "}
-            </small>
+            <strong>${state.fundRaised.toLocaleString()}</strong>{" "}
+            <small>raised out of ${state.fundTiers[3].toLocaleString()} </small>
           </Text>
-          <Text className="card" size="small">
-            12 days left
-          </Text>
+          <Text
+            className="card"
+            size="small"
+          >{`${calculateDates()} days remaining`}</Text>
         </Box>
       </Box>
     </Box>
