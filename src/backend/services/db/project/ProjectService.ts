@@ -156,7 +156,6 @@ const ProjectService = {
           `"user"."id" = (SELECT "project"."userId" FROM "project" WHERE "project"."id" = ${findProjectUserByIdParams.id})`
         )
         .getRawOne();
-
       if (
         foundProjectUser === null ||
         foundProjectUser === undefined ||
@@ -164,7 +163,6 @@ const ProjectService = {
       ) {
         throw new DatabaseError(notFoundError);
       }
-
       return [foundProjectUser, StatusCodes.OK];
     } catch (err) {
       throw err;
