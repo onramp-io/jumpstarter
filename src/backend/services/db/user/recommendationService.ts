@@ -83,7 +83,7 @@ const rankProjects = (matrix: Map<any, any>) => {
     });
     rankedProjects.push(sortedProjects);
   });
-  return rankedProjects;
+  return rankedProjects.flat();
 };
 
 export const getRecommendation = (params: any) => {
