@@ -1,50 +1,12 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useReducer,
-} from 'react';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
 
 import { onAuthStateChanged } from '@firebase/auth';
 
 import { auth } from '../../firebase/client/client';
 import { getIdToken } from 'firebase/auth';
 import axios from '../../axios/instance';
-import { tokenToString } from 'typescript';
-import { Token } from '@mui/icons-material';
-
-export interface AuthContextType {
-  userId: number;
-  accessToken: string;
-  firstName: string;
-  lastName: string;
-  bio: string;
-  avatar: string;
-  totalInvestments: number;
-  interests: string[];
-  balance: number;
-  investments: any[];
-  userProjects: any[];
-}
-
-export const AuthContext = createContext<AuthContextType>({
-  userId: 0,
-  accessToken: '',
-  firstName: '',
-  lastName: '',
-  bio: '',
-  avatar: '',
-  totalInvestments: 0,
-  interests: [],
-  balance: 0,
-  investments: [],
-  userProjects: [],
-});
-
-const userDispatchContext = createContext({});
 
 const initialState = {
   accessToken: '',
@@ -58,14 +20,17 @@ const initialState = {
   balance: 0,
   investments: [],
   userProjects: [],
+  setUser: (payload: any) => {},
 };
+
+export const AppContext = createContext(initialState);
 
 const reducer = (state, action) => {
   switch (action.type) {
     case 'SET_USER':
       return { ...state, ...action.payload };
     default:
-      throw new Error(`Unknown action: ${action.type}`);
+      return state;
   }
 };
 
@@ -131,16 +96,17 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
   }, []);
 
   return (
-    <userDispatchContext.Provider value={{ setUser }}>
-      <AuthContext.Provider value={state}>{children}</AuthContext.Provider>
-    </userDispatchContext.Provider>
+    <AppContext.Provider
+      value={{
+        ...state,
+        setUser,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  return useContext(AuthContext);
-};
-
-export const useUserDispatch = () => {
-  return useContext(userDispatchContext);
+  return useContext(AppContext);
 };
