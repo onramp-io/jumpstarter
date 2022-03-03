@@ -4,8 +4,13 @@ import {
   IUserPut,
   IUserPutAvatar,
 } from '@backend/controller/user/user';
+import { Investment } from '@backend/entities/Investment';
+import { Like } from '@backend/entities/Like';
+import { Project } from '@backend/entities/Project';
 import { User } from '@backend/entities/User';
+import { Comment } from '@backend/entities/Comment';
 import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors';
+import { getRecommendation } from './recommendationService';
 
 export const userService = {
   get: async (uid: string) => {
@@ -115,101 +120,84 @@ export const userService = {
     return userData;
   },
 
+  /**
+   * * Recommendation System
+   */
+
   getUserRecommendation: async (uid: string) => {
     const db = await connection();
-
-    // 1. Get all projects not created by the user
     if (!db) throw new DatabaseError('Database connection failed');
-    const projects = await db
-      .createQueryBuilder()
-      .select('*')
-      .from('project', 'project')
-      .where(
-        `project.user != (SELECT id FROM public.user WHERE uid = '${uid}')`
-      )
-      .getRawMany();
-    if (!projects) throw new NotFoundError('Projects not found');
-    // 2. Get the projects that the user has invested in
-    const projectsInvested = await db
-      .createQueryBuilder()
-      .select('*')
-      .from('investment', 'investment')
-      .where(
-        `investment.userId = (SELECT id FROM public.user WHERE uid = '${uid}')`
-      )
-      .getRawMany();
-    if (!projectsInvested) throw new NotFoundError('Projects not found');
 
-    // 3. Get the projects that the user has created
-    const projectsCreated = await db
-      .createQueryBuilder()
-      .select('*')
-      .from('project', 'project')
-      .where(`project.user = (SELECT id FROM public.user WHERE uid = '${uid}')`)
-      .getRawMany();
-    if (!projectsCreated) throw new NotFoundError('Projects not found');
+    const params = {
+      allProjects: await getAllProjects(db, uid),
+      investedProjects: await getAllInvestments(db, uid),
+      likedProjects: await getAllLikes(db, uid),
+      commentedProjects: await getAllComments(db, uid),
+    };
 
-    // 4. Get the projects that the user has liked
-    const projectsLiked = await db
-      .createQueryBuilder()
-      .select('*')
-      .from('like', 'like')
-      .where(`like.userId = (SELECT id FROM public.user WHERE uid = '${uid}')`)
-      .getRawMany();
-    if (!projectsLiked) throw new NotFoundError('Projects not found');
-
-    // 5. Get the projects that the user has commented on
-    const projectsCommented = await db
-      .createQueryBuilder()
-      .select('*')
-      .from('comment', 'comment')
-      .where(
-        `comment.userId = (SELECT id FROM public.user WHERE uid = '${uid}')`
-      )
-      .getRawMany();
-    if (!projectsCommented) throw new NotFoundError('Projects not found');
-
-    /**
-     * 6. Give scores to each project based on the above criteria
-     * - Invested projects get a score of 4
-     * - Created projects get a score of 3
-     * - Liked projects get a score of 2
-     * - Commented projects get a score of 1
-     */
-    const projectsWithScores = projects.map((project) => {
-      let score = 0;
-      projectsInvested.forEach((investment) => {
-        if (project.id === investment.projectId) {
-          score += 4;
-        }
-      });
-      projectsCreated.forEach((createdProject) => {
-        if (project.id === createdProject.id) {
-          score += 3;
-        }
-      });
-      projectsLiked.forEach((likedProject) => {
-        if (project.id === likedProject.projectId) {
-          score += 2;
-        }
-      });
-      projectsCommented.forEach((commentedProject) => {
-        if (project.id === commentedProject.projectId) {
-          score += 1;
-        }
-      });
-      return { ...project, score };
-    });
-
-    console.log(projectsWithScores);
-
-    // 7. Sort the projects based on the scores
-
-    const sortedProjects = projectsWithScores.sort((a, b) => {
-      return b.score - a.score;
-    });
-
-    // 8. Return the top 10 projects
-    return sortedProjects.slice(0, 10);
+    const recommendedProjects = getRecommendation(params);
+    return recommendedProjects;
   },
+};
+
+const getAllProjects = async (db, uid) => {
+  // 1. Get all projects not created by the user
+  const projects = await db
+    .createQueryBuilder()
+    .addSelect('project.title', 'projectTitle')
+    .addSelect('project.category', 'projectCategory')
+    .from('project', 'project')
+    .where(`project.user != (SELECT id FROM public.user WHERE uid = '${uid}')`)
+    .cache(true)
+    .getRawMany();
+  if (!projects) throw new NotFoundError('Projects not found');
+  return projects;
+};
+
+const getAllInvestments = async (db, uid) => {
+  // 2. Get all the projects that the user has invested in
+  const projectsInvested = await db
+    .createQueryBuilder()
+    .addSelect('project.title', 'projectTitle')
+    .addSelect('project.category', 'projectCategory')
+    .from(Investment, 'investment')
+    .innerJoin(Project, 'project', 'investment.projectId = project.id')
+    .innerJoin(User, 'user', 'investment.userId = user.id')
+    .where('user.uid = :uid', { uid })
+    .cache(true)
+    .getRawMany();
+  if (!projectsInvested) throw new NotFoundError('Projects not found');
+  return projectsInvested;
+};
+
+const getAllLikes = async (db, uid) => {
+  // 3. Get all the projects that the user has liked
+  const projectsLiked = await db
+    .createQueryBuilder()
+    .addSelect('project.title', 'projectTitle')
+    .addSelect('project.category', 'projectCategory')
+    .from(Like, 'like')
+    .innerJoin(Project, 'project', 'like.projectId = project.id')
+    .innerJoin(User, 'user', 'like.userId = user.id')
+    .where('user.uid = :uid', { uid })
+    .cache(true)
+    .getRawMany();
+  if (!projectsLiked) throw new NotFoundError('Projects not found');
+  return projectsLiked;
+};
+
+const getAllComments = async (db, uid) => {
+  // 4. Get all the projects that the user has commented on
+  const projectsCommented = await db
+    .createQueryBuilder()
+    .addSelect('project.title', 'projectTitle')
+    .addSelect('project.category', 'projectCategory')
+    .from(Comment, 'comment')
+    .innerJoin(Project, 'project', 'comment.projectId = project.id')
+    .innerJoin(User, 'user', 'comment.userId = user.id')
+    .where('user.uid = :uid', { uid })
+    .cache(true)
+    .getRawMany();
+  if (!projectsCommented) throw new NotFoundError('Projects not found');
+  return projectsCommented;
 };
