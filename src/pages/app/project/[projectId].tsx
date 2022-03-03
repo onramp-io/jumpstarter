@@ -6,11 +6,9 @@ import SingleProjectInfo from '@frontend/components/singleprojectinfo';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '@frontend/context/AuthProvider';
-import urls from 'helpers/urls'; 
-
+import urls from 'helpers/urls';
 
 const Project: NextPage = () => {
-
   interface ProjectDetails {
     id: number;
     title: string;
@@ -29,39 +27,60 @@ const Project: NextPage = () => {
   const [currentUser, setCurrentUser] = useState(0);
   const [projectOwner, setProjectOwner] = useState(0);
   const [projectDetails, setProjectDetails] = useState<ProjectDetails>({
-        id: 64,
-        title: '',
-        description: '',
-        fund_goal: 0,
-        fund_raised: 0,
-        end_date: new Date(),
-        pictures: [],
-        investors: 0,
-        likesAmt: 0,
-        remaining: ''
-      });
+    id: 64,
+    title: '',
+    description: '',
+    fund_goal: 0,
+    fund_raised: 0,
+    end_date: new Date(),
+    pictures: [],
+    investors: 0,
+    likesAmt: 0,
+    remaining: '',
+  });
   const router = useRouter();
   const { accessToken, firstName } = useAuth();
 
   const getComments = async (projectId) => {
-    const commentData = await axios.get(urls.comments + projectId, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}}) ;
-    setCommentList(commentData.data.response);
-  }
+    try {
+      const commentData = await axios.get(urls.comments + projectId, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setCommentList(commentData.data.response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const submitComment = async (event: MouseEvent) => {
-    
-    const body = {
-      userId: currentUser,
-      projectId: router.query.projectId,
-      comment: comment
+    try {
+      const body = {
+        userId: currentUser,
+        projectId: router.query.projectId,
+        comment: comment,
+      };
+      await axios.post(urls.comments, body, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      getComments(router.query.projectId);
+    } catch (error) {
+      console.log(error);
     }
-    await axios.post(urls.comments, body, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
-    getComments(router.query.projectId);
-  }
+  };
 
   const addView = async () => {
-    await axios.put(urls.projectView + router.query.projectId);
-  }
+    try {
+      await axios.put(urls.projectView + router.query.projectId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getProject = async (projectId) => {
     const project = await axios.get(urls.projects + router.query.projectId);
@@ -73,80 +92,106 @@ const Project: NextPage = () => {
       remainingGoal = `$${(lastGoal-project.data.data.fundRaised).toLocaleString()}`
     }
 
-    setProjectOwner(project.data.data.userId);
+      setProjectOwner(project.data.data.userId);
 
-    const data = {
-      id: project.data.data.id,
-      title: project.data.data.title,
-      description: project.data.data.description,
-      fund_goal: project.data.data.fundTiers[project.data.data.currFundGoal],
-      fund_raised: project.data.data.fundRaised,
-      end_date: new Date(),
-      pictures: ["//v2.grommet.io/assets/Wilderpeople_Ricky.jpg"],
-      investors: project.data.data.investors,
-      likesAmt: project.data.data.likesAmt,
-      remaining: remainingGoal
+      const data = {
+        id: project.data.data.id,
+        title: project.data.data.title,
+        description: project.data.data.description,
+        fund_goal: project.data.data.fundTiers[project.data.data.currFundGoal],
+        fund_raised: project.data.data.fundRaised,
+        end_date: new Date(),
+        pictures: ['//v2.grommet.io/assets/Wilderpeople_Ricky.jpg'],
+        investors: project.data.data.investors,
+        likesAmt: project.data.data.likesAmt,
+        remaining: remainingGoal,
+      };
+      setProjectDetails(data);
+    } catch (error) {
+      console.log(error);
     }
-    setProjectDetails(data);
-  }
+  };
 
   const getCurrentUser = async () => {
-    const user = await axios.get(urls.getUserApi, {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}`}});
-    setCurrentUser(user.data.userData['id']);
-  }
+    try {
+      const user = await axios.get(urls.getUserApi, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setCurrentUser(user.data.userData['id']);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const goToEdit = async () => {
     router.push(urls.edit + router.query.projectId);
-  }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     //make sure url is populated before pulling query params
-    if(!router.isReady && !firstName) return;
+    if (!router.isReady && !firstName) return;
 
     getProject(router.query.projectId);
     addView();
     getComments(router.query.projectId);
 
     if (!firstName) return;
-    getCurrentUser()
-
-  }, [router.isReady, firstName]); 
-
+    getCurrentUser();
+  }, [router.isReady, firstName]);
 
   return (
     <>
-      <SingleProjectInfo 
-        projectDetails={projectDetails}
-      />
-        {(currentUser == projectOwner) && (
-        <Box margin={{horizontal: '25rem'}} height="small">
-          <Button primary label="Edit Project" alignSelf="end" margin={{top: "1.5rem"}} onClick={() => goToEdit()}/>
-        </Box>
-        )}
-      <Heading textAlign="center" fill={true} margin={{left: '2rem', top: '5rem'}}>Comments</Heading>
-
-      {(firstName) && (
-        <Box margin={{horizontal: '25rem'}} height="small">
-          <TextArea 
-              placeholder="Leave a comment." 
-              resize={false} 
-              fill={true} 
-              size="medium"
-              onChange={event => setComment(event.target.value)}
+      <SingleProjectInfo projectDetails={projectDetails} />
+      {currentUser == projectOwner && (
+        <Box margin={{ horizontal: '25rem' }} height="small">
+          <Button
+            primary
+            label="Edit Project"
+            alignSelf="end"
+            margin={{ top: '1.5rem' }}
+            onClick={() => goToEdit()}
           />
-          <Button primary label="Post comment" alignSelf="end" margin={{top: "1.5rem"}} onClick={(event) => submitComment(event)}/>
+        </Box>
+      )}
+      <Heading
+        textAlign="center"
+        fill={true}
+        margin={{ left: '2rem', top: '5rem' }}
+      >
+        Comments
+      </Heading>
+
+      {firstName && (
+        <Box margin={{ horizontal: '25rem' }} height="small">
+          <TextArea
+            placeholder="Leave a comment."
+            resize={false}
+            fill={true}
+            size="medium"
+            onChange={(event) => setComment(event.target.value)}
+          />
+          <Button
+            primary
+            label="Post comment"
+            alignSelf="end"
+            margin={{ top: '1.5rem' }}
+            onClick={(event) => submitComment(event)}
+          />
         </Box>
       )}
       {commentList.map((comment, index) => {
         return (
-          <Comment 
-            key={index} 
-            userName={comment.firstName} 
-            userIconURL="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" 
-            commentText={comment.comment}/>
-        )
-      })
-      }
+          <Comment
+            key={index}
+            userName={comment.firstName}
+            userIconURL="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80"
+            commentText={comment.comment}
+          />
+        );
+      })}
     </>
   );
 };

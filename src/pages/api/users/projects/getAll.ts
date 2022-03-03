@@ -1,6 +1,6 @@
 import { verifyRequest } from '@backend/middleware/verify_request';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { InvestmentController } from '@backend/controller/investment/investment';
+import { UserController } from '../../../../backend/controller/user/user';
 
 import chalk from 'chalk';
 import {
@@ -18,11 +18,18 @@ const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case 'GET':
-        const userInvestments = await InvestmentController.getAll(req);
+        const projects = await UserController.getUserProject(req);
+        const userProjects = projects.map((project) => {
+          return {
+            projectId: project.id,
+            projectTitle: project.title,
+            projectDescription: project.description,
+          };
+        });
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
-          userInvestments,
+          userProjects,
         });
         break;
       default:
@@ -30,7 +37,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
     }
   } catch (error) {
     console.log(
-      chalk.red.bold(error.name + '@investments/get.ts on Line 32'),
+      chalk.red.bold(error.name + '@users/projects/getAll.ts on Line 32'),
       error.message
     );
     res.status(error.code).json({
