@@ -72,7 +72,7 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
   const setUser = (payload) => dispatch({ type: 'SET_USER', payload });
 
   useEffect(() => {
-    const getUser = async () => {
+    const getUser = async (token) => {
       const response = await axios.get('/users/get');
       setUser({
         accessToken: token,
