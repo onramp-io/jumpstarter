@@ -9,6 +9,11 @@
  *
  */
 
+/**
+ * * Helper methods
+ *
+ */
+
 const addProject = (project: any, matrix: Map<any, any>): Map<any, any> => {
   matrix.set(project.category, [
     {
@@ -53,27 +58,33 @@ const parseData = (allProjects: any, matrix: Map<any, any>): Map<any, any> => {
   return matrix;
 };
 
+/**
+ * * Add points to the adjacency matrix by liked, commented, invested category projects
+ */
+
 const populateMatrix = (matrix: Map<any, any>, params: any): Map<any, any> => {
   const { invested, liked, commented } = params;
-  // Add points to the adjacency matrix by liked category projects
   liked.forEach((project) => {
     const { id, category } = project;
     addPoints(id, category, 1, matrix);
   });
 
-  // Add points to the adjacency matrix by commented category projects
   commented.forEach((project) => {
     const { id, category } = project;
     addPoints(id, category, 2, matrix);
   });
 
-  // Add points to the adjacency matrix by investment category projects
   invested.forEach((project) => {
     const { id, category } = project;
     addPoints(id, category, 3, matrix);
   });
   return matrix;
 };
+
+/**
+ * * Rank the projects of each category by points
+ * * Return the top 10 projects of all categories ranked by points
+ */
 
 const rankProjects = (matrix: Map<any, any>) => {
   const rankedProjects = [];
@@ -83,18 +94,18 @@ const rankProjects = (matrix: Map<any, any>) => {
     });
     rankedProjects.push(sortedProjects);
   });
-  return rankedProjects.flat();
+  return rankedProjects.flat().sort((a, b) => {
+    return b.points - a.points;
+  });
 };
 
 export const getRecommendation = (params: any) => {
   const { allProjects } = params;
-
   const adjacencyMatrix = new Map();
+
   parseData(allProjects, adjacencyMatrix);
   populateMatrix(adjacencyMatrix, params);
   const recommendedProjects = rankProjects(adjacencyMatrix);
 
-  console.log('Recommended Projects: ', recommendedProjects);
-
-  return recommendedProjects;
+  return recommendedProjects.slice(0, 10);
 };
