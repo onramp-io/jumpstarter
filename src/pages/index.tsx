@@ -46,6 +46,7 @@ const Index: NextPage = function indexComponent<indexProps>({}) {
 
   useEffect(() => {
     getTrendingProjects();
+    console.log(trendingProjects);
   }, []);
 
   const personalPicks = [

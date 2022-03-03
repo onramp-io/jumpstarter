@@ -107,9 +107,6 @@ const Project: NextPage = () => {
         remaining: remainingGoal,
       };
       setProjectDetails(data);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const getCurrentUser = async () => {
