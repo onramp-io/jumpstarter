@@ -59,18 +59,24 @@ const Discover: NextPage = () => {
 
     copyOfCategories[category] = !checked;
 
-    setCategories(copyOfCategories)
-  }
+    setCategories(copyOfCategories);
+  };
 
   return (
     <>
-      <Box margin={{top: "xlarge"}}>
-        <Heading alignSelf='center'>Discover</Heading>
+      <Box margin={{ top: 'xlarge' }}>
+        <Heading alignSelf="center">Discover</Heading>
       </Box>
 
       <Box direction="column" width="100%">
-        <Text alignSelf="end">Sort by 
-          <Select options={['Newest', 'Trending']} alignSelf="end" margin={{ left: "small",right: "11rem", bottom: "small" }} defaultValue={'Newest'}/>
+        <Text alignSelf="end">
+          Sort by
+          <Select
+            options={['Newest', 'Trending']}
+            alignSelf="end"
+            margin={{ left: 'small', right: '11rem', bottom: 'small' }}
+            defaultValue={'Newest'}
+          />
         </Text>
       </Box>
 
@@ -89,19 +95,16 @@ const Discover: NextPage = () => {
         </Sidebar>
         <Box direction="row" wrap={true} margin={{left: "1rem"}} width="100vw">
           <InfiniteScroll
-            items={projectData.filter(project => categories[project.category])}
+            items={projectData.filter(
+              (project) => categories[project.category]
+            )}
             step={3}
             onMore={() => {
             }}
           >
-            {
-              (item, index) => (
-                <LargeProjectCard
-                  key={index}
-                  projectData = {item}
-                />
-              )
-            }
+            {(item, index) => (
+              <LargeProjectCard key={index} projectData={item} />
+            )}
           </InfiniteScroll>
         </Box>
       </Box>
