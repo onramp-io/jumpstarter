@@ -59,13 +59,15 @@ const EditProfile: NextPage = () => {
         bio: bioValue,
         avatarImgUrl: uploadConfig.data.uploadConfig.randomKey,
       };
+      const updateUrl = '/api/users/update';
       const updateUserProfile = await axios.put(
-        '/api/users/update',
+        updateUrl,
         body,
         headers
       );
 
-      router.push('/app/profile');
+      const redirectUrl = '/app/profile';
+      router.push(redirectUrl);
     } catch (error) {
       setError(error.message);
     }

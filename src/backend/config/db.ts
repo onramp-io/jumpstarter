@@ -19,7 +19,7 @@ const connection = async () => {
     type: process.env.DB_TYPE as any,
     url: process.env.DB_CONNECTION_STRING,
     synchronize: true,
-    entities: [User, Project, Investment, Comment, Like, Category],
+    entities: [User, Project, Investment, Comment, Like, Category]
   });
   if (getConnection().isConnected) {
     return getConnection();
