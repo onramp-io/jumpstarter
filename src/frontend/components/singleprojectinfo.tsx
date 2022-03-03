@@ -1,15 +1,24 @@
 import type { NextPage } from 'next';
 import { Box, Button, Grid, Heading, Image, Meter, Paragraph, Table, TableRow, TableCell, Text } from 'grommet';
-import { Favorite } from 'grommet-icons';
+import { Like } from 'grommet-icons';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@frontend/context/AuthProvider';
+import axios from '../../axios/instance';
+import urls from 'helpers/urls'; 
+
 
 type projectType = {
+  id: number;
   title: string,
   description: string,
   fund_goal: number,
   fund_raised: number,
   end_date: Date,
   pictures: string[],
-  investors: number
+  investors: number,
+  likesAmt: number,
+  remaining: string
 }
 
 interface SingleProjectInfoProps {
@@ -17,6 +26,54 @@ interface SingleProjectInfoProps {
 }
 
 const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails }): JSX.Element => {
+
+  const { firstName, accessToken } = useAuth();
+  const [like, setLike] = useState(false);
+  const [likeTotal, setLikeTotal] = useState(0);
+  const router = useRouter();
+
+  const checkIfLiked = async (projectId) => {
+    const response = await axios.get(urls.likes + projectId);
+    if (response.data.data) {
+      setLike(true);
+    }
+  }
+
+  const submitLike = async (event: any) => {
+    let newLikeTotal = 0;
+    if (!like) {
+      const user = await axios.get(urls.getUser);
+      newLikeTotal = likeTotal + 1;
+      const body = {
+        userId: user.data.userData['id'],
+        projectId: router.query.projectId,
+      }
+      await axios.post(urls.likes, body);
+      setLike(true);
+    } else {
+      newLikeTotal = likeTotal - 1;
+      await axios.delete(urls.likes + router.query.projectId);
+      setLike(false);
+    }
+    setLikeTotal(newLikeTotal);
+  }
+
+  const goToCheckOut = async (event: any) => {
+    if (firstName) {
+      router.push(urls.checkout + router.query.projectId);
+    } else {
+      router.push(urls.loginRedirect);
+    }
+  }
+
+  useEffect(()=>{
+    //make sure url is populated and user is logged in before pulling query params
+    if(!urls.urlCheck(router, firstName)) return;
+
+    checkIfLiked(router.query.projectId);
+
+  }, [router.isReady, firstName]); 
+
   return (
     <Box 
         direction="column" 
@@ -62,7 +119,12 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
                         <Text>Target Date: {projectDetails.end_date.toDateString()}</Text>
                     </Box>
                     <Box margin="small" align="end">
-                        <Favorite size="large"/>
+                        {((firstName) && (!like)) && (
+                          <Like onClick={(event) => submitLike(event)} size="large" style={{cursor: "pointer"}}/>
+                        )}
+                        {((firstName) && (like)) && (
+                          <Text onClick={(event) => submitLike(event)} color="brand" style={{cursor: "pointer"}}>Liked</Text>
+                        )}
                     </Box>
               </Grid>
           </Box>
@@ -81,11 +143,13 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
                     <TableCell scope="col"><strong>Raised</strong></TableCell>
                     <TableCell scope="col"><strong>Remaining</strong></TableCell>
                     <TableCell scope="col"><strong>Investors</strong></TableCell>
+                    <TableCell scope="col"><strong>Likes</strong></TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell scope="col">${projectDetails.fund_raised.toLocaleString()}</TableCell>
-                    <TableCell scope="col">${(projectDetails.fund_goal - projectDetails.fund_raised).toLocaleString()}</TableCell>
+                    <TableCell scope="col">{projectDetails.remaining}</TableCell>
                     <TableCell scope="col">{projectDetails.investors.toLocaleString()}</TableCell>
+                    <TableCell scope="col">{projectDetails.likesAmt.toLocaleString()}</TableCell>
                   </TableRow>
               </Table>
               <Meter max={projectDetails.fund_goal} value={projectDetails.fund_raised}  background="light-3" size="full" margin={{
@@ -103,7 +167,7 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
             }}>{projectDetails.description}</Paragraph>
           </Box>
 
-          <Button gridArea="button" margin={{horizontal: "xlarge"}} primary label="JumpStart this project"/>
+          <Button onClick={(event) => goToCheckOut(event)} gridArea="button" margin={{horizontal: "xlarge"}} primary label="JumpStart this project"/>
         </Grid>
       </Box>
   );

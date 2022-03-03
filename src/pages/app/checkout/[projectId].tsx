@@ -1,10 +1,11 @@
 import type { NextPage } from 'next';
 import { Box, Button, Form, FormField, Heading, Text, TextInput } from 'grommet';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@frontend/context/AuthProvider';
 import { useRouter } from 'next/router';
 import { Alert, AlertTitle } from '@mui/material';
-import axios from 'axios';
+import axios from '../../../axios/instance';
+import urls from 'helpers/urls'; 
 
 const Checkout: NextPage = () => {
     const initialState = {
@@ -21,27 +22,33 @@ const Checkout: NextPage = () => {
     const [state, setState] = useState(initialState);
     const [validForm, setValidForm] = useState(false);
     const [errorMessage, setError] = useState('');
+    const { firstName } = useAuth();
     const router = useRouter();
-    const { userId } = useAuth();
 
     const checkout = async () => {
         if (validForm) {
             try {
+                const user = await axios.get(urls.getUser);
                 const body = {
-                    userId: userId,
-                    projectId: state.projectId,
+                    userId: user.data.userData['id'],
+                    projectId: router.query.projectId,
                     fundAmt: state.donation
                 }
-                await axios.post('/api/investments', body);
-                router.push('/app/profile');
+                await axios.post(urls.addInvestment, body);
+                router.push(urls.profileRedirect);
             } catch (error) {
-                console.log(error);
                 setError('Invalid form data');
             }
         } else {
             setError('Invalid form');
         }
     }
+
+    useEffect(()=>{
+        //make sure url is populated before pulling query params
+        if(!urls.urlCheck(router, firstName)) return;
+    
+    }, [router.isReady, firstName]); 
 
     return (
         <>

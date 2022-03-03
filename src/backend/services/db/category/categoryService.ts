@@ -3,6 +3,7 @@ import { getRepository, getConnection } from 'typeorm';
 import { Category } from '@backend/entities/Category';
 import connection from '@backend/config/db';
 import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors'
+import { dbError, notFoundError } from "helpers/ErrorHandling/messaging";
 
 const categoryService = {
   //Add a like to a project by a user
@@ -17,7 +18,7 @@ const categoryService = {
       return categoryData;
     }
     catch {
-      throw new DatabaseError('Database connection failed');
+      throw new DatabaseError(dbError);
     }
   },
 
@@ -37,7 +38,7 @@ const categoryService = {
       return newCategory;
     }
     catch {
-      throw new DatabaseError('Database connection failed');
+      throw new DatabaseError(dbError);
     }
   },
 
@@ -57,7 +58,7 @@ const categoryService = {
 
     }
     catch {
-      throw new DatabaseError('Database connection failed');
+      throw new DatabaseError(dbError);
     }
   }
 }

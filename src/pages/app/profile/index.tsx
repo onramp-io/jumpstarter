@@ -33,7 +33,8 @@ function MyProfile() {
   const handlePayOut = async () => {
     try {
       setMoneyTransferring(true);
-      await axios.put('/users/payout', {});
+      const url = '/users/payout';
+      await axios.put(url, {});
       setMoneyTransferred(true);
       setMoneyTransferring(false);
     } catch (error) {
