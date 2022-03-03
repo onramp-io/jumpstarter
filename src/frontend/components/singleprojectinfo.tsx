@@ -68,11 +68,9 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({ projectDetails })
 
   useEffect(()=>{
     //make sure url is populated and user is logged in before pulling query params
-    if(!router.isReady || !firstName) return;
-    
-    if (firstName) {
-      checkIfLiked(router.query.projectId);
-    }
+    if(!urls.urlCheck(router, firstName)) return;
+
+    checkIfLiked(router.query.projectId);
 
   }, [router.isReady, firstName]); 
 

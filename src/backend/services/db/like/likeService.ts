@@ -20,7 +20,7 @@ const likeService = {
 
         try {
             //Increment project likesAmt
-            updateLikeAmt(UpdateLike.Decrement, db, projectId);
+            updateLikeAmt(UpdateLike.Increment, db, projectId);
         }
         catch {
             throw new DatabaseError(dbError);
@@ -121,6 +121,7 @@ const updateLikeAmt = async (selector, db, projectId) => {
             likesAmt: () => `${setString + selector}`
         })
         .where("id = :id", { id: projectId })
+        .andWhere("likesAmt >= 0")
         .execute()
 }
 
