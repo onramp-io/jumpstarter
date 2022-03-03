@@ -251,7 +251,7 @@ const ProjectService = {
     try {
       var trendEquation =
         '("likesAmt"-"likesAmtLast") + ("views"-"viewsLast") + ("fundRaised"-"fundRaisedLast")';
-      var trendCondition = "(now() - scoreUpdatedAt) > INTERVAL '5 sec'";
+      var trendCondition = "(now() - scoreUpdatedAt) > INTERVAL '5 min'";
 
       await db
         .createQueryBuilder()
@@ -292,12 +292,14 @@ const ProjectService = {
 const getSortedProjects = async (column) => {
   const db = await connection();
 
+  console.log("here");
   const projectData = await db
   .createQueryBuilder()
   .select('*')
   .from('project', 'project')
   .orderBy(`project.${column}`, 'DESC')
   .getRawMany();
+  
 
   return projectData;
 };

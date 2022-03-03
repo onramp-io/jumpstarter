@@ -60,7 +60,7 @@ export class Project {
   @Column({ type: 'integer', default: 0 })
   trendScore: number;
 
-  @Column({ type: 'timestamp', default: () => 'now()' })
+  @Column({ type: 'timestamp', default: () => 'now()', nullable: true })
   scoreUpdatedAt: string;
 
   @Column({ type: 'integer', default: 0 })
