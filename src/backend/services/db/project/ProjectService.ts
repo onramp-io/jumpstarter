@@ -302,10 +302,12 @@ const ProjectService = {
 const getSortedProjects = async (column) => {
   const db = await connection();
 
-  const projectData = await getRepository(Project)
-  .createQueryBuilder("project")
+  const projectData = await db
+  .createQueryBuilder()
+  .select('*')
+  .from('project', 'project')
   .orderBy(`project.${column}`, 'DESC')
-  .getMany();
+  .getRawMany();
 
   return projectData;
 }

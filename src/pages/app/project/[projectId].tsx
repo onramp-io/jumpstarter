@@ -70,7 +70,7 @@ const Project: NextPage = () => {
     if (project.data.data.fundRaised > lastGoal) {
       remainingGoal = "All goals Reached!"
     } else {
-      remainingGoal = `$${lastGoal.toLocaleString()}`
+      remainingGoal = `$${(lastGoal-project.data.data.fundRaised).toLocaleString()}`
     }
 
     setProjectOwner(project.data.data.userId);
