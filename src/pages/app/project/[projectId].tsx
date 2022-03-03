@@ -83,16 +83,14 @@ const Project: NextPage = () => {
   };
 
   const getProject = async (projectId) => {
-    try {
-      const project = await axios.get(urls.projects + router.query.projectId);
-      const lastGoal =
-        project.data.data.fundTiers[project.data.data.fundTiers.length - 1];
-      let remainingGoal = '';
-      if (project.data.data.fundRaised > lastGoal) {
-        remainingGoal = 'All goals Reached!';
-      } else {
-        remainingGoal = `$${lastGoal.toLocaleString()}`;
-      }
+    const project = await axios.get(urls.projects + router.query.projectId);
+    const lastGoal = project.data.data.fundTiers[project.data.data.fundTiers.length - 1];
+    let remainingGoal = "";
+    if (project.data.data.fundRaised > lastGoal) {
+      remainingGoal = "All goals Reached!"
+    } else {
+      remainingGoal = `$${(lastGoal-project.data.data.fundRaised).toLocaleString()}`
+    }
 
       setProjectOwner(project.data.data.userId);
 
@@ -109,9 +107,6 @@ const Project: NextPage = () => {
         remaining: remainingGoal,
       };
       setProjectDetails(data);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const getCurrentUser = async () => {

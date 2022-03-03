@@ -156,7 +156,6 @@ const ProjectService = {
           `"user"."id" = (SELECT "project"."userId" FROM "project" WHERE "project"."id" = ${findProjectUserByIdParams.id})`
         )
         .getRawOne();
-
       if (
         foundProjectUser === null ||
         foundProjectUser === undefined ||
@@ -164,7 +163,6 @@ const ProjectService = {
       ) {
         throw new DatabaseError(notFoundError);
       }
-
       return [foundProjectUser, StatusCodes.OK];
     } catch (err) {
       throw err;
@@ -281,7 +279,7 @@ const ProjectService = {
     try {
       var trendEquation =
         '("likesAmt"-"likesAmtLast") + ("views"-"viewsLast") + ("fundRaised"-"fundRaisedLast")';
-      var trendCondition = "(now() - scoreUpdatedAt) > INTERVAL '5 sec'";
+      var trendCondition = "(now() - scoreUpdatedAt) > INTERVAL '5 min'";
 
       await db
         .createQueryBuilder()
@@ -322,10 +320,14 @@ const ProjectService = {
 const getSortedProjects = async (column) => {
   const db = await connection();
 
-  const projectData = await getRepository(Project)
-    .createQueryBuilder('project')
-    .orderBy(`project.${column}`, 'DESC')
-    .getMany();
+  console.log("here");
+  const projectData = await db
+  .createQueryBuilder()
+  .select('*')
+  .from('project', 'project')
+  .orderBy(`project.${column}`, 'DESC')
+  .getRawMany();
+  
 
   return projectData;
 };
