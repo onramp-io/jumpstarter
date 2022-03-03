@@ -12,26 +12,20 @@ type projectFormType = {
   launchDate: Date,
   fundTiers: number[],
   pictures: string[],
-  createOrEdit: string
+  currFundGoal: number,
 }
 
 interface ProjectFormProps {
     projectFormState: projectFormType
+    createOrEdit: string
 }
 
-const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Element => {
+const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState, createOrEdit}): JSX.Element => {
 
   const [projectState, setProjectState] = useState(projectFormState);
   const [imageFile, setImageFile] = useState<File>();
-  const [create, setCreate] = useState(true);
   const { userId, accessToken } = useAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    if (projectFormState.createOrEdit === "create") {
-      setCreate(true)
-    }
-  }, [])
 
   const onSubmitCreate = async (event) => {
     try {
@@ -98,12 +92,13 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
       const pictureArray = [uploadConfig.data.uploadConfig.randomKey];
 
       const body = {
+        pictures: pictureArray,
         title: projectState.title,
         category: projectState.category,
         description: projectState.description,
         fundTiers: projectState.fundTiers,
+        currFundGoal: projectState.currFundGoal,
         launchDate: projectState.launchDate,
-        pictures: pictureArray
       }
 
       const projectId = 66;
@@ -145,7 +140,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
       </Box>
       <Form
         value={projectState}
-        onSubmit={(event) => create ? onSubmitCreate(event) : onSubmitEdit(event)}
+        onSubmit={(event) => createOrEdit === "create" ? onSubmitCreate(event) : onSubmitEdit(event)}
         validate="blur"
       >
         <Box direction="column" gap="xlarge">
@@ -191,7 +186,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
               }
             }}
           >
-            <DateInput name="endDate" format="mm/dd/yyyy" onChange={(event) => setProjectState({...projectState, launchDate: new Date(event.value.toString())})} />
+            <DateInput name="endDate" format="mm/dd/yyyy" value={projectState.launchDate.toString()} onChange={(event) => setProjectState({...projectState, launchDate: new Date(event.value.toString())})} />
           </FormField>
 
           <Box margin={{left: "small"}}>
@@ -218,6 +213,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
               <TextInput
                 name="tier1"
                 type="number"
+                value={projectState.fundTiers[1]}
                 placeholder="$0"
                 onChange={(event) => updateTier(event.target.value, 1)}
               />
@@ -246,6 +242,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
               <TextInput
                 name="tier2"
                 type="number"
+                value={projectState.fundTiers[2]}
                 placeholder="$0"
                 onChange={(event) => updateTier(event.target.value, 2)}
                 />
@@ -266,13 +263,14 @@ const ProjectForm: NextPage<ProjectFormProps> = ({ projectFormState }): JSX.Elem
               <TextInput
                 name="tier3"
                 type="number"
+                value={projectState.fundTiers[3]}
                 placeholder="$0"
                 onChange={(event) => updateTier(event.target.value, 3)}
               />
             </FormField>
           </Box>
 
-          <Button type="submit" primary label={create ? "Create project" : "Edit project"} />
+          <Button type="submit" primary label={createOrEdit === "create" ? "Create project" : "Edit project"} />
         </Box>
       </Form>
     </Box>

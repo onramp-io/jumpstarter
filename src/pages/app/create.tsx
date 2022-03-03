@@ -10,14 +10,14 @@ const CreateProject: NextPage = () => {
     launchDate: new Date(),
     fundTiers: [0, 0, 0, 0],
     pictures: [],
-    createOrEdit: "create"
+    currFundGoal: 0,
   }
 
   return (
     <>
       <Box>
         <Heading alignSelf="center" margin={{top: "xlarge"}}>Create a new project</Heading>
-        <ProjectForm projectFormState={projectFormDetails}/>
+        <ProjectForm projectFormState={projectFormDetails} createOrEdit="create"/>
       </Box>
     </>
   );

@@ -13,7 +13,7 @@ const EditProject: NextPage = () => {
     try {
       const getProject = async (id) => {
         const response = await axios.get(projectsUrl + id);
-        setProjectFormDetails(response.data);
+        setProjectFormDetails(response.data.data);
         setLoading(false);
       }
 
@@ -31,7 +31,7 @@ const EditProject: NextPage = () => {
     <>
       <Box>
         <Heading alignSelf="center" margin={{top: "xlarge"}}>Edit project</Heading>
-        <ProjectForm projectFormState={projectFormDetails}/>
+        <ProjectForm projectFormState={projectFormDetails} createOrEdit={"edit"}/>
       </Box>
     </>
   );
