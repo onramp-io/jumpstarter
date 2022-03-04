@@ -97,9 +97,9 @@ export const PrivateRouteProvider: NextPage = ({ children }) => {
           const token = await getIdToken(user);
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
           getUser(token);
-          getUserInvestments();
-          getCategories();
-          getUserProjects();
+          // getUserInvestments(); //profile page for investments
+          // getUserProjects(); // profile page for projects
+          // getCategories(); //preferences page categories
         }
       } catch (error) {
         console.log(error);

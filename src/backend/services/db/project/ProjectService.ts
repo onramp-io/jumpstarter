@@ -101,7 +101,7 @@ const ProjectService = {
         .select('*')
         .from('project', 'project')
         .innerJoin(User, 'user', 'project.userId = user.id')
-        .getMany();
+        .getRawMany();
 
       if (allProjectRows === undefined || allProjectRows === null) {
         throw new NotFoundError(notFoundError);

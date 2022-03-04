@@ -14,7 +14,7 @@ const categoryService = {
         .createQueryBuilder()
         .select('*')
         .from('category', 'category')
-        .getMany();
+        .getRawMany();
 
       return categoryData;
     } catch {
@@ -29,7 +29,6 @@ const categoryService = {
       const db = await connection();
       //add new category
       const newCategory = await db
-        .createQueryBuilder()
         .createQueryBuilder()
         .insert()
         .into(Category)
@@ -48,7 +47,6 @@ const categoryService = {
 
     try {
       const deleteCategory = await db
-        .createQueryBuilder()
         .createQueryBuilder()
         .delete()
         .from(Category)

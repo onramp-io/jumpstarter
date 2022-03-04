@@ -1,9 +1,9 @@
-import type { NextPage } from "next";
-import { Anchor, Box, Image, Meter, Text } from "grommet";
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import { projectUrl } from "helpers/Urls/index";
-import axios from "axios";
+import type { NextPage } from 'next';
+import { Anchor, Box, Image, Meter, Text } from 'grommet';
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+import { projectUrl } from 'helpers/Urls/index';
+import axios from 'axios';
 
 type projectType = {
   id: number; //added
@@ -26,26 +26,26 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({
   projectData,
 }): JSX.Element => {
   const [state, setState] = useState(projectData);
-  useEffect(() => {
-    const getUser = async (id) => {
-      const projectInfo = await axios.get(projectUrl + id);
+  // useEffect(() => {
+  //   const getUser = async (id) => {
+  //     const projectInfo = await axios.get(projectUrl + id);
 
-      setState({
-        ...state,
-        user_name:
-          projectInfo.data.data.firstName +
-          " " +
-          projectInfo.data.data.lastName,
-      });
-    };
+  //     setState({
+  //       ...state,
+  //       user_name:
+  //         projectInfo.data.data.firstName +
+  //         ' ' +
+  //         projectInfo.data.data.lastName,
+  //     });
+  //   };
 
-    getUser(projectData.id);
-  }, []);
+  //   getUser(projectData.id);
+  // }, []);
 
   const router = useRouter();
 
   const goToProject = async (event: MouseEvent) => {
-    router.push("/app/project/" + projectData.id);
+    router.push('/app/project/' + projectData.id);
   };
 
   const calculateDates = () => {
@@ -56,17 +56,15 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({
     return Math.round(timeDifference / (1000 * 3600 * 24));
   };
 
-  console.log(state.pictures);
-
   return (
     <Box
       className="card"
-      style={{ cursor: "pointer" }}
+      style={{ cursor: 'pointer' }}
       onClick={(event) => goToProject(event)}
       flex={{ shrink: 0 }}
       margin={{
-        vertical: "small",
-        horizontal: "0.5rem",
+        vertical: 'small',
+        horizontal: '0.5rem',
       }}
       align="center"
       pad="small"
@@ -80,7 +78,7 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({
           src={
             state.pictures
               ? process.env.AWS_BUCKET_URL + state.pictures[0]
-              : "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
+              : 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80'
           }
         />
       </Box>
@@ -89,7 +87,7 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({
         className="card"
         direction="column"
         gap="small"
-        margin={{ vertical: "medium", horizontal: "medium" }}
+        margin={{ vertical: 'medium', horizontal: 'medium' }}
       >
         <Anchor href="#" label={state.category.toUpperCase()} size="small" />
         <Text weight="bold" size="large">
@@ -98,16 +96,16 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({
         <Box max-height="min-content">
           <Text>{state.description}</Text>
         </Box>
-        <Box margin={{ top: "small", bottom: "medium" }}>
+        <Box margin={{ top: 'small', bottom: 'medium' }}>
           <Text className="card" size="small">
             Created by
           </Text>
-          <Anchor className="card" href="#" label={state.user_name} />
+          <Anchor className="card" href="#" />
         </Box>
         <Meter type="bar" value={state.fundRaised} max={state.fundTiers[3]} />
-        <Box margin={{ bottom: "small" }}>
+        <Box margin={{ bottom: 'small' }}>
           <Text className="card">
-            <strong>${state.fundRaised.toLocaleString()}</strong>{" "}
+            <strong>${state.fundRaised.toLocaleString()}</strong>{' '}
             <small>raised out of ${state.fundTiers[3].toLocaleString()} </small>
           </Text>
           <Text
