@@ -1,96 +1,33 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import Section from "@frontend/components/sectionHeader";
-import LandingComponent from "@frontend/components/landingComponent";
-import type { NextPage } from "next";
-import Head from "next/head";
-import styles from "../styles/Home.module.css";
-import SectionCard from "@frontend/components/sectionCard";
-import { Heading, Text, Box } from "grommet";
-import { useEffect, useState } from "react";
-import urls from "helpers/urls";
+import Section from '@frontend/components/sectionHeader';
+import LandingComponent from '@frontend/components/landingComponent';
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
+import SectionCard from '@frontend/components/sectionCard';
+import { Heading, Text, Box } from 'grommet';
+import { useEffect, useState } from 'react';
+import urls from 'helpers/urls';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { NextPageContext } from "next";
-import SectionMarquee from "@frontend/components/sectionMarquee";
-import { useAuth } from "@frontend/context/AuthProvider";
-import axios from "axios";
+import { NextPageContext } from 'next';
+import SectionMarquee from '@frontend/components/sectionMarquee';
+import { useAuth } from '@frontend/context/AuthProvider';
+import axios from 'axios';
+import { getIdToken, onAuthStateChanged } from 'firebase/auth';
+import { auth } from 'firebase/client/client';
+import axiosInstance from '../axios/instance';
+import { useRouter } from 'next/router';
 
 interface indexProps {}
 
-const Index: NextPage = function indexComponent<indexProps>({}) {
-  const { firstName } = useAuth();
-
-  const [trendingProjects, setTrendingProjects] = useState([]);
-
-  const getTrendingProjects = async () => {
-    try {
-      const result = await axios.get(urls.trending);
-
-      for (let i = 0; i < 4; i++) {
-        trendingProjects.push({
-          projectId: result.data.data[i].id,
-          projectTitle: result.data.data[i].title,
-          projectDescription: result.data.data[i].description,
-          projectCreator: result.data.data[i].firstName,
-          projectImageUrl: `https://picsum.photos/${Math.floor(
-            Math.random() * 1000
-          )}`,
-        });
-      }
-      setTrendingProjects(trendingProjects);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getTrendingProjects();
-    console.log(trendingProjects);
-  }, []);
-
-  const personalPicks = [
-    {
-      projectId: 1,
-      projectTitle: "Personal Picks Project 1",
-      projectDescription:
-        "A brief description of what this project is. A second line for good measure.",
-      projectCreator: "Example Creator 1",
-      projectImageUrl: `https://picsum.photos/${Math.floor(
-        Math.random() * 1000
-      )}`,
-    },
-    {
-      projectId: 2,
-      projectTitle: "Personal Picks Project 2",
-      projectDescription:
-        "A brief description of what this project is. A second line for good measure.",
-      projectCreator: "Example Creator 2",
-      projectImageUrl: `https://picsum.photos/${Math.floor(
-        Math.random() * 1000
-      )}`,
-    },
-    {
-      projectId: 3,
-      projectTitle: "Personal Picks Project 3",
-      projectDescription:
-        "A brief description of what this project is. A second line for good measure.",
-      projectCreator: "Example Creator 3",
-      projectImageUrl: `https://picsum.photos/${Math.floor(
-        Math.random() * 1000
-      )}`,
-    },
-    {
-      projectId: 4,
-      projectTitle: "Personal Picks Project 4",
-      projectDescription:
-        "A brief description of what this project is. A second line for good measure.",
-      projectCreator: "Example Creator 4",
-      projectImageUrl: `https://picsum.photos/${Math.floor(
-        Math.random() * 1000
-      )}`,
-    },
-  ];
+const Index: NextPage = function indexComponent<indexProps>({
+  trendingProjects,
+  recommendedProjects,
+}) {
+  const { firstName, accessToken } = useAuth();
+  const router = useRouter();
 
   const landingImageUrl = `https://picsum.photos/${Math.floor(
     Math.random() * 1000
@@ -114,7 +51,7 @@ const Index: NextPage = function indexComponent<indexProps>({}) {
             margin="small"
           >
             <SectionMarquee
-              APIPayload={personalPicks}
+              APIPayload={recommendedProjects}
               linkHref="/personalpicks"
               linkCaption="See all recommended projects >"
             />
@@ -137,9 +74,52 @@ const Index: NextPage = function indexComponent<indexProps>({}) {
     </>
   );
 };
+export async function getServerSideProps(context) {
+  const trendingProjects = [];
+  const recommendedProjects = [];
 
-Index.getInitialProps = async ({ req }: NextPageContext) => {
-  return {};
-};
+  try {
+    const result = await axios.get('http://localhost:3000' + urls.trending);
+    const body = {
+      uid: '7Y1RadEe6XSfxdzexFWTsP8xtY33',
+    };
+    const res = await axios.put(
+      'http://localhost:3000/api/users/recommend',
+      body
+    );
+
+    result.data.data.forEach((element) => {
+      trendingProjects.push({
+        projectId: element.id,
+        projectTitle: element.title,
+        projectDescription: element.description,
+        projectCreator: `${element.firstName} ${element.lastName}`,
+        projectImageUrl: `https://picsum.photos/${Math.floor(
+          Math.random() * 1000
+        )}`,
+      });
+    });
+    res.data.data.forEach((element) => {
+      recommendedProjects.push({
+        projectId: element.id,
+        projectTitle: element.title,
+        projectDescription: element.description,
+        projectCreator: `${element.firstName} ${element.lastName}`,
+        projectImageUrl: `https://picsum.photos/${Math.floor(
+          Math.random() * 1000
+        )}`,
+      });
+    });
+  } catch (error) {
+    console.log(`error === ${error}`);
+  }
+
+  return {
+    props: {
+      trendingProjects,
+      recommendedProjects,
+    },
+  };
+}
 
 export default Index;

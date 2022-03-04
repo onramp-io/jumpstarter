@@ -96,9 +96,11 @@ const ProjectService = {
       if (db === undefined || db === null) {
         throw new DatabaseError(dbError);
       }
-
-      const allProjectRows: Project[] = await getRepository(Project)
-        .createQueryBuilder('project')
+      const allProjectRows: any = await db
+        .createQueryBuilder()
+        .select('*')
+        .from('project', 'project')
+        .innerJoin(User, 'user', 'project.userId = user.id')
         .getMany();
 
       if (allProjectRows === undefined || allProjectRows === null) {
@@ -145,9 +147,9 @@ const ProjectService = {
   findProjectUserById: async (findProjectUserByIdParams) => {
     try {
       const db = await connection();
-       if (db === undefined || db === null) {
-         throw new DatabaseError(dbError);
-       }
+      if (db === undefined || db === null) {
+        throw new DatabaseError(dbError);
+      }
       const foundProjectUser = await db
         .createQueryBuilder()
         .select('*')
@@ -320,16 +322,15 @@ const ProjectService = {
 const getSortedProjects = async (column) => {
   const db = await connection();
 
-  console.log("here");
   const projectData = await db
-  .createQueryBuilder()
-  .select('*')
-  .from('project', 'project')
-  .orderBy(`project.${column}`, 'DESC')
-  .getRawMany();
-  
+    .createQueryBuilder()
+    .select('*')
+    .from('project', 'project')
+    .innerJoin(User, 'user', 'project.userId = user.id')
+    .orderBy(`project.${column}`, 'DESC')
+    .getRawMany();
 
-  return projectData;
+  return projectData.slice(0, 4);
 };
 
 export default ProjectService;

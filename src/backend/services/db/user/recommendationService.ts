@@ -6,29 +6,44 @@ interface IParams {
   allProjects: {
     id: number;
     title: string;
+    description: string;
     category: string;
+    firstName: string;
+    lastName: string;
   }[];
   invested: {
     id: number;
     title: string;
+    description: string;
     category: string;
+    firstName: string;
+    lastName: string;
   }[];
   liked: {
     id: number;
     title: string;
+    description: string;
     category: string;
+    firstName: string;
+    lastName: string;
   }[];
   commented: {
     id: number;
     title: string;
+    description: string;
     category: string;
+    firstName: string;
+    lastName: string;
   }[];
 }
 
 interface IProject {
   id: number;
   title: string;
+  description: string;
   category: string;
+  firstName: string;
+  lastName: string;
 }
 
 const addProject = (
@@ -40,6 +55,9 @@ const addProject = (
       id: project.id,
       title: project.title,
       category: project.category,
+      description: project.description,
+      firstName: project.firstName,
+      lastName: project.lastName,
       points: 0,
     },
   ]);
@@ -76,7 +94,10 @@ const parseData = (
       matrix.get(category).push({
         id: project.id,
         title: project.title,
-        category: category,
+        category: project.category,
+        description: project.description,
+        firstName: project.firstName,
+        lastName: project.lastName,
         points: 0,
       });
     }
@@ -136,5 +157,5 @@ export const getRecommendation = (params: IParams) => {
   populateMatrix(adjacencyMatrix, params);
   const recommendedProjects = rankProjects(adjacencyMatrix);
 
-  return recommendedProjects.slice(0, 10);
+  return recommendedProjects.slice(0, 4);
 };

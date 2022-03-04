@@ -17,12 +17,12 @@ interface Request extends NextApiRequest {
 const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
-      case 'GET':
-        const recommendedProjects = await UserController.getRecommendation(req);
+      case 'PUT':
+        const data = await UserController.getRecommendation(req);
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
-          recommendedProjects,
+          data,
         });
         break;
       default:
