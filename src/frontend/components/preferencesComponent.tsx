@@ -1,12 +1,14 @@
-import { Box, Button, Heading } from 'grommet';
+import { Box, Button, Heading } from "grommet";
 
-import styles from '../../styles/Preference.module.css';
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { AlertTitle, Alert } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
+import { motion } from "framer-motion";
+import styles from "../../styles/Preference.module.css";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { AlertTitle, Alert } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import Animations from "utils/animations/motionObjects";
 
-import axios from '../../axios/instance';
+import axios from "../../axios/instance";
 
 interface UserPreferencesProps {
   categories: any;
@@ -14,7 +16,7 @@ interface UserPreferencesProps {
 
 const UserPreferences: React.FC<UserPreferencesProps> = ({ categories }) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [errorMessage, setError] = useState('');
+  const [errorMessage, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
@@ -30,10 +32,10 @@ const UserPreferences: React.FC<UserPreferencesProps> = ({ categories }) => {
   const submitPreferences = async () => {
     setIsSubmitting(true);
     try {
-      await axios.put('/users/preferences/update', {
+      await axios.put("/users/preferences/update", {
         categories: selectedCategories,
       });
-      router.push('/app/profile');
+      router.push("/app/profile");
     } catch (error) {
       console.log(error);
       setError(error.message);
@@ -48,35 +50,45 @@ const UserPreferences: React.FC<UserPreferencesProps> = ({ categories }) => {
         <Box className={styles.container}>
           {categories &&
             categories.map((item) => (
-              <div key={item.id}>
+              <motion.div key={item.id} whileHover={Animations.scaleOnHover}>
                 <Box
-                  className={styles.cards}
+                  elevation="medium"
+                  margin={{
+                    bottom: "large",
+                    right: "medium",
+                  }}
+                  direction="column"
+                  height="min(300px)"
+                  width="max(300px)"
+                  justify="center"
+                  pad="medium"
+                  align="center"
                   onClick={() => addPreference(item.category)}
                 >
                   <div>{item.category}</div>
                 </Box>
-              </div>
+              </motion.div>
             ))}
+          {isSubmitting ? (
+            <>
+              <CircularProgress />
+            </>
+          ) : (
+            <>
+              <Button
+                primary
+                label="Submit my preferences"
+                onClick={submitPreferences}
+                disabled={isSubmitting}
+              />
+              {errorMessage !== "" && (
+                <Alert severity="error">
+                  <AlertTitle>{errorMessage}</AlertTitle>
+                </Alert>
+              )}
+            </>
+          )}
         </Box>
-        {isSubmitting ? (
-          <>
-            <CircularProgress />
-          </>
-        ) : (
-          <>
-            <Button
-              primary
-              label="Submit my preferences"
-              onClick={submitPreferences}
-              disabled={isSubmitting}
-            />
-            {errorMessage !== '' && (
-              <Alert severity="error">
-                <AlertTitle>{errorMessage}</AlertTitle>
-              </Alert>
-            )}
-          </>
-        )}
       </Box>
     </>
   );
