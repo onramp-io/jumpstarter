@@ -7,17 +7,17 @@ const CreateProject: NextPage = () => {
     title: "",
     category: "",
     description: "",
-    end_date: new Date().toString(),
-    fund_goal: 0,
-    fund_tiers: [0, 0, 0, 0],
-    pictures: []
+    launchDate: new Date(),
+    fundTiers: [0, 0, 0, 0],
+    pictures: [],
+    currFundGoal: 0,
   }
 
   return (
     <>
       <Box>
         <Heading alignSelf="center" margin={{top: "xlarge"}}>Create a new project</Heading>
-        <ProjectForm projectFormState={projectFormDetails}/>
+        <ProjectForm projectFormState={projectFormDetails} createOrEdit="create"/>
       </Box>
     </>
   );

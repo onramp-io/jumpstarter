@@ -2,10 +2,8 @@ import type { NextPage } from "next";
 import {
   Box,
   CheckBox,
-  CheckBoxGroup,
   Heading,
   InfiniteScroll,
-  NameValueList,
   Select,
   Sidebar,
   Text,
@@ -13,23 +11,53 @@ import {
 import React, { useState, useEffect } from "react";
 import LargeProjectCard from "@frontend/components/largeprojectcard";
 import axios from "axios";
-import { useAuth } from "@frontend/context/AuthProvider";
+import { NotFoundError } from "helpers/ErrorHandling/errors";
+import { notFoundError } from "helpers/ErrorHandling/messaging";
 
-const Discover: NextPage = () => {
-  const categoryState = {
-    Film: true,
-    Tech: true,
-    Literature: true,
-    Games: true,
-    Music: true,
-    Food: true,
+const Discover: NextPage = ({ discoverCategories, discoverProjects }) => {
+  const testState = {
+    TECH: true,
   };
+  const [categories, setCategories] = useState({});
+  console.log(categories);
+  const [categoryArray, setCategoryArray] = useState([]);
+  const [projectData, setProjectData] = useState([]);
 
-  const [categories, setCategories] = useState(categoryState);
+  useEffect(() => {
+    // console.log(JSON.stringify(discoverProjects));
+    const getCategories = async () => {
+      try {
+        const categoryList = discoverCategories.map((categoryObj) => {
+          return categoryObj.category;
+        });
+
+        const categoryState = {};
+        setCategoryArray(categoryList);
+
+        for (const category of categoryList) {
+          categoryState[category] = true;
+          // setCategories({ ...categories, category: true });
+        }
+
+        setCategories(categoryState);
+      } catch (error) {
+        throw new NotFoundError(notFoundError);
+      }
+    };
+
+    const getProjects = async () => {
+      try {
+        setProjectData(discoverProjects);
+      } catch (error) {
+        throw new NotFoundError(notFoundError);
+      }
+    };
+
+    getProjects();
+    getCategories();
+  }, []);
 
   const onChangeHandler = (category) => {
-    console.log(category);
-
     const checked = categories[category];
     const copyOfCategories = { ...categories };
 
@@ -38,96 +66,9 @@ const Discover: NextPage = () => {
     setCategories(copyOfCategories);
   };
 
-  const categoryList = ["Film", "Tech", "Literature", "Games", "Music", "Food"];
-
-  const projectData = [
-    {
-      id: 1,
-      user_name: "User 1",
-      title: "New Film",
-      category: "Film",
-      description:
-        "This is a new film description. It will be really good and fun to watch.",
-      fund_goal: 10000,
-      fund_raised: 1000,
-      end_date: new Date(),
-    },
-    {
-      id: 17,
-      user_name: "User 2",
-      title: "Smart Watch",
-      category: "Tech",
-      description:
-        "This is a new smart watch description. It is very useful and high tech.",
-      fund_goal: 20000,
-      fund_raised: 15000,
-      end_date: new Date(),
-    },
-    {
-      id: 2,
-      user_name: "User 3",
-      title: "New Book",
-      category: "Literature",
-      description:
-        "This is a new book description. It will have many pages and tell a fun story. Some other third line of text.",
-      fund_goal: 5000,
-      fund_raised: 1300,
-      end_date: new Date(),
-    },
-    {
-      id: 3,
-      user_name: "User 4",
-      title: "New Game",
-      category: "Games",
-      description:
-        "This is a new game description. It will be really fun and have lots of mechanics.",
-      fund_goal: 30000,
-      fund_raised: 12000,
-      end_date: new Date(),
-    },
-    {
-      id: 4,
-      user_name: "User 5",
-      title: "New Album",
-      category: "Music",
-      description:
-        "This is a new album description. It is made by New Singer and their new band.",
-      fund_goal: 10000,
-      fund_raised: 3000,
-      end_date: new Date(),
-    },
-    {
-      id: 5,
-      user_name: "User 6",
-      title: "New Snack",
-      category: "Food",
-      description:
-        "This is a new snack description. It will be sold in grocery stores and be very delicious.",
-      fund_goal: 10000,
-      fund_raised: 5000,
-      end_date: new Date(),
-    },
-  ];
-
-  const { accessToken } = useAuth();
-
-  const calculateTrendScore = async () => {
-    try {
-      var url = "/api/projects/trend";
-      await axios.put(url, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-    }
+  const filterProjects = (discoverProjects) => {
+    return discoverProjects.filter((project) => categories[project.category]);
   };
-
-  useEffect(() => {
-    calculateTrendScore();
-  }, []);
 
   return (
     <>
@@ -152,7 +93,7 @@ const Discover: NextPage = () => {
           <Text weight="bold" margin={{ top: "large", bottom: "medium" }}>
             Categories
           </Text>
-          {categoryList.map((category, index) => {
+          {categoryArray.map((category, index) => {
             return (
               <CheckBox
                 key={index}
@@ -172,22 +113,46 @@ const Discover: NextPage = () => {
           width="100vw"
         >
           <InfiniteScroll
-            items={projectData.filter(
-              (project) => categories[project.category]
-            )}
+            items={filterProjects(discoverProjects)}
             step={3}
-            onMore={() => {
-              console.log();
-            }}
+            onMore={() => {}}
           >
             {(item, index) => (
               <LargeProjectCard key={index} projectData={item} />
             )}
           </InfiniteScroll>
+          {/**
+           *
+           */}
+          {/**
+           *
+           */}
         </Box>
       </Box>
     </>
   );
 };
+
+export async function getServerSideProps(context) {
+  const categoriesResponse = await axios.get(
+    "http://localhost:3000/api/categories"
+  );
+  const discoverCategories = categoriesResponse.data.categoriesList;
+
+  const projectsResponse = await axios.get(
+    "http://localhost:3000/api/projects"
+  );
+
+  const discoverProjects = projectsResponse.data.data;
+
+  // const discoverCreatorName = await axios.get(`http://localhost:3000/api/project/${id}`);
+
+  return {
+    props: {
+      discoverCategories,
+      discoverProjects,
+    }, // will be passed to the page component as props
+  };
+}
 
 export default Discover;

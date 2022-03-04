@@ -544,3 +544,12 @@ main {
   font-family: InterR;
   color: var(--BRANDLIGHT);
 }
+
+/** 
+FIX STYLING ON SECTION MARQUEE
+*/
+
+.sectionMarquee_container {
+  width: 90vw;
+  flex-wrap: wrap;
+}
