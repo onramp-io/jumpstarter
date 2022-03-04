@@ -112,8 +112,7 @@ export const UserController = {
 
   getRecommendation: async (req: Request) => {
     const {
-      // user: { uid },
-      body: { uid },
+      user: { uid },
     } = req;
     const userData = userService.getUserRecommendation(uid);
     return userData;

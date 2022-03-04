@@ -1,9 +1,9 @@
-import { NextPageContext } from "next";
-import axios from "axios";
-import { Box, Heading, Image, Meter, Text } from "grommet";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import urls from "helpers/urls";
+import { NextPageContext } from 'next';
+import axios from 'axios';
+import { Box, Heading, Image, Meter, Text } from 'grommet';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import urls from 'helpers/urls';
 
 interface ProjectInfoProps {
   projectId: number;
@@ -24,7 +24,7 @@ export const ProjectInfo = function ProjectInfoComponent<sectionCardProps>({
         className="card"
         align="left"
         margin={{
-          top: "small",
+          top: 'small',
         }}
       >
         <Heading level={3}>{projectTitle}</Heading>
@@ -33,8 +33,8 @@ export const ProjectInfo = function ProjectInfoComponent<sectionCardProps>({
         className="card"
         align="left"
         margin={{
-          top: "small",
-          bottom: "small",
+          top: 'small',
+          bottom: 'small',
         }}
       >
         <Text>{projectDescription}</Text>
@@ -75,7 +75,7 @@ export const CreatorText = function CreatorTextComponent<sectionCardProps>({
         className="card"
         align="left"
         margin={{
-          top: "small",
+          top: 'small',
         }}
       >
         <Text color="dark-6">
@@ -125,19 +125,23 @@ const SectionCard = function sectionCardsComponent({
     <Box
       className="card"
       margin={{
-        top: "xsmall",
-        left: "xsmall",
+        top: 'xsmall',
+        left: 'xsmall',
       }}
       align="center"
       pad="medium"
       width="medium"
       height="min(10rem, min-content)"
       elevation="medium"
-      style={{ cursor: "pointer" }}
+      style={{ cursor: 'pointer' }}
       onClick={(event) => goToProject(event)}
     >
       <Box width="large" height="small">
-        <Image className="section-card_img" fit="cover" src={projectImageUrl} />
+        <Image
+          className="section-card_img"
+          fit="cover"
+          src={process.env.AWS_BUCKET_URL + projectImageUrl}
+        />
       </Box>
       <Meter type="bar" value={percentageFunded} />
       <ProjectInfo

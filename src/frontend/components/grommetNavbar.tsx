@@ -29,7 +29,7 @@ import axiosInstance from '../../axios/instance';
 import axios from 'axios';
 
 export const NavBar = () => {
-  const { firstName, avatar } = useAuth();
+  const { firstName, avatar, setUser } = useAuth();
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const router = useRouter();
@@ -38,8 +38,14 @@ export const NavBar = () => {
     try {
       signOut(auth)
         .then(() => {
+          setUser({
+            isLoading: true,
+          });
           setIsAuthenticated(false);
           delete axiosInstance.defaults.headers.common['Authorization'];
+          setUser({
+            isLoading: false,
+          });
           router.push('/');
         })
         .catch((error) => {

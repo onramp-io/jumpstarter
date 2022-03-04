@@ -17,8 +17,9 @@ interface Request extends NextApiRequest {
 const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
-      case 'PUT':
+      case 'GET':
         const data = await UserController.getRecommendation(req);
+        console.log(data);
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
@@ -40,5 +41,4 @@ const handler = async (req: Request, res: NextApiResponse) => {
   }
 };
 
-// export default verifyRequest(handler);
-export default handler;
+export default verifyRequest(handler);

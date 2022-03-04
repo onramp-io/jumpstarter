@@ -1,10 +1,10 @@
-import { NextPageContext } from "next";
-import axios from "axios";
-import SectionCard from "./sectionCard";
-import styled from "styled-components";
-import { Anchor, Box, Pagination } from "grommet";
-import Link from "next/link";
-import JumpstarterLink from "./jumpstarterLink";
+import { NextPageContext } from 'next';
+import axios from 'axios';
+import SectionCard from './sectionCard';
+import styled from 'styled-components';
+import { Anchor, Box, Pagination } from 'grommet';
+import Link from 'next/link';
+import JumpstarterLink from './jumpstarterLink';
 
 interface SingleAPIPayload {
   projectId: number;
@@ -29,7 +29,7 @@ const SectionMarquee = function SectionMarqueeComponent({
    * first 4 JSON payload from our API
    */
   const handlePageChange = () => {
-    console.log("Changed page numbers!");
+    console.log('Changed page numbers!');
   };
 
   let numberOfPages = 40;
@@ -41,17 +41,17 @@ const SectionMarquee = function SectionMarqueeComponent({
           align="end"
           gap="small"
           margin={{
-            bottom: "small",
-            right: "large",
+            bottom: 'small',
+            right: 'large',
           }}
         >
-          <Pagination onChange={handlePageChange} numberItems={numberOfPages} />
+          {/* <Pagination onChange={handlePageChange} numberItems={numberOfPages} /> */}
         </Box>
         <Box
           className="sectionMarquee_container"
           margin={{
-            left: "large",
-            right: "large",
+            left: 'large',
+            right: 'large',
           }}
           gap="medium"
           direction="row"
@@ -84,8 +84,8 @@ const SectionMarquee = function SectionMarqueeComponent({
           direction="row"
           justify="end"
           margin={{
-            top: "medium",
-            right: "large",
+            top: 'medium',
+            right: 'large',
           }}
         >
           <JumpstarterLink

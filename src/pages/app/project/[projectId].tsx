@@ -7,9 +7,11 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '@frontend/context/AuthProvider';
 import urls from 'helpers/urls';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Project: NextPage = () => {
   interface ProjectDetails {
+    userId: number;
     id: number;
     title: string;
     description: string;
@@ -24,9 +26,11 @@ const Project: NextPage = () => {
 
   const [comment, setComment] = useState('');
   const [commentList, setCommentList] = useState([]);
+  const [IsCommenting, setIsCommenting] = useState(false);
+  const [finishRendering, setFinishRendering] = useState(false);
   const [currentUser, setCurrentUser] = useState(0);
-  const [projectOwner, setProjectOwner] = useState(0);
   const [projectDetails, setProjectDetails] = useState<ProjectDetails>({
+    userId: 0,
     id: 64,
     title: '',
     description: '',
@@ -39,17 +43,15 @@ const Project: NextPage = () => {
     remaining: '',
   });
   const router = useRouter();
-  const { accessToken, firstName } = useAuth();
+  const { accessToken, firstName, userId } = useAuth();
 
   const getComments = async (projectId) => {
     try {
-      const commentData = await axios.get(urls.comments + projectId, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      setFinishRendering(true);
+      const commentData = await axios.get(urls.comments + projectId);
+      console.log(commentData.data);
       setCommentList(commentData.data.response);
+      setFinishRendering(false);
     } catch (error) {
       console.log(error);
     }
@@ -57,6 +59,7 @@ const Project: NextPage = () => {
 
   const submitComment = async (event: MouseEvent) => {
     try {
+      setIsCommenting(true);
       const body = {
         userId: currentUser,
         projectId: router.query.projectId,
@@ -69,6 +72,8 @@ const Project: NextPage = () => {
         },
       });
       getComments(router.query.projectId);
+      setComment('');
+      setIsCommenting(false);
     } catch (error) {
       console.log(error);
     }
@@ -82,77 +87,62 @@ const Project: NextPage = () => {
     }
   };
 
+  // HERE
   const getProject = async (projectId) => {
     const project = await axios.get(urls.projects + router.query.projectId);
-    const lastGoal = project.data.data.fundTiers[project.data.data.fundTiers.length - 1];
-    let remainingGoal = "";
+    const lastGoal =
+      project.data.data.fundTiers[project.data.data.fundTiers.length - 1];
+    let remainingGoal = '';
     if (project.data.data.fundRaised > lastGoal) {
-      remainingGoal = "All goals Reached!"
+      remainingGoal = 'All goals Reached!';
     } else {
-      remainingGoal = `$${(lastGoal-project.data.data.fundRaised).toLocaleString()}`
+      remainingGoal = `$${(
+        lastGoal - project.data.data.fundRaised
+      ).toLocaleString()}`;
     }
-
-      setProjectOwner(project.data.data.userId);
-
-      const data = {
-        id: project.data.data.id,
-        title: project.data.data.title,
-        description: project.data.data.description,
-        fund_goal: project.data.data.fundTiers[project.data.data.currFundGoal],
-        fund_raised: project.data.data.fundRaised,
-        end_date: new Date(),
-        pictures: ['//v2.grommet.io/assets/Wilderpeople_Ricky.jpg'],
-        investors: project.data.data.investors,
-        likesAmt: project.data.data.likesAmt,
-        remaining: remainingGoal,
-      };
-      setProjectDetails(data);
-  };
-
-  const getCurrentUser = async () => {
-    try {
-      const user = await axios.get(urls.getUserApi, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      setCurrentUser(user.data.userData['id']);
-    } catch (error) {
-      console.log(error);
-    }
+    console.log(project.data.data);
+    const data = {
+      userId: project.data.data.userId,
+      id: project.data.data.id,
+      title: project.data.data.title,
+      description: project.data.data.description,
+      fund_goal: project.data.data.fundTiers[project.data.data.currFundGoal],
+      fund_raised: project.data.data.fundRaised,
+      end_date: new Date(),
+      pictures: project.data.data.pictures,
+      investors: project.data.data.investors,
+      likesAmt: project.data.data.likesAmt,
+      remaining: remainingGoal,
+    };
+    setProjectDetails(data);
   };
 
   const goToEdit = async () => {
     router.push(urls.edit + router.query.projectId);
   };
 
+  const getCurrentUser = async () => {
+    console.log('Line 113 userId', userId);
+    setCurrentUser(userId);
+  };
+
   useEffect(() => {
     //make sure url is populated before pulling query params
-    if (!router.isReady && !firstName) return;
+    if (!router.isReady) return;
 
     getProject(router.query.projectId);
     addView();
     getComments(router.query.projectId);
 
-    if (!firstName) return;
-    getCurrentUser();
+    if (firstName) {
+      getCurrentUser();
+    }
   }, [router.isReady, firstName]);
 
   return (
     <>
       <SingleProjectInfo projectDetails={projectDetails} />
-      {currentUser == projectOwner && (
-        <Box margin={{ horizontal: '25rem' }} height="small">
-          <Button
-            primary
-            label="Edit Project"
-            alignSelf="end"
-            margin={{ top: '1.5rem' }}
-            onClick={() => goToEdit()}
-          />
-        </Box>
-      )}
+
       <Heading
         textAlign="center"
         fill={true}
@@ -169,14 +159,23 @@ const Project: NextPage = () => {
             fill={true}
             size="medium"
             onChange={(event) => setComment(event.target.value)}
+            value={comment}
           />
-          <Button
-            primary
-            label="Post comment"
-            alignSelf="end"
-            margin={{ top: '1.5rem' }}
-            onClick={(event) => submitComment(event)}
-          />
+          {!IsCommenting && !finishRendering ? (
+            <>
+              <Button
+                primary
+                label="Post comment"
+                alignSelf="end"
+                margin={{ top: '1.5rem' }}
+                onClick={(event) => submitComment(event)}
+              />
+            </>
+          ) : (
+            <>
+              <CircularProgress />
+            </>
+          )}
         </Box>
       )}
       {commentList.map((comment, index) => {

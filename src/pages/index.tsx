@@ -19,24 +19,61 @@ import { getIdToken, onAuthStateChanged } from 'firebase/auth';
 import { auth } from 'firebase/client/client';
 import axiosInstance from '../axios/instance';
 import { useRouter } from 'next/router';
+import { CircularProgress } from '@mui/material';
 
 interface indexProps {}
 
 const Index: NextPage = function indexComponent<indexProps>({
   trendingProjects,
-  recommendedProjects,
 }) {
   const { firstName, accessToken } = useAuth();
+  const [recommendedProjects, setrecommendedProjects] = useState([]);
+  const [isLoading, setIsloading] = useState(false);
+
   const router = useRouter();
 
   const landingImageUrl = `https://picsum.photos/${Math.floor(
     Math.random() * 1000
   )}`;
 
+  useEffect(() => {
+    if (accessToken) {
+      setIsloading(true);
+      const getUserRecommendations = async () => {
+        try {
+          const res = await axiosInstance.get(
+            'http://localhost:3000/api/users/recommend'
+          );
+          console.log(res.data.data);
+          res.data.data.forEach((element) => {
+            recommendedProjects.push({
+              projectId: element.id,
+              projectTitle: element.title,
+              projectDescription: element.description,
+              projectCreator: `${element.firstName} ${element.lastName}`,
+              projectImageUrl: `https://picsum.photos/${Math.floor(
+                Math.random() * 1000
+              )}`,
+            });
+          });
+          setIsloading(false);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getUserRecommendations();
+    }
+  }, []);
+
   return (
     <>
       <LandingComponent landingImageUrl={landingImageUrl} />
-      {firstName && (
+      {isLoading && (
+        <>
+          <CircularProgress />
+        </>
+      )}
+      {accessToken && firstName && (
         <>
           <Box align="center" direction="column" margin="large">
             <Section
@@ -80,14 +117,6 @@ export async function getServerSideProps(context) {
 
   try {
     const result = await axios.get('http://localhost:3000' + urls.trending);
-    const body = {
-      uid: '7Y1RadEe6XSfxdzexFWTsP8xtY33',
-    };
-    const res = await axios.put(
-      'http://localhost:3000/api/users/recommend',
-      body
-    );
-
     result.data.data.forEach((element) => {
       trendingProjects.push({
         projectId: element.id,
@@ -99,17 +128,7 @@ export async function getServerSideProps(context) {
         )}`,
       });
     });
-    res.data.data.forEach((element) => {
-      recommendedProjects.push({
-        projectId: element.id,
-        projectTitle: element.title,
-        projectDescription: element.description,
-        projectCreator: `${element.firstName} ${element.lastName}`,
-        projectImageUrl: `https://picsum.photos/${Math.floor(
-          Math.random() * 1000
-        )}`,
-      });
-    });
+    console.log(trendingProjects);
   } catch (error) {
     console.log(`error === ${error}`);
   }

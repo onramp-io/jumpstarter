@@ -73,12 +73,19 @@ const ProjectService = {
       if (!db) throw new DatabaseError(dbError);
       const userData = await db
         .createQueryBuilder()
-        .select('*')
+        .select('project.id', 'projectId')
+        .addSelect('project.title', 'projectTitle')
+        .addSelect('project.description', 'projectDescription')
+        .addSelect('project.pictures', 'projectImageUrl')
+        .addSelect('user.firstName', 'firstName')
+        .addSelect('user.lastName', 'lastName')
         .from('project', 'project')
+        .innerJoin('user', 'user', 'project.userId = user.id')
         .where(
           `project.user = (SELECT id FROM public.user WHERE uid = '${uid}')`
         )
         .getRawMany();
+      console.log(userData);
       if (!userData) throw new NotFoundError(notFoundError);
       return userData;
     } catch (err) {
@@ -89,6 +96,7 @@ const ProjectService = {
   /**
    * READ: 'GET' request for **ALL** Records
    */
+
   findAll: async () => {
     try {
       const db = await connection();
@@ -98,9 +106,19 @@ const ProjectService = {
       }
       const allProjectRows: any = await db
         .createQueryBuilder()
-        .select('*')
+        .select('project.id', 'id')
+        .addSelect('project.title', 'title')
+        .addSelect('project.description', 'description')
+        .addSelect('project.category', 'category')
+        .addSelect('project.fundTiers', 'fundTiers')
+        .addSelect('project.fundRaised', 'fundRaised')
+        .addSelect('project.launchDate', 'launchDate')
+        .addSelect('project.createdDate', 'createdDate')
+        .addSelect('project.pictures', 'pictures')
+        .addSelect('user.firstName', 'firstName')
+        .addSelect('user.lastName', 'lastName')
         .from('project', 'project')
-        .innerJoin(User, 'user', 'project.userId = user.id')
+        .innerJoin('user', 'user', 'project.userId = user.id')
         .getRawMany();
 
       if (allProjectRows === undefined || allProjectRows === null) {
@@ -116,21 +134,23 @@ const ProjectService = {
   /**
    * READ: 'GET' request for **ONE Record by ID**
    */
-  findById: async (findByIdParams) => {
+  findById: async (id) => {
     try {
       const db = await connection();
 
       if (db === undefined || db === null) {
         throw new DatabaseError(dbError);
       }
-
+      console.log(chalk.green(getConnection().isConnected));
+      console.log(chalk.green('================='));
+      console.log(chalk.green('@line 128: ', id));
       const foundProject = await db
         .createQueryBuilder()
         .select('*')
         .from('project', 'project')
-        .where(`project.id = ${findByIdParams.id}`)
+        .where(`project.id = :id`, { id })
         .getRawOne();
-
+      console.log('================', foundProject);
       if (
         foundProject === null ||
         foundProject === undefined ||
@@ -140,6 +160,7 @@ const ProjectService = {
       }
       return [foundProject, StatusCodes.OK];
     } catch (err) {
+      console.log(chalk.red('================= @Line 144: '), err);
       throw err;
     }
   },
@@ -324,12 +345,17 @@ const getSortedProjects = async (column) => {
 
   const projectData = await db
     .createQueryBuilder()
-    .select('*')
+    .select('project.id', 'id')
+    .addSelect('project.title', 'title')
+    .addSelect('project.description', 'description')
+    .addSelect('project.category', 'category')
+    .addSelect('user.firstName', 'firstName')
+    .addSelect('user.lastName', 'lastName')
     .from('project', 'project')
     .innerJoin(User, 'user', 'project.userId = user.id')
     .orderBy(`project.${column}`, 'DESC')
     .getRawMany();
-
+  //console.log(projectData);
   return projectData.slice(0, 4);
 };
 

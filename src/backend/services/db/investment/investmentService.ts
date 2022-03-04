@@ -17,6 +17,7 @@ const InvestmentsDbService = {
       .addSelect('project.id', 'projectId')
       .addSelect('project.title', 'projectTitle')
       .addSelect('project.description', 'projectDescription')
+      .addSelect('project.pictures', 'projectImageUrl')
       .from(Investment, 'investment')
       .innerJoin(Project, 'project', 'investment.projectId = project.id')
       .innerJoin(User, 'user', 'investment.userId = user.id')

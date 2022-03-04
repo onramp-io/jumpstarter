@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/link-passhref */
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, Heading, Button, Text, Tab, Tabs, Avatar } from 'grommet';
 
@@ -22,13 +22,17 @@ function MyProfile() {
     avatar,
     totalInvestments,
     balance,
-    investments,
-    userProjects,
+    setUser,
+    accessToken,
+    isUserLoading,
   } = useAuth();
 
   const [error, setError] = useState('');
+  const [investments, setInvestments] = useState([]);
+  const [userProjects, setUserProjects] = useState([]);
   const [isMoneyTransfering, setMoneyTransferring] = useState(false);
   const [isMoneyTransferred, setMoneyTransferred] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePayOut = async () => {
     try {
@@ -42,106 +46,156 @@ function MyProfile() {
     }
   };
 
+  useEffect(() => {
+    if (!firstName) return;
+    if (firstName) {
+      setIsLoading(true);
+      const getUserInvestments = async () => {
+        try {
+          const response = await axios.get('/investments/get');
+          setInvestments(response.data.userInvestments);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      const getUserProjects = async () => {
+        const response = await axios.get('/users/projects/getAll');
+        response.data.userProjects.forEach((element) => {
+          userProjects.push({
+            projectId: element.projectId,
+            projectTitle: element.projectTitle,
+            projectDescription: element.projectDescription,
+            projectCreator: `${element.firstName} ${element.lastName}`,
+            projectImageUrl: `https://picsum.photos/${Math.floor(
+              Math.random() * 1000
+            )}`,
+          });
+        });
+
+        setUserProjects(response.data.userProjects);
+      };
+      getUserInvestments();
+      getUserProjects();
+      setIsLoading(false);
+    }
+  }, [firstName]);
+
   return (
     <>
-      <Box className={profile.wrapper}>
-        <Box className={profile.userData}>
-          {avatar ? (
-            <>
-              <Avatar src={process.env.AWS_BUCKET_URL + avatar} size="3xl" />
-            </>
-          ) : (
-            <>
-              <Avatar
-                src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80"
-                size="3xl"
-              />
-            </>
-          )}
-          <Heading className={profile.heading}>
-            {firstName} {lastName}
-          </Heading>
-          <Text>{bio}</Text>
-          <Link href="/app/profile/edit">
-            <Button label="Edit" className={profile.editButton} />
-          </Link>
-          <Box className={profile.withdrawFunds}>
-            <Text>My balance: ${balance}</Text>
-            {isMoneyTransfering ? (
-              <CircularProgress />
+      {!isUserLoading ? (
+        <Box className={profile.wrapper}>
+          <Box className={profile.userData}>
+            {avatar ? (
+              <>
+                <Avatar src={process.env.AWS_BUCKET_URL + avatar} size="3xl" />
+              </>
             ) : (
               <>
-                {balance <= 0 ? (
-                  <>
-                    <Button
-                      label="Withdraw"
-                      className={profile.editButton}
-                      disabled
-                    />
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      label="Withdraw"
-                      className={profile.editButton}
-                      onClick={handlePayOut}
-                      disabled={isMoneyTransferred}
-                    />
-                  </>
-                )}
+                <Avatar
+                  src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80"
+                  size="3xl"
+                />
               </>
             )}
+            <Heading className={profile.heading}>
+              {firstName} {lastName}
+            </Heading>
+            <Text>{bio}</Text>
+            <Link href="/app/profile/edit">
+              <Button label="Edit" className={profile.editButton} />
+            </Link>
+            <Box className={profile.withdrawFunds}>
+              <Text>My balance: ${balance}</Text>
+              {isMoneyTransfering ? (
+                <CircularProgress />
+              ) : (
+                <>
+                  {balance <= 0 ? (
+                    <>
+                      <Button
+                        label="Withdraw"
+                        className={profile.editButton}
+                        disabled
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        label="Withdraw"
+                        className={profile.editButton}
+                        onClick={handlePayOut}
+                        disabled={isMoneyTransferred}
+                      />
+                    </>
+                  )}
+                </>
+              )}
+            </Box>
+          </Box>
+          {isMoneyTransferred && (
+            <Alert severity="success">
+              Your balance has been successfully transferred.
+            </Alert>
+          )}
+          <Box className={profile.profileData}>
+            <Tabs>
+              <Tab title="My Projects">
+                <Box pad="medium">
+                  <Box align="center" direction="row" margin="small">
+                    {isLoading && (
+                      <>
+                        <CircularProgress />
+                      </>
+                    )}
+                    {userProjects.length > 0 ? (
+                      <>
+                        <SectionMarquee
+                          APIPayload={userProjects}
+                          linkHref="/personalpicks"
+                          linkCaption="See all recommended projects >"
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <Text>You have not launched a project yet.</Text>
+                      </>
+                    )}
+                  </Box>
+                </Box>
+              </Tab>
+              <Tab title="My Contribution">
+                <Box pad="medium">
+                  <Text>Total Investment: ${totalInvestments}</Text>
+                  <Box align="center" direction="row" margin="small">
+                    {isLoading && (
+                      <>
+                        <CircularProgress />
+                      </>
+                    )}
+                    {investments.length > 0 ? (
+                      <>
+                        <SectionMarquee
+                          APIPayload={investments}
+                          linkHref="/personalpicks"
+                          linkCaption="See all recommended projects >"
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <Text>You have not made any contributions yet.</Text>
+                      </>
+                    )}
+                  </Box>
+                </Box>
+              </Tab>
+            </Tabs>
           </Box>
         </Box>
-        {isMoneyTransferred && (
-          <Alert severity="success">
-            Your balance has been successfully transferred.
-          </Alert>
-        )}
-        <Box className={profile.profileData}>
-          <Tabs>
-            <Tab title="My Projects">
-              <Box pad="medium">
-                <Box align="center" direction="row" margin="small">
-                  {userProjects.length > 0 ? (
-                    <>
-                      <SectionMarquee
-                        APIPayload={userProjects}
-                        linkHref="/personalpicks"
-                        linkCaption="See all recommended projects >"
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <Text>You have not launched a project yet.</Text>
-                    </>
-                  )}
-                </Box>
-              </Box>
-            </Tab>
-            <Tab title="My Contribution">
-              <Box pad="medium">
-                <Text>Total Investment: ${totalInvestments}</Text>
-                <Box align="center" direction="row" margin="small">
-                  {investments.length > 0 ? (
-                    <>
-                      <SectionMarquee
-                        APIPayload={investments}
-                        linkHref="/personalpicks"
-                        linkCaption="See all recommended projects >"
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <Text>You have not made any contributions yet.</Text>
-                    </>
-                  )}
-                </Box>
-              </Box>
-            </Tab>
-          </Tabs>
-        </Box>
-      </Box>
+      ) : (
+        <>
+          <CircularProgress />
+        </>
+      )}
     </>
   );
 }

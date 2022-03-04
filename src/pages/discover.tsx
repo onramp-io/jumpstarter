@@ -85,7 +85,11 @@ const Discover: NextPage = () => {
   };
 
   if (!categoryLoaded || !projectLoaded) {
-    <Text>Loading...</Text>;
+    return (
+      <>
+        <CircularProgress />
+      </>
+    );
   }
 
   return (
@@ -130,6 +134,7 @@ const Discover: NextPage = () => {
           margin={{ left: '1rem' }}
           width="100vw"
         >
+          {console.log('@discover page on 137: ', projectData)}
           {projectData.map((project, index) => {
             return <LargeProjectCard key={index} projectData={project} />;
           })}
