@@ -110,7 +110,7 @@ const Discover: NextPage = ({ discoverCategories, discoverProjects }) => {
           gap="small"
           wrap={true}
           margin={{ left: "1rem" }}
-          width="100vw"
+          width="70vw"
         >
           <InfiniteScroll
             items={filterProjects(discoverProjects)}
