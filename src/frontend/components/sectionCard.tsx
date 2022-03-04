@@ -2,8 +2,10 @@ import { NextPageContext } from "next";
 import axios from "axios";
 import { Box, Heading, Image, Meter, Text } from "grommet";
 import { useState, useEffect } from "react";
-import { useRouter } from 'next/router';
-import urls from 'helpers/urls';
+import { useRouter } from "next/router";
+import urls from "helpers/urls";
+import { motion } from "framer-motion";
+import Animations from "utils/animations/motionObjects";
 
 interface ProjectInfoProps {
   projectId: number;
@@ -18,7 +20,6 @@ export const ProjectInfo = function ProjectInfoComponent<sectionCardProps>({
   projectDescription,
   projectCreator,
 }) {
-
   return (
     <Box className="card">
       <Box
@@ -110,7 +111,7 @@ const SectionCard = function sectionCardsComponent({
 
   const goToProject = async (event: MouseEvent) => {
     router.push(urls.projectRedirect + projectId);
-  }
+  };
 
   useEffect(() => {
     const timerId = setTimeout(() => {
@@ -123,31 +124,37 @@ const SectionCard = function sectionCardsComponent({
   }, [percentageFunded]);
 
   return (
-    <Box
-      className="card"
-      margin={{
-        top: "xsmall",
-        left: "xsmall",
-      }}
-      align="center"
-      pad="medium"
-      width="medium"
-      height="min-content"
-      elevation="medium"
-      style={{cursor: "pointer"}}
-      onClick={(event) => goToProject(event)}
-    >
-      <Box width="large" height="small">
-        <Image className="section-card_img" fit="cover" src={projectImageUrl} />
+    <motion.div whileHover={Animations.scaleOnHover}>
+      <Box
+        className="card"
+        margin={{
+          top: "xsmall",
+          left: "xsmall",
+        }}
+        align="center"
+        pad="medium"
+        width="medium"
+        height="min-content"
+        elevation="medium"
+        style={{ cursor: "pointer" }}
+        onClick={(event) => goToProject(event)}
+      >
+        <Box width="large" height="small">
+          <Image
+            className="section-card_img"
+            fit="cover"
+            src={projectImageUrl}
+          />
+        </Box>
+        <Meter type="bar" value={percentageFunded} />
+        <ProjectInfo
+          projectId={projectId}
+          projectTitle={projectTitle}
+          projectDescription={projectDescription}
+          projectCreator={projectCreator}
+        />
       </Box>
-      <Meter type="bar" value={percentageFunded} />
-      <ProjectInfo
-        projectId={projectId}
-        projectTitle={projectTitle}
-        projectDescription={projectDescription}
-        projectCreator={projectCreator}
-      />
-    </Box>
+    </motion.div>
   );
 };
 
