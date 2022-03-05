@@ -14,6 +14,7 @@ import axios from 'axios';
 import { NotFoundError } from 'helpers/ErrorHandling/errors';
 import { notFoundError } from 'helpers/ErrorHandling/messaging';
 import { CircularProgress } from '@mui/material';
+import urls from 'helpers/urls';
 
 const Discover: NextPage = () => {
   const testState = {
@@ -24,13 +25,12 @@ const Discover: NextPage = () => {
   const [projectData, setProjectData] = useState([]);
   const [categoryLoaded, setCategoryLoaded] = useState(false);
   const [projectLoaded, setProjectLoaded] = useState(false);
+  const [value, setValue] = React.useState('newest');
 
   useEffect(() => {
     const getCategories = async () => {
       try {
-        const categoriesResponse = await axios.get(
-          'http://localhost:3000/api/categories'
-        );
+        const categoriesResponse = await axios.get(urls.categories);
         const discoverCategories = categoriesResponse.data.categoriesList;
 
         const categoryList = discoverCategories.map((categoryObj) => {
@@ -51,25 +51,9 @@ const Discover: NextPage = () => {
       }
     };
 
-    const getProjects = async () => {
-      try {
-        const projectsResponse = await axios.get('/api/projects');
-        console.log(projectsResponse.data.data);
-
-        const discoverProjects = projectsResponse.data.data;
-        //setProjectData(discoverProjects);
-
-        setProjectData(discoverProjects);
-        setProjectLoaded(true);
-      } catch (error) {
-        console.log(error);
-        // throw new NotFoundError(notFoundError);
-      }
-    };
-
-    getProjects();
+    sortProjects(value);
     getCategories();
-  }, []);
+  }, [value]);
 
   const onChangeHandler = (category) => {
     const checked = categories[category];
@@ -78,6 +62,33 @@ const Discover: NextPage = () => {
     copyOfCategories[category] = !checked;
 
     setCategories(copyOfCategories);
+  };
+
+  const sortProjects = async (option) => {
+    setProjectData([]);
+    if (option == 'newest') {
+      try {
+        const projectsResponse = await axios.get(urls.newest);
+        const discoverProjects = projectsResponse.data.data;
+
+        setProjectData(discoverProjects);
+        setProjectLoaded(true);
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (option == 'trending') {
+      try {
+        const projectsResponse = await axios.get(urls.trending);
+
+        const discoverProjects = projectsResponse.data.data;
+
+        setProjectData(discoverProjects);
+        setProjectLoaded(true);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    setValue(option);
   };
 
   const filterProjects = (discoverProjects) => {
@@ -102,10 +113,12 @@ const Discover: NextPage = () => {
         <Text alignSelf="end">
           Sort by
           <Select
-            options={['Newest', 'Trending']}
+            options={['newest', 'trending']}
             alignSelf="end"
             margin={{ left: 'small', right: '11rem', bottom: 'small' }}
-            defaultValue={'Newest'}
+            defaultValue={'newest'}
+            value={value}
+            onChange={({ option }) => setValue(option)}
           />
         </Text>
       </Box>
@@ -134,7 +147,6 @@ const Discover: NextPage = () => {
           margin={{ left: '1rem' }}
           width="100vw"
         >
-          {console.log('@discover page on 137: ', projectData)}
           {projectData.map((project, index) => {
             return <LargeProjectCard key={index} projectData={project} />;
           })}
