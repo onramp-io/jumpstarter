@@ -17,6 +17,7 @@ import axios from "axios";
 import { useAuth } from "@frontend/context/AuthProvider";
 import { deleteUser, getAuth } from "firebase/auth";
 import { Alert, AlertTitle, CircularProgress } from "@mui/material";
+import urls from 'helpers/urls';
 
 const EditProfile: NextPage = () => {
   const [fName, setFName] = useState("");
@@ -40,7 +41,7 @@ const EditProfile: NextPage = () => {
       };
       if (avatarImg) {
         // 1. Get the AWS S3 signed url
-        const uploadConfig = await axios.get("/api/upload", headers);
+        const uploadConfig = await axios.get(urls.upload, headers);
 
         // 2. Upload the file to the signed url
         const userAvatar = await axios.put(
@@ -62,7 +63,7 @@ const EditProfile: NextPage = () => {
         };
 
         const updateUserProfile = await axios.put(
-          "/api/users/update",
+          urls.userUpdate,
           body,
           headers
         );
@@ -81,7 +82,7 @@ const EditProfile: NextPage = () => {
           avatarImgUrl: avatar,
         };
         const updateUserProfile = await axios.put(
-          "/api/users/update",
+          urls.userUpdate,
           body,
           headers
         );
@@ -94,7 +95,7 @@ const EditProfile: NextPage = () => {
         });
       }
 
-      const redirectUrl = "/app/profile";
+      const redirectUrl = urls.profileRedirect;
       router.push(redirectUrl);
     } catch (error) {
       setError(error.message);
@@ -107,7 +108,7 @@ const EditProfile: NextPage = () => {
       const auth = getAuth();
       const user = auth.currentUser;
       deleteUser(user).then(async () => {
-        const res = await axios.delete(`/users/delete`);
+        const res = await axios.delete(urls.deleteUser);
         router.push("/");
       });
     } catch (error) {
