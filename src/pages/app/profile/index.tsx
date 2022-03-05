@@ -13,6 +13,7 @@ import Link from 'next/link';
 import axios from '../../../axios/instance';
 import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
+import urls from 'helpers/urls';
 
 function MyProfile() {
   const {
@@ -37,7 +38,7 @@ function MyProfile() {
   const handlePayOut = async () => {
     try {
       setMoneyTransferring(true);
-      const url = '/users/payout';
+      const url = urls.payout;
       await axios.put(url, {});
       setMoneyTransferred(true);
       setMoneyTransferring(false);
@@ -52,23 +53,20 @@ function MyProfile() {
       setIsLoading(true);
       const getUserInvestments = async () => {
         try {
-          const response = await axios.get('/investments/get');
+          const response = await axios.get(urls.userInvestments);
           setInvestments(response.data.userInvestments);
         } catch (error) {
           console.log(error);
         }
       };
       const getUserProjects = async () => {
-        const response = await axios.get('/users/projects/getAll');
+        const response = await axios.get(urls.getAllUserProjects);
         response.data.userProjects.forEach((element) => {
           userProjects.push({
             projectId: element.projectId,
             projectTitle: element.projectTitle,
             projectDescription: element.projectDescription,
             projectCreator: `${element.firstName} ${element.lastName}`,
-            projectImageUrl: `https://picsum.photos/${Math.floor(
-              Math.random() * 1000
-            )}`,
           });
         });
 
