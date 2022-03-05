@@ -9,14 +9,10 @@ import { dbError, notFoundError } from 'helpers/ErrorHandling/messaging';
 import chalk from 'chalk';
 
 const commentService = {
-  //Add a like to a project by a user
   getAllById: async (query) => {
     const id = query.id;
-    console.log(chalk.green(id));
     try {
       const db = await connection();
-      console.log(chalk.green(getConnection().isConnected));
-      console.log(chalk.green('================='));
       const comments = await db
         .createQueryBuilder()
         .select('*')
@@ -27,7 +23,6 @@ const commentService = {
       console.log(comments);
       return comments;
     } catch (err) {
-      console.log(chalk.red('================='), err);
       throw new DatabaseError(dbError);
     }
   },

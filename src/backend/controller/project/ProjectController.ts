@@ -56,7 +56,6 @@ const ProjectController = {
   findById: async (req) => {
     try {
       const { id } = req.query;
-      console.log(chalk.green('@line 59: ', id));
       if (reqParamsAreComplete(req.query, 1)) {
         return await ProjectService.findById(id);
       } else {

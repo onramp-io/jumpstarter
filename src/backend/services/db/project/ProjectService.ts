@@ -141,16 +141,13 @@ const ProjectService = {
       if (db === undefined || db === null) {
         throw new DatabaseError(dbError);
       }
-      console.log(chalk.green(getConnection().isConnected));
-      console.log(chalk.green('================='));
-      console.log(chalk.green('@line 128: ', id));
+
       const foundProject = await db
         .createQueryBuilder()
         .select('*')
         .from('project', 'project')
         .where(`project.id = :id`, { id })
         .getRawOne();
-      console.log('================', foundProject);
       if (
         foundProject === null ||
         foundProject === undefined ||
@@ -160,7 +157,6 @@ const ProjectService = {
       }
       return [foundProject, StatusCodes.OK];
     } catch (err) {
-      console.log(chalk.red('================= @Line 144: '), err);
       throw err;
     }
   },
@@ -349,14 +345,18 @@ const getSortedProjects = async (column) => {
     .addSelect('project.title', 'title')
     .addSelect('project.description', 'description')
     .addSelect('project.category', 'category')
+    .addSelect('project.pictures', 'pictures')
+    .addSelect('project.createdDate', 'createdDate')
+    .addSelect('project.launchDate', 'launchDate')
+    .addSelect('project.fundRaised', 'fundRaised')
+    .addSelect('project.fundTiers', 'fundTiers')
     .addSelect('user.firstName', 'firstName')
     .addSelect('user.lastName', 'lastName')
     .from('project', 'project')
     .innerJoin(User, 'user', 'project.userId = user.id')
     .orderBy(`project.${column}`, 'DESC')
     .getRawMany();
-  //console.log(projectData);
-  return projectData.slice(0, 4);
+  return projectData;
 };
 
 export default ProjectService;
