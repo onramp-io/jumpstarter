@@ -12,7 +12,6 @@ const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case 'GET':
-        console.log('====================================');
         const response = await commentController.getAllById(req);
         res.status(Success.code).json({
           status: Success.status,
