@@ -1,6 +1,6 @@
-import { Box, Heading } from 'grommet';
-import type { NextPage } from 'next';
-import ProjectForm from '@frontend/components/projectForm';
+import { Box, Heading } from "grommet";
+import type { NextPage } from "next";
+import ProjectForm from "@frontend/components/projectForm";
 
 const CreateProject: NextPage = () => {
   const projectFormDetails = {
@@ -11,13 +11,16 @@ const CreateProject: NextPage = () => {
     fundTiers: [0, 0, 0, 0],
     pictures: [],
     currFundGoal: 0,
-  }
+  };
 
   return (
     <>
       <Box>
-        <Heading alignSelf="center" margin={{top: "xlarge"}}>Create a new project</Heading>
-        <ProjectForm projectFormState={projectFormDetails} createOrEdit="create"/>
+        <Heading alignSelf="center">Create a new project</Heading>
+        <ProjectForm
+          projectFormState={projectFormDetails}
+          createOrEdit="create"
+        />
       </Box>
     </>
   );
