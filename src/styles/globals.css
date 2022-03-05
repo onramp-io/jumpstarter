@@ -135,6 +135,21 @@ select {
   font: inherit;
 }
 
+/** 
+FIX CREATE PROJECT FORM
+*/
+
+textarea {
+  border-radius: 0.4rem !important;
+  box-shadow: var(--inset-top) var(--inset-bottom) var(--large) !important;
+  color: var(--ACCENT) !important;
+}
+
+label {
+  font-family: InterB;
+  color: var(--BRAND);
+}
+
 /* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
@@ -552,4 +567,16 @@ FIX STYLING ON SECTION MARQUEE
 .sectionMarquee_container {
   width: 90vw;
   flex-wrap: wrap;
+}
+
+/** 
+FIX STYLING ON CREATE PROJECT FORM */
+
+.projectForm_container {
+  background-color: green;
+}
+
+.projectForm_description-textarea {
+  height: 15vh;
+  width: 100%;
 }
