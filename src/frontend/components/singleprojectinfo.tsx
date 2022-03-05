@@ -43,7 +43,7 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
 }): JSX.Element => {
   const { firstName, accessToken } = useAuth();
   const [like, setLike] = useState(false);
-  const [likeTotal, setLikeTotal] = useState(0);
+  const [likeTotal, setLikeTotal] = useState(projectDetails.likesAmt);
   const [isliking, setIsLiking] = useState(false);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [currentUser, setCurrentUser] = useState(0);
@@ -98,14 +98,17 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
     }
   };
 
+  const goToEdit = async () => {
+    router.push(urls.edit + projectDetails.id);
+  };
+
   useEffect(() => {
-    //make sure url is populated and user is logged in before pulling query params
-    if (!router.isReady) return;
+    setLikeTotal(projectDetails.likesAmt);
 
     if (firstName) {
       checkIfLiked(router.query.projectId);
     }
-  }, [router.isReady]);
+  }, [projectDetails.likesAmt]);
 
   return (
     <Box
@@ -289,6 +292,7 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
               gridArea="button"
               alignSelf="center"
               margin={{ top: 'medium' }}
+              onClick={(event) => goToEdit(event)}
             />
           )}
         </Box>
