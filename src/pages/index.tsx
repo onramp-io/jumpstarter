@@ -32,28 +32,23 @@ const Index: NextPage = function indexComponent<indexProps>({
 
   const router = useRouter();
 
-  const landingImageUrl = `https://picsum.photos/${Math.floor(
-    Math.random() * 1000
-  )}`;
+  const landingImageUrl = '../assets/jumpman.png';
 
   useEffect(() => {
+    if (!firstName) return;
     if (accessToken) {
       setIsloading(true);
       const getUserRecommendations = async () => {
         try {
-          const res = await axiosInstance.get(
-            'http://localhost:3000/api/users/recommend'
-          );
-          console.log(res.data.data);
+          const res = await axiosInstance.get(urls.recommend);
+
           res.data.data.forEach((element) => {
             recommendedProjects.push({
               projectId: element.id,
               projectTitle: element.title,
               projectDescription: element.description,
               projectCreator: `${element.firstName} ${element.lastName}`,
-              projectImageUrl: `https://picsum.photos/${Math.floor(
-                Math.random() * 1000
-              )}`,
+              projectImageUrl: element.pictures,
             });
           });
           setIsloading(false);
@@ -63,7 +58,7 @@ const Index: NextPage = function indexComponent<indexProps>({
       };
       getUserRecommendations();
     }
-  }, []);
+  }, [accessToken, firstName]);
 
   return (
     <>
@@ -116,21 +111,19 @@ export async function getServerSideProps(context) {
   const recommendedProjects = [];
 
   try {
-    const result = await axios.get('http://localhost:3000' + urls.trending);
-    result.data.data.forEach((element) => {
+    const result = await axios.get(urls.SSRURL + urls.trending);
+    const result_slice = result.data.data.slice(0, 5);
+    result_slice.forEach((element) => {
       trendingProjects.push({
         projectId: element.id,
         projectTitle: element.title,
         projectDescription: element.description,
         projectCreator: `${element.firstName} ${element.lastName}`,
-        projectImageUrl: `https://picsum.photos/${Math.floor(
-          Math.random() * 1000
-        )}`,
+        projectImageUrl: element.pictures[0],
       });
     });
-    console.log(trendingProjects);
   } catch (error) {
-    console.log(`error === ${error}`);
+    console.log('error', error);
   }
 
   return {
