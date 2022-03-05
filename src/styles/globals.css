@@ -580,3 +580,20 @@ FIX STYLING ON CREATE PROJECT FORM */
   height: 15vh;
   width: 100%;
 }
+
+/** 
+FIX UI ON PREFERENCES COMPONENT
+*/
+
+.preferencesComponent_container {
+  height: min-content !important;
+}
+
+.preferencesComponent_itemCategory {
+  font-family: InterEB !important;
+  color: var(--ACCENT);
+  font-size: 2rem;
+}
+
+.preferencesComponent_cardBox {
+}
