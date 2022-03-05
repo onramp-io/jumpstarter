@@ -28,11 +28,6 @@ const SectionMarquee = function SectionMarqueeComponent({
   /**
    * first 4 JSON payload from our API
    */
-  const handlePageChange = () => {
-    console.log('Changed page numbers!');
-  };
-
-  let numberOfPages = 40;
 
   return (
     <>
@@ -44,9 +39,7 @@ const SectionMarquee = function SectionMarqueeComponent({
             bottom: 'small',
             right: 'large',
           }}
-        >
-          {/* <Pagination onChange={handlePageChange} numberItems={numberOfPages} /> */}
-        </Box>
+        ></Box>
         <Box
           className="sectionMarquee_container"
           margin={{
