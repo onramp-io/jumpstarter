@@ -43,13 +43,12 @@ const Project: NextPage = () => {
     remaining: '',
   });
   const router = useRouter();
-  const { accessToken, firstName, userId } = useAuth();
+  const { accessToken, firstName, userId, avatar } = useAuth();
 
   const getComments = async (projectId) => {
     try {
       setFinishRendering(true);
       const commentData = await axios.get(urls.comments + projectId);
-      console.log(commentData.data);
       setCommentList(commentData.data.response);
       setFinishRendering(false);
     } catch (error) {
@@ -100,34 +99,28 @@ const Project: NextPage = () => {
         lastGoal - project.data.data.fundRaised
       ).toLocaleString()}`;
     }
-    console.log(project.data.data);
     const data = {
       userId: project.data.data.userId,
       id: project.data.data.id,
       title: project.data.data.title,
       description: project.data.data.description,
-      fund_goal: project.data.data.fundTiers[project.data.data.currFundGoal],
+      fund_goal: lastGoal,
       fund_raised: project.data.data.fundRaised,
-      end_date: new Date(),
+      end_date: new Date(project.data.data.launchDate),
       pictures: project.data.data.pictures,
       investors: project.data.data.investors,
       likesAmt: project.data.data.likesAmt,
       remaining: remainingGoal,
     };
+
     setProjectDetails(data);
   };
 
-  const goToEdit = async () => {
-    router.push(urls.edit + router.query.projectId);
-  };
-
   const getCurrentUser = async () => {
-    console.log('Line 113 userId', userId);
     setCurrentUser(userId);
   };
 
   useEffect(() => {
-    //make sure url is populated before pulling query params
     if (!router.isReady) return;
 
     getProject(router.query.projectId);
@@ -183,7 +176,7 @@ const Project: NextPage = () => {
           <Comment
             key={index}
             userName={comment.firstName}
-            userIconURL="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80"
+            userIconURL={process.env.AWS_BUCKET_URL + avatar}
             commentText={comment.comment}
           />
         );
