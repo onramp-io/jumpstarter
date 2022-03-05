@@ -134,7 +134,7 @@ const SectionCard = function sectionCardsComponent({
         align="center"
         pad="medium"
         width="medium"
-        height="min-content"
+        height="max(min-content, 40vh)"
         elevation="medium"
         style={{ cursor: "pointer" }}
         onClick={(event) => goToProject(event)}
@@ -146,7 +146,11 @@ const SectionCard = function sectionCardsComponent({
             src={projectImageUrl}
           />
         </Box>
-        <Meter type="bar" value={percentageFunded} />
+        <Meter
+          className="sectionCard_progressbar"
+          type="bar"
+          value={percentageFunded}
+        />
         <ProjectInfo
           projectId={projectId}
           projectTitle={projectTitle}
