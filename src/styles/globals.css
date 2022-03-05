@@ -606,3 +606,19 @@ Fix Navbar logged in text
   font-family: Inter !important;
   margin-right: 1rem;
 }
+
+div svg {
+  width: 1.8rem !important;
+  height: 1.8rem !important;
+}
+
+div span,
+div div label {
+  font-family: InterB !important;
+  margin-right: 1rem;
+  color: var(--ANCHOR);
+}
+
+div > input {
+  background-color: green;
+}
