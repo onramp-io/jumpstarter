@@ -10,6 +10,7 @@ interface IParams {
     category: string;
     firstName: string;
     lastName: string;
+    pictures: string;
   }[];
   invested: {
     id: number;
@@ -18,6 +19,7 @@ interface IParams {
     category: string;
     firstName: string;
     lastName: string;
+    pictures: string;
   }[];
   liked: {
     id: number;
@@ -26,6 +28,7 @@ interface IParams {
     category: string;
     firstName: string;
     lastName: string;
+    pictures: string;
   }[];
   commented: {
     id: number;
@@ -34,6 +37,7 @@ interface IParams {
     category: string;
     firstName: string;
     lastName: string;
+    pictures: string;
   }[];
 }
 
@@ -44,6 +48,7 @@ interface IProject {
   category: string;
   firstName: string;
   lastName: string;
+  pictures: string;
 }
 
 const addProject = (
@@ -58,6 +63,7 @@ const addProject = (
       description: project.description,
       firstName: project.firstName,
       lastName: project.lastName,
+      pictures: project.pictures[0],
       points: 0,
     },
   ]);
@@ -98,6 +104,7 @@ const parseData = (
         description: project.description,
         firstName: project.firstName,
         lastName: project.lastName,
+        pictures: project.pictures[0],
         points: 0,
       });
     }
@@ -156,6 +163,5 @@ export const getRecommendation = (params: IParams) => {
   parseData(allProjects, adjacencyMatrix);
   populateMatrix(adjacencyMatrix, params);
   const recommendedProjects = rankProjects(adjacencyMatrix);
-
-  return recommendedProjects.slice(0, 4);
+  return recommendedProjects.slice(0, 5);
 };
