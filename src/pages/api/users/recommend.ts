@@ -19,7 +19,6 @@ const handler = async (req: Request, res: NextApiResponse) => {
     switch (req.method) {
       case 'GET':
         const data = await UserController.getRecommendation(req);
-        console.log(data);
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
