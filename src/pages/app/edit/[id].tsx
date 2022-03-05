@@ -6,6 +6,7 @@ import { NotFoundError } from 'helpers/ErrorHandling/errors';
 import { notFoundError } from 'helpers/ErrorHandling/messaging';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import urls from 'helpers/urls';
 
 const EditProject: NextPage = () => {
   const [projectFormDetails, setProjectFormDetails] = useState();
@@ -16,7 +17,7 @@ const EditProject: NextPage = () => {
     if (!router.isReady) return;
     try {
       const getProject = async (id) => {
-        const response = await axios.get('/api/projects/' + id);
+        const response = await axios.get(urls.projects + id);
         setProjectFormDetails(response.data.data);
         setLoading(false);
       };
