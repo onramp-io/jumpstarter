@@ -150,6 +150,7 @@ const getAllProjects = async (db: Connection, uid: string) => {
     .addSelect('project.title', 'title')
     .addSelect('project.description', 'description')
     .addSelect('project.category', 'category')
+    .addSelect('project.pictures', 'pictures')
     .addSelect('user.firstName', 'firstName')
     .addSelect('user.lastName', 'lastName')
     .innerJoin(User, 'user', 'project.user = user.id')
