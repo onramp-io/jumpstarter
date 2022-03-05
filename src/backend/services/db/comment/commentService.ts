@@ -20,7 +20,6 @@ const commentService = {
         .innerJoin('user', 'user', 'comment.userId = user.id')
         .where('"projectId" = :id', { id })
         .getRawMany();
-      console.log(comments);
       return comments;
     } catch (err) {
       throw new DatabaseError(dbError);
