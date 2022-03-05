@@ -5,7 +5,6 @@ import { DatabaseError } from 'helpers/ErrorHandling/errors';
 
 const commentController = {
   getAllById: async (req: Request) => {
-    console.log('in the controller');
     return commentService.getAllById(req.query);
   },
 
