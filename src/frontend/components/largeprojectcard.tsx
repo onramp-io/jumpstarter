@@ -16,6 +16,8 @@ type projectType = {
   launchDate: Date;
   createdDate: Date;
   pictures: string[];
+  firstName: string;
+  lastName: string;
 };
 
 interface LargeProjectCardProps {
@@ -26,21 +28,6 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({
   projectData,
 }): JSX.Element => {
   const [state, setState] = useState(projectData);
-  // useEffect(() => {
-  //   const getUser = async (id) => {
-  //     const projectInfo = await axios.get(projectUrl + id);
-
-  //     setState({
-  //       ...state,
-  //       user_name:
-  //         projectInfo.data.data.firstName +
-  //         ' ' +
-  //         projectInfo.data.data.lastName,
-  //     });
-  //   };
-
-  //   getUser(projectData.id);
-  // }, []);
 
   const router = useRouter();
 
@@ -98,7 +85,7 @@ const LargeProjectCard: NextPage<LargeProjectCardProps> = ({
         </Box>
         <Box margin={{ top: 'small', bottom: 'medium' }}>
           <Text className="card" size="small">
-            Created by
+            Created by {state.firstName} {state.lastName}
           </Text>
           <Anchor className="card" href="#" />
         </Box>
