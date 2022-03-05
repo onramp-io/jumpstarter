@@ -85,7 +85,6 @@ const ProjectService = {
           `project.user = (SELECT id FROM public.user WHERE uid = '${uid}')`
         )
         .getRawMany();
-      console.log(userData);
       if (!userData) throw new NotFoundError(notFoundError);
       return userData;
     } catch (err) {
