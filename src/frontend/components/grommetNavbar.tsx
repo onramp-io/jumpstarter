@@ -179,7 +179,9 @@ export const NavBar = () => {
               <Box direction="row" justify="end" gap="xlarge"></Box>
               {firstName && isAuthenticated && (
                 <>
-                  <Text>Welcome back, {firstName}</Text>
+                  <Text className="grommetNavbar_welcomeText card">
+                    Welcome back, {firstName}
+                  </Text>
                   <DropButton
                     label={<RenderAvatar />}
                     className={navbar.dropdown}

@@ -597,3 +597,12 @@ FIX UI ON PREFERENCES COMPONENT
 
 .preferencesComponent_cardBox {
 }
+
+/** 
+Fix Navbar logged in text
+*/
+
+.grommetNavbar_welcomeText {
+  font-family: Inter !important;
+  margin-right: 1rem;
+}
