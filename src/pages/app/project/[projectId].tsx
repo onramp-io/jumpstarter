@@ -165,9 +165,9 @@ const Project: NextPage = () => {
               />
             </>
           ) : (
-            <>
+            <Box alignSelf="center">
               <CircularProgress />
-            </>
+            </Box>
           )}
         </Box>
       )}
@@ -176,7 +176,7 @@ const Project: NextPage = () => {
           <Comment
             key={index}
             userName={comment.firstName}
-            userIconURL={process.env.AWS_BUCKET_URL + avatar}
+            userIconURL={process.env.AWS_BUCKET_URL + comment.avatar}
             commentText={comment.comment}
           />
         );

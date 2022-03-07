@@ -1,5 +1,5 @@
-import type { NextPage } from "next";
-import { Avatar, Box, Grid, Text } from "grommet";
+import type { NextPage } from 'next';
+import { Avatar, Box, Grid, Text } from 'grommet';
 
 interface CommentProps {
   userName: string;
@@ -16,17 +16,17 @@ const Comment: NextPage<CommentProps> = ({
     <Box
       direction="column"
       alignContent="center"
-      margin={{ horizontal: "25rem", vertical: "medium" }}
-      pad={{ horizontal: "medium" }}
+      margin={{ horizontal: '25rem', vertical: 'medium' }}
+      pad={{ horizontal: 'medium' }}
     >
       <Grid
         className="comment_grid"
-        rows={["1fr", "2fr", "1fr"]}
-        columns={["0.5fr", "1fr", "3fr"]}
+        rows={['1fr', '2fr', '1fr']}
+        columns={['0.5fr', '1fr', '3fr']}
         areas={[
-          { name: "icon", start: [0, 1], end: [0, 1] },
-          { name: "username", start: [1, 0], end: [1, 0] },
-          { name: "comment", start: [1, 1], end: [2, 1] },
+          { name: 'icon', start: [0, 1], end: [0, 1] },
+          { name: 'username', start: [1, 0], end: [1, 0] },
+          { name: 'comment', start: [1, 1], end: [2, 1] },
         ]}
       >
         <Avatar
@@ -35,7 +35,7 @@ const Comment: NextPage<CommentProps> = ({
           size="large"
           alignSelf="start"
           margin={{
-            right: "medium",
+            right: 'medium',
           }}
           src={userIconURL}
         />
@@ -44,7 +44,7 @@ const Comment: NextPage<CommentProps> = ({
             className="comment_username-text"
             alignSelf="end"
             margin={{
-              bottom: "small",
+              bottom: 'small',
             }}
           >
             {userName}

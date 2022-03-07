@@ -63,11 +63,7 @@ const Index: NextPage = function indexComponent<indexProps>({
   return (
     <>
       <LandingComponent landingImageUrl={landingImageUrl} />
-      {isLoading && (
-        <>
-          <CircularProgress />
-        </>
-      )}
+
       {accessToken && firstName && (
         <>
           <Box align="center" direction="column" margin="large">
@@ -76,6 +72,11 @@ const Index: NextPage = function indexComponent<indexProps>({
               sectionDescription="Here are some projects we think you'll love"
             />
           </Box>
+          {isLoading && (
+            <Box alignSelf="center">
+              <CircularProgress />
+            </Box>
+          )}
           <Box
             className="marquee"
             align="center"

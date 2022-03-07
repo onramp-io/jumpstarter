@@ -27,7 +27,7 @@
 }
 
 @font-face {
-  font-family: "InterR";
+  font-family: 'InterR';
   src: url(/fonts/inter-R.ttf);
   font-style: normal;
   font-weight: 400;
@@ -35,7 +35,7 @@
 }
 
 @font-face {
-  font-family: "InterM";
+  font-family: 'InterM';
   src: url(/fonts/inter-M.otf);
   font-style: normal;
   font-weight: 400;
@@ -43,7 +43,7 @@
 }
 
 @font-face {
-  font-family: "InterB";
+  font-family: 'InterB';
   src: url(/fonts/inter-B.otf);
   font-style: normal;
   font-weight: 400;
@@ -51,7 +51,7 @@
 }
 
 @font-face {
-  font-family: "InterEB";
+  font-family: 'InterEB';
   src: url(/fonts/inter-EB.otf);
   letter-spacing: -1.2px !important;
   font-style: normal;
@@ -98,8 +98,8 @@ dd {
 }
 
 /* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
-ul[role="list"],
-ol[role="list"] {
+ul[role='list'],
+ol[role='list'] {
   list-style: none;
 }
 
@@ -608,7 +608,6 @@ Fix Navbar logged in text
 }
 
 div svg {
-  width: 1.8rem !important;
   height: 1.8rem !important;
 }
 

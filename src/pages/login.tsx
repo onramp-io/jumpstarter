@@ -10,7 +10,7 @@ import styles from '../styles/Login.module.css';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/client/client';
 
-import { Alert, AlertTitle } from '@mui/material';
+import { Alert, AlertTitle, CircularProgress } from '@mui/material';
 
 import cookie from 'js-cookie';
 
@@ -85,15 +85,21 @@ const Login: NextPage = () => {
               </Alert>
             )}
             <Box className="auth-buttons">
-              <Button
-                primary
-                disabled={isLoggingIn}
-                type="submit"
-                onClick={handleLogin}
-                className={styles.loginButton}
-              >
-                Login
-              </Button>
+              {isLoggingIn ? (
+                <Box alignSelf="center">
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <Button
+                  primary
+                  disabled={isLoggingIn}
+                  type="submit"
+                  onClick={handleLogin}
+                  className={styles.loginButton}
+                >
+                  Login
+                </Button>
+              )}
             </Box>
           </Box>
         </Box>

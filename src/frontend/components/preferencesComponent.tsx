@@ -119,9 +119,9 @@ const UserPreferences: React.FC<UserPreferencesProps> = ({ categories }) => {
                 </motion.div>
               ))}
             {isSubmitting ? (
-              <>
+              <Box alignSelf="center">
                 <CircularProgress />
-              </>
+              </Box>
             ) : (
               <>
                 <Button

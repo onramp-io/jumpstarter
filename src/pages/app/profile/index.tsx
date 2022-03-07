@@ -105,7 +105,9 @@ function MyProfile() {
             <Box className={profile.withdrawFunds}>
               <Text>My balance: ${balance}</Text>
               {isMoneyTransfering ? (
-                <CircularProgress />
+                <Box alignSelf="center">
+                  <CircularProgress />
+                </Box>
               ) : (
                 <>
                   {balance <= 0 ? (
@@ -141,9 +143,9 @@ function MyProfile() {
                 <Box pad="medium">
                   <Box align="center" direction="row" margin="small">
                     {isLoading && (
-                      <>
+                      <Box alignSelf="center">
                         <CircularProgress />
-                      </>
+                      </Box>
                     )}
                     {userProjects.length > 0 ? (
                       <>
@@ -163,12 +165,14 @@ function MyProfile() {
               </Tab>
               <Tab title="My Contribution">
                 <Box pad="medium">
-                  <Text>Total Investment: ${totalInvestments}</Text>
+                  <Box alignSelf="center">
+                    <Text>Total Investment: ${totalInvestments}</Text>
+                  </Box>
                   <Box align="center" direction="row" margin="small">
                     {isLoading && (
-                      <>
+                      <Box alignSelf="center">
                         <CircularProgress />
-                      </>
+                      </Box>
                     )}
                     {investments.length > 0 ? (
                       <>
@@ -190,9 +194,9 @@ function MyProfile() {
           </Box>
         </Box>
       ) : (
-        <>
+        <Box alignSelf="center">
           <CircularProgress />
-        </>
+        </Box>
       )}
     </>
   );

@@ -39,7 +39,7 @@ const Checkout: NextPage = () => {
   const checkout = async () => {
     if (validForm) {
       try {
-        setIsCheckingOut(false);
+        setIsCheckingOut(true);
         const user = await axios.get(urls.getUser);
         const body = {
           userId: user.data.userData['id'],
@@ -47,7 +47,7 @@ const Checkout: NextPage = () => {
           fundAmt: state.donation,
         };
         await axios.post(urls.addInvestment, body);
-        setIsCheckingOut(true);
+        setIsCheckingOut(false);
         router.push(urls.profileRedirect);
       } catch (error) {
         setError('Invalid form data');
@@ -97,7 +97,7 @@ const Checkout: NextPage = () => {
 
                 if (val === 0) {
                   return {
-                    message: 'Donation must be greated than $0',
+                    message: 'Donation must be greater than $0',
                     status: 'error',
                   };
                 }
@@ -266,7 +266,7 @@ const Checkout: NextPage = () => {
             You will pay
           </Heading>
           <Heading>${state.donation.toLocaleString()}</Heading>
-          {setSubmitting ? (
+          {!isCheckingOut ? (
             <Button
               primary
               label="Checkout"
@@ -276,9 +276,9 @@ const Checkout: NextPage = () => {
               }}
             />
           ) : (
-            <>
+            <Box alignSelf="center">
               <CircularProgress />
-            </>
+            </Box>
           )}
         </Box>
       </Box>

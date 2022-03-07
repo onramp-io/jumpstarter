@@ -1,7 +1,7 @@
-import type { NextPage } from "next";
-import styles from "../../../styles/EditUser.module.css";
-import { useContext, useEffect, useReducer, useState } from "react";
-import { useRouter } from "next/router";
+import type { NextPage } from 'next';
+import styles from '../../../styles/EditUser.module.css';
+import { useContext, useEffect, useReducer, useState } from 'react';
+import { useRouter } from 'next/router';
 
 import {
   Heading,
@@ -12,19 +12,19 @@ import {
   Avatar,
   FileInput,
   Text,
-} from "grommet";
-import axios from "axios";
-import { useAuth } from "@frontend/context/AuthProvider";
-import { deleteUser, getAuth } from "firebase/auth";
-import { Alert, AlertTitle, CircularProgress } from "@mui/material";
+} from 'grommet';
+import axios from 'axios';
+import { useAuth } from '@frontend/context/AuthProvider';
+import { deleteUser, getAuth } from 'firebase/auth';
+import { Alert, AlertTitle, CircularProgress } from '@mui/material';
 import urls from 'helpers/urls';
 
 const EditProfile: NextPage = () => {
-  const [fName, setFName] = useState("");
-  const [lName, setLName] = useState("");
-  const [bioValue, setBio] = useState("");
+  const [fName, setFName] = useState('');
+  const [lName, setLName] = useState('');
+  const [bioValue, setBio] = useState('');
   const [avatarImg, setAvatar] = useState<File>(null);
-  const [errorMessage, setError] = useState("");
+  const [errorMessage, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { firstName, lastName, bio, avatar, accessToken, setUser } = useAuth();
@@ -49,7 +49,7 @@ const EditProfile: NextPage = () => {
           avatarImg,
           {
             headers: {
-              "Content-type": avatarImg.type,
+              'Content-type': avatarImg.type,
             },
           }
         );
@@ -109,7 +109,7 @@ const EditProfile: NextPage = () => {
       const user = auth.currentUser;
       deleteUser(user).then(async () => {
         const res = await axios.delete(urls.deleteUser);
-        router.push("/");
+        router.push('/');
       });
     } catch (error) {
       setError(error.message);
@@ -190,9 +190,9 @@ const EditProfile: NextPage = () => {
             </Box>
             <Box>
               {isSubmitting ? (
-                <>
+                <Box alignSelf="center">
                   <CircularProgress />
-                </>
+                </Box>
               ) : (
                 <>
                   <Button
@@ -211,7 +211,7 @@ const EditProfile: NextPage = () => {
         <Text onClick={delUser} className={styles.deleteUser}>
           Delete Account
         </Text>
-        {errorMessage !== "" && (
+        {errorMessage !== '' && (
           <Alert severity="error">
             <AlertTitle>{errorMessage}</AlertTitle>
           </Alert>

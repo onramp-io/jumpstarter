@@ -124,7 +124,8 @@ const SectionCard = function sectionCardsComponent({
   }, [percentageFunded]);
 
   return (
-    <motion.div whileHover={Animations.scaleOnHover}>
+    // <motion.div whileHover={Animations.scaleOnHover}>
+    <>
       <Box
         className="card"
         margin={{
@@ -134,7 +135,8 @@ const SectionCard = function sectionCardsComponent({
         align="center"
         pad="medium"
         width="medium"
-        height="max(min-content, 40vh)"
+        // height="max(min-content, 40vh)"
+        height="min(10rem, min-content)"
         elevation="medium"
         style={{ cursor: 'pointer' }}
         onClick={(event) => goToProject(event)}
@@ -147,7 +149,7 @@ const SectionCard = function sectionCardsComponent({
           />
         </Box>
         <Meter
-          className="sectionCard_progressbar"
+          // className="sectionCard_progressbar"
           type="bar"
           value={percentageFunded}
         />
@@ -158,7 +160,8 @@ const SectionCard = function sectionCardsComponent({
           projectCreator={projectCreator}
         />
       </Box>
-    </motion.div>
+      {/* </motion.div> */}
+    </>
   );
 };
 

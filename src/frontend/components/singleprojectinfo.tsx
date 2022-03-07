@@ -175,9 +175,9 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
             </Box>
             <Box margin="small" align="end">
               {isliking && (
-                <>
+                <Box alignSelf="center">
                   <CircularProgress />
-                </>
+                </Box>
               )}
               {firstName && !like && !isliking && (
                 <Like
@@ -281,9 +281,9 @@ const SingleProjectInfo: NextPage<SingleProjectInfoProps> = ({
               />
             </>
           ) : (
-            <>
+            <Box alignSelf="center">
               <CircularProgress />
-            </>
+            </Box>
           )}
 
           {userId == projectDetails.userId && (

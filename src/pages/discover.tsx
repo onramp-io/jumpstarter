@@ -55,8 +55,14 @@ const Discover: NextPage = () => {
     getCategories();
   }, [value]);
 
+  useEffect(() => {
+    sortProjects(value);
+  }, [categories]);
+
   const onChangeHandler = (category) => {
+
     const checked = categories[category];
+
     const copyOfCategories = { ...categories };
 
     copyOfCategories[category] = !checked;
@@ -97,9 +103,9 @@ const Discover: NextPage = () => {
 
   if (!categoryLoaded || !projectLoaded) {
     return (
-      <>
+      <Box alignSelf="center">
         <CircularProgress />
-      </>
+      </Box>
     );
   }
 
@@ -144,12 +150,14 @@ const Discover: NextPage = () => {
           direction="row"
           gap="small"
           wrap={true}
-          margin={{ left: "1rem" }}
+          margin={{ left: '1rem' }}
           width="70vw"
         >
-          {projectData.map((project, index) => {
-            return <LargeProjectCard key={index} projectData={project} />;
-          })}
+          {projectData
+            .filter((project) => categories[project.category])
+            .map((project, index) => {
+              return <LargeProjectCard key={index} projectData={project} />;
+            })}
         </Box>
       </Box>
     </>

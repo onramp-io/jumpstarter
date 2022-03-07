@@ -28,7 +28,11 @@ const EditProject: NextPage = () => {
   }, [router.isReady]);
 
   if (isLoading) {
-    return <Text>Loading....</Text>;
+    return (
+      <Box alignSelf="center">
+        <Text>Loading....</Text>
+      </Box>
+    );
   }
 
   return (
