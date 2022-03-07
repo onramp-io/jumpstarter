@@ -124,8 +124,8 @@ const SectionCard = function sectionCardsComponent({
   }, [percentageFunded]);
 
   return (
-    // <motion.div whileHover={Animations.scaleOnHover}>
-    <>
+    <motion.div whileHover={Animations.scaleOnHover}>
+      {/* <> */}
       <Box
         className="card"
         margin={{
@@ -160,8 +160,8 @@ const SectionCard = function sectionCardsComponent({
           projectCreator={projectCreator}
         />
       </Box>
-      {/* </motion.div> */}
-    </>
+    </motion.div>
+    // </>
   );
 };
 
