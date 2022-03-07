@@ -144,8 +144,8 @@ const Discover: NextPage = () => {
           direction="row"
           gap="small"
           wrap={true}
-          margin={{ left: '1rem' }}
-          width="100vw"
+          margin={{ left: "1rem" }}
+          width="70vw"
         >
           {projectData.map((project, index) => {
             return <LargeProjectCard key={index} projectData={project} />;

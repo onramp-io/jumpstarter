@@ -1,10 +1,12 @@
 import { Box, Button, Heading } from 'grommet';
 
+import { motion } from 'framer-motion';
 import styles from '../../styles/Preference.module.css';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { AlertTitle, Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
+import Animations from 'utils/animations/motionObjects';
 
 import axios from '../../axios/instance';
 import { useAuth } from '@frontend/context/AuthProvider';
@@ -30,6 +32,10 @@ const UserPreferences: React.FC<UserPreferencesProps> = ({ categories }) => {
       setSelectedCategories([...selectedCategories, category]);
     }
   };
+
+  useEffect(() => {
+    console.log(selectedCategories);
+  }, [selectedCategories]);
 
   const submitPreferences = async () => {
     setIsSubmitting(true);
@@ -61,48 +67,79 @@ const UserPreferences: React.FC<UserPreferencesProps> = ({ categories }) => {
     getCategories();
   }, []);
 
+  const tick = 0.1;
+  const staggerTotalDuration = 6 * tick;
+  const pulse = {
+    scale: [1, 0.9, 1.1, 1],
+    transition: {
+      duration: tick * 40,
+      delay: staggerTotalDuration,
+      repeat: Infinity,
+      repeatDelay: tick * 10,
+    },
+  };
+
   return (
     <>
-      <Box className={styles.wrapper}>
-        <Heading className={styles.header}>Preferences</Heading>
-        {!isLoading ? (
-          <Box className={styles.container}>
+      <Box
+        className="preferencesComponent_container"
+        align="center"
+        height="100vh"
+      >
+        <Box align="center" width="80vw" direction="column">
+          <Heading className={styles.header}>Preferences</Heading>
+          <Box
+            className={`${styles.container} preferencesComponent_cardBox`}
+            height="min-content"
+            margin="large"
+          >
             {categories &&
               categories.map((item) => (
-                <div key={item.id}>
+                <motion.div
+                  key={item.id}
+                  whileHover={Animations.scaleOnHover}
+                  whileTap={pulse}
+                  onClick={() => addPreference(item.category)}
+                >
                   <Box
-                    className={styles.cards}
-                    onClick={() => addPreference(item.category)}
+                    className="card"
+                    elevation="medium"
+                    margin="medium"
+                    direction="column"
+                    height="min(300px)"
+                    width="max(300px)"
+                    justify="center"
+                    pad="medium"
+                    align="center"
                   >
-                    <div>{item.category}</div>
+                    <Box className="preferencesComponent_itemCategory card">
+                      {item.category}
+                    </Box>
                   </Box>
-                </div>
+                </motion.div>
               ))}
-          </Box>
-        ) : (
-          <>
-            <CircularProgress />
-          </>
-        )}
-        {isSubmitting ? (
-          <>
-            <CircularProgress />
-          </>
-        ) : (
-          <>
-            <Button
-              primary
-              label="Submit my preferences"
-              onClick={submitPreferences}
-              disabled={isSubmitting}
-            />
-            {errorMessage !== '' && (
-              <Alert severity="error">
-                <AlertTitle>{errorMessage}</AlertTitle>
-              </Alert>
+            {isSubmitting ? (
+              <>
+                <CircularProgress />
+              </>
+            ) : (
+              <>
+                <Button
+                  margin={{ top: 'large' }}
+                  primary
+                  label="Submit my preferences"
+                  onClick={submitPreferences}
+                  disabled={isSubmitting}
+                />
+                {errorMessage !== '' && (
+                  <Alert severity="error">
+                    <AlertTitle>{errorMessage}</AlertTitle>
+                  </Alert>
+                )}
+              </>
             )}
-          </>
-        )}
+          </Box>
+        </Box>
       </Box>
     </>
   );

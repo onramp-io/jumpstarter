@@ -4,6 +4,8 @@ import { Box, Heading, Image, Meter, Text } from 'grommet';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import urls from 'helpers/urls';
+import { motion } from 'framer-motion';
+import Animations from 'utils/animations/motionObjects';
 
 interface ProjectInfoProps {
   projectId: number;
@@ -122,35 +124,41 @@ const SectionCard = function sectionCardsComponent({
   }, [percentageFunded]);
 
   return (
-    <Box
-      className="card"
-      margin={{
-        top: 'xsmall',
-        left: 'xsmall',
-      }}
-      align="center"
-      pad="medium"
-      width="medium"
-      height="min(10rem, min-content)"
-      elevation="medium"
-      style={{ cursor: 'pointer' }}
-      onClick={(event) => goToProject(event)}
-    >
-      <Box width="large" height="small">
-        <Image
-          className="section-card_img"
-          fit="cover"
-          src={process.env.AWS_BUCKET_URL + projectImageUrl}
+    <motion.div whileHover={Animations.scaleOnHover}>
+      <Box
+        className="card"
+        margin={{
+          top: 'xsmall',
+          left: 'xsmall',
+        }}
+        align="center"
+        pad="medium"
+        width="medium"
+        height="max(min-content, 40vh)"
+        elevation="medium"
+        style={{ cursor: 'pointer' }}
+        onClick={(event) => goToProject(event)}
+      >
+        <Box width="large" height="small">
+          <Image
+            className="section-card_img"
+            fit="cover"
+            src={process.env.AWS_BUCKET_URL + projectImageUrl}
+          />
+        </Box>
+        <Meter
+          className="sectionCard_progressbar"
+          type="bar"
+          value={percentageFunded}
+        />
+        <ProjectInfo
+          projectId={projectId}
+          projectTitle={projectTitle}
+          projectDescription={projectDescription}
+          projectCreator={projectCreator}
         />
       </Box>
-      <Meter type="bar" value={percentageFunded} />
-      <ProjectInfo
-        projectId={projectId}
-        projectTitle={projectTitle}
-        projectDescription={projectDescription}
-        projectCreator={projectCreator}
-      />
-    </Box>
+    </motion.div>
   );
 };
 
