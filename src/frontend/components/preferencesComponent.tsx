@@ -1,14 +1,15 @@
-import { Box, Button, Heading } from "grommet";
+import { Box, Button, Heading } from 'grommet';
 
-import { motion } from "framer-motion";
-import styles from "../../styles/Preference.module.css";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { AlertTitle, Alert } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
-import Animations from "utils/animations/motionObjects";
+import { motion } from 'framer-motion';
+import styles from '../../styles/Preference.module.css';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { AlertTitle, Alert } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import Animations from 'utils/animations/motionObjects';
 
-import axios from "../../axios/instance";
+import axios from '../../axios/instance';
+import { useAuth } from '@frontend/context/AuthProvider';
 
 interface UserPreferencesProps {
   categories: any;
@@ -16,8 +17,11 @@ interface UserPreferencesProps {
 
 const UserPreferences: React.FC<UserPreferencesProps> = ({ categories }) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [errorMessage, setError] = useState("");
+  const [errorMessage, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { setUser } = useAuth();
 
   const router = useRouter();
 
@@ -36,16 +40,32 @@ const UserPreferences: React.FC<UserPreferencesProps> = ({ categories }) => {
   const submitPreferences = async () => {
     setIsSubmitting(true);
     try {
-      await axios.put("/users/preferences/update", {
+      await axios.put('/users/preferences/update', {
         categories: selectedCategories,
       });
-      router.push("/app/profile");
+      router.push('/app/profile');
     } catch (error) {
       console.log(error);
       setError(error.message);
     }
     setIsSubmitting(false);
   };
+
+  useEffect(() => {
+    setIsLoading(true);
+    const getCategories = async () => {
+      try {
+        const response = await axios.get('/users/preferences/get');
+        setUser({
+          interests: response.data.categories,
+        });
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCategories();
+  }, []);
 
   const tick = 0.1;
   const staggerTotalDuration = 6 * tick;
@@ -99,19 +119,19 @@ const UserPreferences: React.FC<UserPreferencesProps> = ({ categories }) => {
                 </motion.div>
               ))}
             {isSubmitting ? (
-              <>
+              <Box alignSelf="center">
                 <CircularProgress />
-              </>
+              </Box>
             ) : (
               <>
                 <Button
-                  margin={{ top: "large" }}
+                  margin={{ top: 'large' }}
                   primary
                   label="Submit my preferences"
                   onClick={submitPreferences}
                   disabled={isSubmitting}
                 />
-                {errorMessage !== "" && (
+                {errorMessage !== '' && (
                   <Alert severity="error">
                     <AlertTitle>{errorMessage}</AlertTitle>
                   </Alert>

@@ -1,35 +1,50 @@
-import { Box, Heading } from 'grommet';
+import { Box, Heading, Text } from 'grommet';
 import type { NextPage } from 'next';
 import ProjectForm from '@frontend/components/projectForm';
+import { useState, useEffect } from 'react';
+import { NotFoundError } from 'helpers/ErrorHandling/errors';
+import { notFoundError } from 'helpers/ErrorHandling/messaging';
+import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { useAuth } from '@frontend/context/AuthProvider';
 import urls from 'helpers/urls';
 
 const EditProject: NextPage = () => {
-  const projectFormDetails = {
-    title: "Current Title",
-    category: "Film",
-    description: "Current description.",
-    end_date: "01/01/2030",
-    fund_goal: 10000,
-    fund_tiers: [0, 100, 1000, 2000],
-    pictures: ["weh"]
-  }
-  const { firstName } = useAuth();
+  const [projectFormDetails, setProjectFormDetails] = useState();
+  const [isLoading, setLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(()=>{
-    //make sure url is populated before pulling query params
-    if(urls.urlCheck(router, firstName)) return; //use router.query.projectId to grab id
+  useEffect(() => {
+    if (!router.isReady) return;
+    try {
+      const getProject = async (id) => {
+        const response = await axios.get(urls.projects + id);
+        setProjectFormDetails(response.data.data);
+        setLoading(false);
+      };
+      getProject(router.query.id);
+    } catch (error) {
+      throw new NotFoundError(notFoundError);
+    }
+  }, [router.isReady]);
 
-  }, [router.isReady, firstName]); 
+  if (isLoading) {
+    return (
+      <Box alignSelf="center">
+        <Text>Loading....</Text>
+      </Box>
+    );
+  }
 
   return (
     <>
       <Box>
-        <Heading alignSelf="center" margin={{top: "xlarge"}}>Create a new project</Heading>
-        <ProjectForm projectFormState={projectFormDetails}/>
+        <Heading alignSelf="center" margin={{ top: 'xlarge' }}>
+          Edit project
+        </Heading>
+        <ProjectForm
+          projectFormState={projectFormDetails}
+          createOrEdit={'edit'}
+        />
       </Box>
     </>
   );

@@ -18,14 +18,7 @@ const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case 'GET':
-        const projects = await UserController.getUserProject(req);
-        const userProjects = projects.map((project) => {
-          return {
-            projectId: project.id,
-            projectTitle: project.title,
-            projectDescription: project.description,
-          };
-        });
+        const userProjects = await UserController.getUserProject(req);
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,

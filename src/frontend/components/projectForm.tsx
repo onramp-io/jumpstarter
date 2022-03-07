@@ -9,16 +9,18 @@ import {
   Text,
   TextArea,
   TextInput,
-} from "grommet";
-import type { NextPage } from "next";
-import { useState, useEffect } from "react";
-import { useAuth } from "@frontend/context/AuthProvider";
-import { useRouter } from "next/router";
-import { NotFoundError } from "helpers/ErrorHandling/errors";
-import { notFoundError } from "helpers/ErrorHandling/messaging";
-import axios from "axios";
+} from 'grommet';
+import type { NextPage } from 'next';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@frontend/context/AuthProvider';
+import { useRouter } from 'next/router';
+import { NotFoundError } from 'helpers/ErrorHandling/errors';
+import { notFoundError } from 'helpers/ErrorHandling/messaging';
+import axios from 'axios';
+import { CircularProgress } from '@mui/material';
 
 type projectFormType = {
+  id: number;
   title: string;
   category: string;
   description: string;
@@ -40,24 +42,26 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
   const [projectState, setProjectState] = useState(projectFormState);
   const [imageFile, setImageFile] = useState<File>();
   const { userId, accessToken } = useAuth();
+  const [isCreating, setIsCreating] = useState(false);
   const router = useRouter();
 
   const onSubmitCreate = async (event) => {
     try {
+      setIsCreating(true);
       const headers = {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       };
 
-      const uploadConfig = await axios.get("/api/upload", headers);
+      const uploadConfig = await axios.get('/api/upload', headers);
 
       const projectImage = await axios.put(
         uploadConfig.data.uploadConfig.url,
         imageFile,
         {
           headers: {
-            "Content-type": imageFile.type,
+            'Content-type': imageFile.type,
           },
         }
       );
@@ -76,12 +80,12 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
       };
 
       const createProject = await axios.post(
-        "/api/users/projects",
+        '/api/users/projects',
         body,
         headers
       );
-
-      router.push("/discover");
+      setIsCreating(false);
+      router.push('/app/profile');
     } catch (error) {
       throw new NotFoundError(notFoundError);
     }
@@ -95,14 +99,14 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
         },
       };
 
-      const uploadConfig = await axios.get("/api/upload", headers);
+      const uploadConfig = await axios.get('/api/upload', headers);
 
       const projectImage = await axios.put(
         uploadConfig.data.uploadConfig.url,
         imageFile,
         {
           headers: {
-            "Content-type": imageFile.type,
+            'Content-type': imageFile.type,
           },
         }
       );
@@ -110,6 +114,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
       const pictureArray = [uploadConfig.data.uploadConfig.randomKey];
 
       const body = {
+        id: projectState.id,
         pictures: pictureArray,
         title: projectState.title,
         category: projectState.category,
@@ -119,15 +124,13 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
         launchDate: projectState.launchDate,
       };
 
-      const projectId = 66;
-
       const editProject = await axios.put(
-        `/api/users/projects/${103}`,
+        `/api/users/projects/${projectState.id}`,
         body,
         headers
       );
 
-      router.push("/discover");
+      router.push('/app/project/' + projectState.id);
     } catch (error) {
       throw new NotFoundError(notFoundError);
     }
@@ -160,8 +163,8 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
       <Box width="min(70vw, 80vw)" align="center">
         <Box
           margin={{
-            top: "large",
-            bottom: "medium",
+            top: 'large',
+            bottom: 'medium',
           }}
         >
           <FileInput
@@ -174,7 +177,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
         <Form
           value={projectState}
           onSubmit={(event) =>
-            createOrEdit === "create"
+            createOrEdit === 'create'
               ? onSubmitCreate(event)
               : onSubmitEdit(event)
           }
@@ -202,12 +205,12 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
               <Select
                 name="category"
                 options={[
-                  "Arts",
-                  "Design & Tech",
-                  "Film",
-                  "Food & Craft",
-                  "Games",
-                  "Music",
+                  'Arts',
+                  'Design & Tech',
+                  'Film',
+                  'Food & Craft',
+                  'Games',
+                  'Music',
                 ]}
                 onChange={({ option }) =>
                   setProjectState({ ...projectState, category: option })
@@ -245,8 +248,8 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
 
                 if (dateOverflow === true) {
                   return {
-                    message: "Target date must be set after the current date",
-                    status: "error",
+                    message: 'Target date must be set after the current date',
+                    status: 'error',
                   };
                 }
               }}
@@ -264,8 +267,8 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
               />
             </FormField>
 
-            <Box margin={{ left: "small" }}>
-              <Text margin={{ vertical: "small" }}>Tier 1</Text>
+            <Box margin={{ left: 'small' }}>
+              <Text margin={{ vertical: 'small' }}>Tier 1</Text>
               <FormField
                 name="tier1"
                 htmlFor="tier1"
@@ -273,13 +276,13 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
                   val = projectState.fundTiers[1];
 
                   if (val <= 0) {
-                    return { message: "Tier goals must be greater than 0." };
+                    return { message: 'Tier goals must be greater than 0.' };
                   }
 
                   if (val >= projectState.fundTiers[3]) {
                     return {
                       message:
-                        "Tier goals must not be equal to or surpass total project goal.",
+                        'Tier goals must not be equal to or surpass total project goal.',
                     };
                   }
 
@@ -289,7 +292,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
                   ) {
                     return {
                       message:
-                        "Tier 1 goal cannot be higher than tiers 2 and 3.",
+                        'Tier 1 goal cannot be higher than tiers 2 and 3.',
                     };
                   }
                 }}
@@ -303,7 +306,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
                 />
               </FormField>
 
-              <Text margin={{ vertical: "small" }}>Tier 2</Text>
+              <Text margin={{ vertical: 'small' }}>Tier 2</Text>
               <FormField
                 name="tier2"
                 htmlFor="tier2"
@@ -311,19 +314,19 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
                   val = projectState.fundTiers[2];
 
                   if (val <= 0) {
-                    return { message: "Tier goals must be greater than 0." };
+                    return { message: 'Tier goals must be greater than 0.' };
                   }
 
                   if (val >= projectState.fundTiers[3]) {
                     return {
                       message:
-                        "Tier goals must not be equal to or surpass total project goal.",
+                        'Tier goals must not be equal to or surpass total project goal.',
                     };
                   }
 
                   if (val >= projectState.fundTiers[3]) {
                     return {
-                      message: "Tier 2 goal cannot be higher than tier 3.",
+                      message: 'Tier 2 goal cannot be higher than tier 3.',
                     };
                   }
                 }}
@@ -337,7 +340,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
                 />
               </FormField>
 
-              <Text margin={{ vertical: "small" }}>Final goal</Text>
+              <Text margin={{ vertical: 'small' }}>Final goal</Text>
               <FormField
                 name="tier3"
                 htmlFor="tier3"
@@ -345,7 +348,7 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
                   val = projectState.fundTiers[3];
 
                   if (val <= 0) {
-                    return { message: "Goal must be greater than 0." };
+                    return { message: 'Goal must be greater than 0.' };
                   }
                 }}
               >
@@ -358,14 +361,19 @@ const ProjectForm: NextPage<ProjectFormProps> = ({
                 />
               </FormField>
             </Box>
-
-            <Button
-              type="submit"
-              primary
-              label={
-                createOrEdit === "create" ? "Create project" : "Edit project"
-              }
-            />
+            {isCreating ? (
+              <Box alignSelf="center">
+                <CircularProgress />
+              </Box>
+            ) : (
+              <Button
+                type="submit"
+                primary
+                label={
+                  createOrEdit === 'create' ? 'Create project' : 'Edit project'
+                }
+              />
+            )}
           </Box>
         </Form>
       </Box>

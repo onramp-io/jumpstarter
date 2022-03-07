@@ -1,9 +1,10 @@
-import { Image, Heading, Grommet, Header, Main, Text, Box } from "grommet";
-import styled from "styled-components";
+import { Image, Heading, Grommet, Header, Main, Text, Box } from 'grommet';
+import styled from 'styled-components';
+import landingImage from '../../assets/jumpman.png';
 
-import { NextPageContext } from "next";
+import { NextPageContext } from 'next';
 
-const textMargin = "1rem";
+const textMargin = '1rem';
 
 interface LandingComponentProps {}
 
@@ -15,18 +16,23 @@ const LandingComponent = function landingComponentComponent<
       direction="column"
       align="center"
       margin={{
-        left: "large",
-        right: "large",
+        left: 'large',
+        right: 'large',
       }}
     >
       <Box
         height="medium"
         width="large"
         margin={{
-          bottom: "xsmall",
+          bottom: 'xsmall',
         }}
       >
-        <Image className="landing-image" fit="cover" src={landingImageUrl} />
+        <Image
+          className="landing-image"
+          fit="cover"
+          src={'../../../assets/jumpman.png'}
+          alt="jumpman"
+        />
       </Box>
       <Heading margin="medium" fill={true} level={1}>
         Welcome to JumpStarter!
@@ -34,7 +40,7 @@ const LandingComponent = function landingComponentComponent<
       <Main
         className="subtitle"
         margin={{
-          bottom: "medium",
+          bottom: 'medium',
         }}
       >
         JumpStarter is a platform for people to jumpstart their projects, way

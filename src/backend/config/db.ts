@@ -6,27 +6,33 @@ import { Comment } from '../entities/Comment';
 import { Like } from '../entities/Like';
 import { Category } from '../entities/Category';
 
-import chalk from 'chalk';
+let connectionReadyPromise: Promise<Connection> | null = null;
 
-//create typeorm database connection using ormconfig.json file
 const connection = async () => {
-  try {
-    const staleConnection = getConnection();
-    await staleConnection.close();
-  } catch (error) {}
+  if (!connectionReadyPromise) {
+    connectionReadyPromise = (async () => {
+      try {
+        const staleConnection = getConnection();
+        await staleConnection.close();
+      } catch (error) {
+        // no stale connection to clean up
+      }
 
-  const temp = await createConnection({
-    type: process.env.DB_TYPE as any,
-    url: process.env.DB_CONNECTION_STRING,
-    synchronize: true,
-    cache: {
-      duration: 30000, // 30 seconds
-    },
-    entities: [User, Project, Investment, Comment, Like, Category],
-  });
-  if (getConnection().isConnected) {
-    return getConnection();
+      // wait for new default connection
+      await createConnection({
+        type: process.env.DB_TYPE as any,
+        url: process.env.DB_CONNECTION_STRING,
+        synchronize: true,
+        cache: {
+          duration: 30000, // 30 seconds
+        },
+        entities: [User, Project, Investment, Comment, Like, Category],
+      });
+      return getConnection();
+    })();
   }
+
+  return connectionReadyPromise;
 };
 
 export default connection;

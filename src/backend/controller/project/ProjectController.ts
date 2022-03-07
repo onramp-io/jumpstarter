@@ -1,18 +1,23 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getConnection } from "typeorm";
-import { Project } from "../../entities/Project";
-import { User } from "../../entities/User";
-import ProjectService from "@backend/services/db/project/ProjectService";
-import { StatusCodes } from "http-status-codes";
-import isAllTruthy from "@backend/utils/isAllTruthy";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { getConnection } from 'typeorm';
+import { Project } from '../../entities/Project';
+import { User } from '../../entities/User';
+import ProjectService from '@backend/services/db/project/ProjectService';
+import { StatusCodes } from 'http-status-codes';
+import isAllTruthy from '@backend/utils/isAllTruthy';
 import {
   AuthorizationError,
   BadRequestError,
-} from "helpers/ErrorHandling/errors";
-import chalk from "chalk";
-import reqIsUnauthorized from "@backend/utils/reqIsUnauthorized";
-import reqParamsAreComplete from "@backend/utils/reqParamsAreComplete";
-import { queryIdError, authError, missingParamsError } from "helpers/ErrorHandling/messaging";
+} from 'helpers/ErrorHandling/errors';
+import chalk from 'chalk';
+import reqIsUnauthorized from '@backend/utils/reqIsUnauthorized';
+import reqParamsAreComplete from '@backend/utils/reqParamsAreComplete';
+import {
+  queryIdError,
+  authError,
+  missingParamsError,
+} from 'helpers/ErrorHandling/messaging';
+import { ConstructionOutlined } from '@mui/icons-material';
 
 const ProjectController = {
   // CREATE - 1
@@ -50,8 +55,9 @@ const ProjectController = {
   // READ - 1
   findById: async (req) => {
     try {
+      const { id } = req.query;
       if (reqParamsAreComplete(req.query, 1)) {
-        return await ProjectService.findById(req.query);
+        return await ProjectService.findById(id);
       } else {
         throw new BadRequestError(queryIdError);
       }
@@ -119,7 +125,6 @@ const ProjectController = {
     }
   },
 
-
   // TODO: (Tapa) BS2-16 [BE]: Create endpoint to return a list of recommended Projects based on Projects a User has liked/funded
   // query should be NEWEST, TRENDING, or RECOMMENDED
   sortBy: async (req) => {
@@ -161,7 +166,7 @@ const ProjectController = {
     } catch (err) {
       throw err;
     }
-  }
+  },
 };
 
 export default ProjectController;

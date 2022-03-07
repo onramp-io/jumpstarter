@@ -18,11 +18,11 @@ const handler = async (req: Request, res: NextApiResponse) => {
   try {
     switch (req.method) {
       case 'GET':
-        const recommendedProjects = await UserController.getRecommendation(req);
+        const data = await UserController.getRecommendation(req);
         res.status(Success.code).json({
           status: Success.status,
           message: Success.message,
-          recommendedProjects,
+          data,
         });
         break;
       default:
@@ -40,5 +40,4 @@ const handler = async (req: Request, res: NextApiResponse) => {
   }
 };
 
-// export default verifyRequest(handler);
-export default handler;
+export default verifyRequest(handler);

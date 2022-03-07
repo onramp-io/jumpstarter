@@ -73,8 +73,14 @@ const ProjectService = {
       if (!db) throw new DatabaseError(dbError);
       const userData = await db
         .createQueryBuilder()
-        .select('*')
+        .select('project.id', 'projectId')
+        .addSelect('project.title', 'projectTitle')
+        .addSelect('project.description', 'projectDescription')
+        .addSelect('project.pictures', 'projectImageUrl')
+        .addSelect('user.firstName', 'firstName')
+        .addSelect('user.lastName', 'lastName')
         .from('project', 'project')
+        .innerJoin('user', 'user', 'project.userId = user.id')
         .where(
           `project.user = (SELECT id FROM public.user WHERE uid = '${uid}')`
         )
@@ -89,6 +95,7 @@ const ProjectService = {
   /**
    * READ: 'GET' request for **ALL** Records
    */
+
   findAll: async () => {
     try {
       const db = await connection();
@@ -96,10 +103,22 @@ const ProjectService = {
       if (db === undefined || db === null) {
         throw new DatabaseError(dbError);
       }
-
-      const allProjectRows: Project[] = await getRepository(Project)
-        .createQueryBuilder('project')
-        .getMany();
+      const allProjectRows: any = await db
+        .createQueryBuilder()
+        .select('project.id', 'id')
+        .addSelect('project.title', 'title')
+        .addSelect('project.description', 'description')
+        .addSelect('project.category', 'category')
+        .addSelect('project.fundTiers', 'fundTiers')
+        .addSelect('project.fundRaised', 'fundRaised')
+        .addSelect('project.launchDate', 'launchDate')
+        .addSelect('project.createdDate', 'createdDate')
+        .addSelect('project.pictures', 'pictures')
+        .addSelect('user.firstName', 'firstName')
+        .addSelect('user.lastName', 'lastName')
+        .from('project', 'project')
+        .innerJoin('user', 'user', 'project.userId = user.id')
+        .getRawMany();
 
       if (allProjectRows === undefined || allProjectRows === null) {
         throw new NotFoundError(notFoundError);
@@ -114,7 +133,7 @@ const ProjectService = {
   /**
    * READ: 'GET' request for **ONE Record by ID**
    */
-  findById: async (findByIdParams) => {
+  findById: async (id) => {
     try {
       const db = await connection();
 
@@ -126,9 +145,8 @@ const ProjectService = {
         .createQueryBuilder()
         .select('*')
         .from('project', 'project')
-        .where(`project.id = ${findByIdParams.id}`)
+        .where(`project.id = :id`, { id })
         .getRawOne();
-
       if (
         foundProject === null ||
         foundProject === undefined ||
@@ -145,9 +163,9 @@ const ProjectService = {
   findProjectUserById: async (findProjectUserByIdParams) => {
     try {
       const db = await connection();
-       if (db === undefined || db === null) {
-         throw new DatabaseError(dbError);
-       }
+      if (db === undefined || db === null) {
+        throw new DatabaseError(dbError);
+      }
       const foundProjectUser = await db
         .createQueryBuilder()
         .select('*')
@@ -320,15 +338,23 @@ const ProjectService = {
 const getSortedProjects = async (column) => {
   const db = await connection();
 
-  console.log("here");
   const projectData = await db
-  .createQueryBuilder()
-  .select('*')
-  .from('project', 'project')
-  .orderBy(`project.${column}`, 'DESC')
-  .getRawMany();
-  
-
+    .createQueryBuilder()
+    .select('project.id', 'id')
+    .addSelect('project.title', 'title')
+    .addSelect('project.description', 'description')
+    .addSelect('project.category', 'category')
+    .addSelect('project.pictures', 'pictures')
+    .addSelect('project.createdDate', 'createdDate')
+    .addSelect('project.launchDate', 'launchDate')
+    .addSelect('project.fundRaised', 'fundRaised')
+    .addSelect('project.fundTiers', 'fundTiers')
+    .addSelect('user.firstName', 'firstName')
+    .addSelect('user.lastName', 'lastName')
+    .from('project', 'project')
+    .innerJoin(User, 'user', 'project.userId = user.id')
+    .orderBy(`project.${column}`, 'DESC')
+    .getRawMany();
   return projectData;
 };
 

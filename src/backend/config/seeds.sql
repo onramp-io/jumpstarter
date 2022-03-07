@@ -124,6 +124,42 @@ INSERT INTO public.user("firstName","lastName","email","interests","bio","uid","
 INSERT INTO public.user("firstName","lastName","email","interests","bio","uid","balance","investedAmt","avatar")  VALUES ('Zonnya','Fahey','zfaheya@stumbleupon.com',Array['Arts', 'Design & Tech', 'Film', 'Food & Craft', 'Games', 'Music'],'Manager @New Carman Album and Music Video','OVZTGWcDikh4Iw7uD61LgKZDJ262',0,0,NULL);
 
 -- Projects
+UPDATE public.project SET "pictures" = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 67
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 68
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 69
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 70
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 71
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 72
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 73
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 74
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 75
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 76
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 77
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 78
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 79
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 80
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 81
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 82
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 83
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 84
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 85
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 86
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 87
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 88
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 89
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 90
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 91
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 92
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 93
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 94
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 95
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 96
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 97
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 98
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 99
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 100
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 101
+UPDATE project SET pictures = Array['7Y1RadEe6XSfxdzexFWTsP8xtY33/1646415043370.jpeg'] WHERE "id" = 102
 INSERT INTO public.project("pictures","title","category","description","fundTiers","currFundGoal","fundRaised","launchDate","likesAmt","userId","views","trendScore","investors") VALUES (NULL,'terraplanter - visibly follow the journey from seed to plant','Arts','Just fill with water and the plant will take only what it needs to visibly grow & flourish on the exterior surface of the planter.',Array[0,10,20,30],0,0,'2004-10-19 10:23:54',0,42,0,0,0);
 INSERT INTO public.project("pictures","title","category","description","fundTiers","currFundGoal","fundRaised","launchDate","likesAmt","userId","views","trendScore","investors") VALUES (NULL,'Sisyphus – The Kinetic Art Table','Arts','What music brings to your ears, Sisyphus brings to your eyes. Kinetic art, technology and design merged in stunning meditative beauty.',Array[0,10,20,30],0,0,'''2004-10-19 10:23:54''',0,43,0,0,0);
 INSERT INTO public.project("pictures","title","category","description","fundTiers","currFundGoal","fundRaised","launchDate","likesAmt","userId","views","trendScore","investors") VALUES (NULL,'Mini Museum','Arts','Billions of years of life, science and history in the palm of your hand! Curated, handcrafted, and artfully arranged for display and wonder!',Array[0,10,20,30],0,0,'''2004-10-19 10:23:54''',0,44,0,0,0);

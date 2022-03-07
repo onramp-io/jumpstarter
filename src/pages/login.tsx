@@ -1,21 +1,23 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useState } from "react";
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import Link from "next/link";
+import { useState } from 'react';
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
-import { Heading, TextInput, Box, Notification, Button } from "grommet";
+import { Heading, TextInput, Box, Notification, Button } from 'grommet';
 
-import styles from "../styles/Login.module.css";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase/client/client";
+import styles from '../styles/Login.module.css';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase/client/client';
 
-import { Alert, AlertTitle } from "@mui/material";
+import { Alert, AlertTitle, CircularProgress } from '@mui/material';
+
+import cookie from 'js-cookie';
 
 const Login: NextPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const router = useRouter();
@@ -32,9 +34,9 @@ const Login: NextPage = () => {
     setIsLoggingIn(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/app/profile");
+      router.push('/app/profile');
     } catch (error) {
-      setError("Invalid email or password");
+      setError('Invalid email or password');
     }
     setIsLoggingIn(false);
   };
@@ -77,21 +79,27 @@ const Login: NextPage = () => {
               }}
               className={styles.loginInput}
             />
-            {errorMessage !== "" && (
+            {errorMessage !== '' && (
               <Alert severity="error">
                 <AlertTitle>{errorMessage}</AlertTitle>
               </Alert>
             )}
             <Box className="auth-buttons">
-              <Button
-                primary
-                disabled={isLoggingIn}
-                type="submit"
-                onClick={handleLogin}
-                className={styles.loginButton}
-              >
-                Login
-              </Button>
+              {isLoggingIn ? (
+                <Box alignSelf="center">
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <Button
+                  primary
+                  disabled={isLoggingIn}
+                  type="submit"
+                  onClick={handleLogin}
+                  className={styles.loginButton}
+                >
+                  Login
+                </Button>
+              )}
             </Box>
           </Box>
         </Box>

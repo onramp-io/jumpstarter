@@ -4,6 +4,7 @@ import ProjectForm from "@frontend/components/projectForm";
 
 const CreateProject: NextPage = () => {
   const projectFormDetails = {
+    id: 0,
     title: "",
     category: "",
     description: "",

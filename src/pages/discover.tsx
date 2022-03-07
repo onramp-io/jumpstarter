@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { NextPage } from 'next';
 import {
   Box,
   CheckBox,
@@ -7,26 +7,32 @@ import {
   Select,
   Sidebar,
   Text,
-} from "grommet";
-import React, { useState, useEffect } from "react";
-import LargeProjectCard from "@frontend/components/largeprojectcard";
-import axios from "axios";
-import { NotFoundError } from "helpers/ErrorHandling/errors";
-import { notFoundError } from "helpers/ErrorHandling/messaging";
+} from 'grommet';
+import React, { useState, useEffect } from 'react';
+import LargeProjectCard from '@frontend/components/largeprojectcard';
+import axios from 'axios';
+import { NotFoundError } from 'helpers/ErrorHandling/errors';
+import { notFoundError } from 'helpers/ErrorHandling/messaging';
+import { CircularProgress } from '@mui/material';
+import urls from 'helpers/urls';
 
-const Discover: NextPage = ({ discoverCategories, discoverProjects }) => {
+const Discover: NextPage = () => {
   const testState = {
     TECH: true,
   };
   const [categories, setCategories] = useState({});
-  console.log(categories);
   const [categoryArray, setCategoryArray] = useState([]);
   const [projectData, setProjectData] = useState([]);
+  const [categoryLoaded, setCategoryLoaded] = useState(false);
+  const [projectLoaded, setProjectLoaded] = useState(false);
+  const [value, setValue] = React.useState('newest');
 
   useEffect(() => {
-    // console.log(JSON.stringify(discoverProjects));
     const getCategories = async () => {
       try {
+        const categoriesResponse = await axios.get(urls.categories);
+        const discoverCategories = categoriesResponse.data.categoriesList;
+
         const categoryList = discoverCategories.map((categoryObj) => {
           return categoryObj.category;
         });
@@ -36,29 +42,27 @@ const Discover: NextPage = ({ discoverCategories, discoverProjects }) => {
 
         for (const category of categoryList) {
           categoryState[category] = true;
-          // setCategories({ ...categories, category: true });
         }
 
         setCategories(categoryState);
+        setCategoryLoaded(true);
       } catch (error) {
-        throw new NotFoundError(notFoundError);
+        console.log(error);
       }
     };
 
-    const getProjects = async () => {
-      try {
-        setProjectData(discoverProjects);
-      } catch (error) {
-        throw new NotFoundError(notFoundError);
-      }
-    };
-
-    getProjects();
+    sortProjects(value);
     getCategories();
-  }, []);
+  }, [value]);
+
+  useEffect(() => {
+    sortProjects(value);
+  }, [categories]);
 
   const onChangeHandler = (category) => {
+
     const checked = categories[category];
+
     const copyOfCategories = { ...categories };
 
     copyOfCategories[category] = !checked;
@@ -66,9 +70,44 @@ const Discover: NextPage = ({ discoverCategories, discoverProjects }) => {
     setCategories(copyOfCategories);
   };
 
+  const sortProjects = async (option) => {
+    setProjectData([]);
+    if (option == 'newest') {
+      try {
+        const projectsResponse = await axios.get(urls.newest);
+        const discoverProjects = projectsResponse.data.data;
+
+        setProjectData(discoverProjects);
+        setProjectLoaded(true);
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (option == 'trending') {
+      try {
+        const projectsResponse = await axios.get(urls.trending);
+
+        const discoverProjects = projectsResponse.data.data;
+
+        setProjectData(discoverProjects);
+        setProjectLoaded(true);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    setValue(option);
+  };
+
   const filterProjects = (discoverProjects) => {
     return discoverProjects.filter((project) => categories[project.category]);
   };
+
+  if (!categoryLoaded || !projectLoaded) {
+    return (
+      <Box alignSelf="center">
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <>
@@ -80,17 +119,19 @@ const Discover: NextPage = ({ discoverCategories, discoverProjects }) => {
         <Text alignSelf="end">
           Sort by
           <Select
-            options={["Newest", "Trending"]}
+            options={['newest', 'trending']}
             alignSelf="end"
-            margin={{ left: "small", right: "11rem", bottom: "small" }}
-            defaultValue={"Newest"}
+            margin={{ left: 'small', right: '11rem', bottom: 'small' }}
+            defaultValue={'newest'}
+            value={value}
+            onChange={({ option }) => setValue(option)}
           />
         </Text>
       </Box>
 
-      <Box direction="row" margin={{ horizontal: "9rem" }}>
-        <Sidebar margin={{ right: "xlarge" }}>
-          <Text weight="bold" margin={{ top: "large", bottom: "medium" }}>
+      <Box direction="row" margin={{ horizontal: '9rem' }}>
+        <Sidebar margin={{ right: 'xlarge' }}>
+          <Text weight="bold" margin={{ top: 'large', bottom: 'medium' }}>
             Categories
           </Text>
           {categoryArray.map((category, index) => {
@@ -109,50 +150,18 @@ const Discover: NextPage = ({ discoverCategories, discoverProjects }) => {
           direction="row"
           gap="small"
           wrap={true}
-          margin={{ left: "1rem" }}
+          margin={{ left: '1rem' }}
           width="70vw"
         >
-          <InfiniteScroll
-            items={filterProjects(discoverProjects)}
-            step={3}
-            onMore={() => {}}
-          >
-            {(item, index) => (
-              <LargeProjectCard key={index} projectData={item} />
-            )}
-          </InfiniteScroll>
-          {/**
-           *
-           */}
-          {/**
-           *
-           */}
+          {projectData
+            .filter((project) => categories[project.category])
+            .map((project, index) => {
+              return <LargeProjectCard key={index} projectData={project} />;
+            })}
         </Box>
       </Box>
     </>
   );
 };
-
-export async function getServerSideProps(context) {
-  const categoriesResponse = await axios.get(
-    "http://localhost:3000/api/categories"
-  );
-  const discoverCategories = categoriesResponse.data.categoriesList;
-
-  const projectsResponse = await axios.get(
-    "http://localhost:3000/api/projects"
-  );
-
-  const discoverProjects = projectsResponse.data.data;
-
-  // const discoverCreatorName = await axios.get(`http://localhost:3000/api/project/${id}`);
-
-  return {
-    props: {
-      discoverCategories,
-      discoverProjects,
-    }, // will be passed to the page component as props
-  };
-}
 
 export default Discover;

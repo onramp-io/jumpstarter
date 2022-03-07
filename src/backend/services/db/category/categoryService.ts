@@ -2,22 +2,22 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getRepository, getConnection } from 'typeorm';
 import { Category } from '@backend/entities/Category';
 import connection from '@backend/config/db';
-import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors'
-import { dbError, notFoundError } from "helpers/ErrorHandling/messaging";
+import { DatabaseError, NotFoundError } from 'helpers/ErrorHandling/errors';
+import { dbError, notFoundError } from 'helpers/ErrorHandling/messaging';
 
 const categoryService = {
-  //Add a like to a project by a user
   getAll: async () => {
     const db = await connection();
 
     try {
-      const categoryData = await getRepository(Category)
-        .createQueryBuilder("category")
-        .getMany();
+      const categoryData = await db
+        .createQueryBuilder()
+        .select('*')
+        .from('category', 'category')
+        .getRawMany();
 
       return categoryData;
-    }
-    catch {
+    } catch {
       throw new DatabaseError(dbError);
     }
   },
@@ -26,18 +26,17 @@ const categoryService = {
     const { category, picture, description } = body;
 
     try {
-    const db = await connection();
-    //add new category
-    const newCategory = await db.createQueryBuilder()
-      .createQueryBuilder()
-      .insert()
-      .into(Category)
-      .values([{ category, picture, description }])
-      .execute();
+      const db = await connection();
+      //add new category
+      const newCategory = await db
+        .createQueryBuilder()
+        .insert()
+        .into(Category)
+        .values([{ category, picture, description }])
+        .execute();
 
       return newCategory;
-    }
-    catch {
+    } catch {
       throw new DatabaseError(dbError);
     }
   },
@@ -47,7 +46,7 @@ const categoryService = {
     const db = await connection();
 
     try {
-      const deleteCategory = await db.createQueryBuilder()
+      const deleteCategory = await db
         .createQueryBuilder()
         .delete()
         .from(Category)
@@ -55,12 +54,10 @@ const categoryService = {
         .execute();
 
       return deleteCategory;
-
-    }
-    catch {
+    } catch {
       throw new DatabaseError(dbError);
     }
-  }
-}
+  },
+};
 
 export default categoryService;
